@@ -1,0 +1,113 @@
+plugins {
+  id "java"
+  id "checkstyle"
+  id "maven-publish"
+  id "signing"
+  id "io.github.gradle-nexus.publish-plugin" version "1.1.0"
+}
+
+group "io.github.shiruka"
+
+sourceCompatibility = JavaVersion.VERSION_16
+targetCompatibility = JavaVersion.VERSION_16
+
+compileJava {
+  options.deprecation true
+  options.encoding "UTF-8"
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+  classifier "sources"
+  from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+  javadoc.options.encoding = "UTF-8"
+  javadoc.options.tags = ["todo"]
+  javadoc.options.addBooleanOption("html5", true)
+  classifier "javadoc"
+  from javadoc.destinationDir
+}
+
+checkstyle {
+  configFile = rootProject.file("checkstyle.xml")
+  checkstyleTest.enabled = false
+}
+
+test {
+  useJUnitPlatform()
+}
+
+artifacts {
+  archives sourcesJar
+  archives javadocJar
+}
+
+repositories {
+  mavenCentral()
+  maven {
+    url "https://jitpack.io"
+  }
+  mavenLocal()
+}
+
+dependencies {
+  compileOnly "org.jetbrains:annotations:22.0.0"
+  annotationProcessor "org.jetbrains:annotations:22.0.0"
+
+  compileOnly "org.projectlombok:lombok:1.18.20"
+  annotationProcessor "org.projectlombok:lombok:1.18.20"
+
+  compileOnly "io.github.shiruka:network:3.0.0"
+
+  // Test
+  testImplementation "org.junit.jupiter:junit-jupiter:5.8.0"
+}
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      groupId project.group
+      artifactId project.name
+      version project.version
+
+      from components.java
+      artifact tasks.sourcesJar
+      artifact tasks.javadocJar
+      pom {
+        name = "Shiru ka Protocol"
+        description = "A protocol library to handle Minecraft: Bedrock Edition packets."
+        url = "https://shiruka.github.io/"
+        licenses {
+          license {
+            name = "MIT License"
+            url = "https://mit-license.org/license.txt"
+          }
+        }
+        developers {
+          developer {
+            id = "portlek"
+            name = "Hasan Demirtaş"
+            email = "utsukushihito@outlook.com"
+          }
+        }
+        scm {
+          connection = "scm:git:git://github.com/shiruka/protocol.git"
+          developerConnection = "scm:git:ssh://github.com/shiruka/protocol.git"
+          url = "https://github.com/shiruka/protocol"
+        }
+      }
+    }
+  }
+}
+
+signing {
+  useGpgCmd()
+  sign publishing.publications.mavenJava
+}
+
+nexusPublishing {
+  repositories {
+    sonatype()
+  }
+}
