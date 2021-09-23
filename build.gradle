@@ -61,7 +61,7 @@ dependencies {
   compileOnly "io.github.shiruka:network:3.0.0"
 
   // Test
-  testImplementation "org.junit.jupiter:junit-jupiter:5.8.0"
+  testImplementation "org.junit.jupiter:junit-jupiter:5.8.1"
 }
 
 publishing {
