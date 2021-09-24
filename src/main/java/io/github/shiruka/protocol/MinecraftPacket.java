@@ -32,7 +32,7 @@ public abstract class MinecraftPacket implements Packet {
   /**
    * handles the packet.
    *
-   * @param handler the hanler to handle.
+   * @param handler the handler to handle.
    */
   public abstract void handle(@NotNull PacketHandler handler);
 }
