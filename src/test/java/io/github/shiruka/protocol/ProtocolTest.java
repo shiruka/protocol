@@ -40,19 +40,16 @@ public final class ProtocolTest {
     @Override
     public void onConnect(@NotNull final MinecraftServerSession session) {
       System.out.printf("A session %s has been created!%n", session.address());
-      System.out.println();
     }
 
     @Override
     public void postPacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftServerSession session) {
       System.out.printf("Packet %s received from %s!%n", packet.packetId(), session.address());
-      System.out.println();
     }
 
     @Override
     public void prePacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftServerSession session) {
       System.out.printf("Packet %s receiving from %s!%n", packet.packetId(), session.address());
-      System.out.println();
     }
   }
 }
