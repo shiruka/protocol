@@ -119,12 +119,12 @@ public final class MinecraftServer implements ServerListener, Identifier {
   }
 
   @Override
-  public void prePacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftServerSession session) {
-    this.serverListener.prePacket(packet, session);
+  public void postPacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftServerSession session) {
+    this.serverListener.postPacket(packet, session);
   }
 
   @Override
-  public void postPacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftServerSession session) {
-    this.serverListener.postPacket(packet, session);
+  public void prePacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftServerSession session) {
+    this.serverListener.prePacket(packet, session);
   }
 }

@@ -1,7 +1,6 @@
 package io.github.shiruka.protocol.server;
 
 import io.github.shiruka.protocol.MinecraftPacket;
-import io.github.shiruka.protocol.MinecraftSession;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -24,19 +23,20 @@ public interface ServerListener {
   }
 
   /**
-   * runs before a Minecraft packets comes.
-   *
-   * @param packet the packet to run.
-   * @param session the session to run.
-   */
-  default void prePacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftServerSession session) {
-  }
-  /**
    * runs after a Minecraft packets comes.
    *
    * @param packet the packet to run.
    * @param session the session to run.
    */
   default void postPacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftServerSession session) {
+  }
+
+  /**
+   * runs before a Minecraft packets comes.
+   *
+   * @param packet the packet to run.
+   * @param session the session to run.
+   */
+  default void prePacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftServerSession session) {
   }
 }
