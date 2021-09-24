@@ -58,7 +58,7 @@ dependencies {
   compileOnly "org.projectlombok:lombok:1.18.20"
   annotationProcessor "org.projectlombok:lombok:1.18.20"
 
-  compileOnly "io.github.shiruka:network:3.0.0"
+  compileOnly "io.github.shiruka:network:3.0.1"
 
   // Test
   testImplementation "org.junit.jupiter:junit-jupiter:5.8.1"
