@@ -1,6 +1,7 @@
 package io.github.shiruka.protocol;
 
 import io.github.shiruka.protocol.packets.Login;
+import io.github.shiruka.protocol.packets.UnknownPacket;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -20,5 +21,13 @@ public interface PacketHandler {
    * @param login the login to handle.
    */
   default void handle(@NotNull final Login login) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param login the login to handle.
+   */
+  default void handle(@NotNull final UnknownPacket login) {
   }
 }

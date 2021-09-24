@@ -24,11 +24,12 @@ public final class MinecraftServerInitializer extends ChannelInitializer<Channel
 
   @Override
   protected void initChannel(final Channel ch) {
+    System.out.println(ch.getClass());
     ch.pipeline()
-      .addLast(UserDataCodec.NAME, new UserDataCodec(0xFE))
       .addLast(MinecraftServerConnection.NAME, new MinecraftServerConnection(this.server))
+      .addLast(UserDataCodec.NAME, new UserDataCodec(0xFE))
       .addLast(CompressorCodec.NAME, CompressorCodec.INSTANCE)
       .addLast(MinecraftPacketCodec.NAME, MinecraftPacketCodec.INSTANCE)
-      .addLast(MinecraftPacketHandler.NAME, new MinecraftPacketHandler());
+      .addLast(MinecraftPacketHandler.NAME, new MinecraftPacketHandler(this.server));
   }
 }

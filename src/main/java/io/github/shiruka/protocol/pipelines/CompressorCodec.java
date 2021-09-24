@@ -77,7 +77,7 @@ public final class CompressorCodec extends MessageToMessageCodec<ByteBuf, ByteBu
   }
 
   @Override
-  protected void decode(final ChannelHandlerContext ctx, final ByteBuf msg, final List<Object> out) throws Exception{
+  protected void decode(final ChannelHandlerContext ctx, final ByteBuf msg, final List<Object> out) throws Exception {
     final var decompressed = ctx.alloc().ioBuffer();
     @Nullable ByteBuf source = null;
     try {

@@ -15,4 +15,22 @@ public interface MinecraftSession {
    */
   @NotNull
   InetSocketAddress address();
+
+  /**
+   * sets the packet handler.
+   *
+   * @param packetHandler the packet handler to set.
+   *
+   * @return {@code this} for the builder chain.
+   */
+  @NotNull
+  MinecraftSession packetHandler(@NotNull PacketHandler packetHandler);
+
+  /**
+   * obtains the packet handler.
+   *
+   * @return packet handler.
+   */
+  @NotNull
+  PacketHandler packetHandler();
 }

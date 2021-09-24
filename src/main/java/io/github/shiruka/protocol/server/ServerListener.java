@@ -24,11 +24,19 @@ public interface ServerListener {
   }
 
   /**
-   * runs when a Minecraft packets comes.
+   * runs before a Minecraft packets comes.
    *
    * @param packet the packet to run.
    * @param session the session to run.
    */
-  default void onPacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftSession session) {
+  default void prePacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftServerSession session) {
+  }
+  /**
+   * runs after a Minecraft packets comes.
+   *
+   * @param packet the packet to run.
+   * @param session the session to run.
+   */
+  default void postPacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftServerSession session) {
   }
 }

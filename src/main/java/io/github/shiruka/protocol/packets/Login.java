@@ -9,7 +9,6 @@ public final class Login extends MinecraftPacket {
 
   @Override
   public void decode(@NotNull final PacketBuffer buffer) {
-    System.out.println("Login packet received!");
   }
 
   @Override

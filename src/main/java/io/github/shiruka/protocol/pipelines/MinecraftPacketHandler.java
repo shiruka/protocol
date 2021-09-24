@@ -1,10 +1,13 @@
 package io.github.shiruka.protocol.pipelines;
 
 import io.github.shiruka.protocol.MinecraftPacket;
+import io.github.shiruka.protocol.server.MinecraftServer;
+import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * a class that represents minecraft packet handler pipelines.
@@ -17,11 +20,19 @@ public final class MinecraftPacketHandler extends SimpleChannelInboundHandler<Li
    */
   public static final String NAME = "rn-mc-handler";
 
+  /**
+   * the server.
+   */
+  @NotNull
+  private final MinecraftServer server;
+
   @Override
   protected void channelRead0(final ChannelHandlerContext ctx, final List<MinecraftPacket> msg) {
+    final var channel = MinecraftChildChannel.cast(ctx);
     for (final var packet : msg) {
-      System.out.println(packet);
-//      packet.handle(this.handler);
+      this.server.prePacket(packet, channel);
+      packet.handle(channel.packetHandler());
+      this.server.postPacket(packet, channel);
     }
   }
 }

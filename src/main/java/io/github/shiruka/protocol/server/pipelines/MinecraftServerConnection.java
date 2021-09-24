@@ -1,8 +1,7 @@
 package io.github.shiruka.protocol.server.pipelines;
 
-import io.github.shiruka.network.server.channels.RakNetChildChannel;
 import io.github.shiruka.protocol.server.MinecraftServer;
-import io.github.shiruka.protocol.server.MinecraftServerSession;
+import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +26,6 @@ public final class MinecraftServerConnection extends ChannelDuplexHandler {
 
   @Override
   public void channelActive(final ChannelHandlerContext ctx) {
-    this.server.onConnect(new MinecraftServerSession((RakNetChildChannel) ctx.channel()));
+    this.server.onConnect(MinecraftChildChannel.cast(ctx));
   }
 }

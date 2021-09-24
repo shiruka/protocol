@@ -6,6 +6,7 @@ import java.net.InetSocketAddress;
 public final class ProtocolTest {
 
   public static void main(final String[] args) throws Exception {
+    PacketRegistry.registerDefaults();
     new MinecraftServer(new InetSocketAddress("127.0.0.1", 19132))
       .bind();
     while (true) {

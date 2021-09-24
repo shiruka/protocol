@@ -2,9 +2,9 @@ package io.github.shiruka.protocol.server;
 
 import io.github.shiruka.network.Identifier;
 import io.github.shiruka.network.options.RakNetChannelOptions;
-import io.github.shiruka.network.server.RakNetServer;
 import io.github.shiruka.protocol.MinecraftPacket;
-import io.github.shiruka.protocol.MinecraftSession;
+import io.github.shiruka.protocol.PacketHandler;
+import io.github.shiruka.protocol.server.channels.MinecraftServerChannel;
 import io.github.shiruka.protocol.server.pipelines.MinecraftServerInitializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -39,6 +39,7 @@ public final class MinecraftServer implements ServerListener {
    * the address.
    */
   @NotNull
+  @Getter
   private final InetSocketAddress address;
 
   /**
@@ -47,10 +48,17 @@ public final class MinecraftServer implements ServerListener {
   @NotNull
   private final ServerBootstrap bootstrap = new ServerBootstrap()
     .group(new NioEventLoopGroup())
-    .channel(RakNetServer.CHANNEL)
+    .channelFactory(() -> new MinecraftServerChannel(this))
     .option(RakNetChannelOptions.SERVER_ID, 1100224433L)
     .option(RakNetChannelOptions.SERVER_IDENTIFIER, Identifier.simple(MinecraftServer.serverInfo))
     .childHandler(new MinecraftServerInitializer(this));
+
+  /**
+   * the default packet handler.
+   */
+  @NotNull
+  @Getter
+  private final PacketHandler defaultPacketHandler;
 
   /**
    * the sessions.
@@ -79,7 +87,12 @@ public final class MinecraftServer implements ServerListener {
   }
 
   @Override
-  public void onPacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftSession session) {
-    this.serverListener.onPacket(packet, session);
+  public void prePacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftServerSession session) {
+    this.serverListener.prePacket(packet, session);
+  }
+
+  @Override
+  public void postPacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftServerSession session) {
+    this.serverListener.postPacket(packet, session);
   }
 }
