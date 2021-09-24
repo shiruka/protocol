@@ -1,5 +1,6 @@
 package io.github.shiruka.protocol.server;
 
+import io.github.shiruka.network.Constants;
 import io.github.shiruka.network.Identifier;
 import io.github.shiruka.network.options.RakNetChannelOptions;
 import io.github.shiruka.protocol.MinecraftPacket;
@@ -13,7 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
@@ -21,9 +21,8 @@ import org.jetbrains.annotations.NotNull;
 /**
  * a class that represents minecraft server sessions.
  */
-@RequiredArgsConstructor
 @Accessors(fluent = true)
-public final class MinecraftServer implements ServerListener {
+public final class MinecraftServer implements ServerListener, Identifier {
 
   private static final String serverInfo = new StringJoiner(";", "", ";")
     .add("MCPE")
@@ -46,12 +45,7 @@ public final class MinecraftServer implements ServerListener {
    * the bootstrap.
    */
   @NotNull
-  private final ServerBootstrap bootstrap = new ServerBootstrap()
-    .group(new NioEventLoopGroup())
-    .channelFactory(() -> new MinecraftServerChannel(this))
-    .option(RakNetChannelOptions.SERVER_ID, 1100224433L)
-    .option(RakNetChannelOptions.SERVER_IDENTIFIER, Identifier.simple(MinecraftServer.serverInfo))
-    .childHandler(new MinecraftServerInitializer(this));
+  private final ServerBootstrap bootstrap;
 
   /**
    * the default packet handler.
@@ -59,6 +53,12 @@ public final class MinecraftServer implements ServerListener {
   @NotNull
   @Getter
   private final PacketHandler defaultPacketHandler;
+
+  /**
+   * the server id.
+   */
+  @Getter
+  private final long serverId = Constants.RANDOM.nextLong();
 
   /**
    * the sessions.
@@ -74,10 +74,42 @@ public final class MinecraftServer implements ServerListener {
   private ServerListener serverListener = ServerListener.EMPTY;
 
   /**
+   * ctor.
+   *
+   * @param address the address.
+   * @param defaultPacketHandler the default packet handler.
+   */
+  public MinecraftServer(@NotNull final InetSocketAddress address, @NotNull final PacketHandler defaultPacketHandler) {
+    this.address = address;
+    this.defaultPacketHandler = defaultPacketHandler;
+    this.bootstrap = new ServerBootstrap()
+      .group(new NioEventLoopGroup())
+      .channelFactory(() -> new MinecraftServerChannel(this))
+      .option(RakNetChannelOptions.SERVER_ID, this.serverId)
+      .option(RakNetChannelOptions.SERVER_IDENTIFIER, this)
+      .childHandler(new MinecraftServerInitializer(this));
+  }
+
+  /**
+   * ctor.
+   *
+   * @param address the address.
+   */
+  public MinecraftServer(@NotNull final InetSocketAddress address) {
+    this(address, PacketHandler.EMPTY);
+  }
+
+  /**
    * binds the server.
    */
   public void bind() {
     this.bootstrap.bind(this.address).syncUninterruptibly();
+  }
+
+  @NotNull
+  @Override
+  public String build() {
+    return MinecraftServer.serverInfo;
   }
 
   @Override
