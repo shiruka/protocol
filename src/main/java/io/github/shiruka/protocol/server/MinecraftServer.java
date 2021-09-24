@@ -24,16 +24,6 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 public final class MinecraftServer implements ServerListener, Identifier {
 
-  private static final String serverInfo = new StringJoiner(";", "", ";")
-    .add("MCPE")
-    .add("Motd")
-    .add("448")
-    .add("1.17.11")
-    .add("0")
-    .add("10")
-    .add("1100224433")
-    .toString();
-
   /**
    * the address.
    */
@@ -48,13 +38,6 @@ public final class MinecraftServer implements ServerListener, Identifier {
   private final ServerBootstrap bootstrap;
 
   /**
-   * the default packet handler.
-   */
-  @NotNull
-  @Getter
-  private final PacketHandler defaultPacketHandler;
-
-  /**
    * the server id.
    */
   @Getter
@@ -64,6 +47,29 @@ public final class MinecraftServer implements ServerListener, Identifier {
    * the sessions.
    */
   private final Map<InetSocketAddress, MinecraftServerSession> sessions = new HashMap<>();
+
+  /**
+   * the default packet handler.
+   */
+  @NotNull
+  @Getter
+  @Setter
+  private PacketHandler defaultPacketHandler = PacketHandler.EMPTY;
+
+  /**
+   * the max connections.
+   */
+  @Getter
+  @Setter
+  private int maxConnections = 1024;
+
+  /**
+   * the identifier.
+   */
+  @NotNull
+  @Getter
+  @Setter
+  private String motd = "Minecraft Server";
 
   /**
    * the server listener.
@@ -77,11 +83,9 @@ public final class MinecraftServer implements ServerListener, Identifier {
    * ctor.
    *
    * @param address the address.
-   * @param defaultPacketHandler the default packet handler.
    */
-  public MinecraftServer(@NotNull final InetSocketAddress address, @NotNull final PacketHandler defaultPacketHandler) {
+  public MinecraftServer(@NotNull final InetSocketAddress address) {
     this.address = address;
-    this.defaultPacketHandler = defaultPacketHandler;
     this.bootstrap = new ServerBootstrap()
       .group(new NioEventLoopGroup())
       .channelFactory(() -> new MinecraftServerChannel(this))
@@ -92,11 +96,9 @@ public final class MinecraftServer implements ServerListener, Identifier {
 
   /**
    * ctor.
-   *
-   * @param address the address.
    */
-  public MinecraftServer(@NotNull final InetSocketAddress address) {
-    this(address, PacketHandler.EMPTY);
+  public MinecraftServer() {
+    this(new InetSocketAddress("127.0.0.1", 19132));
   }
 
   /**
@@ -109,7 +111,15 @@ public final class MinecraftServer implements ServerListener, Identifier {
   @NotNull
   @Override
   public String build() {
-    return MinecraftServer.serverInfo;
+    return new StringJoiner(";", "", ";")
+      .add("MCPE")
+      .add(this.motd)
+      .add("448")
+      .add("1.17.11")
+      .add(String.valueOf(this.sessions.size()))
+      .add(String.valueOf(this.maxConnections))
+      .add(String.valueOf(this.serverId))
+      .toString();
   }
 
   @Override

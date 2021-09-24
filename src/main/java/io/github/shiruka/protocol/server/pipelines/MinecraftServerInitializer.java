@@ -24,7 +24,6 @@ public final class MinecraftServerInitializer extends ChannelInitializer<Channel
 
   @Override
   protected void initChannel(final Channel ch) {
-    System.out.println(ch.getClass());
     ch.pipeline()
       .addLast(MinecraftServerConnection.NAME, new MinecraftServerConnection(this.server))
       .addLast(UserDataCodec.NAME, new UserDataCodec(0xFE))
