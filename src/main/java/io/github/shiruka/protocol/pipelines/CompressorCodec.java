@@ -48,7 +48,36 @@ public final class CompressorCodec extends MessageToMessageCodec<ByteBuf, ByteBu
   private final ThreadLocal<Inflater> inflater = ThreadLocal.withInitial(() -> new Inflater(true));
 
   @Override
-  protected void encode(final ChannelHandlerContext ctx, final ByteBuf msg, final List<Object> out) throws Exception {
+  protected void encode(final ChannelHandlerContext ctx, final ByteBuf msg, final List<Object> out) {
+    final var compressed = ctx.alloc().ioBuffer();
+    @Nullable ByteBuf source = null;
+    try {
+      if (msg.isDirect()) {
+        source = msg;
+      } else {
+        source = ctx.alloc().ioBuffer();
+        source.writeBytes(msg);
+      }
+      final var deflater = this.deflater.get();
+      deflater.reset();
+      deflater.setLevel(Deflater.DEFAULT_COMPRESSION);
+      deflater.setInput(source.internalNioBuffer(source.readerIndex(), source.readableBytes()));
+      while (!deflater.finished()) {
+        final var index = compressed.writerIndex();
+        compressed.ensureWritable(CompressorCodec.CHUNK);
+        final var written = deflater.deflate(compressed.internalNioBuffer(index, CompressorCodec.CHUNK));
+        compressed.writerIndex(index + written);
+      }
+      out.add(compressed);
+    } finally {
+      if (source != null && source != msg) {
+        source.release();
+      }
+    }
+  }
+
+  @Override
+  protected void decode(final ChannelHandlerContext ctx, final ByteBuf msg, final List<Object> out) throws Exception{
     final var decompressed = ctx.alloc().ioBuffer();
     @Nullable ByteBuf source = null;
     try {
@@ -79,35 +108,6 @@ public final class CompressorCodec extends MessageToMessageCodec<ByteBuf, ByteBu
     } catch (final DataFormatException e) {
       decompressed.release();
       throw e;
-    } finally {
-      if (source != null && source != msg) {
-        source.release();
-      }
-    }
-  }
-
-  @Override
-  protected void decode(final ChannelHandlerContext ctx, final ByteBuf msg, final List<Object> out) {
-    final var compressed = ctx.alloc().ioBuffer();
-    @Nullable ByteBuf source = null;
-    try {
-      if (msg.isDirect()) {
-        source = msg;
-      } else {
-        source = ctx.alloc().ioBuffer();
-        source.writeBytes(msg);
-      }
-      final var deflater = this.deflater.get();
-      deflater.reset();
-      deflater.setLevel(Deflater.DEFAULT_COMPRESSION);
-      deflater.setInput(source.internalNioBuffer(source.readerIndex(), source.readableBytes()));
-      while (!deflater.finished()) {
-        final var index = compressed.writerIndex();
-        compressed.ensureWritable(CompressorCodec.CHUNK);
-        final var written = deflater.deflate(compressed.internalNioBuffer(index, CompressorCodec.CHUNK));
-        compressed.writerIndex(index + written);
-      }
-      out.add(compressed);
     } finally {
       if (source != null && source != msg) {
         source.release();

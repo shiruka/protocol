@@ -3,6 +3,8 @@ package io.github.shiruka.protocol.server;
 import io.github.shiruka.network.Identifier;
 import io.github.shiruka.network.options.RakNetChannelOptions;
 import io.github.shiruka.network.server.RakNetServer;
+import io.github.shiruka.protocol.MinecraftPacket;
+import io.github.shiruka.protocol.MinecraftSession;
 import io.github.shiruka.protocol.server.pipelines.MinecraftServerInitializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -21,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
  */
 @RequiredArgsConstructor
 @Accessors(fluent = true)
-public final class MinecraftServer {
+public final class MinecraftServer implements ServerListener {
 
   private static final String serverInfo = new StringJoiner(";", "", ";")
     .add("MCPE")
@@ -63,7 +65,21 @@ public final class MinecraftServer {
   @Setter
   private ServerListener serverListener = ServerListener.EMPTY;
 
+  /**
+   * binds the server.
+   */
   public void bind() {
     this.bootstrap.bind(this.address).syncUninterruptibly();
+  }
+
+  @Override
+  public void onConnect(@NotNull final MinecraftServerSession session) {
+    this.sessions.put(session.address(), session);
+    this.serverListener.onConnect(session);
+  }
+
+  @Override
+  public void onPacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftSession session) {
+    this.serverListener.onPacket(packet, session);
   }
 }

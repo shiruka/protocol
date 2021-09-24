@@ -1,9 +1,12 @@
 package io.github.shiruka.protocol.server;
 
+import io.github.shiruka.network.server.channels.RakNetChildChannel;
 import io.github.shiruka.protocol.MinecraftSession;
+import io.github.shiruka.protocol.PacketHandler;
 import java.net.InetSocketAddress;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,9 +18,23 @@ import org.jetbrains.annotations.NotNull;
 public final class MinecraftServerSession implements MinecraftSession {
 
   /**
-   * the address.
+   * the channel.
    */
   @NotNull
   @Getter
-  private final InetSocketAddress address;
+  private final RakNetChildChannel channel;
+
+  /**
+   * the packet handler.
+   */
+  @NotNull
+  @Getter
+  @Setter
+  private PacketHandler packetHandler = PacketHandler.EMPTY;
+
+  @NotNull
+  @Override
+  public InetSocketAddress address() {
+    return (InetSocketAddress) this.channel.remoteAddress();
+  }
 }

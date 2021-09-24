@@ -56,7 +56,7 @@ public final class MinecraftPacketCodec extends MessageToMessageCodec<ByteBuf, L
           packet.decode(packetBuffer);
           packets.add(packet);
         } catch (final Exception e) {
-          MinecraftPacketCodec.log.debug("Error occurred whilst decoding packet!", e);
+          MinecraftPacketCodec.log.error("Error occurred whilst decoding packet!", e);
           if (MinecraftPacketCodec.log.isTraceEnabled()) {
             MinecraftPacketCodec.log.trace("Packet contents\n{}", ByteBufUtil.prettyHexDump(packetBuffer.buffer().readerIndex(0)));
           }

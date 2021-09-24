@@ -16,10 +16,18 @@ public interface ServerListener {
   };
 
   /**
+   * runs when a Minecraft user wants to connect to the server.
+   *
+   * @param session the session to run.
+   */
+  default void onConnect(@NotNull final MinecraftServerSession session) {
+  }
+
+  /**
    * runs when a Minecraft packets comes.
    *
-   * @param packet the packet to come.
-   * @param session the session come from.
+   * @param packet the packet to run.
+   * @param session the session to run.
    */
   default void onPacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftSession session) {
   }
