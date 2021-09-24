@@ -1,7 +1,7 @@
 package io.github.shiruka.protocol;
 
 import io.github.shiruka.protocol.packets.Login;
-import io.github.shiruka.protocol.packets.UnknownPacket;
+import io.github.shiruka.protocol.packets.Unknown;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import java.util.Objects;
@@ -52,6 +52,6 @@ public final class PacketRegistry {
    */
   public static void registerDefaults() {
     PacketRegistry.register(Ids.LOGIN, Login::new);
-    PacketRegistry.PACKETS.defaultReturnValue(UnknownPacket::new);
+    PacketRegistry.PACKETS.defaultReturnValue(Unknown::new);
   }
 }

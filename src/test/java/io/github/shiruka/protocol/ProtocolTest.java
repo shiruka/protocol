@@ -1,7 +1,8 @@
 package io.github.shiruka.protocol;
 
+import io.github.shiruka.protocol.data.ClientChainData;
 import io.github.shiruka.protocol.packets.Login;
-import io.github.shiruka.protocol.packets.UnknownPacket;
+import io.github.shiruka.protocol.packets.Unknown;
 import io.github.shiruka.protocol.server.MinecraftServer;
 import io.github.shiruka.protocol.server.MinecraftServerSession;
 import io.github.shiruka.protocol.server.ServerListener;
@@ -25,13 +26,16 @@ public final class ProtocolTest {
   private static final class Handler implements PacketHandler {
 
     @Override
-    public void handle(@NotNull final Login login) {
-      System.out.println("Login packet received!");
+    public void handle(@NotNull final Login packet) {
+      final var now = System.currentTimeMillis();
+      final var chainData = ClientChainData.from(
+        packet.chainData().toString(),
+        packet.skinData().toString());
+      System.out.println(System.currentTimeMillis() - now);
     }
 
     @Override
-    public void handle(@NotNull final UnknownPacket login) {
-      System.out.println("Login packet received!");
+    public void handle(@NotNull final Unknown packet) {
     }
   }
 
@@ -39,17 +43,14 @@ public final class ProtocolTest {
 
     @Override
     public void onConnect(@NotNull final MinecraftServerSession session) {
-      System.out.printf("A session %s has been created!%n", session.address());
     }
 
     @Override
     public void postPacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftServerSession session) {
-      System.out.printf("Packet %s received from %s!%n", packet.packetId(), session.address());
     }
 
     @Override
     public void prePacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftServerSession session) {
-      System.out.printf("Packet %s receiving from %s!%n", packet.packetId(), session.address());
     }
   }
 }

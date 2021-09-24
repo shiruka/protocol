@@ -15,6 +15,14 @@ public interface ServerListener {
   };
 
   /**
+   * runs when a Minecraft user disconnects from the server.
+   *
+   * @param session the session to run.
+   */
+  default void onDisconnect(@NotNull final MinecraftServerSession session) {
+  }
+
+  /**
    * runs when a Minecraft user wants to connect to the server.
    *
    * @param session the session to run.

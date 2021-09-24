@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
  * a class that represents unknown packets.
  */
 @Accessors(fluent = true)
-public final class UnknownPacket extends MinecraftPacket {
+public final class Unknown extends MinecraftPacket {
 
   /**
    * the payload.
@@ -23,7 +23,7 @@ public final class UnknownPacket extends MinecraftPacket {
   /**
    * ctor.
    */
-  public UnknownPacket() {
+  public Unknown() {
   }
 
   /**
@@ -31,7 +31,7 @@ public final class UnknownPacket extends MinecraftPacket {
    *
    * @param payload the payload.
    */
-  public UnknownPacket(@Nullable final PacketBuffer payload) {
+  public Unknown(@Nullable final PacketBuffer payload) {
     this.payload = payload;
   }
 

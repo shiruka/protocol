@@ -2,7 +2,6 @@ package io.github.shiruka.protocol.server.pipelines;
 
 import io.github.shiruka.protocol.server.MinecraftServer;
 import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
-import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.RequiredArgsConstructor;
@@ -28,5 +27,11 @@ public final class MinecraftServerConnection extends ChannelInboundHandlerAdapte
   @Override
   public void channelActive(final ChannelHandlerContext ctx) {
     this.server.onConnect(MinecraftChildChannel.cast(ctx));
+  }
+
+  @Override
+  public void channelInactive(final ChannelHandlerContext ctx) throws Exception {
+    System.out.println("test1");
+    super.channelInactive(ctx);
   }
 }

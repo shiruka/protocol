@@ -115,11 +115,17 @@ public final class MinecraftServer implements ServerListener, Identifier {
       .add("MCPE")
       .add(this.motd)
       .add("448")
-      .add("1.17.11")
+      .add("1.17.30")
       .add(String.valueOf(this.sessions.size()))
       .add(String.valueOf(this.maxConnections))
       .add(String.valueOf(this.serverId))
       .toString();
+  }
+
+  @Override
+  public void onDisconnect(@NotNull final MinecraftServerSession session) {
+    this.sessions.remove(session.address());
+    this.serverListener.onDisconnect(session);
   }
 
   @Override
