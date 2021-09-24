@@ -104,8 +104,8 @@ public final class MinecraftServer implements ServerListener, Identifier {
   /**
    * binds the server.
    */
-  public void bind() {
-    this.bootstrap.bind(this.address).syncUninterruptibly();
+  public void bind() throws InterruptedException {
+    this.bootstrap.bind(this.address).sync();
   }
 
   @NotNull
