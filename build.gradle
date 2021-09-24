@@ -68,7 +68,7 @@ dependencies {
   compileOnly "org.apache.logging.log4j:log4j-api:2.14.1"
 
   // Test
-  testImplementation "org.junit.jupiter:junit-jupiter:5.8.0"
+  testImplementation "org.junit.jupiter:junit-jupiter:5.8.1"
 }
 
 publishing {
