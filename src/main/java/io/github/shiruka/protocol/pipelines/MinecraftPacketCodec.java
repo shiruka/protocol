@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * a class that represents Minecraft packet codec.
+ * a class that represents Minecraft packet codec pipelines.
  */
 @Log4j2
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -25,6 +25,11 @@ public final class MinecraftPacketCodec extends MessageToMessageCodec<ByteBuf, L
    * the instance.
    */
   public static final MinecraftPacketCodec INSTANCE = new MinecraftPacketCodec();
+
+  /**
+   * the name.
+   */
+  public static final String NAME = "rn-mc-codec";
 
   @Override
   protected void encode(final ChannelHandlerContext ctx, final List<MinecraftPacket> msg,

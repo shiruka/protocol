@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * a class that represents compressors.
+ * a class that represents compressor pipelines.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class CompressorCodec extends MessageToMessageCodec<ByteBuf, ByteBuf> {
@@ -21,6 +21,11 @@ public final class CompressorCodec extends MessageToMessageCodec<ByteBuf, ByteBu
    * the instance.
    */
   public static final CompressorCodec INSTANCE = new CompressorCodec();
+
+  /**
+   * the name.
+   */
+  public static final String NAME = "rn-mc-compressor";
 
   /**
    * the chunk.

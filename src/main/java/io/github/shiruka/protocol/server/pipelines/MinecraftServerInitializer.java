@@ -26,8 +26,9 @@ public final class MinecraftServerInitializer extends ChannelInitializer<Channel
   protected void initChannel(final Channel ch) {
     ch.pipeline()
       .addLast(UserDataCodec.NAME, new UserDataCodec(0xFE))
-      .addLast(CompressorCodec.INSTANCE)
-      .addLast(MinecraftPacketCodec.INSTANCE)
-      .addLast(new MinecraftPacketHandler());
+      .addLast(MinecraftServerConnection.NAME, new MinecraftServerConnection(this.server))
+      .addLast(CompressorCodec.NAME, CompressorCodec.INSTANCE)
+      .addLast(MinecraftPacketCodec.NAME, MinecraftPacketCodec.INSTANCE)
+      .addLast(MinecraftPacketHandler.NAME, new MinecraftPacketHandler());
   }
 }
