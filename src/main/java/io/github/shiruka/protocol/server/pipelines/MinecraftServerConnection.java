@@ -4,6 +4,7 @@ import io.github.shiruka.protocol.server.MinecraftServer;
 import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents Minecraft connection pipelines.
  */
 @RequiredArgsConstructor
-public final class MinecraftServerConnection extends ChannelDuplexHandler {
+public final class MinecraftServerConnection extends ChannelInboundHandlerAdapter {
 
   /**
    * the name.
