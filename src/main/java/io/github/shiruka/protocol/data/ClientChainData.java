@@ -26,6 +26,9 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * a record class that represents client chain data.
+ *
+ * @param chainData the chain data.
+ * @param skinData the skin data.
  */
 public final record ClientChainData(
   @NotNull ChainData chainData,
@@ -49,7 +52,7 @@ public final record ClientChainData(
   private static final PublicKey MOJANG_PUBLIC_KEY;
 
   /**
-   * the Mojang's public key as base 64
+   * the Mojang's public key as base 64.
    */
   private static final String MOJANG_PUBLIC_KEY_BASE64 =
     "MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAE8ELkixyLcwlZryUQcu1TvPOmI2B7vX83ndnWRUaXm74wFfa5f/lwQNTfrLVHa2PmenpGI6JhIMUJaWZrjmMj90NoKNFSNBuKdm8rYiXsfaz3K36x/1U26HpG0ZxK/V1V";
@@ -181,6 +184,12 @@ public final record ClientChainData(
 
   /**
    * a record class that represents chain data.
+   *
+   * @param clientUUID the client unique id.
+   * @param identityPublicKey the identify public key.
+   * @param username the username.
+   * @param xboxAuthed the xbox authed.
+   * @param xuid the xuid.
    */
   private final record ChainData(
     boolean xboxAuthed,
@@ -194,6 +203,8 @@ public final record ClientChainData(
      * decodes the chain data.
      *
      * @param chainData the chain data to decode.
+     *
+     * @return chain data.
      */
     @NotNull
     private static ChainData decode(@NotNull final String chainData) {
@@ -242,6 +253,19 @@ public final record ClientChainData(
 
   /**
    * a record class that represents skin data.
+   *
+   * @param clientId the client id.
+   * @param currentInputMode the current input mode.
+   * @param defaultInputMode the default input mode.
+   * @param deviceId the device id.
+   * @param deviceModel the device model.
+   * @param deviceOS the device os.
+   * @param gameVersion the game version.
+   * @param guiScale the gui scale.
+   * @param languageCode the language code.
+   * @param skin the skin.
+   * @param serverAddress the server address.
+   * @param uiProfile the ui profile.
    */
   private final record SkinData(
     long clientId,

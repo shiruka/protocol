@@ -6,6 +6,10 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * a record class that represents image data.
+ *
+ * @param width the width.
+ * @param height the height.
+ * @param image the image.
  */
 public final record ImageData(
   int width,

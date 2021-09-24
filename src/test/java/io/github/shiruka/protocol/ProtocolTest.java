@@ -10,23 +10,14 @@ import org.jetbrains.annotations.NotNull;
 
 public final class ProtocolTest {
 
-  public static void main(final String[] args) throws Exception {
+  public static void main(final String[] args) {
     PacketRegistry.registerDefaults();
-    new Thread(() -> {
-      try {
-        new MinecraftServer()
-          .maxConnections(1024)
-          .defaultPacketHandler(new Handler())
-          .motd("Motd")
-          .serverListener(new Listener())
-          .bind();
-      } catch (final Exception e) {
-        e.printStackTrace();
-      }
-    }).start();
-    while (true) {
-      Thread.sleep(5L);
-    }
+    new MinecraftServer()
+      .maxConnections(1024)
+      .defaultPacketHandler(new Handler())
+      .motd("Motd")
+      .serverListener(new Listener())
+      .bind();
   }
 
   private static final class Handler implements PacketHandler {

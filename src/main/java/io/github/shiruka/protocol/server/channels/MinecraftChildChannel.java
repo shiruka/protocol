@@ -36,6 +36,7 @@ public final class MinecraftChildChannel extends RakNetChildChannel implements M
    *
    * @param parent the parent.
    * @param address the address.
+   * @param server the server.
    */
   public MinecraftChildChannel(@NotNull final MinecraftServerChannel parent, @NotNull final InetSocketAddress address,
                                @NotNull final MinecraftServer server) {

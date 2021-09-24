@@ -104,8 +104,9 @@ public final class MinecraftServer implements ServerListener, Identifier {
   /**
    * binds the server.
    */
-  public void bind() throws InterruptedException {
-    this.bootstrap.bind(this.address).sync();
+  public void bind() {
+    this.bootstrap.bind(this.address)
+      .syncUninterruptibly();
   }
 
   @NotNull
@@ -123,15 +124,15 @@ public final class MinecraftServer implements ServerListener, Identifier {
   }
 
   @Override
-  public void onDisconnect(@NotNull final MinecraftServerSession session) {
-    this.sessions.remove(session.address());
-    this.serverListener.onDisconnect(session);
-  }
-
-  @Override
   public void onConnect(@NotNull final MinecraftServerSession session) {
     this.sessions.put(session.address(), session);
     this.serverListener.onConnect(session);
+  }
+
+  @Override
+  public void onDisconnect(@NotNull final MinecraftServerSession session) {
+    this.sessions.remove(session.address());
+    this.serverListener.onDisconnect(session);
   }
 
   @Override

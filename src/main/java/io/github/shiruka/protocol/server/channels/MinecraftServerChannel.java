@@ -22,6 +22,8 @@ public final class MinecraftServerChannel extends RakNetServerChannel {
 
   /**
    * ctor.
+   *
+   * @param server the server.
    */
   public MinecraftServerChannel(@NotNull final MinecraftServer server) {
     super();
@@ -32,6 +34,7 @@ public final class MinecraftServerChannel extends RakNetServerChannel {
    * ctor.
    *
    * @param supplier the supplier.
+   * @param server the server.
    */
   public MinecraftServerChannel(@NotNull final Supplier<? extends DatagramChannel> supplier,
                                 @NotNull final MinecraftServer server) {
@@ -43,6 +46,7 @@ public final class MinecraftServerChannel extends RakNetServerChannel {
    * ctor.
    *
    * @param cls the cls.
+   * @param server the server.
    */
   public MinecraftServerChannel(@NotNull final Class<? extends DatagramChannel> cls,
                                 @NotNull final MinecraftServer server) {

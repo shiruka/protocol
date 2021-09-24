@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 public final class PacketRegistry {
 
   /**
-   * the packets
+   * the packets.
    */
   private static final Int2ObjectMap<Supplier<? extends MinecraftPacket>> PACKETS = new Int2ObjectOpenHashMap<>();
 

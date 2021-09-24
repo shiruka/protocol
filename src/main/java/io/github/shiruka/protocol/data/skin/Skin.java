@@ -217,6 +217,11 @@ public final class Skin {
 
   /**
    * a class that represents skin animations.
+   *
+   * @param imageData the image Data.
+   * @param type the type.
+   * @param frames the frames.
+   * @param expression the expression.
    */
   public final record Animation(
     @NotNull ImageData imageData,
