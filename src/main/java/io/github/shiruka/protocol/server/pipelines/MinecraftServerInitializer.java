@@ -28,6 +28,6 @@ public final class MinecraftServerInitializer extends ChannelInitializer<Channel
       .addLast(UserDataCodec.NAME, new UserDataCodec(0xFE))
       .addLast(CompressorCodec.INSTANCE)
       .addLast(MinecraftPacketCodec.INSTANCE)
-      .addLast(new MinecraftPacketHandler(this.server));
+      .addLast(new MinecraftPacketHandler());
   }
 }
