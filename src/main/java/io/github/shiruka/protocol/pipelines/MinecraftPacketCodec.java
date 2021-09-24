@@ -8,7 +8,6 @@ import io.netty.buffer.ByteBufUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageCodec;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.zip.DataFormatException;
 import lombok.AccessLevel;
