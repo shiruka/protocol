@@ -58,7 +58,7 @@ dependencies {
   compileOnly "org.projectlombok:lombok:1.18.20"
   annotationProcessor "org.projectlombok:lombok:1.18.20"
 
-  compileOnly "io.github.shiruka:network:3.0.2"
+  compileOnly "io.github.shiruka:network:3.0.3"
 
   compileOnly "it.unimi.dsi:fastutil:8.5.6"
   compileOnly "io.netty:netty-all:4.1.68.Final"
