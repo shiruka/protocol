@@ -67,7 +67,7 @@ dependencies {
   compileOnly "com.google.guava:guava:31.0.1-jre"
   compileOnly "org.apache.commons:commons-math3:3.6.1"
   compileOnly "org.apache.logging.log4j:log4j-api:2.14.1"
-  compileOnly "com.fasterxml.jackson.core:jackson-databind:2.12.5"
+  compileOnly "com.fasterxml.jackson.core:jackson-databind:2.13.0"
 
 
   // Test
