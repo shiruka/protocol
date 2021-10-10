@@ -128,15 +128,12 @@ public final class MinecraftPacketBuffer {
     final var name = this.readString();
     final var editable = this.readBoolean();
     final var type = this.readUnsignedVarInt();
-    switch (type) {
-      case 1:
-        return new GameRuleValue(name, editable, this.readBoolean());
-      case 2:
-        return new GameRuleValue(name, editable, this.readUnsignedIntLE());
-      case 3:
-        return new GameRuleValue(name, editable, this.readFloatLE());
-    }
-    throw new IllegalStateException("Invalid game rule type received!");
+    return switch (type) {
+      case 1 -> new GameRuleValue(name, editable, this.readBoolean());
+      case 2 -> new GameRuleValue(name, editable, this.readUnsignedIntLE());
+      case 3 -> new GameRuleValue(name, editable, this.readFloatLE());
+      default -> throw new IllegalStateException("Invalid game rule type received!");
+    };
   }
 
   /**
