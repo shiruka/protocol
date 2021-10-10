@@ -48,7 +48,7 @@ public final class ResourcePackStack extends MinecraftPacket {
   private boolean forcedToAccept;
 
   /**
-   * the game version
+   * the game version.
    */
   @Nullable
   private String gameVersion;
