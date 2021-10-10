@@ -49,7 +49,7 @@ public final class MinecraftServer implements ServerListener, Identifier {
   private final Map<InetSocketAddress, MinecraftServerSession> sessions = new HashMap<>();
 
   /**
-   * the default packet handler.
+   * the default Minecraft server session packet handler.
    */
   @NotNull
   @Getter
@@ -115,8 +115,8 @@ public final class MinecraftServer implements ServerListener, Identifier {
     return new StringJoiner(";", "", ";")
       .add("MCPE")
       .add(this.motd)
-      .add("448")
-      .add("1.17.30")
+      .add("465")
+      .add("1.17.34")
       .add(String.valueOf(this.sessions.size()))
       .add(String.valueOf(this.maxConnections))
       .add(String.valueOf(this.serverId))
