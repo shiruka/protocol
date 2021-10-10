@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
@@ -22,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents minecraft server sessions.
  */
 @Accessors(fluent = true)
+@RequiredArgsConstructor
 public final class MinecraftServer implements ServerListener, Identifier {
 
   /**
