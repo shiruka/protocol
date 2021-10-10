@@ -372,6 +372,7 @@ public final class MinecraftPacketBuffer {
       case 1 -> this.writeBoolean((boolean) value);
       case 2 -> this.writeUnsignedVarInt((int) value);
       case 3 -> this.writeFloatLE((float) value);
+      default -> throw new IllegalStateException("Invalid game rule type received!");
     }
   }
 
