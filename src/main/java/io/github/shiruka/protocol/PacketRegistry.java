@@ -7,6 +7,7 @@ import io.github.shiruka.protocol.packets.ClientToServerHandshake;
 import io.github.shiruka.protocol.packets.Disconnect;
 import io.github.shiruka.protocol.packets.Login;
 import io.github.shiruka.protocol.packets.PlayStatus;
+import io.github.shiruka.protocol.packets.PlayerAuthInput;
 import io.github.shiruka.protocol.packets.RemoveEntity;
 import io.github.shiruka.protocol.packets.ResourcePackClientResponse;
 import io.github.shiruka.protocol.packets.ResourcePackInfo;
@@ -82,6 +83,7 @@ public final class PacketRegistry {
     PacketRegistry.register(Ids.REMOVE_ENTITY, RemoveEntity::new);
     PacketRegistry.register(Ids.ADD_ITEM_ENTITY, AddItemEntity::new);
     PacketRegistry.register(Ids.TAKE_ITEM_ENTITY, TakeItemEntity::new);
+    PacketRegistry.register(Ids.PLAYER_AUTH_INPUT, PlayerAuthInput::new);
     PacketRegistry.PACKETS.defaultReturnValue(Unknown::new);
   }
 }

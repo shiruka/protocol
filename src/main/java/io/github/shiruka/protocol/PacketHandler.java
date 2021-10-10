@@ -7,6 +7,7 @@ import io.github.shiruka.protocol.packets.ClientToServerHandshake;
 import io.github.shiruka.protocol.packets.Disconnect;
 import io.github.shiruka.protocol.packets.Login;
 import io.github.shiruka.protocol.packets.PlayStatus;
+import io.github.shiruka.protocol.packets.PlayerAuthInput;
 import io.github.shiruka.protocol.packets.RemoveEntity;
 import io.github.shiruka.protocol.packets.ResourcePackClientResponse;
 import io.github.shiruka.protocol.packets.ResourcePackInfo;
@@ -29,6 +30,14 @@ public interface PacketHandler {
    */
   PacketHandler EMPTY = new PacketHandler() {
   };
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final PlayerAuthInput packet) {
+  }
 
   /**
    * handles the packet.

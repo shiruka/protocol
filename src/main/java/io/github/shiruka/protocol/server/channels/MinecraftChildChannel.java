@@ -6,6 +6,7 @@ import io.github.shiruka.protocol.server.MinecraftServer;
 import io.github.shiruka.protocol.server.MinecraftServerSession;
 import io.netty.channel.ChannelHandlerContext;
 import java.net.InetSocketAddress;
+import java.util.concurrent.atomic.AtomicInteger;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -17,6 +18,12 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @Accessors(fluent = true)
 public final class MinecraftChildChannel extends RakNetChildChannel implements MinecraftServerSession {
+
+  /**
+   * the dynamic blocking id.
+   */
+  @Getter
+  private final AtomicInteger dynamicBlockingId = new AtomicInteger(-1);
 
   /**
    * the server.

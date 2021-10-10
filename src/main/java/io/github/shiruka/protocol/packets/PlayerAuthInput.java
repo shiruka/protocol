@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 @Setter
 @ToString
 @Accessors(fluent = true)
-public final class AddPlayer extends MinecraftPacket {
+public final class PlayerAuthInput extends MinecraftPacket {
 
   @Override
   public void decode(@NotNull final MinecraftPacketBuffer buffer) {

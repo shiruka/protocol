@@ -7,6 +7,7 @@ import io.github.shiruka.protocol.packets.ClientToServerHandshake;
 import io.github.shiruka.protocol.packets.Disconnect;
 import io.github.shiruka.protocol.packets.Login;
 import io.github.shiruka.protocol.packets.PlayStatus;
+import io.github.shiruka.protocol.packets.PlayerAuthInput;
 import io.github.shiruka.protocol.packets.RemoveEntity;
 import io.github.shiruka.protocol.packets.ResourcePackClientResponse;
 import io.github.shiruka.protocol.packets.ResourcePackInfo;
@@ -51,6 +52,11 @@ public interface Ids {
    * the id of the {@link Login} packet.
    */
   int LOGIN = 1;
+
+  /**
+   * the id of the {@link PlayerAuthInput} packet.
+   */
+  int PLAYER_AUTH_INPUT = 144;
 
   /**
    * the id of the {@link PlayStatus} packet.

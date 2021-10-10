@@ -41,14 +41,14 @@ public enum GameType {
   private static final GameType[] CACHE = GameType.values();
 
   /**
-   * gets game type by id.
+   * gets game type by ordinal.
    *
-   * @param id the id to get.
+   * @param ordinal the ordinal to get.
    *
    * @return game type.
    */
   @NotNull
-  public static GameType byId(final int id) {
-    return GameType.CACHE[id];
+  public static GameType byOrdinal(final int ordinal) {
+    return GameType.CACHE[ordinal];
   }
 }

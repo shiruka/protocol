@@ -3,16 +3,22 @@ package io.github.shiruka.protocol.packets;
 import io.github.shiruka.api.math.vectors.Vector2f;
 import io.github.shiruka.api.math.vectors.Vector3f;
 import io.github.shiruka.api.math.vectors.Vector3i;
+import io.github.shiruka.api.nbt.ListTag;
+import io.github.shiruka.protocol.Constants;
 import io.github.shiruka.protocol.MinecraftPacket;
 import io.github.shiruka.protocol.MinecraftPacketBuffer;
 import io.github.shiruka.protocol.PacketHandler;
+import io.github.shiruka.protocol.data.BlockPropertyData;
 import io.github.shiruka.protocol.data.EduSharedUriResource;
 import io.github.shiruka.protocol.data.ExperimentData;
 import io.github.shiruka.protocol.data.GamePublishSetting;
 import io.github.shiruka.protocol.data.GameRuleValue;
 import io.github.shiruka.protocol.data.GameType;
+import io.github.shiruka.protocol.data.ItemEntry;
 import io.github.shiruka.protocol.data.PlayerPermission;
 import io.github.shiruka.protocol.data.SpawnBiomeType;
+import io.github.shiruka.protocol.data.SyncedPlayerMovementSettings;
+import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -31,6 +37,11 @@ import org.jetbrains.annotations.Nullable;
 @ToString
 @Accessors(fluent = true)
 public final class StartGame extends MinecraftPacket {
+
+  /**
+   * the block properties.
+   */
+  private final List<BlockPropertyData> blockProperties = new ObjectArrayList<>();
 
   /**
    * the experiments.
@@ -55,6 +66,12 @@ public final class StartGame extends MinecraftPacket {
   private boolean behaviorPackLocked;
 
   /**
+   * the block palette.
+   */
+  @Nullable
+  private ListTag blockPalette;
+
+  /**
    * the bonus chest enabled.
    */
   @Getter
@@ -71,6 +88,12 @@ public final class StartGame extends MinecraftPacket {
    */
   @Getter
   private boolean commandsEnabled;
+
+  /**
+   * the current tick.
+   */
+  @Getter
+  private long currentTick;
 
   /**
    * the custom biome name.
@@ -136,6 +159,12 @@ public final class StartGame extends MinecraftPacket {
   private String educationProductionId = "";
 
   /**
+   * the enchantment seed.
+   */
+  @Getter
+  private int enchantmentSeed;
+
+  /**
    * the experiments previously toggled.
    */
   @Getter
@@ -166,6 +195,18 @@ public final class StartGame extends MinecraftPacket {
   private int generatorId;
 
   /**
+   * the inventories server authoritative.
+   */
+  @Getter
+  private boolean inventoriesServerAuthoritative;
+
+  /**
+   * the item entries.
+   */
+  @NotNull
+  private List<ItemEntry> itemEntries = new ObjectArrayList<>();
+
+  /**
    * the level game type.
    */
   @Nullable
@@ -190,7 +231,7 @@ public final class StartGame extends MinecraftPacket {
   private float lightningLevel;
 
   /**
-   * the limited world height
+   * the limited world height.
    */
   @Getter
   private int limitedWorldHeight;
@@ -200,6 +241,12 @@ public final class StartGame extends MinecraftPacket {
    */
   @Getter
   private int limitedWorldWidth;
+
+  /**
+   * the multiplayer correlation id.
+   */
+  @Nullable
+  private String multiplayerCorrelationId;
 
   /**
    * the multiplayer game.
@@ -238,11 +285,20 @@ public final class StartGame extends MinecraftPacket {
   private GameType playerGameType;
 
   /**
+   * the player movement settings.
+   */
+  @Nullable
+  private SyncedPlayerMovementSettings playerMovementSettings;
+
+  /**
    * the player position.
    */
   @Nullable
   private Vector3f playerPosition;
 
+  /**
+   * the premium world template id.
+   */
   @Nullable
   private String premiumWorldTemplateId;
 
@@ -281,6 +337,12 @@ public final class StartGame extends MinecraftPacket {
    */
   @Getter
   private int serverChunkTickRange;
+
+  /**
+   * the server engine.
+   */
+  @Nullable
+  private String serverEngine;
 
   /**
    * the spawn biome type.
@@ -343,12 +405,87 @@ public final class StartGame extends MinecraftPacket {
   @Nullable
   private GamePublishSetting xblBroadcastMode;
 
+  /**
+   * obtains the block palette.
+   *
+   * @return block palette.
+   */
+  @NotNull
+  public ListTag blockPalette() {
+    return Objects.requireNonNull(this.blockPalette, "block palette");
+  }
+
+  /**
+   * obtains the block properties.
+   *
+   * @return block properties.
+   */
+  @NotNull
+  public List<BlockPropertyData> blockProperties() {
+    return Collections.unmodifiableList(this.blockProperties);
+  }
+
   @Override
-  public void decode(@NotNull final MinecraftPacketBuffer buffer) {
+  public void decode(@NotNull final MinecraftPacketBuffer buffer, @NotNull final MinecraftChildChannel session) {
+    this.uniqueEntityId = buffer.readVarLong();
+    this.runtimeEntityId = buffer.readUnsignedVarLong();
+    this.playerGameType = buffer.readGameType();
+    this.playerPosition = buffer.readVector3f();
+    this.rotation = buffer.readVector2f();
+    this.readLevelSettings(buffer);
+    this.levelId = buffer.readString();
+    this.levelName = buffer.readString();
+    this.premiumWorldTemplateId = buffer.readString();
+    this.trial = buffer.readBoolean();
+    this.playerMovementSettings = buffer.readSyncedPlayerMovementSettings();
+    this.currentTick = buffer.readLongLE();
+    this.enchantmentSeed = buffer.readVarInt();
+    buffer.readArray(this.blockProperties, () -> {
+      final var name = buffer.readString();
+      final var properties = buffer.readCompoundTag();
+      return new BlockPropertyData(name, properties);
+    });
+    buffer.readArray(this.itemEntries, () -> {
+      final var identifier = buffer.readString();
+      final var id = buffer.readShortLE();
+      final var componentBased = buffer.readBoolean();
+      if (identifier.equals(Constants.BLOCKING_ITEM_IDENTIFIER)) {
+        session.dynamicBlockingId().set(id);
+      }
+      return new ItemEntry(identifier, id, componentBased);
+    });
+    this.multiplayerCorrelationId = buffer.readString();
+    this.inventoriesServerAuthoritative = buffer.readBoolean();
+    this.serverEngine = buffer.readString();
   }
 
   @Override
   public void encode(@NotNull final MinecraftPacketBuffer buffer) {
+    buffer.writeVarLong(this.uniqueEntityId);
+    buffer.writeUnsignedVarLong(this.runtimeEntityId);
+    buffer.writeGameType(this.playerGameType());
+    buffer.writeVector3f(this.playerPosition());
+    buffer.writeVector2f(this.rotation());
+    this.writeLevelSettings(buffer);
+    buffer.writeString(this.levelId());
+    buffer.writeString(this.levelName());
+    buffer.writeString(this.premiumWorldTemplateId());
+    buffer.writeBoolean(this.trial);
+    buffer.writeSyncedPlayerMovementSettings(this.playerMovementSettings());
+    buffer.writeLongLE(this.currentTick);
+    buffer.writeVarInt(this.enchantmentSeed);
+    buffer.writeArray(this.blockProperties, block -> {
+      buffer.writeString(block.name());
+      buffer.writeCompoundTag(block.properties());
+    });
+    buffer.writeArray(this.itemEntries, entry -> {
+      buffer.writeString(entry.identifier());
+      buffer.writeShortLE(entry.id());
+      buffer.writeBoolean(entry.componentBased());
+    });
+    buffer.writeString(this.multiplayerCorrelationId());
+    buffer.writeBoolean(this.inventoriesServerAuthoritative);
+    buffer.writeString(this.serverEngine());
   }
 
   @Override
@@ -366,6 +503,11 @@ public final class StartGame extends MinecraftPacket {
     return Objects.requireNonNull(this.defaultPlayerPermission, "default player permission");
   }
 
+  /**
+   * obtains the default spawn.
+   *
+   * @return default spawn.
+   */
   @NotNull
   public Vector3i defaultSpawn() {
     return Objects.requireNonNull(this.defaultSpawn, "default spawn");
@@ -389,6 +531,16 @@ public final class StartGame extends MinecraftPacket {
   @NotNull
   public List<GameRuleValue> gameRules() {
     return Collections.unmodifiableList(this.gameRules);
+  }
+
+  /**
+   * obtains the item entries.
+   *
+   * @return item entries.
+   */
+  @NotNull
+  public List<ItemEntry> itemEntries() {
+    return Collections.unmodifiableList(this.itemEntries);
   }
 
   /**
@@ -422,6 +574,16 @@ public final class StartGame extends MinecraftPacket {
   }
 
   /**
+   * obtains the multiplayer correlation id.
+   *
+   * @return multiplayer correlation id.
+   */
+  @NotNull
+  public String multiplayerCorrelationId() {
+    return Objects.requireNonNull(this.multiplayerCorrelationId, "multiplayer correlation id");
+  }
+
+  /**
    * obtains the platform broadcast mode.
    *
    * @return platform broadcast mode.
@@ -439,6 +601,16 @@ public final class StartGame extends MinecraftPacket {
   @NotNull
   public GameType playerGameType() {
     return Objects.requireNonNull(this.playerGameType, "player game type.");
+  }
+
+  /**
+   * obtains the player movement settings.
+   *
+   * @return player movement settings.
+   */
+  @NotNull
+  public SyncedPlayerMovementSettings playerMovementSettings() {
+    return Objects.requireNonNull(this.playerMovementSettings, "player movement settings");
   }
 
   /**
@@ -472,6 +644,16 @@ public final class StartGame extends MinecraftPacket {
   }
 
   /**
+   * obtains the server engine.
+   *
+   * @return server engine.
+   */
+  @NotNull
+  public String serverEngine() {
+    return Objects.requireNonNull(this.serverEngine, "server engine");
+  }
+
+  /**
    * obtains the vanilla version.
    *
    * @return vanilla version.
@@ -489,5 +671,111 @@ public final class StartGame extends MinecraftPacket {
   @NotNull
   public GamePublishSetting xblBroadcastMode() {
     return Objects.requireNonNull(this.xblBroadcastMode, "xbl broadcast mode");
+  }
+
+  /**
+   * reads the level settings.
+   *
+   * @param buffer the buffer to read.
+   */
+  private void readLevelSettings(@NotNull final MinecraftPacketBuffer buffer) {
+    this.seed = buffer.readVarInt();
+    this.spawnBiomeType = buffer.readSpawnBiomeType();
+    this.customBiomeName = buffer.readString();
+    this.dimensionId = buffer.readVarInt();
+    this.generatorId = buffer.readVarInt();
+    this.levelGameType = buffer.readGameType();
+    this.difficulty = buffer.readVarInt();
+    this.defaultSpawn = buffer.readVector3i();
+    this.achievementsDisabled = buffer.readBoolean();
+    this.dayCycleStopTime = buffer.readVarInt();
+    this.eduEditionOffers = buffer.readVarInt();
+    this.eduFeaturesEnabled = buffer.readBoolean();
+    this.educationProductionId = buffer.readString();
+    this.rainLevel = buffer.readFloatLE();
+    this.lightningLevel = buffer.readFloatLE();
+    this.platformLockedContentConfirmed = buffer.readBoolean();
+    this.multiplayerGame = buffer.readBoolean();
+    this.broadcastingToLan = buffer.readBoolean();
+    this.xblBroadcastMode = buffer.readGamePublishSetting();
+    this.platformBroadcastMode = buffer.readGamePublishSetting();
+    this.commandsEnabled = buffer.readBoolean();
+    this.texturePacksRequired = buffer.readBoolean();
+    buffer.readArray(this.gameRules, buffer::readGameRule);
+    buffer.readExperiments(this.experiments);
+    this.experimentsPreviouslyToggled = buffer.readBoolean();
+    this.bonusChestEnabled = buffer.readBoolean();
+    this.startingWithMap = buffer.readBoolean();
+    this.defaultPlayerPermission = buffer.readPlayerPermission();
+    this.serverChunkTickRange = buffer.readIntLE();
+    this.behaviorPackLocked = buffer.readBoolean();
+    this.resourcePackLocked = buffer.readBoolean();
+    this.fromLockedWorldTemplate = buffer.readBoolean();
+    this.usingMsaGamerTagsOnly = buffer.readBoolean();
+    this.fromWorldTemplate = buffer.readBoolean();
+    this.worldTemplateOptionLocked = buffer.readBoolean();
+    this.onlySpawningV1Villagers = buffer.readBoolean();
+    this.vanillaVersion = buffer.readString();
+    this.limitedWorldWidth = buffer.readIntLE();
+    this.limitedWorldHeight = buffer.readIntLE();
+    this.netherType = buffer.readBoolean();
+    this.eduSharedUriResource = buffer.readEduSharedUriResource();
+    if (buffer.readBoolean()) {
+      this.forceExperimentalGameplay = buffer.readBoolean();
+    }
+  }
+
+  /**
+   * writes the level settings.
+   *
+   * @param buffer the buffer to write.
+   */
+  private void writeLevelSettings(@NotNull final MinecraftPacketBuffer buffer) {
+    buffer.writeVarInt(this.seed);
+    buffer.writeSpawnBiomeType(this.spawnBiomeType());
+    buffer.writeString(this.customBiomeName());
+    buffer.writeVarInt(this.dimensionId);
+    buffer.writeVarInt(this.generatorId);
+    buffer.writeGameType(this.levelGameType());
+    buffer.writeVarInt(this.difficulty);
+    buffer.writeVector3i(this.defaultSpawn());
+    buffer.writeBoolean(this.achievementsDisabled);
+    buffer.writeVarInt(this.dayCycleStopTime);
+    buffer.writeVarInt(this.eduEditionOffers);
+    buffer.writeBoolean(this.eduFeaturesEnabled);
+    buffer.writeString(this.educationProductionId());
+    buffer.writeFloatLE(this.rainLevel);
+    buffer.writeFloatLE(this.lightningLevel);
+    buffer.writeBoolean(this.platformLockedContentConfirmed);
+    buffer.writeBoolean(this.multiplayerGame);
+    buffer.writeBoolean(this.broadcastingToLan);
+    buffer.writeGamePublishSetting(this.xblBroadcastMode());
+    buffer.writeGamePublishSetting(this.platformBroadcastMode());
+    buffer.writeBoolean(this.commandsEnabled);
+    buffer.writeBoolean(this.texturePacksRequired);
+    buffer.writeArray(this.gameRules, buffer::writeGameRule);
+    buffer.writeExperiments(this.experiments);
+    buffer.writeBoolean(this.experimentsPreviouslyToggled);
+    buffer.writeBoolean(this.bonusChestEnabled);
+    buffer.writeBoolean(this.startingWithMap);
+    buffer.writePlayerPermission(this.defaultPlayerPermission());
+    buffer.writeIntLE(this.serverChunkTickRange);
+    buffer.writeBoolean(this.behaviorPackLocked);
+    buffer.writeBoolean(this.resourcePackLocked);
+    buffer.writeBoolean(this.fromLockedWorldTemplate);
+    buffer.writeBoolean(this.usingMsaGamerTagsOnly);
+    buffer.writeBoolean(this.fromWorldTemplate);
+    buffer.writeBoolean(this.worldTemplateOptionLocked);
+    buffer.writeBoolean(this.onlySpawningV1Villagers);
+    buffer.writeString(this.vanillaVersion());
+    buffer.writeIntLE(this.limitedWorldWidth);
+    buffer.writeIntLE(this.limitedWorldHeight);
+    buffer.writeBoolean(this.netherType);
+    buffer.writeString(this.eduSharedUriResource().buttonName());
+    buffer.writeString(this.eduSharedUriResource().linkUri());
+    buffer.writeBoolean(this.forceExperimentalGameplay);
+    if (this.forceExperimentalGameplay) {
+      buffer.writeBoolean(true);
+    }
   }
 }

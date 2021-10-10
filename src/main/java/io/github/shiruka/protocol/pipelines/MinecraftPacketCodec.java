@@ -3,6 +3,7 @@ package io.github.shiruka.protocol.pipelines;
 import io.github.shiruka.network.PacketBuffer;
 import io.github.shiruka.protocol.MinecraftPacket;
 import io.github.shiruka.protocol.PacketRegistry;
+import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.channel.ChannelHandlerContext;
@@ -38,6 +39,7 @@ public final class MinecraftPacketCodec extends MessageToMessageCodec<ByteBuf, L
 
   @Override
   protected void decode(final ChannelHandlerContext ctx, final ByteBuf msg, final List<Object> out) {
+    final var session = MinecraftChildChannel.cast(ctx);
     final var packets = new ArrayList<MinecraftPacket>();
     try {
       final var buffer = new PacketBuffer(msg);
@@ -53,7 +55,7 @@ public final class MinecraftPacketCodec extends MessageToMessageCodec<ByteBuf, L
           packet.packetId(packetId);
           packet.senderId(header >>> 10 & 3);
           packet.clientId(header >>> 12 & 3);
-          packet.decode(packetBuffer);
+          packet.decode(packetBuffer, session);
           packets.add(packet);
         } catch (final Exception e) {
           MinecraftPacketCodec.log.error("Error occurred whilst decoding packet!", e);
