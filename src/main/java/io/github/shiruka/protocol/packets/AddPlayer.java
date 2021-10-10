@@ -22,6 +22,7 @@ public final class AddPlayer extends MinecraftPacket {
 
   @Override
   public void encode(@NotNull final MinecraftPacketBuffer buffer) {
+
   }
 
   @Override

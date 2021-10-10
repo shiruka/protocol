@@ -4,10 +4,12 @@ import io.github.shiruka.protocol.MinecraftPacket;
 import io.github.shiruka.protocol.MinecraftPacketBuffer;
 import io.github.shiruka.protocol.PacketHandler;
 import io.github.shiruka.protocol.data.ResourcePackStackEntry;
-import io.github.shiruka.protocol.data.ResourcePackStackExperimentData;
+import io.github.shiruka.protocol.data.ExperimentData;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
@@ -30,7 +32,7 @@ public final class ResourcePackStack extends MinecraftPacket {
   /**
    * the experiments.
    */
-  private final List<ResourcePackStackExperimentData> experiments = new ObjectArrayList<>();
+  private final List<ExperimentData> experiments = new ObjectArrayList<>();
 
   /**
    * the resource packs.
@@ -40,11 +42,13 @@ public final class ResourcePackStack extends MinecraftPacket {
   /**
    * the experiments previously toggled.
    */
+  @Getter
   private boolean experimentsPreviouslyToggled;
 
   /**
    * the forced to accept.
    */
+  @Getter
   private boolean forcedToAccept;
 
   /**
@@ -52,6 +56,16 @@ public final class ResourcePackStack extends MinecraftPacket {
    */
   @Nullable
   private String gameVersion;
+
+  /**
+   * obtains the behavior packs.
+   *
+   * @return behavior packs.
+   */
+  @NotNull
+  public List<ResourcePackStackEntry> behaviorPacks() {
+    return Collections.unmodifiableList(this.behaviorPacks);
+  }
 
   @Override
   public void decode(@NotNull final MinecraftPacketBuffer buffer) {
@@ -79,6 +93,16 @@ public final class ResourcePackStack extends MinecraftPacket {
   }
 
   /**
+   * obtains the experiments.
+   *
+   * @return experiments.
+   */
+  @NotNull
+  public List<ExperimentData> experiments() {
+    return Collections.unmodifiableList(this.experiments);
+  }
+
+  /**
    * obtains the game version.
    *
    * @return game version.
@@ -86,5 +110,15 @@ public final class ResourcePackStack extends MinecraftPacket {
   @NotNull
   public String gameVersion() {
     return Objects.requireNonNull(this.gameVersion, "game version.");
+  }
+
+  /**
+   * obtains the resource packs.
+   *
+   * @return resource packs.
+   */
+  @NotNull
+  public List<ResourcePackStackEntry> resourcePacks() {
+    return Collections.unmodifiableList(this.resourcePacks);
   }
 }

@@ -2,9 +2,11 @@ package io.github.shiruka.protocol;
 
 import io.github.shiruka.network.PacketBuffer;
 import io.github.shiruka.protocol.data.PlayStatusStatus;
+import io.github.shiruka.protocol.data.ResourcePackClientResponseStatus;
 import io.github.shiruka.protocol.data.ResourcePackInfoEntry;
 import io.github.shiruka.protocol.data.ResourcePackStackEntry;
-import io.github.shiruka.protocol.data.ResourcePackStackExperimentData;
+import io.github.shiruka.protocol.data.ExperimentData;
+import io.github.shiruka.protocol.data.TextType;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
@@ -60,10 +62,10 @@ public final class MinecraftPacketBuffer {
    *
    * @param experiments the experiments to read.
    */
-  public void readExperiments(@NotNull final List<ResourcePackStackExperimentData> experiments) {
+  public void readExperiments(@NotNull final List<ExperimentData> experiments) {
     final var count = this.buffer.readIntLE();
     IntStream.range(0, count)
-      .mapToObj(i -> new ResourcePackStackExperimentData(this.readString(), this.buffer.readBoolean()))
+      .mapToObj(i -> new ExperimentData(this.readString(), this.buffer.readBoolean()))
       .forEach(experiments::add);
   }
 
@@ -75,6 +77,16 @@ public final class MinecraftPacketBuffer {
   @NotNull
   public PlayStatusStatus readPlayStatusStatus() {
     return PlayStatusStatus.byOrdinal(this.readInt());
+  }
+
+  /**
+   * reads the resource pack client response status.
+   *
+   * @return resource pack client response status.
+   */
+  @NotNull
+  public ResourcePackClientResponseStatus readResourcePackClientResponseStatus() {
+    return ResourcePackClientResponseStatus.byOrdinal(this.buffer.readUnsignedByte());
   }
 
   /**
@@ -128,6 +140,16 @@ public final class MinecraftPacketBuffer {
   }
 
   /**
+   * reads the text type.
+   *
+   * @return text type.
+   */
+  @NotNull
+  public TextType readTextType() {
+    return TextType.values()[this.readUnsignedByte()];
+  }
+
+  /**
    * writes the array.
    *
    * @param array the array to write.
@@ -157,7 +179,7 @@ public final class MinecraftPacketBuffer {
    *
    * @param experiments the experiments to write.
    */
-  public void writeExperiments(@NotNull final List<ResourcePackStackExperimentData> experiments) {
+  public void writeExperiments(@NotNull final List<ExperimentData> experiments) {
     this.writeIntLE(experiments.size());
     for (final var experiment : experiments) {
       this.writeString(experiment.name());
@@ -172,6 +194,15 @@ public final class MinecraftPacketBuffer {
    */
   public void writePlayStatusStatus(@NotNull final PlayStatusStatus status) {
     this.writeInt(status.ordinal());
+  }
+
+  /**
+   * writes the resource pack client response status.
+   *
+   * @param status the status to write.
+   */
+  public void writeResourcePackClientResponseStatus(@NotNull final ResourcePackClientResponseStatus status) {
+    this.writeByte(status.ordinal());
   }
 
   /**
@@ -208,5 +239,14 @@ public final class MinecraftPacketBuffer {
     this.writeString(entry.packId());
     this.writeString(entry.packVersion());
     this.writeString(entry.subPackName());
+  }
+
+  /**
+   * writes the text type.
+   *
+   * @param type the type to write.
+   */
+  public void writeTextType(@NotNull final TextType type) {
+    this.writeByte(type.ordinal());
   }
 }
