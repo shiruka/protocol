@@ -2,6 +2,7 @@ package io.github.shiruka.protocol.packets;
 
 import io.github.shiruka.network.PacketBuffer;
 import io.github.shiruka.protocol.MinecraftPacket;
+import io.github.shiruka.protocol.MinecraftPacketBuffer;
 import io.github.shiruka.protocol.PacketHandler;
 import java.util.Objects;
 import lombok.experimental.Accessors;
@@ -36,12 +37,12 @@ public final class Unknown extends MinecraftPacket {
   }
 
   @Override
-  public void decode(@NotNull final PacketBuffer buffer) {
+  public void decode(@NotNull final MinecraftPacketBuffer buffer) {
     this.payload = buffer.readRetainedSlice(buffer.remaining());
   }
 
   @Override
-  public void encode(@NotNull final PacketBuffer buffer) {
+  public void encode(@NotNull final MinecraftPacketBuffer buffer) {
     final var payload = this.payload();
     buffer.writeBytes(payload, payload.readerIndex(), payload.remaining());
   }

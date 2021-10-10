@@ -1,7 +1,7 @@
 package io.github.shiruka.protocol.packets;
 
-import io.github.shiruka.network.PacketBuffer;
 import io.github.shiruka.protocol.MinecraftPacket;
+import io.github.shiruka.protocol.MinecraftPacketBuffer;
 import io.github.shiruka.protocol.PacketHandler;
 import io.github.shiruka.protocol.data.PlayStatusStatus;
 import java.util.Objects;
@@ -26,13 +26,13 @@ public final class PlayStatus extends MinecraftPacket {
   private PlayStatusStatus status;
 
   @Override
-  public void decode(@NotNull final PacketBuffer buffer) {
-    this.status = PlayStatusStatus.byOrdinal(buffer.readInt());
+  public void decode(@NotNull final MinecraftPacketBuffer buffer) {
+    this.status = buffer.readPlayStatusStatus();
   }
 
   @Override
-  public void encode(@NotNull final PacketBuffer buffer) {
-    buffer.writeInt(this.status().ordinal());
+  public void encode(@NotNull final MinecraftPacketBuffer buffer) {
+    buffer.writePlayStatusStatus(this.status());
   }
 
   @Override

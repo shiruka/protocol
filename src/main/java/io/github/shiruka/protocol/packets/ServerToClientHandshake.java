@@ -1,7 +1,7 @@
 package io.github.shiruka.protocol.packets;
 
-import io.github.shiruka.network.PacketBuffer;
 import io.github.shiruka.protocol.MinecraftPacket;
+import io.github.shiruka.protocol.MinecraftPacketBuffer;
 import io.github.shiruka.protocol.PacketHandler;
 import java.util.Objects;
 import lombok.Setter;
@@ -25,12 +25,12 @@ public final class ServerToClientHandshake extends MinecraftPacket {
   private String jwt;
 
   @Override
-  public void decode(@NotNull final PacketBuffer buffer) {
+  public void decode(@NotNull final MinecraftPacketBuffer buffer) {
     this.jwt = buffer.readString();
   }
 
   @Override
-  public void encode(@NotNull final PacketBuffer buffer) {
+  public void encode(@NotNull final MinecraftPacketBuffer buffer) {
     buffer.writeString(this.jwt());
   }
 

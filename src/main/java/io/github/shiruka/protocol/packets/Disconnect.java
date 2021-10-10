@@ -1,7 +1,7 @@
 package io.github.shiruka.protocol.packets;
 
-import io.github.shiruka.network.PacketBuffer;
 import io.github.shiruka.protocol.MinecraftPacket;
+import io.github.shiruka.protocol.MinecraftPacketBuffer;
 import io.github.shiruka.protocol.PacketHandler;
 import java.util.Objects;
 import lombok.Setter;
@@ -30,7 +30,7 @@ public final class Disconnect extends MinecraftPacket {
   private boolean messageSkipped;
 
   @Override
-  public void decode(@NotNull final PacketBuffer buffer) {
+  public void decode(@NotNull final MinecraftPacketBuffer buffer) {
     this.messageSkipped = buffer.readBoolean();
     if (!this.messageSkipped) {
       this.kickMessage = buffer.readString();
@@ -38,7 +38,7 @@ public final class Disconnect extends MinecraftPacket {
   }
 
   @Override
-  public void encode(@NotNull final PacketBuffer buffer) {
+  public void encode(@NotNull final MinecraftPacketBuffer buffer) {
     buffer.writeBoolean(this.messageSkipped);
     if (!this.messageSkipped) {
       buffer.writeString(this.kickMessage());

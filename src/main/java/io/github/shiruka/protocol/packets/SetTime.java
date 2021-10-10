@@ -1,7 +1,7 @@
 package io.github.shiruka.protocol.packets;
 
-import io.github.shiruka.network.PacketBuffer;
 import io.github.shiruka.protocol.MinecraftPacket;
+import io.github.shiruka.protocol.MinecraftPacketBuffer;
 import io.github.shiruka.protocol.PacketHandler;
 import lombok.Setter;
 import lombok.ToString;
@@ -17,11 +17,11 @@ import org.jetbrains.annotations.NotNull;
 public final class SetTime extends MinecraftPacket {
 
   @Override
-  public void decode(@NotNull final PacketBuffer buffer) {
+  public void decode(@NotNull final MinecraftPacketBuffer buffer) {
   }
 
   @Override
-  public void encode(@NotNull final PacketBuffer buffer) {
+  public void encode(@NotNull final MinecraftPacketBuffer buffer) {
   }
 
   @Override
