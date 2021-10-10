@@ -2,6 +2,7 @@ package io.github.shiruka.protocol.packets;
 
 import io.github.shiruka.network.PacketBuffer;
 import io.github.shiruka.protocol.MinecraftPacket;
+import io.github.shiruka.protocol.MinecraftPacketBuffer;
 import io.github.shiruka.protocol.PacketHandler;
 import io.netty.util.AsciiString;
 import java.util.Objects;
@@ -49,7 +50,7 @@ public final class Login extends MinecraftPacket {
   }
 
   @Override
-  public void decode(@NotNull final PacketBuffer buffer) {
+  public void decode(@NotNull final MinecraftPacketBuffer buffer) {
     this.protocolVersion = buffer.readInt();
     final var jwt = new PacketBuffer(buffer.readSlice());
     this.chainData = jwt.readLEAsciiString();
@@ -57,7 +58,7 @@ public final class Login extends MinecraftPacket {
   }
 
   @Override
-  public void encode(@NotNull final PacketBuffer buffer) {
+  public void encode(@NotNull final MinecraftPacketBuffer buffer) {
     throw new UnsupportedOperationException("Encoding not supported yet!");
   }
 

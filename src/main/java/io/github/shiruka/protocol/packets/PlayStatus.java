@@ -1,50 +1,38 @@
 package io.github.shiruka.protocol.packets;
 
-import io.github.shiruka.network.PacketBuffer;
 import io.github.shiruka.protocol.MinecraftPacket;
 import io.github.shiruka.protocol.MinecraftPacketBuffer;
 import io.github.shiruka.protocol.PacketHandler;
+import io.github.shiruka.protocol.data.PlayStatusStatus;
 import java.util.Objects;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * a class that represents unknown packets.
+ * a class that represents play status packets.
  */
+@Setter
+@ToString
 @Accessors(fluent = true)
-public final class Unknown extends MinecraftPacket {
+public final class PlayStatus extends MinecraftPacket {
 
   /**
-   * the payload.
+   * the status.
    */
   @Nullable
-  private PacketBuffer payload;
-
-  /**
-   * ctor.
-   */
-  public Unknown() {
-  }
-
-  /**
-   * ctor.
-   *
-   * @param payload the payload.
-   */
-  public Unknown(@Nullable final PacketBuffer payload) {
-    this.payload = payload;
-  }
+  private PlayStatusStatus status;
 
   @Override
   public void decode(@NotNull final MinecraftPacketBuffer buffer) {
-    this.payload = buffer.readRetainedSlice(buffer.remaining());
+    this.status = buffer.readPlayStatusStatus();
   }
 
   @Override
   public void encode(@NotNull final MinecraftPacketBuffer buffer) {
-    final var payload = this.payload();
-    buffer.writeBytes(payload, payload.readerIndex(), payload.remaining());
+    buffer.writePlayStatusStatus(this.status());
   }
 
   @Override
@@ -53,12 +41,12 @@ public final class Unknown extends MinecraftPacket {
   }
 
   /**
-   * obtains the payload.
+   * obtains the status.
    *
-   * @return payload.
+   * @return status.
    */
   @NotNull
-  public PacketBuffer payload() {
-    return Objects.requireNonNull(this.payload, "payload");
+  public PlayStatusStatus status() {
+    return Objects.requireNonNull(this.status, "status");
   }
 }
