@@ -32,7 +32,7 @@ public final class EntityFlags {
   }
 
   /**
-   * checks if the flag contains
+   * checks if the flag contains.
    *
    * @param flag the flag to check.
    *

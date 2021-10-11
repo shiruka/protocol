@@ -37,7 +37,7 @@ public final class EntityDataMap implements Map<EntityData, Object> {
     }
     final var sb = new StringBuilder();
     sb.append('{');
-    for (; ; ) {
+    while (true) {
       final var e = iterator.next();
       final var key = e.getKey();
       if (key == EntityData.FLAGS_2) {
