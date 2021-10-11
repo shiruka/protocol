@@ -1,6 +1,6 @@
 package io.github.shiruka.protocol.packets;
 
-import io.github.shiruka.api.math.vectors.Vector3f;
+import io.github.shiruka.api.common.vectors.Vector3f;
 import io.github.shiruka.protocol.MinecraftPacket;
 import io.github.shiruka.protocol.MinecraftPacketBuffer;
 import io.github.shiruka.protocol.PacketHandler;

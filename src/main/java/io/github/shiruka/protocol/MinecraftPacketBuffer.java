@@ -1,9 +1,9 @@
 package io.github.shiruka.protocol;
 
 import com.google.common.base.Preconditions;
-import io.github.shiruka.api.math.vectors.Vector2f;
-import io.github.shiruka.api.math.vectors.Vector3f;
-import io.github.shiruka.api.math.vectors.Vector3i;
+import io.github.shiruka.api.common.vectors.Vector2f;
+import io.github.shiruka.api.common.vectors.Vector3f;
+import io.github.shiruka.api.common.vectors.Vector3i;
 import io.github.shiruka.api.nbt.CompoundTag;
 import io.github.shiruka.api.nbt.Tag;
 import io.github.shiruka.network.PacketBuffer;
@@ -27,6 +27,7 @@ import io.github.shiruka.protocol.data.entity.EntityDataMap;
 import io.github.shiruka.protocol.data.entity.EntityDataType;
 import io.github.shiruka.protocol.data.entity.EntityFlags;
 import io.github.shiruka.protocol.data.entity.EntityLinkData;
+import io.github.shiruka.protocol.data.entity.EntityLinkDataType;
 import io.github.shiruka.protocol.data.inventory.ItemData;
 import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
 import io.netty.buffer.ByteBufAllocator;
@@ -118,6 +119,63 @@ public final class MinecraftPacketBuffer {
   @NotNull
   public EduSharedUriResource readEduSharedUriResource() {
     return new EduSharedUriResource(this.readString(), this.readString());
+  }
+
+  /**
+   * reads the entity data.
+   *
+   * @param metadata the metadata to read.
+   */
+  public void readEntityData(@NotNull final EntityDataMap metadata) {
+    final var length = this.readUnsignedVarInt();
+    for (var i = 0; i < length; i++) {
+      final var metadataInt = this.readUnsignedVarInt();
+      final var entityData = Constants.ENTITY_DATA.get(metadataInt);
+      var type = Constants.ENTITY_DATA_TYPES.get(this.readUnsignedVarInt());
+      if (entityData != null && entityData.isFlags()) {
+        Preconditions.checkArgument(type == EntityDataType.LONG, "Expected long value for flags, got %s", type.name());
+        type = EntityDataType.FLAGS;
+      }
+      final Object object;
+      switch (type) {
+        case BYTE -> object = this.readByte();
+        case SHORT -> object = this.readShortLE();
+        case INT -> object = this.readVarInt();
+        case FLOAT -> object = this.readFloatLE();
+        case STRING -> object = this.readString();
+        case NBT -> object = this.readCompoundTag();
+        case VECTOR3I -> object = this.readVector3i();
+        case FLAGS -> {
+          final var index = entityData == EntityData.FLAGS_2 ? 1 : 0;
+          metadata.getOrCreateFlags().set(this.readVarLong(), index, Constants.ENTITY_FLAGS);
+          continue;
+        }
+        case LONG -> object = this.readVarLong();
+        case VECTOR3F -> object = this.readVector3f();
+        default -> throw new IllegalArgumentException("Unknown entity data type received");
+      }
+      if (entityData != null) {
+        metadata.put(entityData, object);
+      } else {
+        MinecraftPacketBuffer.log.debug("Unknown entity data: {} type {} value {}", metadataInt, type, object);
+      }
+    }
+  }
+
+  /**
+   * reads the entity link.
+   *
+   * @return entity link.
+   */
+  @NotNull
+  public EntityLinkData readEntityLink() {
+    return new EntityLinkData(
+      this.readVarLong(),
+      this.readVarLong(),
+      EntityLinkDataType.byOrdinal(this.readUnsignedByte()),
+      this.readBoolean(),
+      this.readBoolean()
+    );
   }
 
   /**

@@ -1,5 +1,6 @@
 package io.github.shiruka.protocol.data.entity;
 
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -515,6 +516,7 @@ public enum EntityData {
   /**
    * the flags.
    */
+  @Getter
   private final boolean flags;
 
   /**
@@ -541,5 +543,15 @@ public enum EntityData {
    */
   EntityData(@NotNull final EntityDataType... type) {
     this(false, type);
+  }
+
+  /**
+   * obtains the type.
+   *
+   * @return type.
+   */
+  @NotNull
+  public EntityDataType[] type() {
+    return this.type.clone();
   }
 }
