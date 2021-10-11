@@ -1,8 +1,10 @@
 package io.github.shiruka.protocol.data.entity;
 
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import io.github.shiruka.api.math.vectors.Vector3f;
 import io.github.shiruka.api.math.vectors.Vector3i;
 import io.github.shiruka.api.nbt.CompoundTag;
+import io.github.shiruka.protocol.data.inventory.ItemData;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -57,6 +59,7 @@ public enum EntityDataType {
    *
    * @return type.
    */
+  @CanIgnoreReturnValue
   @NotNull
   public static EntityDataType byObject(@NotNull final Object obj) {
     if (obj instanceof EntityFlags) {
@@ -80,6 +83,6 @@ public enum EntityDataType {
     } else if (obj instanceof Vector3f) {
       return EntityDataType.VECTOR3F;
     }
-    throw new IllegalArgumentException("Invalid type");
+    throw new IllegalArgumentException("Invalid type!");
   }
 }

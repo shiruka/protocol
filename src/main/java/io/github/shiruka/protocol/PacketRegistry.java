@@ -67,6 +67,7 @@ public final class PacketRegistry {
    * register default packets.
    */
   public static void registerDefaults() {
+    Constants.register();
     PacketRegistry.register(Ids.LOGIN, Login::new);
     PacketRegistry.register(Ids.PLAY_STATUS, PlayStatus::new);
     PacketRegistry.register(Ids.SERVER_TO_CLIENT_HANDSHAKE, ServerToClientHandshake::new);

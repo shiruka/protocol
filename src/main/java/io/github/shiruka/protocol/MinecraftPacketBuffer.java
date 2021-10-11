@@ -1,5 +1,6 @@
 package io.github.shiruka.protocol;
 
+import com.google.common.base.Preconditions;
 import io.github.shiruka.api.math.vectors.Vector2f;
 import io.github.shiruka.api.math.vectors.Vector3f;
 import io.github.shiruka.api.math.vectors.Vector3i;
@@ -20,8 +21,19 @@ import io.github.shiruka.protocol.data.ResourcePackStackEntry;
 import io.github.shiruka.protocol.data.SpawnBiomeType;
 import io.github.shiruka.protocol.data.SyncedPlayerMovementSettings;
 import io.github.shiruka.protocol.data.TextType;
+import io.github.shiruka.protocol.data.command.CommandPermission;
+import io.github.shiruka.protocol.data.entity.EntityData;
+import io.github.shiruka.protocol.data.entity.EntityDataMap;
+import io.github.shiruka.protocol.data.entity.EntityDataType;
+import io.github.shiruka.protocol.data.entity.EntityFlags;
+import io.github.shiruka.protocol.data.entity.EntityLinkData;
+import io.github.shiruka.protocol.data.inventory.ItemData;
+import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
+import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
+import io.netty.buffer.ByteBufUtil;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
@@ -30,11 +42,13 @@ import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.experimental.Delegate;
+import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * a record class that delegates {@link PacketBuffer} and adds more helpful methods.
  */
+@Log4j2
 @RequiredArgsConstructor
 public final class MinecraftPacketBuffer {
 
@@ -71,6 +85,16 @@ public final class MinecraftPacketBuffer {
     IntStream.range(0, length)
       .mapToObj(i -> supplier.get())
       .forEach(array::add);
+  }
+
+  /**
+   * reads the command permission.
+   *
+   * @return command permission.
+   */
+  @NotNull
+  public CommandPermission readCommandPermission() {
+    return CommandPermission.byOrdinal(this.readUnsignedVarInt());
   }
 
   /**
@@ -144,6 +168,73 @@ public final class MinecraftPacketBuffer {
   @NotNull
   public GameType readGameType() {
     return GameType.byOrdinal(this.readVarInt());
+  }
+
+  /**
+   * reads the item.
+   *
+   * @param session the session to read.
+   *
+   * @return item data.
+   */
+  @NotNull
+  public ItemData readItem(final MinecraftChildChannel session) {
+    final var id = this.readVarInt();
+    if (id == 0) {
+      return ItemData.AIR;
+    }
+    final var count = this.readUnsignedShortLE();
+    final var damage = this.readUnsignedVarInt();
+    final var hasNetId = this.readBoolean();
+    var netId = 0;
+    if (hasNetId) {
+      netId = this.readVarInt();
+    }
+    final var blockRuntimeId = this.readVarInt();
+    CompoundTag compoundTag = null;
+    var blockingTicks = 0L;
+    final String[] canPlace;
+    final String[] canBreak;
+    final var buf = this.readSlice();
+    try (final var stream = Tag.createReaderLE(buf)) {
+      final var nbtSize = stream.readShort().shortValue();
+      if (nbtSize > 0) {
+        compoundTag = stream.readCompoundTag();
+      } else if (nbtSize == -1) {
+        final var tagCount = stream.input().readUnsignedByte();
+        Preconditions.checkArgument(tagCount == 1, "Expected 1 tag but got %s", tagCount);
+        compoundTag = stream.readCompoundTag();
+      }
+      canPlace = new String[stream.readInt().intValue()];
+      for (var i = 0; i < canPlace.length; i++) {
+        canPlace[i] = stream.readString().value();
+      }
+      canBreak = new String[stream.readInt().intValue()];
+      for (var i = 0; i < canBreak.length; i++) {
+        canBreak[i] = stream.readString().value();
+      }
+      if (Constants.isBlockingItem(id, session)) {
+        blockingTicks = stream.readLong().longValue();
+      }
+    } catch (final IOException e) {
+      throw new IllegalStateException("Unable to read item user data", e);
+    }
+    if (buf.isReadable()) {
+      MinecraftPacketBuffer.log.info("Item user data has {} readable bytes left\n{}",
+        buf.readableBytes(), ByteBufUtil.prettyHexDump(buf.readerIndex(0)));
+    }
+    return ItemData.newBuilder()
+      .id(id)
+      .damage(damage)
+      .count(count)
+      .tag(compoundTag)
+      .canPlace(canPlace)
+      .canBreak(canBreak)
+      .blockingTicks(blockingTicks)
+      .blockRuntimeId(blockRuntimeId)
+      .usingNetId(hasNetId)
+      .netId(netId)
+      .build();
   }
 
   /**
@@ -336,6 +427,80 @@ public final class MinecraftPacketBuffer {
   }
 
   /**
+   * writes the entity data.
+   *
+   * @param metadata the metadata to write.
+   */
+  public void writeEntityData(@NotNull final EntityDataMap metadata) {
+    this.writeUnsignedVarInt(metadata.size());
+    for (final var entry : metadata.entrySet()) {
+      final var index = this.size();
+      this.writeUnsignedVarInt(Constants.ENTITY_DATA.get(entry.getKey()));
+      var object = entry.getValue();
+      final var type = EntityDataType.byObject(object);
+      this.writeUnsignedVarInt(Constants.ENTITY_DATA_TYPES.get(type));
+      switch (type) {
+        case BYTE:
+          this.writeByte((byte) object);
+          break;
+        case SHORT:
+          this.writeShortLE((short) object);
+          break;
+        case INT:
+          this.writeVarInt((int) object);
+          break;
+        case FLOAT:
+          this.writeFloatLE((float) object);
+          break;
+        case STRING:
+          this.writeString((String) object);
+          break;
+        case NBT:
+          CompoundTag tag;
+          if (object instanceof CompoundTag) {
+            tag = (CompoundTag) object;
+          } else {
+            final var item = (ItemData) object;
+            tag = item.tag();
+            if (tag == null) {
+              tag = Tag.createCompound();
+            }
+          }
+          this.writeCompoundTag(tag);
+          break;
+        case VECTOR3I:
+          this.writeVector3i((Vector3i) object);
+          break;
+        case FLAGS:
+          final var flagsIndex = entry.getKey() == EntityData.FLAGS_2 ? 1 : 0;
+          object = ((EntityFlags) object).get(flagsIndex, Constants.ENTITY_FLAGS);
+        case LONG:
+          this.writeVarLong((long) object);
+          break;
+        case VECTOR3F:
+          this.writeVector3f((Vector3f) object);
+          break;
+        default:
+          this.buffer.buffer().writerIndex(index);
+          break;
+      }
+    }
+  }
+
+  /**
+   * writes the entity link.
+   *
+   * @param entityLink the entity link to write.
+   */
+  public void writeEntityLink(@NotNull final EntityLinkData entityLink) {
+    this.writeVarLong(entityLink.from());
+    this.writeVarLong(entityLink.to());
+    this.writeByte(entityLink.type().ordinal());
+    this.writeBoolean(entityLink.immediate());
+    this.writeBoolean(entityLink.riderInitiated());
+  }
+
+  /**
    * writes the experiments.
    *
    * @param experiments the experiments to write.
@@ -383,6 +548,58 @@ public final class MinecraftPacketBuffer {
    */
   public void writeGameType(@NotNull final GameType type) {
     this.writeVarInt(type.ordinal());
+  }
+
+  /**
+   * writes the item.
+   *
+   * @param item the item to write.
+   * @param session the session to write.
+   */
+  public void writeItem(@NotNull final ItemData item, @NotNull final MinecraftChildChannel session) {
+    final var id = item.id();
+    if (id == 0) {
+      this.writeByte(0);
+      return;
+    }
+    this.writeVarInt(id);
+    this.writeShortLE(item.count());
+    this.writeUnsignedVarInt(item.damage());
+    this.writeBoolean(item.usingNetId());
+    if (item.usingNetId()) {
+      this.writeVarInt(item.netId());
+    }
+    this.writeVarInt(item.blockRuntimeId());
+    final var userDataBuf = ByteBufAllocator.DEFAULT.ioBuffer();
+    try (final var stream = Tag.createWriterLE(userDataBuf)) {
+      final var tag = item.tag();
+      if (tag != null) {
+        stream.writeShort(Tag.createShort(-1));
+        stream.writeByte(Tag.createByte(1));
+        stream.writeCompoundTag(tag);
+      } else {
+        userDataBuf.writeShortLE(0);
+      }
+      final var canPlace = item.canPlace();
+      stream.writeInt(Tag.createInt(canPlace.length));
+      for (final var aCanPlace : canPlace) {
+        stream.writeString(Tag.createString(aCanPlace));
+      }
+      final var canBreak = item.canBreak();
+      stream.writeInt(Tag.createInt(canBreak.length));
+      for (final var aCanBreak : canBreak) {
+        stream.writeString(Tag.createString(aCanBreak));
+      }
+      if (Constants.isBlockingItem(id, session)) {
+        stream.writeLong(Tag.createLong(item.blockingTicks()));
+      }
+      this.writeUnsignedVarInt(userDataBuf.readableBytes());
+      this.buffer.buffer().writeBytes(userDataBuf);
+    } catch (final IOException e) {
+      throw new IllegalStateException("Unable to write item user data", e);
+    } finally {
+      userDataBuf.release();
+    }
   }
 
   /**
