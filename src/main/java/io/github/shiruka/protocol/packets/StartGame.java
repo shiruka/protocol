@@ -1,8 +1,8 @@
 package io.github.shiruka.protocol.packets;
 
-import io.github.shiruka.api.math.vectors.Vector2f;
-import io.github.shiruka.api.math.vectors.Vector3f;
-import io.github.shiruka.api.math.vectors.Vector3i;
+import io.github.shiruka.api.common.vectors.Vector2f;
+import io.github.shiruka.api.common.vectors.Vector3f;
+import io.github.shiruka.api.common.vectors.Vector3i;
 import io.github.shiruka.api.nbt.ListTag;
 import io.github.shiruka.protocol.Constants;
 import io.github.shiruka.protocol.MinecraftPacket;

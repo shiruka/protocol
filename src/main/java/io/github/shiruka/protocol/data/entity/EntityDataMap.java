@@ -1,7 +1,7 @@
 package io.github.shiruka.protocol.data.entity;
 
-import io.github.shiruka.api.math.vectors.Vector3f;
-import io.github.shiruka.api.math.vectors.Vector3i;
+import io.github.shiruka.api.common.vectors.Vector3f;
+import io.github.shiruka.api.common.vectors.Vector3i;
 import io.github.shiruka.api.nbt.CompoundTag;
 import io.github.shiruka.api.nbt.Tag;
 import java.util.Collection;

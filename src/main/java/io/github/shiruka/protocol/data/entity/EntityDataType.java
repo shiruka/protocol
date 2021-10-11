@@ -1,8 +1,8 @@
 package io.github.shiruka.protocol.data.entity;
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
-import io.github.shiruka.api.math.vectors.Vector3f;
-import io.github.shiruka.api.math.vectors.Vector3i;
+import io.github.shiruka.api.common.vectors.Vector3f;
+import io.github.shiruka.api.common.vectors.Vector3i;
 import io.github.shiruka.api.nbt.CompoundTag;
 import io.github.shiruka.protocol.data.inventory.ItemData;
 import org.jetbrains.annotations.NotNull;
