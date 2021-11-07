@@ -5,7 +5,9 @@ import io.github.shiruka.protocol.MinecraftPacketBuffer;
 import io.github.shiruka.protocol.PacketHandler;
 import io.github.shiruka.protocol.data.ResourcePackInfoEntry;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import java.util.Collections;
 import java.util.List;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
@@ -32,17 +34,30 @@ public final class ResourcePackInfo extends MinecraftPacket {
   /**
    * the forced to accept.
    */
+  @Getter
   private boolean forcedToAccept;
 
   /**
    * the forcing server packs enabled.
    */
+  @Getter
   private boolean forcingServerPacksEnabled;
 
   /**
    * the scripting enabled.
    */
+  @Getter
   private boolean scriptingEnabled;
+
+  /**
+   * obtains the behaviour pack infos.
+   *
+   * @return behaviour pack infos.
+   */
+  @NotNull
+  public List<ResourcePackInfoEntry> behaviorPackInfos() {
+    return Collections.unmodifiableList(this.behaviorPackInfos);
+  }
 
   @Override
   public void decode(@NotNull final MinecraftPacketBuffer buffer) {
@@ -65,5 +80,15 @@ public final class ResourcePackInfo extends MinecraftPacket {
   @Override
   public void handle(@NotNull final PacketHandler handler) {
     handler.handle(this);
+  }
+
+  /**
+   * obtains the resource pack infos.
+   *
+   * @return resource pack infos.
+   */
+  @NotNull
+  public List<ResourcePackInfoEntry> resourcePackInfos() {
+    return Collections.unmodifiableList(this.resourcePackInfos);
   }
 }

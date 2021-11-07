@@ -4,6 +4,7 @@ import io.github.shiruka.protocol.MinecraftPacket;
 import io.github.shiruka.protocol.MinecraftPacketBuffer;
 import io.github.shiruka.protocol.PacketHandler;
 import java.util.Objects;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
@@ -27,6 +28,7 @@ public final class Disconnect extends MinecraftPacket {
   /**
    * the message skipped.
    */
+  @Getter
   private boolean messageSkipped;
 
   @Override

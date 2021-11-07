@@ -2,6 +2,7 @@ package io.github.shiruka.protocol;
 
 import io.github.shiruka.network.Packet;
 import io.github.shiruka.network.PacketBuffer;
+import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -30,6 +31,16 @@ public abstract class MinecraftPacket implements Packet {
    */
   private int senderId;
 
+  /**
+   * decodes the packet.
+   *
+   * @param buffer the buffer to decode.
+   * @param session the session to decode.
+   */
+  public final void decode(@NotNull final PacketBuffer buffer, @NotNull final MinecraftChildChannel session) {
+    this.decode(new MinecraftPacketBuffer(buffer), session);
+  }
+
   @Override
   public final void decode(@NotNull final PacketBuffer buffer) {
     this.decode(new MinecraftPacketBuffer(buffer));
@@ -41,18 +52,50 @@ public abstract class MinecraftPacket implements Packet {
   }
 
   /**
+   * encodes the packet.
+   *
+   * @param buffer the buffer to encode.
+   * @param session the session to decode.
+   */
+  public final void encode(@NotNull final PacketBuffer buffer, @NotNull final MinecraftChildChannel session) {
+    this.encode(new MinecraftPacketBuffer(buffer), session);
+  }
+
+  /**
    * decodes the packet.
    *
    * @param buffer the buffer to decode.
    */
-  public abstract void decode(@NotNull MinecraftPacketBuffer buffer);
+  public void decode(@NotNull final MinecraftPacketBuffer buffer) {
+  }
+
+  /**
+   * decodes the packet.
+   *
+   * @param buffer the buffer to decode.
+   * @param session the session to decode.
+   */
+  public void decode(@NotNull final MinecraftPacketBuffer buffer, @NotNull final MinecraftChildChannel session) {
+    this.decode(buffer);
+  }
 
   /**
    * encodes the packet.
    *
    * @param buffer the buffer to encode.
    */
-  public abstract void encode(@NotNull MinecraftPacketBuffer buffer);
+  public void encode(@NotNull final MinecraftPacketBuffer buffer) {
+  }
+
+  /**
+   * encodes the packet.
+   *
+   * @param buffer the buffer to encode.
+   * @param session the session to decode.
+   */
+  public void encode(@NotNull final MinecraftPacketBuffer buffer, @NotNull final MinecraftChildChannel session) {
+    this.encode(buffer);
+  }
 
   /**
    * handles the packet.

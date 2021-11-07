@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
  * @param name the name.
  * @param enabled the enabled.
  */
-public final record ResourcePackStackExperimentData(
+public final record ExperimentData(
   @NotNull String name,
   boolean enabled
 ) {
@@ -18,7 +18,7 @@ public final record ResourcePackStackExperimentData(
    *
    * @param name the name.
    */
-  public ResourcePackStackExperimentData(@NotNull final String name) {
+  public ExperimentData(@NotNull final String name) {
     this(name, true);
   }
 }
