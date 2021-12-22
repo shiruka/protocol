@@ -15,6 +15,8 @@ import io.github.shiruka.protocol.data.GamePublishSetting;
 import io.github.shiruka.protocol.data.GameRuleValue;
 import io.github.shiruka.protocol.data.GameType;
 import io.github.shiruka.protocol.data.PlayStatusStatus;
+import io.github.shiruka.protocol.data.PlayerActionType;
+import io.github.shiruka.protocol.data.PlayerBlockActionData;
 import io.github.shiruka.protocol.data.PlayerPermission;
 import io.github.shiruka.protocol.data.ResourcePackClientResponseStatus;
 import io.github.shiruka.protocol.data.ResourcePackInfoEntry;
@@ -29,13 +31,22 @@ import io.github.shiruka.protocol.data.entity.EntityDataType;
 import io.github.shiruka.protocol.data.entity.EntityFlags;
 import io.github.shiruka.protocol.data.entity.EntityLinkData;
 import io.github.shiruka.protocol.data.entity.EntityLinkDataType;
+import io.github.shiruka.protocol.data.inventory.InventoryActionData;
+import io.github.shiruka.protocol.data.inventory.InventorySource;
 import io.github.shiruka.protocol.data.inventory.ItemData;
+import io.github.shiruka.protocol.data.inventory.ItemStackRequest;
+import io.github.shiruka.protocol.data.inventory.ItemUseTransaction;
+import io.github.shiruka.protocol.data.inventory.StackRequestSlotInfoData;
+import io.github.shiruka.protocol.data.inventory.stackrequestactions.SRADCraftResultsDeprecated;
+import io.github.shiruka.protocol.data.inventory.stackrequestactions.SRADTransfer;
+import io.github.shiruka.protocol.data.inventory.stackrequestactions.StackRequestActionData;
 import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.ByteBufUtil;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
@@ -121,7 +132,7 @@ public final class MinecraftPacketBuffer {
   @SneakyThrows
   @NotNull
   public CompoundTag readCompoundTag() {
-    try (final var reader = Tag.createNetworkReader(new ByteBufInputStream(this.buffer.buffer()))) {
+    try (final var reader = Tag.createNetworkReader(new ByteBufInputStream(this.buffer()))) {
       return reader.readCompoundTag();
     }
   }
@@ -469,10 +480,21 @@ public final class MinecraftPacketBuffer {
    * @param consumer the consumer to write.
    * @param <T> type of the array.
    */
-  public <T> void writeArray(@NotNull final Collection<T> array,
-                             @NotNull final Consumer<T> consumer) {
+  public <T> void writeArray(@NotNull final Collection<T> array, @NotNull final Consumer<T> consumer) {
     this.writeUnsignedInt(array.size());
     array.forEach(consumer);
+  }
+
+  /**
+   * writes the array.
+   *
+   * @param array the array to write.
+   * @param consumer the consumer to write.
+   * @param <T> type of the array.
+   */
+  public <T> void writeArray(@NotNull final T[] array, @NotNull final Consumer<T> consumer) {
+    this.writeUnsignedInt(array.length);
+    Arrays.stream(array).forEach(consumer);
   }
 
   /**
@@ -500,13 +522,34 @@ public final class MinecraftPacketBuffer {
   }
 
   /**
+   * writes the block position.
+   *
+   * @param blockPosition the block position to write.
+   */
+  public void writeBlockPosition(@NotNull final Vector3i blockPosition) {
+    this.writeVarInt(blockPosition.x());
+    this.writeUnsignedVarInt(blockPosition.y());
+    this.writeVarInt(blockPosition.z());
+  }
+
+  /**
+   * writes byte array.
+   *
+   * @param bytes the bytes to write.
+   */
+  public void writeByteArray(final byte[] bytes) {
+    this.writeUnsignedVarInt(bytes.length);
+    this.writeBytes(bytes);
+  }
+
+  /**
    * writes the compound tag.
    *
    * @param tag the tag to write.
    */
   @SneakyThrows
   public void writeCompoundTag(@NotNull final CompoundTag tag) {
-    try (final var writer = Tag.createNetworkWriter(new ByteBufOutputStream(this.buffer.buffer()))) {
+    try (final var writer = Tag.createNetworkWriter(new ByteBufOutputStream(this.buffer()))) {
       writer.writeCompoundTag(tag);
     }
   }
@@ -566,7 +609,7 @@ public final class MinecraftPacketBuffer {
           this.writeVector3f((Vector3f) object);
           break;
         default:
-          this.buffer.buffer().writerIndex(index);
+          this.buffer().writerIndex(index);
           break;
       }
     }
@@ -636,6 +679,24 @@ public final class MinecraftPacketBuffer {
   }
 
   /**
+   * writes the inventory actions.
+   *
+   * @param session the session to write.
+   * @param actions the actions to write.
+   * @param hasNetworkIds the has network ids to write.
+   */
+  public void writeInventoryActions(@NotNull final MinecraftChildChannel session,
+                                    @NotNull final List<InventoryActionData> actions,
+                                    final boolean hasNetworkIds) {
+    this.writeArray(actions, action -> {
+      this.writeSource(action.source());
+      this.writeUnsignedVarInt(action.slot());
+      this.writeItem(action.fromItem(), session);
+      this.writeItem(action.toItem(), session);
+    });
+  }
+
+  /**
    * writes the item.
    *
    * @param item the item to write.
@@ -679,12 +740,55 @@ public final class MinecraftPacketBuffer {
         stream.writeLong(Tag.createLong(item.blockingTicks()));
       }
       this.writeUnsignedVarInt(userDataBuf.readableBytes());
-      this.buffer.buffer().writeBytes(userDataBuf);
+      this.buffer().writeBytes(userDataBuf);
     } catch (final IOException e) {
       throw new IllegalStateException("Unable to write item user data", e);
     } finally {
       userDataBuf.release();
     }
+  }
+
+  /**
+   * writes item stack request.
+   *
+   * @param session the session to write.
+   * @param request the request to write.
+   */
+  public void writeItemStackRequest(@NotNull final MinecraftChildChannel session,
+                                    @NotNull final ItemStackRequest request) {
+    this.writeVarInt(request.requestId());
+    this.writeArray(request.actions(), action -> {
+      final var type = action.type();
+      this.writeByte(type.id());
+      this.writeRequestActionData(session, action);
+    });
+    this.writeArray(request.filterStrings(), this::writeString);
+  }
+
+  /**
+   * writes the item use transaction.
+   *
+   * @param transaction the transaction to write.
+   */
+  public void writeItemUseTransaction(@NotNull final MinecraftChildChannel session,
+                                      @NotNull final ItemUseTransaction transaction) {
+    final var legacyRequestId = transaction.legacyRequestId();
+    this.writeVarInt(legacyRequestId);
+    if (legacyRequestId < -1 && (legacyRequestId & 1) == 0) {
+      this.writeArray(transaction.legacySlots(), element -> {
+        this.writeByte(element.containerId());
+        this.writeByteArray(element.slots());
+      });
+    }
+    this.writeInventoryActions(session, transaction.actions(), transaction.usingNetIds());
+    this.writeUnsignedVarInt(transaction.actionType());
+    this.writeBlockPosition(transaction.blockPosition());
+    this.writeVarInt(transaction.blockFace());
+    this.writeVarInt(transaction.hotbarSlot());
+    this.writeItem(transaction.itemInHand(), session);
+    this.writeVector3f(transaction.playerPosition());
+    this.writeVector3f(transaction.clickPosition());
+    this.writeUnsignedVarInt(transaction.blockRuntimeId());
   }
 
   /**
@@ -694,6 +798,28 @@ public final class MinecraftPacketBuffer {
    */
   public void writePlayStatusStatus(@NotNull final PlayStatusStatus status) {
     this.writeInt(status.ordinal());
+  }
+
+  /**
+   * writes the player block action data.
+   *
+   * @param data the data to write.
+   */
+  public void writePlayerBlockActionData(@NotNull final PlayerBlockActionData data) {
+    final var action = data.action();
+    final var face = data.face();
+    final var blockPosition = data.blockPosition();
+    this.writeVarInt(action.ordinal());
+    switch (action) {
+      case START_BREAK, ABORT_BREAK, CONTINUE_BREAK, BLOCK_PREDICT_DESTROY, BLOCK_CONTINUE_DESTROY -> {
+        this.writeVector3i(blockPosition);
+        this.writeVarInt(face);
+      }
+    }
+    if (action == PlayerActionType.STOP_BREAK) {
+      this.writeVector3i(blockPosition);
+      this.writeVarInt(face);
+    }
   }
 
   /**
@@ -751,12 +877,26 @@ public final class MinecraftPacketBuffer {
   }
 
   /**
+   * writes the inventory source.
+   *
+   * @param inventorySource the inventory source to write.
+   */
+  public void writeSource(@NotNull final InventorySource inventorySource) {
+    final var type = inventorySource.type();
+    this.writeUnsignedVarInt(type.id());
+    switch (type) {
+      case CONTAINER, UNTRACKED_INTERACTION_UI, NON_IMPLEMENTED_TODO -> this.writeVarInt(inventorySource.containerId());
+      case WORLD_INTERACTION -> this.writeUnsignedVarInt(inventorySource.flag().ordinal());
+    }
+  }
+
+  /**
    * writes the spawn biome type.
    *
    * @param type the type to write.
    */
   public void writeSpawnBiomeType(@NotNull final SpawnBiomeType type) {
-    this.buffer.writeShortLE(type.ordinal());
+    this.writeShortLE(type.ordinal());
   }
 
   /**
@@ -809,5 +949,79 @@ public final class MinecraftPacketBuffer {
     this.writeVarInt(vector.x());
     this.writeUnsignedVarInt(vector.y());
     this.writeVarInt(vector.z());
+  }
+
+  /**
+   * writes the request action data.
+   *
+   * @param session the session to write.
+   * @param action the action to write.
+   */
+  private void writeRequestActionData(@NotNull final MinecraftChildChannel session,
+                                      @NotNull final StackRequestActionData action) {
+    final var type = action.type();
+    switch (type) {
+      case TAKE:
+      case PLACE:
+        this.writeByte(((SRADTransfer) action).count());
+        this.writeStackRequestSlotInfo(((SRADTransfer) action).source());
+        this.writeStackRequestSlotInfo(((SRADTransfer) action).destination());
+        break;
+      case SWAP:
+        this.writeStackRequestSlotInfo(((SRADSwap) action).source());
+        this.writeStackRequestSlotInfo(((SRADSwap) action).destination());
+        break;
+      case DROP:
+        this.writeByte(((SRADDrop) action).count());
+        this.writeStackRequestSlotInfo(((SRADDrop) action).source());
+        this.writeBoolean(((SRADDrop) action).randomly());
+        break;
+      case DESTROY:
+        this.writeByte(((SRADDestroy) action).count());
+        this.writeStackRequestSlotInfo(((SRADDestroy) action).source());
+        break;
+      case CONSUME:
+        this.writeByte(((SRADConsume) action).count());
+        this.writeStackRequestSlotInfo(((SRADConsume) action).source());
+        break;
+      case CREATE:
+        this.writeByte(((SRADCreate) action).slot());
+        break;
+      case BEACON_PAYMENT:
+        this.writeVarInt(((SRADBeaconPayment) action).primaryEffect());
+        this.writeVarInt(((SRADBeaconPayment) action).secondaryEffect());
+        break;
+      case CRAFT_RECIPE:
+      case CRAFT_RECIPE_AUTO:
+        this.writeUnsignedVarInt(((SRADRecipe) action).recipeNetworkId());
+        break;
+      case CRAFT_CREATIVE:
+        this.writeUnsignedVarInt(((SRADCraftCreative) action).creativeItemNetworkId());
+        break;
+      case CRAFT_RECIPE_OPTIONAL:
+        this.writeUnsignedVarInt(((SRADCraftRecipeOptional) action).recipeNetworkId());
+        this.writeIntLE(((SRADCraftRecipeOptional) action).filteredStringIndex());
+        break;
+      case CRAFT_RESULTS_DEPRECATED:
+        this.writeArray(((SRADCraftResultsDeprecated) action).resultItems(), item -> this.writeItem(item, session));
+        this.writeByte(((SRADCraftResultsDeprecated) action).timesCrafted());
+        break;
+      case LAB_TABLE_COMBINE:
+      case CRAFT_NON_IMPLEMENTED_DEPRECATED:
+        break;
+      default:
+        throw new UnsupportedOperationException("Unhandled stack request action type: " + type);
+    }
+  }
+
+  /**
+   * writes stack request slot info.
+   *
+   * @param data the data to write.
+   */
+  private void writeStackRequestSlotInfo(@NotNull final StackRequestSlotInfoData data) {
+    this.writeByte(data.container().ordinal());
+    this.writeByte(data.slot());
+    this.writeVarInt(data.stackNetworkId());
   }
 }

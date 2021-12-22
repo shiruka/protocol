@@ -5,6 +5,7 @@ import io.github.shiruka.protocol.data.AdventureSetting;
 import io.github.shiruka.protocol.data.entity.EntityData;
 import io.github.shiruka.protocol.data.entity.EntityDataType;
 import io.github.shiruka.protocol.data.entity.EntityFlag;
+import io.github.shiruka.protocol.data.inventory.stackrequestactions.StackRequestActionType;
 import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
