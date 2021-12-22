@@ -37,7 +37,16 @@ import io.github.shiruka.protocol.data.inventory.ItemData;
 import io.github.shiruka.protocol.data.inventory.ItemStackRequest;
 import io.github.shiruka.protocol.data.inventory.ItemUseTransaction;
 import io.github.shiruka.protocol.data.inventory.StackRequestSlotInfoData;
+import io.github.shiruka.protocol.data.inventory.stackrequestactions.SRADBeaconPayment;
+import io.github.shiruka.protocol.data.inventory.stackrequestactions.SRADConsume;
+import io.github.shiruka.protocol.data.inventory.stackrequestactions.SRADCraftCreative;
+import io.github.shiruka.protocol.data.inventory.stackrequestactions.SRADCraftRecipeOptional;
 import io.github.shiruka.protocol.data.inventory.stackrequestactions.SRADCraftResultsDeprecated;
+import io.github.shiruka.protocol.data.inventory.stackrequestactions.SRADCreate;
+import io.github.shiruka.protocol.data.inventory.stackrequestactions.SRADDestroy;
+import io.github.shiruka.protocol.data.inventory.stackrequestactions.SRADDrop;
+import io.github.shiruka.protocol.data.inventory.stackrequestactions.SRADRecipe;
+import io.github.shiruka.protocol.data.inventory.stackrequestactions.SRADSwap;
 import io.github.shiruka.protocol.data.inventory.stackrequestactions.SRADTransfer;
 import io.github.shiruka.protocol.data.inventory.stackrequestactions.StackRequestActionData;
 import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
@@ -365,8 +374,8 @@ public final class MinecraftPacketBuffer {
     final var subPackName = this.readString();
     final var contentId = this.readString();
     final var isScripting = this.readBoolean();
-    return new ResourcePackInfoEntry(packId, packVersion, packSize, contentKey, subPackName, contentId,
-      isScripting, false);
+    return new ResourcePackInfoEntry(packId, packVersion, packSize, contentKey, subPackName, contentId, isScripting,
+      false);
   }
 
   /**
@@ -376,16 +385,9 @@ public final class MinecraftPacketBuffer {
    */
   @NotNull
   public ResourcePackInfoEntry readResourcePackEntryWithRaytracing() {
-    final var packId = this.readString();
-    final var packVersion = this.readString();
-    final var packSize = this.readLongLE();
-    final var contentKey = this.readString();
-    final var subPackName = this.readString();
-    final var contentId = this.readString();
-    final var isScripting = this.readBoolean();
+    final var entry = this.readResourcePackEntry();
     final var raytracingCapable = this.readBoolean();
-    return new ResourcePackInfoEntry(packId, packVersion, packSize, contentKey, subPackName, contentId,
-      isScripting, raytracingCapable);
+    return entry.raytracingCapable(raytracingCapable);
   }
 
   /**
