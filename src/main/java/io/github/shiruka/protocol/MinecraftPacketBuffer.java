@@ -770,6 +770,7 @@ public final class MinecraftPacketBuffer {
   /**
    * writes the item use transaction.
    *
+   * @param session the session to write.
    * @param transaction the transaction to write.
    */
   public void writeItemUseTransaction(@NotNull final MinecraftChildChannel session,
