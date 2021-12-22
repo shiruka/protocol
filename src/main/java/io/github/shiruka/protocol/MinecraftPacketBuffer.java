@@ -7,6 +7,7 @@ import io.github.shiruka.api.common.vectors.Vector3i;
 import io.github.shiruka.api.nbt.CompoundTag;
 import io.github.shiruka.api.nbt.Tag;
 import io.github.shiruka.network.PacketBuffer;
+import io.github.shiruka.protocol.data.AttributeData;
 import io.github.shiruka.protocol.data.AuthoritativeMovementMode;
 import io.github.shiruka.protocol.data.EduSharedUriResource;
 import io.github.shiruka.protocol.data.ExperimentData;
@@ -86,6 +87,20 @@ public final class MinecraftPacketBuffer {
     IntStream.range(0, length)
       .mapToObj(i -> supplier.get())
       .forEach(array::add);
+  }
+
+  /**
+   * reads the attribute.
+   *
+   * @return attribute.
+   */
+  @NotNull
+  public AttributeData readAttribute() {
+    final var name = this.readString();
+    final var min = this.readFloatLE();
+    final var max = this.readFloatLE();
+    final var val = this.readFloatLE();
+    return new AttributeData(name, min, max, val);
   }
 
   /**
@@ -470,6 +485,18 @@ public final class MinecraftPacketBuffer {
   public <T> void writeArrayShortLE(@NotNull final Collection<T> array, @NotNull final Consumer<T> consumer) {
     this.writeShortLE(array.size());
     array.forEach(consumer);
+  }
+
+  /**
+   * writes the attribute.
+   *
+   * @param attribute the attribute to write.
+   */
+  public void writeAttribute(@NotNull final AttributeData attribute) {
+    this.writeString(attribute.name());
+    this.writeFloatLE(attribute.minimum());
+    this.writeFloatLE(attribute.maximum());
+    this.writeFloatLE(attribute.value());
   }
 
   /**
