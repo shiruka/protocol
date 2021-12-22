@@ -8,8 +8,10 @@ import io.github.shiruka.protocol.data.AttributeData;
 import io.github.shiruka.protocol.data.entity.EntityDataMap;
 import io.github.shiruka.protocol.data.entity.EntityLinkData;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
@@ -37,11 +39,13 @@ public final class AddEntity extends MinecraftPacket {
   /**
    * the metadata.
    */
+  @Getter
   private final EntityDataMap metadata = new EntityDataMap();
 
   /**
    * the entity type.
    */
+  @Getter
   private int entityType;
 
   /**
@@ -59,6 +63,7 @@ public final class AddEntity extends MinecraftPacket {
   /**
    * the position.
    */
+  @Nullable
   private Vector3f position;
 
   /**
@@ -70,12 +75,24 @@ public final class AddEntity extends MinecraftPacket {
   /**
    * the runtime entity id.
    */
+  @Getter
   private long runtimeEntityId;
 
   /**
    * the unique entity id.
    */
+  @Getter
   private long uniqueEntityId;
+
+  /**
+   * obtains the attributes.
+   *
+   * @return attributes.
+   */
+  @NotNull
+  public List<AttributeData> attributes() {
+    return Collections.unmodifiableList(this.attributes);
+  }
 
   @Override
   public void decode(@NotNull final MinecraftPacketBuffer buffer) {
@@ -106,6 +123,16 @@ public final class AddEntity extends MinecraftPacket {
   @Override
   public void handle(@NotNull final PacketHandler handler) {
     handler.handle(this);
+  }
+
+  /**
+   * obtains the entity links.
+   *
+   * @return entity links.
+   */
+  @NotNull
+  public List<EntityLinkData> entityLinks() {
+    return Collections.unmodifiableList(this.entityLinks);
   }
 
   /**

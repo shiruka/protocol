@@ -62,7 +62,7 @@ public final class Text extends MinecraftPacket {
    * the xbox unique id.
    */
   @Nullable
-  private String xuid;
+  private String xboxUniqueId;
 
   @Override
   public void decode(@NotNull final MinecraftPacketBuffer buffer) {
@@ -89,7 +89,7 @@ public final class Text extends MinecraftPacket {
       default:
         throw new UnsupportedOperationException("Unsupported TextType %s".formatted(this.type));
     }
-    this.xuid = buffer.readString();
+    this.xboxUniqueId = buffer.readString();
     this.platformChatId = buffer.readString();
   }
 
@@ -118,7 +118,7 @@ public final class Text extends MinecraftPacket {
       default:
         throw new UnsupportedOperationException("Unsupported TextType %s".formatted(this.type()));
     }
-    buffer.writeString(this.xuid());
+    buffer.writeString(this.xboxUniqueId());
     buffer.writeString(this.platformChatId);
   }
 
@@ -168,12 +168,12 @@ public final class Text extends MinecraftPacket {
   }
 
   /**
-   * obtains the xuid.
+   * obtains the xbox unique id.
    *
-   * @return xuid.
+   * @return xbox unique id.
    */
   @NotNull
-  public String xuid() {
-    return Objects.requireNonNull(this.xuid, "xuid");
+  public String xboxUniqueId() {
+    return Objects.requireNonNull(this.xboxUniqueId, "xbox unique id");
   }
 }
