@@ -818,6 +818,8 @@ public final class MinecraftPacketBuffer {
         this.writeVector3i(blockPosition);
         this.writeVarInt(face);
       }
+      default -> {
+      }
     }
     if (action == PlayerActionType.STOP_BREAK) {
       this.writeVector3i(blockPosition);
@@ -890,6 +892,8 @@ public final class MinecraftPacketBuffer {
     switch (type) {
       case CONTAINER, UNTRACKED_INTERACTION_UI, NON_IMPLEMENTED_TODO -> this.writeVarInt(inventorySource.containerId());
       case WORLD_INTERACTION -> this.writeUnsignedVarInt(inventorySource.flag().ordinal());
+      default -> {
+      }
     }
   }
 
