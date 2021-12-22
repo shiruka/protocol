@@ -1,5 +1,6 @@
 package io.github.shiruka.protocol;
 
+import io.github.shiruka.protocol.packets.AddBehaviorTree;
 import io.github.shiruka.protocol.packets.AddEntity;
 import io.github.shiruka.protocol.packets.AddItemEntity;
 import io.github.shiruka.protocol.packets.AddPlayer;
@@ -22,6 +23,11 @@ import io.github.shiruka.protocol.packets.Text;
  * an interface that contains Minecraft packet ids.
  */
 public interface Ids {
+
+  /**
+   * the id of the {@link AddBehaviorTree} packet.
+   */
+  int ADD_BEHAVIOR_TREE = 89;
 
   /**
    * the id of the {@link AddEntity} packet.

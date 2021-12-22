@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * @param scripting the scripting.
  * @param raytracingCapable the raytracing capable.
  */
-public final record ResourcePackInfoEntry(
+public record ResourcePackInfoEntry(
   @NotNull String packId,
   @NotNull String packVersion,
   long packSize,

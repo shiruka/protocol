@@ -31,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * a class that represents play status packets.
+ * a class that represents start game packets.
  */
 @Setter
 @ToString
@@ -70,6 +70,11 @@ public final class StartGame extends MinecraftPacket {
    */
   @Nullable
   private ListTag blockPalette;
+
+  /**
+   * the block registry checksum.
+   */
+  private long blockRegistryChecksum;
 
   /**
    * the bonus chest enabled.
@@ -457,6 +462,7 @@ public final class StartGame extends MinecraftPacket {
     this.multiplayerCorrelationId = buffer.readString();
     this.inventoriesServerAuthoritative = buffer.readBoolean();
     this.serverEngine = buffer.readString();
+    this.blockRegistryChecksum = buffer.readLongLE();
   }
 
   @Override
@@ -486,6 +492,7 @@ public final class StartGame extends MinecraftPacket {
     buffer.writeString(this.multiplayerCorrelationId());
     buffer.writeBoolean(this.inventoriesServerAuthoritative);
     buffer.writeString(this.serverEngine());
+    buffer.writeLongLE(this.blockRegistryChecksum);
   }
 
   @Override

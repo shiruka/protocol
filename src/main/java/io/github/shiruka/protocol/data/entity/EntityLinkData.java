@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  * @param immediate the immediate.
  * @param riderInitiated the rider initiated.
  */
-public final record EntityLinkData(
+public record EntityLinkData(
   long from,
   long to,
   @NotNull EntityLinkDataType type,

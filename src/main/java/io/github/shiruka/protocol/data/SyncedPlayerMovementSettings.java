@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
  * @param movementMode the movement mode.
  * @param rewindHistorySize the rewind history size.
  */
-public final record SyncedPlayerMovementSettings(
+public record SyncedPlayerMovementSettings(
   boolean serverAuthoritativeBlockBreaking,
   @NotNull AuthoritativeMovementMode movementMode,
   int rewindHistorySize

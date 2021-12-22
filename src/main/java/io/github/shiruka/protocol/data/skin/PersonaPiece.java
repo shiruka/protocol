@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
  * @param isDefault the is default.
  * @param productId the product id.
  */
-public final record PersonaPiece(
+public record PersonaPiece(
   @NotNull String id,
   @NotNull String type,
   @NotNull String packId,
@@ -26,7 +26,7 @@ public final record PersonaPiece(
    * @param pieceType the piece type.
    * @param colors the colors.
    */
-  public final record Tint(
+  public record Tint(
     @NotNull String pieceType,
     @NotNull List<String> colors
   ) {

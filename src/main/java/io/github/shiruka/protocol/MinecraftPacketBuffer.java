@@ -587,9 +587,9 @@ public final class MinecraftPacketBuffer {
    */
   public void writeGameRule(@NotNull final GameRuleValue gameRule) {
     final var value = gameRule.value();
-    final var type = Constants.GAME_RULE_TYPES.getInt(value.getClass());
     this.writeString(gameRule.name());
     this.writeBoolean(gameRule.editable());
+    final var type = Constants.GAME_RULE_TYPES.getInt(value.getClass());
     this.writeUnsignedVarInt(type);
     switch (type) {
       case 1 -> this.writeBoolean((boolean) value);

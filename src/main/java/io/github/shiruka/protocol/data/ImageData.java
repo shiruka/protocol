@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  * @param height the height.
  * @param image the image.
  */
-public final record ImageData(
+public record ImageData(
   int width,
   int height,
   byte[] image

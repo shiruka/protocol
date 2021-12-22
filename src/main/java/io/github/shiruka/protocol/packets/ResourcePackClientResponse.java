@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * a class that represents play status packets.
+ * a class that represents resource pack client response packets.
  */
 @Setter
 @ToString

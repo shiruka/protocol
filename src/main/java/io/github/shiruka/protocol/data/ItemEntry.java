@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
  * @param id the id.
  * @param componentBased the component based.
  */
-public final record ItemEntry(
+public record ItemEntry(
   @NotNull String identifier,
   short id,
   boolean componentBased

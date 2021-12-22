@@ -3,34 +3,45 @@ package io.github.shiruka.protocol.packets;
 import io.github.shiruka.protocol.MinecraftPacket;
 import io.github.shiruka.protocol.MinecraftPacketBuffer;
 import io.github.shiruka.protocol.PacketHandler;
-import lombok.Getter;
+import java.util.Objects;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
- * a class that represents remove entity packets.
+ * a class that represents add behavior tree packets.
  */
 @Setter
 @ToString
 @Accessors(fluent = true)
-public final class RemoveEntity extends MinecraftPacket {
+public final class AddBehaviorTree extends MinecraftPacket {
 
   /**
-   * the unique entity id.
+   * the behavior tree json.
    */
-  @Getter
-  private long uniqueEntityId;
+  @Nullable
+  private String behaviorTreeJson;
+
+  /**
+   * obtains the behavior tree json.
+   *
+   * @return behavior tree json.
+   */
+  @NotNull
+  public String behaviorTreeJson() {
+    return Objects.requireNonNull(this.behaviorTreeJson, "behavior tree json");
+  }
 
   @Override
   public void decode(@NotNull final MinecraftPacketBuffer buffer) {
-    this.uniqueEntityId = buffer.readVarLong();
+    this.behaviorTreeJson = buffer.readString();
   }
 
   @Override
   public void encode(@NotNull final MinecraftPacketBuffer buffer) {
-    buffer.writeVarLong(this.uniqueEntityId);
+    buffer.writeString(this.behaviorTreeJson());
   }
 
   @Override

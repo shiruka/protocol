@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * a class that represents play status packets.
+ * a class that represents take item entity packets.
  */
 @Setter
 @ToString

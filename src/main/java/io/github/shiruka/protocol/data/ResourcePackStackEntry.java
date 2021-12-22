@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
  * @param packVersion the pack version.
  * @param subPackName the sub pack name.
  */
-public final record ResourcePackStackEntry(
+public record ResourcePackStackEntry(
   @NotNull String packId,
   @NotNull String packVersion,
   @NotNull String subPackName

@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
  * @param editable the editable.
  * @param value the value.
  */
-public final record GameRuleValue(
+public record GameRuleValue(
   @NotNull String name,
   boolean editable,
   Object value
