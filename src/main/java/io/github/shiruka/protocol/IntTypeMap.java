@@ -99,7 +99,6 @@ public final class IntTypeMap<T> {
    *
    * @return type.
    */
-  @NotNull
   public T type(final int id) {
     return this.map.get(id);
   }
