@@ -226,5 +226,6 @@ public interface PacketHandler {
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull UpdateBlock packet){}
+  default void handle(@NotNull final UpdateBlock packet) {
+  }
 }

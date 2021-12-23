@@ -23,6 +23,7 @@ import io.github.shiruka.protocol.packets.StartGame;
 import io.github.shiruka.protocol.packets.TakeItemEntity;
 import io.github.shiruka.protocol.packets.Text;
 import io.github.shiruka.protocol.packets.Unknown;
+import io.github.shiruka.protocol.packets.UpdateBlock;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import java.util.Objects;
@@ -94,8 +95,8 @@ public final class PacketRegistry {
     PacketRegistry.register(Ids.MOVE_ENTITY_ABSOLUTE, MoveEntityAbsolute::new);
     PacketRegistry.register(Ids.MOVE_PLAYER, MovePlayer::new);
     PacketRegistry.register(Ids.RIDER_JUMP, RiderJump::new);
-    register(Ids.UPDATE_BLOCK, UpdateBlock::new);
-    // 21...54 missing
+    PacketRegistry.register(Ids.UPDATE_BLOCK, UpdateBlock::new);
+    // 22...54 missing
     PacketRegistry.register(Ids.ADVENTURE_SETTINGS, AdventureSettings::new);
     // 56...88 missing
     PacketRegistry.register(Ids.ADD_BEHAVIOR_TREE, AddBehaviorTree::new);

@@ -146,6 +146,19 @@ public final class MinecraftPacketBuffer extends PacketBuffer {
   }
 
   /**
+   * reads the block position.
+   *
+   * @return block position.
+   */
+  @NotNull
+  public Vector3i readBlockPosition() {
+    final var x = this.readVarInt();
+    final var y = this.readUnsignedVarInt();
+    final var z = this.readVarInt();
+    return Vector3i.of(x, y, z);
+  }
+
+  /**
    * reads the byte angle.
    *
    * @return byte angle.
@@ -1147,19 +1160,6 @@ public final class MinecraftPacketBuffer extends PacketBuffer {
     this.writeVarInt(vector.x());
     this.writeUnsignedVarInt(vector.y());
     this.writeVarInt(vector.z());
-  }
-
-  /**
-   * reads the block position.
-   *
-   * @return block position.
-   */
-  @NotNull
-  private Vector3i readBlockPosition() {
-    final var x = this.readVarInt();
-    final var y = this.readUnsignedVarInt();
-    final var z = this.readVarInt();
-    return Vector3i.of(x, y, z);
   }
 
   /**

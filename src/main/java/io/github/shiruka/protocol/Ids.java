@@ -22,6 +22,7 @@ import io.github.shiruka.protocol.packets.SetTime;
 import io.github.shiruka.protocol.packets.StartGame;
 import io.github.shiruka.protocol.packets.TakeItemEntity;
 import io.github.shiruka.protocol.packets.Text;
+import io.github.shiruka.protocol.packets.UpdateBlock;
 
 /**
  * an interface that contains Minecraft packet ids.
