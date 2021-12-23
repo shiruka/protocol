@@ -1,5 +1,8 @@
 package io.github.shiruka.protocol.data;
 
+/**
+ * an enum class that contains level event types.
+ */
 public enum LevelEventType {
   /**
    * the undefined.

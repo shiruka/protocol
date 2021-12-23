@@ -38,7 +38,7 @@ public class AddHangingEntity extends MinecraftPacket {
   private long runtimeEntityId;
 
   /**
-   * the unique entity idç
+   * the unique entity id.
    */
   @Getter
   private long uniqueEntityId;
