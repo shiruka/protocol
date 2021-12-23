@@ -25,13 +25,13 @@ public final class MinecraftServerConnection extends ChannelInboundHandlerAdapte
   private final MinecraftServer server;
 
   @Override
-  public void channelActive(final ChannelHandlerContext ctx) throws Exception {
+  public void channelActive(@NotNull final ChannelHandlerContext ctx) throws Exception {
     this.server.onConnect(MinecraftChildChannel.cast(ctx));
     super.channelActive(ctx);
   }
 
   @Override
-  public void channelInactive(final ChannelHandlerContext ctx) throws Exception {
+  public void channelInactive(@NotNull final ChannelHandlerContext ctx) throws Exception {
     this.server.onDisconnect(MinecraftChildChannel.cast(ctx));
     super.channelInactive(ctx);
   }

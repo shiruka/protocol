@@ -34,16 +34,20 @@ public final class MinecraftServer implements ServerListener, Identifier {
   private final InetSocketAddress address;
 
   /**
-   * the bootstrap.
-   */
-  @NotNull
-  private final ServerBootstrap bootstrap;
-
-  /**
    * the server id.
    */
   @Getter
   private final long serverId = Constants.RANDOM.nextLong();
+
+  /**
+   * the bootstrap.
+   */
+  private final ServerBootstrap bootstrap = new ServerBootstrap()
+    .group(new NioEventLoopGroup())
+    .channelFactory(() -> new MinecraftServerChannel(this))
+    .option(RakNetChannelOptions.SERVER_ID, this.serverId)
+    .option(RakNetChannelOptions.SERVER_IDENTIFIER, this)
+    .childHandler(new MinecraftServerInitializer(this));
 
   /**
    * the sessions.
@@ -83,21 +87,6 @@ public final class MinecraftServer implements ServerListener, Identifier {
 
   /**
    * ctor.
-   *
-   * @param address the address.
-   */
-  public MinecraftServer(@NotNull final InetSocketAddress address) {
-    this.address = address;
-    this.bootstrap = new ServerBootstrap()
-      .group(new NioEventLoopGroup())
-      .channelFactory(() -> new MinecraftServerChannel(this))
-      .option(RakNetChannelOptions.SERVER_ID, this.serverId)
-      .option(RakNetChannelOptions.SERVER_IDENTIFIER, this)
-      .childHandler(new MinecraftServerInitializer(this));
-  }
-
-  /**
-   * ctor.
    */
   public MinecraftServer() {
     this(new InetSocketAddress("127.0.0.1", 19132));
@@ -117,8 +106,8 @@ public final class MinecraftServer implements ServerListener, Identifier {
     return new StringJoiner(";", "", ";")
       .add("MCPE")
       .add(this.motd)
-      .add("465")
-      .add("1.17.34")
+      .add(io.github.shiruka.protocol.Constants.PROTOCOL_VERSION_AS_STRING)
+      .add(io.github.shiruka.protocol.Constants.MINECRAFT_VERSION)
       .add(String.valueOf(this.sessions.size()))
       .add(String.valueOf(this.maxConnections))
       .add(String.valueOf(this.serverId))

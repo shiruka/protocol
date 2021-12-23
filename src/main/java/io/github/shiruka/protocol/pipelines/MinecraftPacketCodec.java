@@ -35,6 +35,35 @@ public final class MinecraftPacketCodec extends MessageToMessageCodec<ByteBuf, L
   @Override
   protected void encode(final ChannelHandlerContext ctx, final List<MinecraftPacket> msg,
                         final List<Object> out) {
+    final var session = MinecraftChildChannel.cast(ctx);
+    final var uncompressed = new PacketBuffer(ctx.alloc().ioBuffer());
+    final var uncompressedBuffer = uncompressed.buffer();
+    try {
+      for (final var packet : msg) {
+        final var packetBuffer = new PacketBuffer(ctx.alloc().ioBuffer());
+        final var packetBufferBuffer = packetBuffer.buffer();
+        try {
+          final var id = packet.packetId();
+          var header = 0;
+          header |= id & 0x3ff;
+          header |= (packet.senderId() & 3) << 10;
+          header |= (packet.clientId() & 3) << 12;
+          packetBuffer.writeUnsignedVarInt(header);
+          packet.encode(packetBuffer, session);
+          uncompressed.writeUnsignedVarInt(packetBuffer.remaining());
+          uncompressedBuffer.writeBytes(packetBufferBuffer);
+        } catch (final Exception e) {
+          MinecraftPacketCodec.log.error("Error occurred whilst decoding packet!", e);
+          if (MinecraftPacketCodec.log.isTraceEnabled()) {
+            MinecraftPacketCodec.log.trace("Packet contents\n{}", ByteBufUtil.prettyHexDump(packetBufferBuffer.readerIndex(0)));
+          }
+        } finally {
+          packetBuffer.release();
+        }
+      }
+    } finally {
+      out.add(uncompressedBuffer);
+    }
   }
 
   @Override
