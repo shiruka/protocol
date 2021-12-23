@@ -5,6 +5,8 @@ import io.github.shiruka.protocol.MinecraftPacket;
 import io.github.shiruka.protocol.MinecraftPacketBuffer;
 import io.github.shiruka.protocol.PacketHandler;
 import java.util.Objects;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,6 +15,8 @@ import org.jetbrains.annotations.Nullable;
  * a class that represents unknown packets.
  */
 @Accessors(fluent = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public final class Unknown extends MinecraftPacket {
 
   /**
@@ -20,21 +24,6 @@ public final class Unknown extends MinecraftPacket {
    */
   @Nullable
   private PacketBuffer payload;
-
-  /**
-   * ctor.
-   */
-  public Unknown() {
-  }
-
-  /**
-   * ctor.
-   *
-   * @param payload the payload.
-   */
-  public Unknown(@Nullable final PacketBuffer payload) {
-    this.payload = payload;
-  }
 
   @Override
   public void decode(@NotNull final MinecraftPacketBuffer buffer) {

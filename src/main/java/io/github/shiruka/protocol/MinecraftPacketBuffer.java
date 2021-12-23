@@ -544,9 +544,9 @@ public final class MinecraftPacketBuffer extends PacketBuffer {
         return InventorySource.worldInteraction(flag);
       case CREATIVE:
         return InventorySource.creative();
-      case NON_IMPLEMENTED_TODO:
+      case NON_IMPLEMENTED:
         containerId = this.readVarInt();
-        return InventorySource.nonImplementedTodo(containerId);
+        return InventorySource.nonImplemented(containerId);
       default:
         return InventorySource.invalid();
     }
@@ -1039,7 +1039,7 @@ public final class MinecraftPacketBuffer extends PacketBuffer {
     final var type = inventorySource.type();
     this.writeUnsignedVarInt(type.id());
     switch (type) {
-      case CONTAINER, UNTRACKED_INTERACTION_UI, NON_IMPLEMENTED_TODO -> this.writeVarInt(inventorySource.containerId());
+      case CONTAINER, UNTRACKED_INTERACTION_UI, NON_IMPLEMENTED -> this.writeVarInt(inventorySource.containerId());
       case WORLD_INTERACTION -> this.writeUnsignedVarInt(inventorySource.flag().ordinal());
       default -> {
       }
