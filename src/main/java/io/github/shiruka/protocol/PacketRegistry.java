@@ -8,6 +8,8 @@ import io.github.shiruka.protocol.packets.AddPlayer;
 import io.github.shiruka.protocol.packets.AdventureSettings;
 import io.github.shiruka.protocol.packets.ClientToServerHandshake;
 import io.github.shiruka.protocol.packets.Disconnect;
+import io.github.shiruka.protocol.packets.LevelEvent;
+import io.github.shiruka.protocol.packets.LevelSoundEvent1;
 import io.github.shiruka.protocol.packets.Login;
 import io.github.shiruka.protocol.packets.MoveEntityAbsolute;
 import io.github.shiruka.protocol.packets.MovePlayer;
@@ -100,7 +102,9 @@ public final class PacketRegistry {
     PacketRegistry.register(Ids.UPDATE_BLOCK, UpdateBlock::new);
     PacketRegistry.register(Ids.ADD_PAINTING, AddPainting::new);
     PacketRegistry.register(Ids.TICK_SYNC, TickSync::new);
-    // 24...54 missing
+    PacketRegistry.register(Ids.LEVEL_SOUND_EVENT_1, LevelSoundEvent1::new);
+    PacketRegistry.register(Ids.LEVEL_EVENT, LevelEvent::new);
+    // 26...54 missing
     PacketRegistry.register(Ids.ADVENTURE_SETTINGS, AdventureSettings::new);
     // 56...88 missing
     PacketRegistry.register(Ids.ADD_BEHAVIOR_TREE, AddBehaviorTree::new);

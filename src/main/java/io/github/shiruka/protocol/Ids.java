@@ -8,6 +8,8 @@ import io.github.shiruka.protocol.packets.AddPlayer;
 import io.github.shiruka.protocol.packets.AdventureSettings;
 import io.github.shiruka.protocol.packets.ClientToServerHandshake;
 import io.github.shiruka.protocol.packets.Disconnect;
+import io.github.shiruka.protocol.packets.LevelEvent;
+import io.github.shiruka.protocol.packets.LevelSoundEvent1;
 import io.github.shiruka.protocol.packets.Login;
 import io.github.shiruka.protocol.packets.MoveEntityAbsolute;
 import io.github.shiruka.protocol.packets.MovePlayer;
@@ -70,6 +72,16 @@ public interface Ids {
    * the id of the {@link Disconnect} packet.
    */
   int DISCONNECT = 5;
+
+  /**
+   * the id of the {@link LevelEvent} packet.
+   */
+  int LEVEL_EVENT = 25;
+
+  /**
+   * the id of the {@link LevelSoundEvent1} packet.
+   */
+  int LEVEL_SOUND_EVENT_1 = 24;
 
   /**
    * the id of the {@link Login} packet.

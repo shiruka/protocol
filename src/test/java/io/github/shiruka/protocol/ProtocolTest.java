@@ -6,6 +6,7 @@ import io.github.shiruka.protocol.packets.Unknown;
 import io.github.shiruka.protocol.server.MinecraftServer;
 import io.github.shiruka.protocol.server.MinecraftServerSession;
 import io.github.shiruka.protocol.server.ServerListener;
+import java.util.Locale;
 import org.jetbrains.annotations.NotNull;
 
 public final class ProtocolTest {
@@ -18,6 +19,21 @@ public final class ProtocolTest {
       .motd("Motd")
       .serverListener(new Listener())
       .bind();
+  }
+
+  @NotNull
+  private static String enumWithComments(@NotNull final Enum<?>[] values) {
+    final var builder = new StringBuilder();
+    for (final var value : values) {
+      final var name = value.name();
+      final var comment = name.toLowerCase(Locale.ROOT).replace("_", " ");
+      builder
+        .append("/**").append("\n")
+        .append(" * the ").append(comment).append(".").append("\n")
+        .append(" */").append("\n")
+        .append(name).append(",").append("\n");
+    }
+    return builder.toString();
   }
 
   private static final class Handler implements PacketHandler {
