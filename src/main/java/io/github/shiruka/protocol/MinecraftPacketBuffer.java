@@ -574,7 +574,7 @@ public final class MinecraftPacketBuffer {
    */
   @NotNull
   public TextType readTextType() {
-    return TextType.values()[this.readUnsignedByte()];
+    return TextType.byOrdinal(this.readUnsignedByte());
   }
 
   /**
