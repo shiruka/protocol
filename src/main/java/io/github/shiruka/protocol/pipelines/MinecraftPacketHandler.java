@@ -28,11 +28,11 @@ public final class MinecraftPacketHandler extends SimpleChannelInboundHandler<Li
 
   @Override
   protected void channelRead0(final ChannelHandlerContext ctx, final List<MinecraftPacket> msg) {
-    final var channel = MinecraftChildChannel.cast(ctx);
+    final var session = MinecraftChildChannel.cast(ctx);
     for (final var packet : msg) {
-      this.server.prePacket(packet, channel);
-      packet.handle(channel.packetHandler());
-      this.server.postPacket(packet, channel);
+      this.server.prePacket(packet, session);
+      packet.handle(session.packetHandler());
+      this.server.postPacket(packet, session);
     }
   }
 }
