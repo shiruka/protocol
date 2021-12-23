@@ -223,7 +223,7 @@ public final class Skin {
    * @param frames the frames.
    * @param expression the expression.
    */
-  public final record Animation(
+  public record Animation(
     @NotNull ImageData imageData,
     int type,
     float frames,

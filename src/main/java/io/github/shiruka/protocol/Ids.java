@@ -1,8 +1,10 @@
 package io.github.shiruka.protocol;
 
+import io.github.shiruka.protocol.packets.AddBehaviorTree;
 import io.github.shiruka.protocol.packets.AddEntity;
 import io.github.shiruka.protocol.packets.AddItemEntity;
 import io.github.shiruka.protocol.packets.AddPlayer;
+import io.github.shiruka.protocol.packets.AdventureSettings;
 import io.github.shiruka.protocol.packets.ClientToServerHandshake;
 import io.github.shiruka.protocol.packets.Disconnect;
 import io.github.shiruka.protocol.packets.Login;
@@ -24,6 +26,11 @@ import io.github.shiruka.protocol.packets.Text;
 public interface Ids {
 
   /**
+   * the id of the {@link AddBehaviorTree} packet.
+   */
+  int ADD_BEHAVIOR_TREE = 89;
+
+  /**
    * the id of the {@link AddEntity} packet.
    */
   int ADD_ENTITY = 13;
@@ -37,6 +44,11 @@ public interface Ids {
    * the id of the {@link AddPlayer} packet.
    */
   int ADD_PLAYER = 12;
+
+  /**
+   * the id of the {@link AdventureSettings} packet.
+   */
+  int ADVENTURE_SETTINGS = 55;
 
   /**
    * the id of the {@link ClientToServerHandshake} packet.

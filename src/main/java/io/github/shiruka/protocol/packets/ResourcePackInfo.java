@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * a class that represents play status packets.
+ * a class that represents resource pack info packets.
  */
 @Setter
 @ToString

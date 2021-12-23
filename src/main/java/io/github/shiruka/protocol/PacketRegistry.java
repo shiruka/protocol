@@ -1,8 +1,10 @@
 package io.github.shiruka.protocol;
 
+import io.github.shiruka.protocol.packets.AddBehaviorTree;
 import io.github.shiruka.protocol.packets.AddEntity;
 import io.github.shiruka.protocol.packets.AddItemEntity;
 import io.github.shiruka.protocol.packets.AddPlayer;
+import io.github.shiruka.protocol.packets.AdventureSettings;
 import io.github.shiruka.protocol.packets.ClientToServerHandshake;
 import io.github.shiruka.protocol.packets.Disconnect;
 import io.github.shiruka.protocol.packets.Login;
@@ -68,6 +70,7 @@ public final class PacketRegistry {
    */
   public static void registerDefaults() {
     Constants.register();
+    PacketRegistry.PACKETS.defaultReturnValue(Unknown::new);
     PacketRegistry.register(Ids.LOGIN, Login::new);
     PacketRegistry.register(Ids.PLAY_STATUS, PlayStatus::new);
     PacketRegistry.register(Ids.SERVER_TO_CLIENT_HANDSHAKE, ServerToClientHandshake::new);
@@ -80,11 +83,12 @@ public final class PacketRegistry {
     PacketRegistry.register(Ids.SET_TIME, SetTime::new);
     PacketRegistry.register(Ids.START_GAME, StartGame::new);
     PacketRegistry.register(Ids.ADD_PLAYER, AddPlayer::new);
+    PacketRegistry.register(Ids.ADVENTURE_SETTINGS, AdventureSettings::new);
+    PacketRegistry.register(Ids.ADD_BEHAVIOR_TREE, AddBehaviorTree::new);
     PacketRegistry.register(Ids.ADD_ENTITY, AddEntity::new);
     PacketRegistry.register(Ids.REMOVE_ENTITY, RemoveEntity::new);
     PacketRegistry.register(Ids.ADD_ITEM_ENTITY, AddItemEntity::new);
     PacketRegistry.register(Ids.TAKE_ITEM_ENTITY, TakeItemEntity::new);
     PacketRegistry.register(Ids.PLAYER_AUTH_INPUT, PlayerAuthInput::new);
-    PacketRegistry.PACKETS.defaultReturnValue(Unknown::new);
   }
 }

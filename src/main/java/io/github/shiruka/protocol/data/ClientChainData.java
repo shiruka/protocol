@@ -30,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
  * @param chainData the chain data.
  * @param skinData the skin data.
  */
-public final record ClientChainData(
+public record ClientChainData(
   @NotNull ChainData chainData,
   @NotNull SkinData skinData
 ) {
@@ -191,7 +191,7 @@ public final record ClientChainData(
    * @param xboxAuthed the xbox authed.
    * @param xuid the xuid.
    */
-  private final record ChainData(
+  private record ChainData(
     boolean xboxAuthed,
     @Nullable String username,
     @Nullable UUID clientUUID,
@@ -267,7 +267,7 @@ public final record ClientChainData(
    * @param serverAddress the server address.
    * @param uiProfile the ui profile.
    */
-  private final record SkinData(
+  private record SkinData(
     long clientId,
     @Nullable String serverAddress,
     @Nullable String deviceModel,

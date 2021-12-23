@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * a class that represents play status packets.
+ * a class that represents client to server handshake packets.
  */
 @Setter
 @ToString

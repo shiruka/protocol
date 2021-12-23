@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
  * @param buttonName the button name.
  * @param linkUri the link uri.
  */
-public final record EduSharedUriResource(
+public record EduSharedUriResource(
   @NotNull String buttonName,
   @NotNull String linkUri
 ) {

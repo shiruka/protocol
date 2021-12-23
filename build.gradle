@@ -9,8 +9,8 @@ plugins {
 
 group "io.github.shiruka"
 
-sourceCompatibility = JavaVersion.VERSION_16
-targetCompatibility = JavaVersion.VERSION_16
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 compileJava {
   options.deprecation true
@@ -56,10 +56,10 @@ dependencies {
   annotationProcessor "org.jetbrains:annotations:22.0.0"
 
   compileOnlyApi "org.projectlombok:lombok:1.18.22"
-  annotationProcessor "org.projectlombok:lombok:1.18.20"
+  annotationProcessor "org.projectlombok:lombok:1.18.22"
 
   compileOnlyApi "io.github.shiruka:api:3.0.14-SNAPSHOT"
-  compileOnlyApi "io.github.shiruka:network:3.0.4"
+  compileOnlyApi "io.github.shiruka:network:3.0.5-SNAPSHOT"
 
   compileOnlyApi "it.unimi.dsi:fastutil:8.5.6"
   compileOnlyApi "io.netty:netty-all:4.1.72.Final"

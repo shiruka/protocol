@@ -8,7 +8,7 @@ import io.github.shiruka.api.nbt.CompoundTag;
  * @param name the name.
  * @param properties the properties.
  */
-public final record BlockPropertyData(
+public record BlockPropertyData(
   String name,
   CompoundTag properties
 ) {
