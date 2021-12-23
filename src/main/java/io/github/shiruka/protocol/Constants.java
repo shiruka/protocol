@@ -68,6 +68,21 @@ public final class Constants {
   public static final Object2IntMap<Class<?>> GAME_RULE_TYPES = new Object2IntOpenHashMap<>(3, 0.5f);
 
   /**
+   * the minecraft version.
+   */
+  public static final String MINECRAFT_VERSION = "1.18.2";
+
+  /**
+   * the protocol version.
+   */
+  public static final int PROTOCOL_VERSION = 475;
+
+  /**
+   * the protocol version as string.
+   */
+  public static final String PROTOCOL_VERSION_AS_STRING = String.valueOf(PROTOCOL_VERSION);
+
+  /**
    * ctor.
    */
   private Constants() {
