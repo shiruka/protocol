@@ -95,6 +95,15 @@ public final class MinecraftPacketBuffer extends PacketBuffer {
   }
 
   /**
+   * ctor.
+   *
+   * @param buffer the buffer.
+   */
+  public MinecraftPacketBuffer(@NotNull final PacketBuffer buffer) {
+    this(buffer.buffer());
+  }
+
+  /**
    * reads the array.
    *
    * @param array the array to read.
