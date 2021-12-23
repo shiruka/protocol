@@ -34,16 +34,20 @@ public final class MinecraftServer implements ServerListener, Identifier {
   private final InetSocketAddress address;
 
   /**
-   * the bootstrap.
-   */
-  @NotNull
-  private final ServerBootstrap bootstrap;
-
-  /**
    * the server id.
    */
   @Getter
   private final long serverId = Constants.RANDOM.nextLong();
+
+  /**
+   * the bootstrap.
+   */
+  private final ServerBootstrap bootstrap = new ServerBootstrap()
+    .group(new NioEventLoopGroup())
+    .channelFactory(() -> new MinecraftServerChannel(this))
+    .option(RakNetChannelOptions.SERVER_ID, this.serverId)
+    .option(RakNetChannelOptions.SERVER_IDENTIFIER, this)
+    .childHandler(new MinecraftServerInitializer(this));
 
   /**
    * the sessions.
@@ -80,21 +84,6 @@ public final class MinecraftServer implements ServerListener, Identifier {
   @Getter
   @Setter
   private ServerListener serverListener = ServerListener.EMPTY;
-
-  /**
-   * ctor.
-   *
-   * @param address the address.
-   */
-  public MinecraftServer(@NotNull final InetSocketAddress address) {
-    this.address = address;
-    this.bootstrap = new ServerBootstrap()
-      .group(new NioEventLoopGroup())
-      .channelFactory(() -> new MinecraftServerChannel(this))
-      .option(RakNetChannelOptions.SERVER_ID, this.serverId)
-      .option(RakNetChannelOptions.SERVER_IDENTIFIER, this)
-      .childHandler(new MinecraftServerInitializer(this));
-  }
 
   /**
    * ctor.
