@@ -101,8 +101,8 @@ public final class InventorySource {
    * @return non implemented source.
    */
   @NotNull
-  public static InventorySource nonImplementedTodo(final int containerId) {
-    return new InventorySource(containerId, Flag.NONE, Type.NON_IMPLEMENTED_TODO);
+  public static InventorySource nonImplemented(final int containerId) {
+    return new InventorySource(containerId, Flag.NONE, Type.NON_IMPLEMENTED);
   }
 
   /**
@@ -183,9 +183,9 @@ public final class InventorySource {
      */
     UNTRACKED_INTERACTION_UI(100),
     /**
-     * the non implemented todo.
+     * the non implemented.
      */
-    NON_IMPLEMENTED_TODO(99999);
+    NON_IMPLEMENTED(99999);
 
     /**
      * the cache by id.
