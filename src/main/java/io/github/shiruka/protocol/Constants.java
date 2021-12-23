@@ -80,7 +80,7 @@ public final class Constants {
   /**
    * the protocol version as string.
    */
-  public static final String PROTOCOL_VERSION_AS_STRING = String.valueOf(PROTOCOL_VERSION);
+  public static final String PROTOCOL_VERSION_AS_STRING = String.valueOf(Constants.PROTOCOL_VERSION);
 
   /**
    * ctor.
