@@ -61,6 +61,7 @@ import io.github.shiruka.protocol.data.inventory.stackrequestactions.SRADTransfe
 import io.github.shiruka.protocol.data.inventory.stackrequestactions.StackRequestActionData;
 import io.github.shiruka.protocol.data.inventory.stackrequestactions.StackRequestActionType;
 import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
@@ -74,9 +75,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.experimental.Delegate;
 import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
 
@@ -84,15 +83,16 @@ import org.jetbrains.annotations.NotNull;
  * a record class that delegates {@link PacketBuffer} and adds more helpful methods.
  */
 @Log4j2
-@RequiredArgsConstructor
-public final class MinecraftPacketBuffer {
+public final class MinecraftPacketBuffer extends PacketBuffer {
 
   /**
-   * the buffer.
+   * ctor.
+   *
+   * @param buffer the buffer.
    */
-  @NotNull
-  @Delegate
-  private final PacketBuffer buffer;
+  public MinecraftPacketBuffer(@NotNull final ByteBuf buffer) {
+    super(buffer);
+  }
 
   /**
    * reads the array.
