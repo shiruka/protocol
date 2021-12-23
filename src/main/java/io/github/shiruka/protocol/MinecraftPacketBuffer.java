@@ -146,6 +146,28 @@ public final class MinecraftPacketBuffer extends PacketBuffer {
   }
 
   /**
+   * reads the block position.
+   *
+   * @return block position.
+   */
+  @NotNull
+  public Vector3i readBlockPosition() {
+    final var x = this.readVarInt();
+    final var y = this.readUnsignedVarInt();
+    final var z = this.readVarInt();
+    return Vector3i.of(x, y, z);
+  }
+
+  /**
+   * reads the byte angle.
+   *
+   * @return byte angle.
+   */
+  public float readByteAngle() {
+    return this.readByte() * (360f / 256f);
+  }
+
+  /**
    * reads the byte array.
    *
    * @return byte array.
@@ -157,6 +179,19 @@ public final class MinecraftPacketBuffer extends PacketBuffer {
     final var bytes = new byte[length];
     this.readBytes(bytes);
     return bytes;
+  }
+
+  /**
+   * reads the byte rotation.
+   *
+   * @return byte rotation.
+   */
+  @NotNull
+  public Vector3f readByteRotation() {
+    final var pitch = this.readByteAngle();
+    final var yaw = this.readByteAngle();
+    final var roll = this.readByteAngle();
+    return Vector3f.of(pitch, yaw, roll);
   }
 
   /**
@@ -684,6 +719,15 @@ public final class MinecraftPacketBuffer extends PacketBuffer {
   }
 
   /**
+   * writes the byte angle.
+   *
+   * @param angle the angle to write.
+   */
+  public void writeByteAngle(final float angle) {
+    this.writeByte((byte) (angle / (360f / 256f)));
+  }
+
+  /**
    * writes byte array.
    *
    * @param bytes the bytes to write.
@@ -691,6 +735,17 @@ public final class MinecraftPacketBuffer extends PacketBuffer {
   public void writeByteArray(final byte[] bytes) {
     this.writeUnsignedVarInt(bytes.length);
     this.writeBytes(bytes);
+  }
+
+  /**
+   * writes the byte rotation.
+   *
+   * @param rotation the rotation to write.
+   */
+  public void writeByteRotation(@NotNull final Vector3f rotation) {
+    this.writeByteAngle(rotation.x());
+    this.writeByteAngle(rotation.y());
+    this.writeByteAngle(rotation.z());
   }
 
   /**
@@ -1105,19 +1160,6 @@ public final class MinecraftPacketBuffer extends PacketBuffer {
     this.writeVarInt(vector.x());
     this.writeUnsignedVarInt(vector.y());
     this.writeVarInt(vector.z());
-  }
-
-  /**
-   * reads the block position.
-   *
-   * @return block position.
-   */
-  @NotNull
-  private Vector3i readBlockPosition() {
-    final var x = this.readVarInt();
-    final var y = this.readUnsignedVarInt();
-    final var z = this.readVarInt();
-    return Vector3i.of(x, y, z);
   }
 
   /**

@@ -3,22 +3,31 @@ package io.github.shiruka.protocol;
 import io.github.shiruka.protocol.packets.AddBehaviorTree;
 import io.github.shiruka.protocol.packets.AddEntity;
 import io.github.shiruka.protocol.packets.AddItemEntity;
+import io.github.shiruka.protocol.packets.AddPainting;
 import io.github.shiruka.protocol.packets.AddPlayer;
 import io.github.shiruka.protocol.packets.AdventureSettings;
+import io.github.shiruka.protocol.packets.BlockEvent;
 import io.github.shiruka.protocol.packets.ClientToServerHandshake;
 import io.github.shiruka.protocol.packets.Disconnect;
+import io.github.shiruka.protocol.packets.LevelEvent;
+import io.github.shiruka.protocol.packets.LevelSoundEvent1;
 import io.github.shiruka.protocol.packets.Login;
+import io.github.shiruka.protocol.packets.MoveEntityAbsolute;
+import io.github.shiruka.protocol.packets.MovePlayer;
 import io.github.shiruka.protocol.packets.PlayStatus;
 import io.github.shiruka.protocol.packets.PlayerAuthInput;
 import io.github.shiruka.protocol.packets.RemoveEntity;
 import io.github.shiruka.protocol.packets.ResourcePackClientResponse;
 import io.github.shiruka.protocol.packets.ResourcePackInfo;
 import io.github.shiruka.protocol.packets.ResourcePackStack;
+import io.github.shiruka.protocol.packets.RiderJump;
 import io.github.shiruka.protocol.packets.ServerToClientHandshake;
 import io.github.shiruka.protocol.packets.SetTime;
 import io.github.shiruka.protocol.packets.StartGame;
 import io.github.shiruka.protocol.packets.TakeItemEntity;
 import io.github.shiruka.protocol.packets.Text;
+import io.github.shiruka.protocol.packets.TickSync;
+import io.github.shiruka.protocol.packets.UpdateBlock;
 
 /**
  * an interface that contains Minecraft packet ids.
@@ -41,6 +50,11 @@ public interface Ids {
   int ADD_ITEM_ENTITY = 15;
 
   /**
+   * the id of the {@link AddPainting} packet.
+   */
+  int ADD_PAINTING = 22;
+
+  /**
    * the id of the {@link AddPlayer} packet.
    */
   int ADD_PLAYER = 12;
@@ -49,6 +63,11 @@ public interface Ids {
    * the id of the {@link AdventureSettings} packet.
    */
   int ADVENTURE_SETTINGS = 55;
+
+  /**
+   * the id of the {@link BlockEvent} packet.
+   */
+  int BLOCK_EVENT = 26;
 
   /**
    * the id of the {@link ClientToServerHandshake} packet.
@@ -61,9 +80,29 @@ public interface Ids {
   int DISCONNECT = 5;
 
   /**
+   * the id of the {@link LevelEvent} packet.
+   */
+  int LEVEL_EVENT = 25;
+
+  /**
+   * the id of the {@link LevelSoundEvent1} packet.
+   */
+  int LEVEL_SOUND_EVENT_1 = 24;
+
+  /**
    * the id of the {@link Login} packet.
    */
   int LOGIN = 1;
+
+  /**
+   * the id of the {@link MoveEntityAbsolute} packet.
+   */
+  int MOVE_ENTITY_ABSOLUTE = 18;
+
+  /**
+   * the id of the {@link MovePlayer} packet.
+   */
+  int MOVE_PLAYER = 19;
 
   /**
    * the id of the {@link PlayerAuthInput} packet.
@@ -96,6 +135,11 @@ public interface Ids {
   int RESOURCE_PACK_STACK = 7;
 
   /**
+   * the id of the {@link RiderJump} packet.
+   */
+  int RIDER_JUMP = 20;
+
+  /**
    * the id of the {@link ServerToClientHandshake} packet.
    */
   int SERVER_TO_CLIENT_HANDSHAKE = 3;
@@ -119,4 +163,14 @@ public interface Ids {
    * the id of the {@link Text} packet.
    */
   int TEXT = 9;
+
+  /**
+   * the id of the {@link TickSync} packet.
+   */
+  int TICK_SYNC = 23;
+
+  /**
+   * the id of the {@link UpdateBlock} packet.
+   */
+  int UPDATE_BLOCK = 21;
 }

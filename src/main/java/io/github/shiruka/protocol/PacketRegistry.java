@@ -3,23 +3,32 @@ package io.github.shiruka.protocol;
 import io.github.shiruka.protocol.packets.AddBehaviorTree;
 import io.github.shiruka.protocol.packets.AddEntity;
 import io.github.shiruka.protocol.packets.AddItemEntity;
+import io.github.shiruka.protocol.packets.AddPainting;
 import io.github.shiruka.protocol.packets.AddPlayer;
 import io.github.shiruka.protocol.packets.AdventureSettings;
+import io.github.shiruka.protocol.packets.BlockEvent;
 import io.github.shiruka.protocol.packets.ClientToServerHandshake;
 import io.github.shiruka.protocol.packets.Disconnect;
+import io.github.shiruka.protocol.packets.LevelEvent;
+import io.github.shiruka.protocol.packets.LevelSoundEvent1;
 import io.github.shiruka.protocol.packets.Login;
+import io.github.shiruka.protocol.packets.MoveEntityAbsolute;
+import io.github.shiruka.protocol.packets.MovePlayer;
 import io.github.shiruka.protocol.packets.PlayStatus;
 import io.github.shiruka.protocol.packets.PlayerAuthInput;
 import io.github.shiruka.protocol.packets.RemoveEntity;
 import io.github.shiruka.protocol.packets.ResourcePackClientResponse;
 import io.github.shiruka.protocol.packets.ResourcePackInfo;
 import io.github.shiruka.protocol.packets.ResourcePackStack;
+import io.github.shiruka.protocol.packets.RiderJump;
 import io.github.shiruka.protocol.packets.ServerToClientHandshake;
 import io.github.shiruka.protocol.packets.SetTime;
 import io.github.shiruka.protocol.packets.StartGame;
 import io.github.shiruka.protocol.packets.TakeItemEntity;
 import io.github.shiruka.protocol.packets.Text;
+import io.github.shiruka.protocol.packets.TickSync;
 import io.github.shiruka.protocol.packets.Unknown;
+import io.github.shiruka.protocol.packets.UpdateBlock;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import java.util.Objects;
@@ -83,12 +92,25 @@ public final class PacketRegistry {
     PacketRegistry.register(Ids.SET_TIME, SetTime::new);
     PacketRegistry.register(Ids.START_GAME, StartGame::new);
     PacketRegistry.register(Ids.ADD_PLAYER, AddPlayer::new);
-    PacketRegistry.register(Ids.ADVENTURE_SETTINGS, AdventureSettings::new);
-    PacketRegistry.register(Ids.ADD_BEHAVIOR_TREE, AddBehaviorTree::new);
     PacketRegistry.register(Ids.ADD_ENTITY, AddEntity::new);
     PacketRegistry.register(Ids.REMOVE_ENTITY, RemoveEntity::new);
     PacketRegistry.register(Ids.ADD_ITEM_ENTITY, AddItemEntity::new);
+    // 16 missing
     PacketRegistry.register(Ids.TAKE_ITEM_ENTITY, TakeItemEntity::new);
+    PacketRegistry.register(Ids.MOVE_ENTITY_ABSOLUTE, MoveEntityAbsolute::new);
+    PacketRegistry.register(Ids.MOVE_PLAYER, MovePlayer::new);
+    PacketRegistry.register(Ids.RIDER_JUMP, RiderJump::new);
+    PacketRegistry.register(Ids.UPDATE_BLOCK, UpdateBlock::new);
+    PacketRegistry.register(Ids.ADD_PAINTING, AddPainting::new);
+    PacketRegistry.register(Ids.TICK_SYNC, TickSync::new);
+    PacketRegistry.register(Ids.LEVEL_SOUND_EVENT_1, LevelSoundEvent1::new);
+    PacketRegistry.register(Ids.LEVEL_EVENT, LevelEvent::new);
+    PacketRegistry.register(Ids.BLOCK_EVENT, BlockEvent::new);
+    // 27...54 missing
+    PacketRegistry.register(Ids.ADVENTURE_SETTINGS, AdventureSettings::new);
+    // 56...88 missing
+    PacketRegistry.register(Ids.ADD_BEHAVIOR_TREE, AddBehaviorTree::new);
+    // 90...143 missing
     PacketRegistry.register(Ids.PLAYER_AUTH_INPUT, PlayerAuthInput::new);
   }
 }
