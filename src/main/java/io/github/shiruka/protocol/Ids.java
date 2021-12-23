@@ -6,6 +6,7 @@ import io.github.shiruka.protocol.packets.AddItemEntity;
 import io.github.shiruka.protocol.packets.AddPainting;
 import io.github.shiruka.protocol.packets.AddPlayer;
 import io.github.shiruka.protocol.packets.AdventureSettings;
+import io.github.shiruka.protocol.packets.BlockEvent;
 import io.github.shiruka.protocol.packets.ClientToServerHandshake;
 import io.github.shiruka.protocol.packets.Disconnect;
 import io.github.shiruka.protocol.packets.LevelEvent;
@@ -62,6 +63,11 @@ public interface Ids {
    * the id of the {@link AdventureSettings} packet.
    */
   int ADVENTURE_SETTINGS = 55;
+
+  /**
+   * the id of the {@link BlockEvent} packet.
+   */
+  int BLOCK_EVENT = 26;
 
   /**
    * the id of the {@link ClientToServerHandshake} packet.

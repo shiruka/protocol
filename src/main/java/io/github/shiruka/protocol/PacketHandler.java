@@ -6,6 +6,7 @@ import io.github.shiruka.protocol.packets.AddHangingEntity;
 import io.github.shiruka.protocol.packets.AddItemEntity;
 import io.github.shiruka.protocol.packets.AddPlayer;
 import io.github.shiruka.protocol.packets.AdventureSettings;
+import io.github.shiruka.protocol.packets.BlockEvent;
 import io.github.shiruka.protocol.packets.ClientToServerHandshake;
 import io.github.shiruka.protocol.packets.Disconnect;
 import io.github.shiruka.protocol.packets.LevelEvent;
@@ -263,5 +264,13 @@ public interface PacketHandler {
    * @param packet the packet to handle.
    */
   default void handle(@NotNull final LevelEvent packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final BlockEvent packet) {
   }
 }
