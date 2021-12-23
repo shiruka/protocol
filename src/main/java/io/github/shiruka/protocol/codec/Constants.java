@@ -1,4 +1,4 @@
-package io.github.shiruka.protocol;
+package io.github.shiruka.protocol.codec;
 
 import io.github.shiruka.api.common.Int2ObjectBiMap;
 import io.github.shiruka.protocol.data.AdventureSetting;

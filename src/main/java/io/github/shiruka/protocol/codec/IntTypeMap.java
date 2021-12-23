@@ -1,4 +1,4 @@
-package io.github.shiruka.protocol;
+package io.github.shiruka.protocol.codec;
 
 import com.google.common.base.Preconditions;
 import io.github.shiruka.api.common.Int2ObjectBiMap;
@@ -90,6 +90,18 @@ public final class IntTypeMap<T> {
    */
   public int id(@NotNull final T value) {
     return this.map.get(value);
+  }
+
+  /**
+   * creates a builder from {@code this}.
+   *
+   * @return builder.
+   */
+  @NotNull
+  public Builder<T> toBuilder() {
+    final var builder = new Builder<T>(this.type);
+    this.map.forEach((t, value) -> builder.insert(value, t));
+    return builder;
   }
 
   /**

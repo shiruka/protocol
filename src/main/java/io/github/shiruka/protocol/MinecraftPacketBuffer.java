@@ -1,12 +1,12 @@
 package io.github.shiruka.protocol;
 
 import com.google.common.base.Preconditions;
-import io.github.shiruka.api.common.vectors.Vector2f;
 import io.github.shiruka.api.common.vectors.Vector3f;
 import io.github.shiruka.api.common.vectors.Vector3i;
 import io.github.shiruka.api.nbt.CompoundTag;
 import io.github.shiruka.api.nbt.Tag;
 import io.github.shiruka.network.PacketBuffer;
+import io.github.shiruka.protocol.codec.Constants;
 import io.github.shiruka.protocol.data.AttributeData;
 import io.github.shiruka.protocol.data.AuthoritativeMovementMode;
 import io.github.shiruka.protocol.data.EduSharedUriResource;
@@ -63,19 +63,13 @@ import io.github.shiruka.protocol.data.inventory.stackrequestactions.StackReques
 import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
-import io.netty.buffer.ByteBufInputStream;
-import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.ByteBufUtil;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 import java.util.stream.IntStream;
-import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
 
@@ -104,34 +98,6 @@ public final class MinecraftPacketBuffer extends PacketBuffer {
   }
 
   /**
-   * reads the array.
-   *
-   * @param array the array to read.
-   * @param supplier the supplier to read.
-   * @param <T> type of the array.
-   */
-  public <T> void readArray(@NotNull final Collection<T> array, @NotNull final Supplier<T> supplier) {
-    final var length = this.readUnsignedInt();
-    IntStream.iterate(0, i -> i < length, i -> i + 1)
-      .mapToObj(i -> supplier.get())
-      .forEach(array::add);
-  }
-
-  /**
-   * reads the array shor le.
-   *
-   * @param array the array to read.
-   * @param supplier the supplier to read.
-   * @param <T> type of the array.
-   */
-  public <T> void readArrayShortLE(@NotNull final Collection<T> array, final Supplier<T> supplier) {
-    final var length = this.readUnsignedShortLE();
-    IntStream.range(0, length)
-      .mapToObj(i -> supplier.get())
-      .forEach(array::add);
-  }
-
-  /**
    * reads the attribute.
    *
    * @return attribute.
@@ -146,55 +112,6 @@ public final class MinecraftPacketBuffer extends PacketBuffer {
   }
 
   /**
-   * reads the block position.
-   *
-   * @return block position.
-   */
-  @NotNull
-  public Vector3i readBlockPosition() {
-    final var x = this.readVarInt();
-    final var y = this.readUnsignedVarInt();
-    final var z = this.readVarInt();
-    return Vector3i.of(x, y, z);
-  }
-
-  /**
-   * reads the byte angle.
-   *
-   * @return byte angle.
-   */
-  public float readByteAngle() {
-    return this.readByte() * (360f / 256f);
-  }
-
-  /**
-   * reads the byte array.
-   *
-   * @return byte array.
-   */
-  public byte[] readByteArray() {
-    final var length = this.readUnsignedVarInt();
-    Preconditions.checkArgument(this.buffer().isReadable(length),
-      "Tried to read %s bytes but only has %s readable", length, this.remaining());
-    final var bytes = new byte[length];
-    this.readBytes(bytes);
-    return bytes;
-  }
-
-  /**
-   * reads the byte rotation.
-   *
-   * @return byte rotation.
-   */
-  @NotNull
-  public Vector3f readByteRotation() {
-    final var pitch = this.readByteAngle();
-    final var yaw = this.readByteAngle();
-    final var roll = this.readByteAngle();
-    return Vector3f.of(pitch, yaw, roll);
-  }
-
-  /**
    * reads the command permission.
    *
    * @return command permission.
@@ -202,19 +119,6 @@ public final class MinecraftPacketBuffer extends PacketBuffer {
   @NotNull
   public CommandPermission readCommandPermission() {
     return CommandPermission.byOrdinal(this.readUnsignedVarInt());
-  }
-
-  /**
-   * reads the compound tag.
-   *
-   * @return compound tag
-   */
-  @SneakyThrows
-  @NotNull
-  public CompoundTag readCompoundTag() {
-    try (final var reader = Tag.createNetworkReader(new ByteBufInputStream(this.buffer()))) {
-      return reader.readCompoundTag();
-    }
   }
 
   /**
@@ -622,80 +526,6 @@ public final class MinecraftPacketBuffer extends PacketBuffer {
   }
 
   /**
-   * reads the vector 2f.
-   *
-   * @return vector 2f.
-   */
-  @NotNull
-  public Vector2f readVector2f() {
-    final var x = this.readFloatLE();
-    final var y = this.readFloatLE();
-    return Vector2f.of(x, y);
-  }
-
-  /**
-   * reads vector 3f.
-   *
-   * @return vector 3f.
-   */
-  @NotNull
-  public Vector3f readVector3f() {
-    final var x = this.readFloatLE();
-    final var y = this.readFloatLE();
-    final var z = this.readFloatLE();
-    return Vector3f.of(x, y, z);
-  }
-
-  /**
-   * reads the vector 3i.
-   *
-   * @return vector 3i.
-   */
-  @NotNull
-  public Vector3i readVector3i() {
-    final var x = this.readVarInt();
-    final var y = this.readUnsignedVarInt();
-    final var z = this.readVarInt();
-    return Vector3i.of(x, y, z);
-  }
-
-  /**
-   * writes the array.
-   *
-   * @param array the array to write.
-   * @param consumer the consumer to write.
-   * @param <T> type of the array.
-   */
-  public <T> void writeArray(@NotNull final Collection<T> array, @NotNull final Consumer<T> consumer) {
-    this.writeUnsignedInt(array.size());
-    array.forEach(consumer);
-  }
-
-  /**
-   * writes the array.
-   *
-   * @param array the array to write.
-   * @param consumer the consumer to write.
-   * @param <T> type of the array.
-   */
-  public <T> void writeArray(@NotNull final T[] array, @NotNull final Consumer<T> consumer) {
-    this.writeUnsignedInt(array.length);
-    Arrays.stream(array).forEach(consumer);
-  }
-
-  /**
-   * writes the array short le.
-   *
-   * @param array the array to write.
-   * @param consumer the consumer to write.
-   * @param <T> type of the array.
-   */
-  public <T> void writeArrayShortLE(@NotNull final Collection<T> array, @NotNull final Consumer<T> consumer) {
-    this.writeShortLE(array.size());
-    array.forEach(consumer);
-  }
-
-  /**
    * writes the attribute.
    *
    * @param attribute the attribute to write.
@@ -705,59 +535,6 @@ public final class MinecraftPacketBuffer extends PacketBuffer {
     this.writeFloatLE(attribute.minimum());
     this.writeFloatLE(attribute.maximum());
     this.writeFloatLE(attribute.value());
-  }
-
-  /**
-   * writes the block position.
-   *
-   * @param blockPosition the block position to write.
-   */
-  public void writeBlockPosition(@NotNull final Vector3i blockPosition) {
-    this.writeVarInt(blockPosition.x());
-    this.writeUnsignedVarInt(blockPosition.y());
-    this.writeVarInt(blockPosition.z());
-  }
-
-  /**
-   * writes the byte angle.
-   *
-   * @param angle the angle to write.
-   */
-  public void writeByteAngle(final float angle) {
-    this.writeByte((byte) (angle / (360f / 256f)));
-  }
-
-  /**
-   * writes byte array.
-   *
-   * @param bytes the bytes to write.
-   */
-  public void writeByteArray(final byte[] bytes) {
-    this.writeUnsignedVarInt(bytes.length);
-    this.writeBytes(bytes);
-  }
-
-  /**
-   * writes the byte rotation.
-   *
-   * @param rotation the rotation to write.
-   */
-  public void writeByteRotation(@NotNull final Vector3f rotation) {
-    this.writeByteAngle(rotation.x());
-    this.writeByteAngle(rotation.y());
-    this.writeByteAngle(rotation.z());
-  }
-
-  /**
-   * writes the compound tag.
-   *
-   * @param tag the tag to write.
-   */
-  @SneakyThrows
-  public void writeCompoundTag(@NotNull final CompoundTag tag) {
-    try (final var writer = Tag.createNetworkWriter(new ByteBufOutputStream(this.buffer()))) {
-      writer.writeCompoundTag(tag);
-    }
   }
 
   /**
@@ -1128,38 +905,6 @@ public final class MinecraftPacketBuffer extends PacketBuffer {
    */
   public void writeTextType(@NotNull final TextType type) {
     this.writeByte(type.ordinal());
-  }
-
-  /**
-   * writes the vector 2f.
-   *
-   * @param vector the vector to write.
-   */
-  public void writeVector2f(@NotNull final Vector2f vector) {
-    this.writeFloatLE(vector.x());
-    this.writeFloatLE(vector.y());
-  }
-
-  /**
-   * writes the vector 3f.
-   *
-   * @param vector the vector to write.
-   */
-  public void writeVector3f(@NotNull final Vector3f vector) {
-    this.writeFloatLE(vector.x());
-    this.writeFloatLE(vector.y());
-    this.writeFloatLE(vector.z());
-  }
-
-  /**
-   * writes the vector 31.
-   *
-   * @param vector the vector to write.
-   */
-  public void writeVector3i(@NotNull final Vector3i vector) {
-    this.writeVarInt(vector.x());
-    this.writeUnsignedVarInt(vector.y());
-    this.writeVarInt(vector.z());
   }
 
   /**

@@ -1,5 +1,7 @@
 package io.github.shiruka.protocol;
 
+import io.github.shiruka.protocol.codec.Constants;
+import io.github.shiruka.protocol.codec.Ids;
 import io.github.shiruka.protocol.packets.AddBehaviorTree;
 import io.github.shiruka.protocol.packets.AddEntity;
 import io.github.shiruka.protocol.packets.AddItemEntity;

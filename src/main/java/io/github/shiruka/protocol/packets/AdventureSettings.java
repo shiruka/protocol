@@ -1,9 +1,9 @@
 package io.github.shiruka.protocol.packets;
 
-import io.github.shiruka.protocol.Constants;
 import io.github.shiruka.protocol.MinecraftPacket;
 import io.github.shiruka.protocol.MinecraftPacketBuffer;
 import io.github.shiruka.protocol.PacketHandler;
+import io.github.shiruka.protocol.codec.Constants;
 import io.github.shiruka.protocol.data.AdventureSetting;
 import io.github.shiruka.protocol.data.PlayerPermission;
 import io.github.shiruka.protocol.data.command.CommandPermission;
