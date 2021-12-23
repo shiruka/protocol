@@ -144,7 +144,12 @@ public final class InventorySource {
     /**
      * the none.
      */
-    NONE
+    NONE;
+
+    /**
+     * the values.
+     */
+    public static final Flag[] VALUES = Flag.values();
   }
 
   /**

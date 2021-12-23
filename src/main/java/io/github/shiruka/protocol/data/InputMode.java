@@ -23,5 +23,10 @@ public enum InputMode {
   /**
    * the motion controller.
    */
-  MOTION_CONTROLLER
+  MOTION_CONTROLLER;
+
+  /**
+   * the values.
+   */
+  public static final InputMode[] VALUES = InputMode.values();
 }

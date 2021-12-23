@@ -39,5 +39,10 @@ public enum ClientPlayMode {
   /**
    * the exit level living room.
    */
-  EXIT_LEVEL_LIVING_ROOM
+  EXIT_LEVEL_LIVING_ROOM;
+
+  /**
+   * hte values.
+   */
+  public static final ClientPlayMode[] VALUES = ClientPlayMode.values();
 }

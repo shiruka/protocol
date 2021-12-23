@@ -115,5 +115,10 @@ public enum PlayerActionType {
   /**
    * the block continue destroy.
    */
-  BLOCK_CONTINUE_DESTROY
+  BLOCK_CONTINUE_DESTROY;
+
+  /**
+   * the values.
+   */
+  public static final PlayerActionType[] VALUES = PlayerActionType.values();
 }

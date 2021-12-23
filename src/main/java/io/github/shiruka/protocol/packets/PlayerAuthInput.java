@@ -13,6 +13,7 @@ import io.github.shiruka.protocol.data.inventory.ItemStackRequest;
 import io.github.shiruka.protocol.data.inventory.ItemUseTransaction;
 import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
@@ -104,7 +105,36 @@ public final class PlayerAuthInput extends MinecraftPacket {
   private Vector3f vrGazeDirection;
 
   @Override
-  public void decode(@NotNull final MinecraftPacketBuffer buffer) {
+  public void decode(@NotNull final MinecraftPacketBuffer buffer, @NotNull final MinecraftChildChannel session) {
+    final var x = buffer.readFloatLE();
+    final var y = buffer.readFloatLE();
+    this.position = buffer.readVector3f();
+    this.motion = Vector2f.of(buffer.readFloatLE(), buffer.readFloatLE());
+    final var z = buffer.readFloatLE();
+    this.rotation = Vector3f.of(x, y, z);
+    final var flagValue = buffer.readUnsignedVarLong();
+    Arrays.stream(PlayerAuthInputData.VALUES)
+      .filter(flag -> (flagValue & 1L << flag.ordinal()) != 0)
+      .forEach(this.inputData::add);
+    this.inputMode = InputMode.VALUES[buffer.readUnsignedVarInt()];
+    this.playMode = ClientPlayMode.VALUES[buffer.readUnsignedVarInt()];
+    if (this.playMode == ClientPlayMode.REALITY) {
+      this.vrGazeDirection = buffer.readVector3f();
+    }
+    this.tick = buffer.readUnsignedVarLong();
+    this.delta = buffer.readVector3f();
+    if (this.inputData.contains(PlayerAuthInputData.PERFORM_ITEM_INTERACTION)) {
+      this.itemUseTransaction = buffer.readItemUseTransaction(session);
+    }
+    if (this.inputData.contains(PlayerAuthInputData.PERFORM_ITEM_STACK_REQUEST)) {
+      this.itemStackRequest = buffer.readItemStackRequest(session);
+    }
+    if (this.inputData.contains(PlayerAuthInputData.PERFORM_BLOCK_ACTIONS)) {
+      final var arraySize = buffer.readVarInt();
+      for (var index = 0; index < arraySize; index++) {
+        this.playerActions.add(buffer.readPlayerBlockActionData());
+      }
+    }
   }
 
   @Override

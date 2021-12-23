@@ -1,9 +1,11 @@
 package io.github.shiruka.protocol.data.inventory.stackrequestactions;
 
+import java.util.Arrays;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * an enum class that contains stack request action types.
@@ -50,43 +52,65 @@ public enum StackRequestActionType {
   /**
    * the mine block.
    */
-  MINE_BLOCK(0),
+  MINE_BLOCK(9),
   /**
    * the craft recipe.
    */
-  CRAFT_RECIPE(9),
+  CRAFT_RECIPE(10),
   /**
    * the craft recipe auto.
    */
-  CRAFT_RECIPE_AUTO(10),
+  CRAFT_RECIPE_AUTO(11),
   /**
    * the craft creative.
    */
-  CRAFT_CREATIVE(11),
+  CRAFT_CREATIVE(12),
   /**
    * the craft recipe optional.
    */
-  CRAFT_RECIPE_OPTIONAL(0),
+  CRAFT_RECIPE_OPTIONAL(13),
   /**
    * the craft repair and disenchant.
    */
-  CRAFT_REPAIR_AND_DISENCHANT(0),
+  CRAFT_REPAIR_AND_DISENCHANT(14),
   /**
    * the craft loom.
    */
-  CRAFT_LOOM(0),
+  CRAFT_LOOM(15),
   /**
    * the craft non-implemented deprecated.
    */
-  CRAFT_NON_IMPLEMENTED_DEPRECATED(12),
+  CRAFT_NON_IMPLEMENTED_DEPRECATED(16),
   /**
    * the craft result deprecated.
    */
-  CRAFT_RESULTS_DEPRECATED(13);
+  CRAFT_RESULTS_DEPRECATED(17);
+
+  /**
+   * the values.
+   */
+  public static final StackRequestActionType[] VALUES = StackRequestActionType.values();
 
   /**
    * the id.
    */
   @Getter
   private final int id;
+
+  /**
+   * gets stack request action type by id.
+   *
+   * @param id the id to get.
+   *
+   * @return stack request action type.
+   */
+  @NotNull
+  public static StackRequestActionType byId(final int id) {
+    return Arrays.stream(StackRequestActionType.VALUES)
+      .filter(stackRequestActionType -> stackRequestActionType.id == id)
+      .findFirst()
+      .orElseThrow(() ->
+        new IllegalStateException("Stack request action type %s not found!"
+          .formatted(id)));
+  }
 }

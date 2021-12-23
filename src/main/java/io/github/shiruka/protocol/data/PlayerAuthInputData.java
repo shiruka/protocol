@@ -151,5 +151,10 @@ public enum PlayerAuthInputData {
   /**
    * the perform item stack request.
    */
-  PERFORM_ITEM_STACK_REQUEST
+  PERFORM_ITEM_STACK_REQUEST;
+
+  /**
+   * the values.
+   */
+  public static final PlayerAuthInputData[] VALUES = PlayerAuthInputData.values();
 }

@@ -243,5 +243,10 @@ public enum ContainerSlotType {
   /**
    * the creative output.
    */
-  CREATIVE_OUTPUT
+  CREATIVE_OUTPUT;
+
+  /**
+   * the values.
+   */
+  public static final ContainerSlotType[] VALUES = ContainerSlotType.values();
 }

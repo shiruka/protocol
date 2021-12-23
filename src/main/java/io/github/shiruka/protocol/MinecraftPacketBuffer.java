@@ -31,30 +31,43 @@ import io.github.shiruka.protocol.data.entity.EntityDataType;
 import io.github.shiruka.protocol.data.entity.EntityFlags;
 import io.github.shiruka.protocol.data.entity.EntityLinkData;
 import io.github.shiruka.protocol.data.entity.EntityLinkDataType;
+import io.github.shiruka.protocol.data.inventory.ContainerSlotType;
 import io.github.shiruka.protocol.data.inventory.InventoryActionData;
 import io.github.shiruka.protocol.data.inventory.InventorySource;
 import io.github.shiruka.protocol.data.inventory.ItemData;
 import io.github.shiruka.protocol.data.inventory.ItemStackRequest;
 import io.github.shiruka.protocol.data.inventory.ItemUseTransaction;
+import io.github.shiruka.protocol.data.inventory.LegacySetItemSlotData;
 import io.github.shiruka.protocol.data.inventory.StackRequestSlotInfoData;
+import io.github.shiruka.protocol.data.inventory.stackrequestactions.SRADAutoCraftRecipe;
 import io.github.shiruka.protocol.data.inventory.stackrequestactions.SRADBeaconPayment;
 import io.github.shiruka.protocol.data.inventory.stackrequestactions.SRADConsume;
 import io.github.shiruka.protocol.data.inventory.stackrequestactions.SRADCraftCreative;
+import io.github.shiruka.protocol.data.inventory.stackrequestactions.SRADCraftGrindstone;
+import io.github.shiruka.protocol.data.inventory.stackrequestactions.SRADCraftLoom;
+import io.github.shiruka.protocol.data.inventory.stackrequestactions.SRADCraftNonImplemented;
+import io.github.shiruka.protocol.data.inventory.stackrequestactions.SRADCraftRecipe;
 import io.github.shiruka.protocol.data.inventory.stackrequestactions.SRADCraftRecipeOptional;
 import io.github.shiruka.protocol.data.inventory.stackrequestactions.SRADCraftResultsDeprecated;
 import io.github.shiruka.protocol.data.inventory.stackrequestactions.SRADCreate;
 import io.github.shiruka.protocol.data.inventory.stackrequestactions.SRADDestroy;
 import io.github.shiruka.protocol.data.inventory.stackrequestactions.SRADDrop;
+import io.github.shiruka.protocol.data.inventory.stackrequestactions.SRADLabTableCombine;
+import io.github.shiruka.protocol.data.inventory.stackrequestactions.SRADPlace;
 import io.github.shiruka.protocol.data.inventory.stackrequestactions.SRADRecipe;
 import io.github.shiruka.protocol.data.inventory.stackrequestactions.SRADSwap;
+import io.github.shiruka.protocol.data.inventory.stackrequestactions.SRADTake;
 import io.github.shiruka.protocol.data.inventory.stackrequestactions.SRADTransfer;
 import io.github.shiruka.protocol.data.inventory.stackrequestactions.StackRequestActionData;
+import io.github.shiruka.protocol.data.inventory.stackrequestactions.StackRequestActionType;
 import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.ByteBufUtil;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -121,6 +134,20 @@ public final class MinecraftPacketBuffer {
     final var max = this.readFloatLE();
     final var val = this.readFloatLE();
     return new AttributeData(name, min, max, val);
+  }
+
+  /**
+   * reads the byte array.
+   *
+   * @return byte array.
+   */
+  public byte[] readByteArray() {
+    final var length = this.readUnsignedVarInt();
+    Preconditions.checkArgument(this.buffer().isReadable(length),
+      "Tried to read %s bytes but only has %s readable", length, this.remaining());
+    final var bytes = new byte[length];
+    this.readBytes(bytes);
+    return bytes;
   }
 
   /**
@@ -331,6 +358,64 @@ public final class MinecraftPacketBuffer {
   }
 
   /**
+   * reads the item stack request.
+   *
+   * @param session the session to read.
+   *
+   * @return item stack request.
+   */
+  @NotNull
+  public ItemStackRequest readItemStackRequest(@NotNull final MinecraftChildChannel session) {
+    final var requestId = this.readVarInt();
+    final var actions = new ArrayList<StackRequestActionData>();
+    this.readArray(actions, () -> {
+      final var type = StackRequestActionType.byId(this.readByte());
+      return this.readRequestActionData(type, session);
+    });
+    final var filteredStrings = new ArrayList<String>();
+    this.readArray(filteredStrings, this::readString);
+    return new ItemStackRequest(
+      requestId,
+      actions.toArray(new StackRequestActionData[0]),
+      filteredStrings.toArray(new String[0])
+    );
+  }
+
+  /**
+   * reads the item use transaction.
+   *
+   * @param session the session to read.
+   *
+   * @return item use transaction.
+   */
+  @NotNull
+  public ItemUseTransaction readItemUseTransaction(@NotNull final MinecraftChildChannel session) {
+    final var legacyRequestId = this.readVarInt();
+    final var legacySlots = new ObjectArrayList<LegacySetItemSlotData>();
+    if (legacyRequestId < -1 && (legacyRequestId & 1) == 0) {
+      this.readArray(legacySlots, () -> {
+        final var containerId = this.readByte();
+        final var slots = this.readByteArray();
+        return new LegacySetItemSlotData(containerId, slots);
+      });
+    }
+    final var actions = new ObjectArrayList<InventoryActionData>();
+    final var hasNetIds = this.readInventoryActions(session, actions);
+    final var actionType = this.readUnsignedVarInt();
+    final var blockPosition = this.readBlockPosition();
+    final var blockFace = this.readVarInt();
+    final var hotbarSlot = this.readVarInt();
+    final var itemInHand = this.readItem(session);
+    final var playerPosition = this.readVector3f();
+    final var clickPosition = this.readVector3f();
+    final var blockRuntimeId = this.readUnsignedVarInt();
+    return new ItemUseTransaction(
+      legacyRequestId, legacySlots, hasNetIds, actions, actionType, blockPosition, blockFace, hotbarSlot,
+      itemInHand, playerPosition, clickPosition, blockRuntimeId
+    );
+  }
+
+  /**
    * reads the play status status.
    *
    * @return play status status.
@@ -338,6 +423,29 @@ public final class MinecraftPacketBuffer {
   @NotNull
   public PlayStatusStatus readPlayStatusStatus() {
     return PlayStatusStatus.byOrdinal(this.readInt());
+  }
+
+  /**
+   * reads the player block action data.
+   *
+   * @return player block action data.
+   */
+  @NotNull
+  public PlayerBlockActionData readPlayerBlockActionData() {
+    final var action = PlayerActionType.VALUES[this.readVarInt()];
+    final Vector3i blockPosition;
+    final int face;
+    switch (action) {
+      case START_BREAK, ABORT_BREAK, CONTINUE_BREAK, BLOCK_PREDICT_DESTROY, BLOCK_CONTINUE_DESTROY, STOP_BREAK -> {
+        blockPosition = this.readVector3i();
+        face = this.readVarInt();
+      }
+      default -> {
+        blockPosition = null;
+        face = 0;
+      }
+    }
+    return new PlayerBlockActionData(action, blockPosition, face);
   }
 
   /**
@@ -401,6 +509,38 @@ public final class MinecraftPacketBuffer {
     final var packVersion = this.readString();
     final var subPackName = this.readString();
     return new ResourcePackStackEntry(packId, packVersion, subPackName);
+  }
+
+  /**
+   * reads the inventory source.
+   *
+   * @return inventory source.
+   */
+  @NotNull
+  public InventorySource readSource() {
+    final var duplicate = new PacketBuffer(this.buffer().duplicate());
+    var type = InventorySource.Type.byId(duplicate.readUnsignedVarInt());
+    if (type == InventorySource.Type.UNTRACKED_INTERACTION_UI) {
+      return InventorySource.untrackedInteractionUI(this.readVarInt());
+    }
+    type = InventorySource.Type.byId(this.readUnsignedVarInt());
+    switch (type) {
+      case CONTAINER:
+        int containerId = this.readVarInt();
+        return InventorySource.containerId(containerId);
+      case GLOBAL:
+        return InventorySource.global();
+      case WORLD_INTERACTION:
+        final var flag = InventorySource.Flag.VALUES[this.readUnsignedVarInt()];
+        return InventorySource.worldInteraction(flag);
+      case CREATIVE:
+        return InventorySource.creative();
+      case NON_IMPLEMENTED_TODO:
+        containerId = this.readVarInt();
+        return InventorySource.nonImplementedTodo(containerId);
+      default:
+        return InventorySource.invalid();
+    }
   }
 
   /**
@@ -959,6 +1099,102 @@ public final class MinecraftPacketBuffer {
   }
 
   /**
+   * reads the block position.
+   *
+   * @return block position.
+   */
+  @NotNull
+  private Vector3i readBlockPosition() {
+    final var x = this.readVarInt();
+    final var y = this.readUnsignedVarInt();
+    final var z = this.readVarInt();
+    return Vector3i.of(x, y, z);
+  }
+
+  /**
+   * reads the inventory actions.
+   *
+   * @param session the session to read.
+   * @param actions the actions to read.
+   *
+   * @return {@code true} if has network ids.
+   */
+  private boolean readInventoryActions(@NotNull final MinecraftChildChannel session,
+                                       @NotNull final Collection<InventoryActionData> actions) {
+    this.readArray(actions, () -> {
+      final var source = this.readSource();
+      final var slot = this.readUnsignedVarInt();
+      final var fromItem = this.readItem(session);
+      final var toItem = this.readItem(session);
+      return new InventoryActionData(source, slot, fromItem, toItem);
+    });
+    return false;
+  }
+
+  /**
+   * reads the request action data.
+   *
+   * @param type the type to read.
+   * @param session the session to read.
+   *
+   * @return request action data.
+   */
+  @NotNull
+  private StackRequestActionData readRequestActionData(@NotNull final StackRequestActionType type,
+                                                       @NotNull final MinecraftChildChannel session) {
+    switch (type) {
+      case CRAFT_REPAIR_AND_DISENCHANT:
+        return new SRADCraftGrindstone(this.readUnsignedVarInt(), this.readVarInt());
+      case CRAFT_LOOM:
+        return new SRADCraftLoom(this.readString());
+      case CRAFT_RECIPE_AUTO:
+        return new SRADAutoCraftRecipe(this.readUnsignedVarInt(), this.readByte());
+      case CRAFT_RESULTS_DEPRECATED:
+        final var data = new ArrayList<ItemData>();
+        this.readArray(data, () -> this.readItem(session));
+        return new SRADCraftResultsDeprecated(data.toArray(new ItemData[0]), this.readByte());
+      case CRAFT_RECIPE_OPTIONAL:
+        return new SRADCraftRecipeOptional(this.readUnsignedVarInt(), this.readIntLE());
+      case TAKE:
+        return new SRADTake(this.readByte(), this.readStackRequestSlotInfo(), this.readStackRequestSlotInfo());
+      case PLACE:
+        return new SRADPlace(this.readByte(), this.readStackRequestSlotInfo(), this.readStackRequestSlotInfo());
+      case SWAP:
+        return new SRADSwap(this.readStackRequestSlotInfo(), this.readStackRequestSlotInfo());
+      case DROP:
+        return new SRADDrop(this.readByte(), this.readStackRequestSlotInfo(), this.readBoolean());
+      case DESTROY:
+        return new SRADDestroy(this.readByte(), this.readStackRequestSlotInfo());
+      case CONSUME:
+        return new SRADConsume(this.readByte(), this.readStackRequestSlotInfo());
+      case CREATE:
+        return new SRADCreate(this.readByte());
+      case LAB_TABLE_COMBINE:
+        return new SRADLabTableCombine();
+      case BEACON_PAYMENT:
+        return new SRADBeaconPayment(this.readVarInt(), this.readVarInt());
+      case CRAFT_RECIPE:
+        return new SRADCraftRecipe(this.readUnsignedVarInt());
+      case CRAFT_CREATIVE:
+        return new SRADCraftCreative(this.readUnsignedVarInt());
+      case CRAFT_NON_IMPLEMENTED_DEPRECATED:
+        return new SRADCraftNonImplemented();
+      default:
+        throw new UnsupportedOperationException("Unhandled stack request action type: " + type);
+    }
+  }
+
+  /**
+   * reads the stack request slot info.
+   *
+   * @return stack request slot info.
+   */
+  @NotNull
+  private StackRequestSlotInfoData readStackRequestSlotInfo() {
+    return new StackRequestSlotInfoData(ContainerSlotType.VALUES[this.readByte()], this.readByte(), this.readVarInt());
+  }
+
+  /**
    * writes the request action data.
    *
    * @param session the session to write.
@@ -968,6 +1204,22 @@ public final class MinecraftPacketBuffer {
                                       @NotNull final StackRequestActionData action) {
     final var type = action.type();
     switch (type) {
+      case CRAFT_REPAIR_AND_DISENCHANT:
+        final var actionData = (SRADCraftGrindstone) action;
+        this.writeUnsignedVarInt(actionData.recipeNetworkId());
+        this.writeVarInt(actionData.repairCost());
+        return;
+      case CRAFT_LOOM:
+        this.writeString(((SRADCraftLoom) action).patternId());
+        return;
+      case CRAFT_RESULTS_DEPRECATED:
+        this.writeArray(((SRADCraftResultsDeprecated) action).resultItems(), item -> this.writeItem(item, session));
+        this.writeByte(((SRADCraftResultsDeprecated) action).timesCrafted());
+        break;
+      case CRAFT_RECIPE_OPTIONAL:
+        this.writeUnsignedVarInt(((SRADCraftRecipeOptional) action).recipeNetworkId());
+        this.writeIntLE(((SRADCraftRecipeOptional) action).filteredStringIndex());
+        break;
       case TAKE:
       case PLACE:
         this.writeByte(((SRADTransfer) action).count());
@@ -994,6 +1246,9 @@ public final class MinecraftPacketBuffer {
       case CREATE:
         this.writeByte(((SRADCreate) action).slot());
         break;
+      case LAB_TABLE_COMBINE:
+      case CRAFT_NON_IMPLEMENTED_DEPRECATED:
+        break;
       case BEACON_PAYMENT:
         this.writeVarInt(((SRADBeaconPayment) action).primaryEffect());
         this.writeVarInt(((SRADBeaconPayment) action).secondaryEffect());
@@ -1004,17 +1259,6 @@ public final class MinecraftPacketBuffer {
         break;
       case CRAFT_CREATIVE:
         this.writeUnsignedVarInt(((SRADCraftCreative) action).creativeItemNetworkId());
-        break;
-      case CRAFT_RECIPE_OPTIONAL:
-        this.writeUnsignedVarInt(((SRADCraftRecipeOptional) action).recipeNetworkId());
-        this.writeIntLE(((SRADCraftRecipeOptional) action).filteredStringIndex());
-        break;
-      case CRAFT_RESULTS_DEPRECATED:
-        this.writeArray(((SRADCraftResultsDeprecated) action).resultItems(), item -> this.writeItem(item, session));
-        this.writeByte(((SRADCraftResultsDeprecated) action).timesCrafted());
-        break;
-      case LAB_TABLE_COMBINE:
-      case CRAFT_NON_IMPLEMENTED_DEPRECATED:
         break;
       default:
         throw new UnsupportedOperationException("Unhandled stack request action type: " + type);
