@@ -9,18 +9,21 @@ import io.github.shiruka.protocol.packets.ClientToServerHandshake;
 import io.github.shiruka.protocol.packets.Disconnect;
 import io.github.shiruka.protocol.packets.Login;
 import io.github.shiruka.protocol.packets.MoveEntityAbsolute;
+import io.github.shiruka.protocol.packets.MovePlayer;
 import io.github.shiruka.protocol.packets.PlayStatus;
 import io.github.shiruka.protocol.packets.PlayerAuthInput;
 import io.github.shiruka.protocol.packets.RemoveEntity;
 import io.github.shiruka.protocol.packets.ResourcePackClientResponse;
 import io.github.shiruka.protocol.packets.ResourcePackInfo;
 import io.github.shiruka.protocol.packets.ResourcePackStack;
+import io.github.shiruka.protocol.packets.RiderJump;
 import io.github.shiruka.protocol.packets.ServerToClientHandshake;
 import io.github.shiruka.protocol.packets.SetTime;
 import io.github.shiruka.protocol.packets.StartGame;
 import io.github.shiruka.protocol.packets.TakeItemEntity;
 import io.github.shiruka.protocol.packets.Text;
 import io.github.shiruka.protocol.packets.Unknown;
+import io.github.shiruka.protocol.packets.UpdateBlock;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -201,4 +204,27 @@ public interface PacketHandler {
    */
   default void handle(@NotNull final MoveEntityAbsolute packet) {
   }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final MovePlayer packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final RiderJump packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull UpdateBlock packet){}
 }

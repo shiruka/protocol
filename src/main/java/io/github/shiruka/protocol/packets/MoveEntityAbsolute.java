@@ -12,6 +12,9 @@ import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * a class that represents move entity absolute packets.
+ */
 @Setter
 @ToString
 @Accessors(fluent = true)

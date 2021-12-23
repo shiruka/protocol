@@ -9,12 +9,14 @@ import io.github.shiruka.protocol.packets.ClientToServerHandshake;
 import io.github.shiruka.protocol.packets.Disconnect;
 import io.github.shiruka.protocol.packets.Login;
 import io.github.shiruka.protocol.packets.MoveEntityAbsolute;
+import io.github.shiruka.protocol.packets.MovePlayer;
 import io.github.shiruka.protocol.packets.PlayStatus;
 import io.github.shiruka.protocol.packets.PlayerAuthInput;
 import io.github.shiruka.protocol.packets.RemoveEntity;
 import io.github.shiruka.protocol.packets.ResourcePackClientResponse;
 import io.github.shiruka.protocol.packets.ResourcePackInfo;
 import io.github.shiruka.protocol.packets.ResourcePackStack;
+import io.github.shiruka.protocol.packets.RiderJump;
 import io.github.shiruka.protocol.packets.ServerToClientHandshake;
 import io.github.shiruka.protocol.packets.SetTime;
 import io.github.shiruka.protocol.packets.StartGame;
@@ -90,7 +92,10 @@ public final class PacketRegistry {
     // 16 missing
     PacketRegistry.register(Ids.TAKE_ITEM_ENTITY, TakeItemEntity::new);
     PacketRegistry.register(Ids.MOVE_ENTITY_ABSOLUTE, MoveEntityAbsolute::new);
-    // 19...54 missing
+    PacketRegistry.register(Ids.MOVE_PLAYER, MovePlayer::new);
+    PacketRegistry.register(Ids.RIDER_JUMP, RiderJump::new);
+    register(Ids.UPDATE_BLOCK, UpdateBlock::new);
+    // 21...54 missing
     PacketRegistry.register(Ids.ADVENTURE_SETTINGS, AdventureSettings::new);
     // 56...88 missing
     PacketRegistry.register(Ids.ADD_BEHAVIOR_TREE, AddBehaviorTree::new);

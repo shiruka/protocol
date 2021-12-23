@@ -9,12 +9,14 @@ import io.github.shiruka.protocol.packets.ClientToServerHandshake;
 import io.github.shiruka.protocol.packets.Disconnect;
 import io.github.shiruka.protocol.packets.Login;
 import io.github.shiruka.protocol.packets.MoveEntityAbsolute;
+import io.github.shiruka.protocol.packets.MovePlayer;
 import io.github.shiruka.protocol.packets.PlayStatus;
 import io.github.shiruka.protocol.packets.PlayerAuthInput;
 import io.github.shiruka.protocol.packets.RemoveEntity;
 import io.github.shiruka.protocol.packets.ResourcePackClientResponse;
 import io.github.shiruka.protocol.packets.ResourcePackInfo;
 import io.github.shiruka.protocol.packets.ResourcePackStack;
+import io.github.shiruka.protocol.packets.RiderJump;
 import io.github.shiruka.protocol.packets.ServerToClientHandshake;
 import io.github.shiruka.protocol.packets.SetTime;
 import io.github.shiruka.protocol.packets.StartGame;
@@ -72,6 +74,11 @@ public interface Ids {
   int MOVE_ENTITY_ABSOLUTE = 18;
 
   /**
+   * the id of the {@link MovePlayer} packet.
+   */
+  int MOVE_PLAYER = 19;
+
+  /**
    * the id of the {@link PlayerAuthInput} packet.
    */
   int PLAYER_AUTH_INPUT = 144;
@@ -102,6 +109,11 @@ public interface Ids {
   int RESOURCE_PACK_STACK = 7;
 
   /**
+   * the id of the {@link RiderJump} packet.
+   */
+  int RIDER_JUMP = 20;
+
+  /**
    * the id of the {@link ServerToClientHandshake} packet.
    */
   int SERVER_TO_CLIENT_HANDSHAKE = 3;
@@ -125,4 +137,9 @@ public interface Ids {
    * the id of the {@link Text} packet.
    */
   int TEXT = 9;
+
+  /**
+   * the id of the {@link UpdateBlock} packet.
+   */
+  int UPDATE_BLOCK = 21;
 }
