@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * a class that represents adventure settings packets.
@@ -21,6 +22,22 @@ import org.jetbrains.annotations.NotNull;
 @ToString
 @Accessors(fluent = true)
 public final class AdventureSettings extends MinecraftPacket {
+
+  /**
+   * the flags 1.
+   */
+  public static final AdventureSetting @Nullable [] FLAGS_1 = {
+    AdventureSetting.WORLD_IMMUTABLE, AdventureSetting.NO_PVM, AdventureSetting.NO_MVP, null,
+    AdventureSetting.SHOW_NAME_TAGS, AdventureSetting.AUTO_JUMP, AdventureSetting.MAY_FLY, AdventureSetting.NO_CLIP,
+    AdventureSetting.WORLD_BUILDER, AdventureSetting.FLYING, AdventureSetting.MUTED};
+
+  /**
+   * the flags 2.
+   */
+  public static final AdventureSetting @Nullable [] FLAGS_2 = {
+    AdventureSetting.MINE, AdventureSetting.DOORS_AND_SWITCHES, AdventureSetting.OPEN_CONTAINERS,
+    AdventureSetting.ATTACK_PLAYERS, AdventureSetting.ATTACK_MOBS, AdventureSetting.OPERATOR, null,
+    AdventureSetting.TELEPORT, AdventureSetting.BUILD, AdventureSetting.DEFAULT_LEVEL_PERMISSIONS};
 
   /**
    * the settings.
@@ -67,8 +84,8 @@ public final class AdventureSettings extends MinecraftPacket {
     buffer.readUnsignedVarInt();
     this.uniqueEntityId = buffer.readLongLE();
     final var settings = this.settings();
-    AdventureSettings.readFlags(flags1, Constants.FLAGS_1, settings);
-    AdventureSettings.readFlags(flags2, Constants.FLAGS_2, settings);
+    AdventureSettings.readFlags(flags1, AdventureSettings.FLAGS_1, settings);
+    AdventureSettings.readFlags(flags2, AdventureSettings.FLAGS_2, settings);
   }
 
   @Override
