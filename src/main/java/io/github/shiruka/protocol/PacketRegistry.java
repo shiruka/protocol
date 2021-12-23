@@ -4,6 +4,7 @@ import io.github.shiruka.protocol.packets.AddBehaviorTree;
 import io.github.shiruka.protocol.packets.AddEntity;
 import io.github.shiruka.protocol.packets.AddItemEntity;
 import io.github.shiruka.protocol.packets.AddPlayer;
+import io.github.shiruka.protocol.packets.AdventureSettings;
 import io.github.shiruka.protocol.packets.ClientToServerHandshake;
 import io.github.shiruka.protocol.packets.Disconnect;
 import io.github.shiruka.protocol.packets.Login;
@@ -82,6 +83,7 @@ public final class PacketRegistry {
     PacketRegistry.register(Ids.SET_TIME, SetTime::new);
     PacketRegistry.register(Ids.START_GAME, StartGame::new);
     PacketRegistry.register(Ids.ADD_PLAYER, AddPlayer::new);
+    PacketRegistry.register(Ids.ADVENTURE_SETTINGS, AdventureSettings::new);
     PacketRegistry.register(Ids.ADD_BEHAVIOR_TREE, AddBehaviorTree::new);
     PacketRegistry.register(Ids.ADD_ENTITY, AddEntity::new);
     PacketRegistry.register(Ids.REMOVE_ENTITY, RemoveEntity::new);
