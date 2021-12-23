@@ -8,6 +8,7 @@ import io.github.shiruka.protocol.packets.AdventureSettings;
 import io.github.shiruka.protocol.packets.ClientToServerHandshake;
 import io.github.shiruka.protocol.packets.Disconnect;
 import io.github.shiruka.protocol.packets.Login;
+import io.github.shiruka.protocol.packets.MoveEntityAbsolute;
 import io.github.shiruka.protocol.packets.PlayStatus;
 import io.github.shiruka.protocol.packets.PlayerAuthInput;
 import io.github.shiruka.protocol.packets.RemoveEntity;
@@ -191,5 +192,13 @@ public interface PacketHandler {
    * @param packet the packet to handle.
    */
   default void handle(@NotNull final AddBehaviorTree packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final MoveEntityAbsolute packet) {
   }
 }

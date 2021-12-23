@@ -8,6 +8,7 @@ import io.github.shiruka.protocol.packets.AdventureSettings;
 import io.github.shiruka.protocol.packets.ClientToServerHandshake;
 import io.github.shiruka.protocol.packets.Disconnect;
 import io.github.shiruka.protocol.packets.Login;
+import io.github.shiruka.protocol.packets.MoveEntityAbsolute;
 import io.github.shiruka.protocol.packets.PlayStatus;
 import io.github.shiruka.protocol.packets.PlayerAuthInput;
 import io.github.shiruka.protocol.packets.RemoveEntity;
@@ -64,6 +65,11 @@ public interface Ids {
    * the id of the {@link Login} packet.
    */
   int LOGIN = 1;
+
+  /**
+   * the id of the {@link MoveEntityAbsolute} packet.
+   */
+  int MOVE_ENTITY_ABSOLUTE = 18;
 
   /**
    * the id of the {@link PlayerAuthInput} packet.

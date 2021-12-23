@@ -8,6 +8,7 @@ import io.github.shiruka.protocol.packets.AdventureSettings;
 import io.github.shiruka.protocol.packets.ClientToServerHandshake;
 import io.github.shiruka.protocol.packets.Disconnect;
 import io.github.shiruka.protocol.packets.Login;
+import io.github.shiruka.protocol.packets.MoveEntityAbsolute;
 import io.github.shiruka.protocol.packets.PlayStatus;
 import io.github.shiruka.protocol.packets.PlayerAuthInput;
 import io.github.shiruka.protocol.packets.RemoveEntity;
@@ -83,12 +84,17 @@ public final class PacketRegistry {
     PacketRegistry.register(Ids.SET_TIME, SetTime::new);
     PacketRegistry.register(Ids.START_GAME, StartGame::new);
     PacketRegistry.register(Ids.ADD_PLAYER, AddPlayer::new);
-    PacketRegistry.register(Ids.ADVENTURE_SETTINGS, AdventureSettings::new);
-    PacketRegistry.register(Ids.ADD_BEHAVIOR_TREE, AddBehaviorTree::new);
     PacketRegistry.register(Ids.ADD_ENTITY, AddEntity::new);
     PacketRegistry.register(Ids.REMOVE_ENTITY, RemoveEntity::new);
     PacketRegistry.register(Ids.ADD_ITEM_ENTITY, AddItemEntity::new);
+    // 16 missing
     PacketRegistry.register(Ids.TAKE_ITEM_ENTITY, TakeItemEntity::new);
+    PacketRegistry.register(Ids.MOVE_ENTITY_ABSOLUTE, MoveEntityAbsolute::new);
+    // 19...54 missing
+    PacketRegistry.register(Ids.ADVENTURE_SETTINGS, AdventureSettings::new);
+    // 56...88 missing
+    PacketRegistry.register(Ids.ADD_BEHAVIOR_TREE, AddBehaviorTree::new);
+    // 90...143 missing
     PacketRegistry.register(Ids.PLAYER_AUTH_INPUT, PlayerAuthInput::new);
   }
 }
