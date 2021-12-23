@@ -3,6 +3,7 @@ package io.github.shiruka.protocol;
 import io.github.shiruka.protocol.packets.AddBehaviorTree;
 import io.github.shiruka.protocol.packets.AddEntity;
 import io.github.shiruka.protocol.packets.AddItemEntity;
+import io.github.shiruka.protocol.packets.AddPainting;
 import io.github.shiruka.protocol.packets.AddPlayer;
 import io.github.shiruka.protocol.packets.AdventureSettings;
 import io.github.shiruka.protocol.packets.ClientToServerHandshake;
@@ -22,6 +23,7 @@ import io.github.shiruka.protocol.packets.SetTime;
 import io.github.shiruka.protocol.packets.StartGame;
 import io.github.shiruka.protocol.packets.TakeItemEntity;
 import io.github.shiruka.protocol.packets.Text;
+import io.github.shiruka.protocol.packets.TickSync;
 import io.github.shiruka.protocol.packets.Unknown;
 import io.github.shiruka.protocol.packets.UpdateBlock;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -96,7 +98,9 @@ public final class PacketRegistry {
     PacketRegistry.register(Ids.MOVE_PLAYER, MovePlayer::new);
     PacketRegistry.register(Ids.RIDER_JUMP, RiderJump::new);
     PacketRegistry.register(Ids.UPDATE_BLOCK, UpdateBlock::new);
-    // 22...54 missing
+    PacketRegistry.register(Ids.ADD_PAINTING, AddPainting::new);
+    PacketRegistry.register(Ids.TICK_SYNC, TickSync::new);
+    // 24...54 missing
     PacketRegistry.register(Ids.ADVENTURE_SETTINGS, AdventureSettings::new);
     // 56...88 missing
     PacketRegistry.register(Ids.ADD_BEHAVIOR_TREE, AddBehaviorTree::new);

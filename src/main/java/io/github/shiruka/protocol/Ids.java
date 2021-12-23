@@ -3,6 +3,7 @@ package io.github.shiruka.protocol;
 import io.github.shiruka.protocol.packets.AddBehaviorTree;
 import io.github.shiruka.protocol.packets.AddEntity;
 import io.github.shiruka.protocol.packets.AddItemEntity;
+import io.github.shiruka.protocol.packets.AddPainting;
 import io.github.shiruka.protocol.packets.AddPlayer;
 import io.github.shiruka.protocol.packets.AdventureSettings;
 import io.github.shiruka.protocol.packets.ClientToServerHandshake;
@@ -22,6 +23,7 @@ import io.github.shiruka.protocol.packets.SetTime;
 import io.github.shiruka.protocol.packets.StartGame;
 import io.github.shiruka.protocol.packets.TakeItemEntity;
 import io.github.shiruka.protocol.packets.Text;
+import io.github.shiruka.protocol.packets.TickSync;
 import io.github.shiruka.protocol.packets.UpdateBlock;
 
 /**
@@ -43,6 +45,11 @@ public interface Ids {
    * the id of the {@link AddItemEntity} packet.
    */
   int ADD_ITEM_ENTITY = 15;
+
+  /**
+   * the id of the {@link AddPainting} packet.
+   */
+  int ADD_PAINTING = 22;
 
   /**
    * the id of the {@link AddPlayer} packet.
@@ -138,6 +145,11 @@ public interface Ids {
    * the id of the {@link Text} packet.
    */
   int TEXT = 9;
+
+  /**
+   * the id of the {@link TickSync} packet.
+   */
+  int TICK_SYNC = 23;
 
   /**
    * the id of the {@link UpdateBlock} packet.

@@ -2,6 +2,7 @@ package io.github.shiruka.protocol;
 
 import io.github.shiruka.protocol.packets.AddBehaviorTree;
 import io.github.shiruka.protocol.packets.AddEntity;
+import io.github.shiruka.protocol.packets.AddHangingEntity;
 import io.github.shiruka.protocol.packets.AddItemEntity;
 import io.github.shiruka.protocol.packets.AddPlayer;
 import io.github.shiruka.protocol.packets.AdventureSettings;
@@ -22,6 +23,7 @@ import io.github.shiruka.protocol.packets.SetTime;
 import io.github.shiruka.protocol.packets.StartGame;
 import io.github.shiruka.protocol.packets.TakeItemEntity;
 import io.github.shiruka.protocol.packets.Text;
+import io.github.shiruka.protocol.packets.TickSync;
 import io.github.shiruka.protocol.packets.Unknown;
 import io.github.shiruka.protocol.packets.UpdateBlock;
 import org.jetbrains.annotations.NotNull;
@@ -227,5 +229,21 @@ public interface PacketHandler {
    * @param packet the packet to handle.
    */
   default void handle(@NotNull final UpdateBlock packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final AddHangingEntity packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final TickSync packet) {
   }
 }
