@@ -19,4 +19,16 @@ public record EntityLinkData(
   boolean riderInitiated
 ) {
 
+  /**
+   * ctor.
+   *
+   * @param from the from.
+   * @param to the to.
+   * @param type the type.
+   * @param immediate the immediate.
+   */
+  public EntityLinkData(final long from, final long to, @NotNull final EntityLinkDataType type,
+                        final boolean immediate) {
+    this(from, to, type, immediate, false);
+  }
 }

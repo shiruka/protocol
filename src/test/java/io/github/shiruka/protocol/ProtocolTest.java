@@ -1,7 +1,6 @@
 package io.github.shiruka.protocol;
 
-import io.github.shiruka.protocol.codec.Codec;
-import io.github.shiruka.protocol.codec.CodecHelper;
+import io.github.shiruka.protocol.codec.v291.CodecsV291;
 import io.github.shiruka.protocol.data.ClientChainData;
 import io.github.shiruka.protocol.packets.Login;
 import io.github.shiruka.protocol.packets.Unknown;
@@ -14,13 +13,7 @@ import org.jetbrains.annotations.NotNull;
 public final class ProtocolTest {
 
   public static void main(final String[] args) {
-    PacketRegistry.registerDefaults();
-    final var codec = Codec.newBuilder()
-      .protocolVersion(475)
-      .minecraftVersion("1.18.2")
-      .helper(CodecHelper.EMPTY)
-      .build();
-    new MinecraftServer(codec)
+    new MinecraftServer(CodecsV291.CODEC)
       .maxConnections(1024)
       .defaultPacketHandler(new Handler())
       .motd("Motd")

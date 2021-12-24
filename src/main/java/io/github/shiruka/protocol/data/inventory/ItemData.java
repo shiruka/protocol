@@ -2,6 +2,7 @@ package io.github.shiruka.protocol.data.inventory;
 
 import com.google.common.base.Preconditions;
 import io.github.shiruka.api.nbt.CompoundTag;
+import io.github.shiruka.protocol.data.ItemDefinition;
 import java.util.Arrays;
 import java.util.Objects;
 import lombok.Builder;
@@ -25,7 +26,8 @@ public final class ItemData {
   /**
    * the air.
    */
-  public static final ItemData AIR = new ItemData(0, 0, ItemData.EMPTY, ItemData.EMPTY, 0, 0, 0, 0, null, false);
+  public static final ItemData AIR = new ItemData(0, 0, ItemData.EMPTY,
+    ItemData.EMPTY, 0, 0, ItemDefinition.AIR, 0, null, false);
 
   /**
    * the block runtime id.
@@ -43,14 +45,14 @@ public final class ItemData {
    * the can break.
    */
   @Getter
-  @Nullable
+  @NotNull
   private final String[] canBreak;
 
   /**
    * the can place.
    */
   @Getter
-  @Nullable
+  @NotNull
   private final String[] canPlace;
 
   /**
@@ -69,7 +71,8 @@ public final class ItemData {
    * the id.
    */
   @Getter
-  private final int id;
+  @NotNull
+  private final ItemDefinition definition;
 
   /**
    * the net id.
@@ -93,7 +96,7 @@ public final class ItemData {
   /**
    * ctor.
    *
-   * @param id the id.
+   * @param definition the definition.
    * @param damage the damage.
    * @param count the count.
    * @param tag the tag.
@@ -105,10 +108,11 @@ public final class ItemData {
    * @param netId the net id.
    */
   private ItemData(final int blockRuntimeId, final long blockingTicks, @Nullable final String[] canBreak,
-                   @Nullable final String[] canPlace, final int count, final int damage, final int id, final int netId,
-                   @Nullable final CompoundTag tag, final boolean usingNetId) {
+                   @Nullable final String[] canPlace, final int count, final int damage,
+                   @NotNull final ItemDefinition definition, final int netId, @Nullable final CompoundTag tag,
+                   final boolean usingNetId) {
     Preconditions.checkArgument(count < 256, "Count exceeds maximum of 255!");
-    this.id = id;
+    this.definition = definition;
     this.damage = damage;
     this.count = count;
     this.tag = tag;
@@ -132,7 +136,7 @@ public final class ItemData {
    */
   public boolean equals(@NotNull final ItemData other, final boolean amount, final boolean metadata,
                         final boolean userdata) {
-    return this.id == other.id &&
+    return this.definition == other.definition &&
       (!amount || this.count == other.count) &&
       (!metadata || this.damage == other.damage &&
         this.blockRuntimeId == other.blockRuntimeId) &&
@@ -143,7 +147,7 @@ public final class ItemData {
 
   @Override
   public int hashCode() {
-    return Objects.hash(this.id, this.damage, this.count, this.tag, Arrays.hashCode(this.canPlace),
+    return Objects.hash(this.definition, this.damage, this.count, this.tag, Arrays.hashCode(this.canPlace),
       Arrays.hashCode(this.canBreak), this.blockingTicks, this.blockRuntimeId);
   }
 
@@ -173,6 +177,6 @@ public final class ItemData {
    * @return {@code true} if the item is valid.
    */
   public boolean isValid() {
-    return !this.isNull() && this.id != 0;
+    return !this.isNull() && this.definition.id() != 0;
   }
 }

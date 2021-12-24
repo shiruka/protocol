@@ -1,13 +1,13 @@
 package io.github.shiruka.protocol.codec;
 
 import io.github.shiruka.api.common.Int2ObjectBiMap;
+import io.github.shiruka.protocol.MinecraftSession;
 import io.github.shiruka.protocol.data.AdventureSetting;
 import io.github.shiruka.protocol.data.LevelEventType;
 import io.github.shiruka.protocol.data.SoundEvent;
 import io.github.shiruka.protocol.data.entity.EntityData;
 import io.github.shiruka.protocol.data.entity.EntityDataType;
 import io.github.shiruka.protocol.data.entity.EntityFlag;
-import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import org.jetbrains.annotations.NotNull;
@@ -91,7 +91,7 @@ public final class Constants {
    *
    * @return {@code true} if the id is blocking item of the session.
    */
-  public static boolean isBlockingItem(final int id, @NotNull final MinecraftChildChannel session) {
+  public static boolean isBlockingItem(final int id, @NotNull final MinecraftSession session) {
     return id == session.dynamicBlockingId().get();
   }
 

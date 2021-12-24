@@ -1,6 +1,7 @@
 package io.github.shiruka.protocol;
 
 import java.net.InetSocketAddress;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -15,6 +16,14 @@ public interface MinecraftSession {
    */
   @NotNull
   InetSocketAddress address();
+
+  /**
+   * obtains the dynamic blocking id.
+   *
+   * @return dynamic blocking id.
+   */
+  @NotNull
+  AtomicInteger dynamicBlockingId();
 
   /**
    * sets the packet handler.

@@ -2,7 +2,6 @@ package io.github.shiruka.protocol.pipelines;
 
 import io.github.shiruka.network.PacketBuffer;
 import io.github.shiruka.protocol.MinecraftPacket;
-import io.github.shiruka.protocol.PacketRegistry;
 import io.github.shiruka.protocol.server.MinecraftServer;
 import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
 import io.netty.buffer.ByteBuf;
@@ -51,7 +50,7 @@ public final class MinecraftPacketCodec extends MessageToMessageCodec<ByteBuf, L
           header |= (packet.senderId() & 3) << 10;
           header |= (packet.clientId() & 3) << 12;
           packetBuffer.writeUnsignedVarInt(header);
-          packet.encode(packetBuffer, session);
+          this.server.codec().encode(packetBuffer, id, session);
           uncompressed.writeUnsignedVarInt(packetBuffer.remaining());
           uncompressedBuffer.writeBytes(packetBufferBuffer);
         } catch (final Exception e) {
@@ -82,7 +81,7 @@ public final class MinecraftPacketCodec extends MessageToMessageCodec<ByteBuf, L
         try {
           final var header = packetBuffer.readUnsignedVarInt();
           final var packetId = header & 0x3ff;
-          final var packet = PacketRegistry.get(packetId);
+          this.server.codec().packet()
           packet.packetId(packetId);
           packet.senderId(header >>> 10 & 3);
           packet.clientId(header >>> 12 & 3);

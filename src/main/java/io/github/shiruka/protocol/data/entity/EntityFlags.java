@@ -1,6 +1,6 @@
 package io.github.shiruka.protocol.data.entity;
 
-import io.github.shiruka.api.common.Int2ObjectBiMap;
+import io.github.shiruka.protocol.codec.IntTypeMap;
 import java.util.EnumSet;
 import java.util.Set;
 import lombok.EqualsAndHashCode;
@@ -83,12 +83,12 @@ public final class EntityFlags {
    *
    * @return flag value.
    */
-  public long get(final int index, @NotNull final Int2ObjectBiMap<EntityFlag> flagMappings) {
+  public long get(final int index, @NotNull final IntTypeMap<EntityFlag> flagMappings) {
     final int value;
     final var lower = index * 64;
     final var upper = lower + 64;
     value = this.flags.stream()
-      .mapToInt(flagMappings::get)
+      .mapToInt(flagMappings::id)
       .filter(flagIndex -> flagIndex >= lower && flagIndex < upper)
       .map(flagIndex -> (int) (1L << (flagIndex & 0x3f)))
       .reduce(0, (a, b) -> a | b);
@@ -111,13 +111,13 @@ public final class EntityFlags {
    * @param index the index to set.
    * @param flagMappings the flag mappings to set.
    */
-  public void set(final long value, final int index, @NotNull final Int2ObjectBiMap<EntityFlag> flagMappings) {
+  public void set(final long value, final int index, @NotNull final IntTypeMap<EntityFlag> flagMappings) {
     final var lower = index * 64;
     final var upper = lower + 64;
     for (var i = lower; i < upper; i++) {
       final var idx = i & 0x3f;
       if ((value & 1L << idx) != 0) {
-        final var flag = flagMappings.get(i);
+        final var flag = flagMappings.type(i);
         if (flag != null) {
           this.flags.add(flag);
         } else {

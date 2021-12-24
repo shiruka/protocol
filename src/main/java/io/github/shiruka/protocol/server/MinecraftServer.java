@@ -38,6 +38,7 @@ public final class MinecraftServer implements ServerListener, Identifier {
    * the codec.
    */
   @NotNull
+  @Getter
   private final Codec codec;
 
   /**
