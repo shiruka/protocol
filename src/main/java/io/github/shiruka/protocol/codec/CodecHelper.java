@@ -5,4 +5,9 @@ package io.github.shiruka.protocol.codec;
  */
 public interface CodecHelper {
 
+  /**
+   * the empty.
+   */
+  CodecHelper EMPTY = new CodecHelper() {
+  };
 }
