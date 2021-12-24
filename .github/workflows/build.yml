@@ -16,13 +16,6 @@ jobs:
           graalvm: 21.3.0
           java: java17
 
-      - uses: actions/cache@v2
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradlew') }}
-          restore-keys: |
-            ${{ runner.os }}-gradlew-
-
       - run: |
           chmod +x gradlew
           ./gradlew clean build javadocJar sourcesJar
