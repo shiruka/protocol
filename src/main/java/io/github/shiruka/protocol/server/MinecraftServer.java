@@ -5,6 +5,7 @@ import io.github.shiruka.network.Identifier;
 import io.github.shiruka.network.options.RakNetChannelOptions;
 import io.github.shiruka.protocol.MinecraftPacket;
 import io.github.shiruka.protocol.PacketHandler;
+import io.github.shiruka.protocol.codec.Codec;
 import io.github.shiruka.protocol.server.channels.MinecraftServerChannel;
 import io.github.shiruka.protocol.server.pipelines.MinecraftServerInitializer;
 import io.netty.bootstrap.ServerBootstrap;
@@ -32,6 +33,12 @@ public final class MinecraftServer implements ServerListener, Identifier {
   @NotNull
   @Getter
   private final InetSocketAddress address;
+
+  /**
+   * the codec.
+   */
+  @NotNull
+  private final Codec codec;
 
   /**
    * the server id.
@@ -87,9 +94,11 @@ public final class MinecraftServer implements ServerListener, Identifier {
 
   /**
    * ctor.
+   *
+   * @param codec the codec.
    */
-  public MinecraftServer() {
-    this(new InetSocketAddress("127.0.0.1", 19132));
+  public MinecraftServer(@NotNull final Codec codec) {
+    this(new InetSocketAddress("127.0.0.1", 19132), codec);
   }
 
   /**
@@ -106,8 +115,8 @@ public final class MinecraftServer implements ServerListener, Identifier {
     return new StringJoiner(";", "", ";")
       .add("MCPE")
       .add(this.motd)
-      .add(io.github.shiruka.protocol.codec.Constants.PROTOCOL_VERSION_AS_STRING)
-      .add(io.github.shiruka.protocol.codec.Constants.MINECRAFT_VERSION)
+      .add(this.codec.protocolVersionAsString())
+      .add(this.codec.minecraftVersion())
       .add(String.valueOf(this.sessions.size()))
       .add(String.valueOf(this.maxConnections))
       .add(String.valueOf(this.serverId))

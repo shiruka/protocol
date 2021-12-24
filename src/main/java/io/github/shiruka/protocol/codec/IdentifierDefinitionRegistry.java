@@ -12,12 +12,18 @@ import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * a class that represents definition registries.
+ * a class that represents identifier definition registries.
  *
- * @param <T> type of the definition.
+ * @param <T> type of the identifier definition.
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public final class DefinitionRegistry<T extends Definition> {
+public final class IdentifierDefinitionRegistry<T extends IdentifierDefinition> {
+
+  /**
+   * the id registry.
+   */
+  @NotNull
+  private final Int2ObjectMap<T> idRegistry;
 
   /**
    * the identifier registry.
@@ -26,10 +32,28 @@ public final class DefinitionRegistry<T extends Definition> {
   private final Object2ObjectMap<String, T> identifierRegistry;
 
   /**
-   * the runtime id registry.
+   * creates a new builder.
+   *
+   * @param <T> type of the definition.
+   *
+   * @return a newly created builder.
    */
   @NotNull
-  private final Int2ObjectMap<T> runtimeIdRegistry;
+  public static <T extends IdentifierDefinition> Builder<T> newBuilder() {
+    return new Builder<>();
+  }
+
+  /**
+   * gets the definition id by id.
+   *
+   * @param id the id to get.
+   *
+   * @return definition.
+   */
+  @NotNull
+  public T byId(final int id) {
+    return this.idRegistry.get(id);
+  }
 
   /**
    * gets the definition by identifier.
@@ -44,33 +68,21 @@ public final class DefinitionRegistry<T extends Definition> {
   }
 
   /**
-   * gets the definition id by runtime id.
-   *
-   * @param runtimeId the runtime id to get.
-   *
-   * @return definition.
-   */
-  @NotNull
-  public T byRuntimeId(final int runtimeId) {
-    return this.runtimeIdRegistry.get(runtimeId);
-  }
-
-  /**
-   * a class that represents builder for {@link DefinitionRegistry}.
+   * a class that represents builder for {@link IdentifierDefinitionRegistry}.
    *
    * @param <T> type of the definition.
    */
-  public static final class Builder<T extends Definition> {
+  public static final class Builder<T extends IdentifierDefinition> {
+
+    /**
+     * the id registry.
+     */
+    private final Int2ObjectMap<T> idRegistry = new Int2ObjectOpenHashMap<>();
 
     /**
      * the identifier registry.
      */
     private final Object2ObjectMap<String, T> identifierRegistry = new Object2ObjectOpenHashMap<>();
-
-    /**
-     * the runtime id registry.
-     */
-    private final Int2ObjectMap<T> runtimeIdRegistry = new Int2ObjectOpenHashMap<>();
 
     /**
      * adds all the definitions.
@@ -95,13 +107,13 @@ public final class DefinitionRegistry<T extends Definition> {
      */
     @NotNull
     public Builder<T> add(@NotNull final T definition) {
-      final var runtimeId = definition.runtimeId();
+      final var id = definition.id();
       final var identifier = definition.identifier();
       Preconditions.checkArgument(!this.identifierRegistry.containsKey(identifier),
         "Identifier is already registered!");
-      Preconditions.checkArgument(!this.runtimeIdRegistry.containsKey(runtimeId),
-        "Runtime ID is already registered!");
-      this.runtimeIdRegistry.put(runtimeId, definition);
+      Preconditions.checkArgument(!this.idRegistry.containsKey(id),
+        "ID is already registered!");
+      this.idRegistry.put(id, definition);
       this.identifierRegistry.put(identifier, definition);
       return this;
     }
@@ -125,8 +137,8 @@ public final class DefinitionRegistry<T extends Definition> {
      * @return definition registry.
      */
     @NotNull
-    public DefinitionRegistry<T> build() {
-      return new DefinitionRegistry<>(this.identifierRegistry, this.runtimeIdRegistry);
+    public IdentifierDefinitionRegistry<T> build() {
+      return new IdentifierDefinitionRegistry<>(this.idRegistry, this.identifierRegistry);
     }
 
     /**
@@ -138,13 +150,13 @@ public final class DefinitionRegistry<T extends Definition> {
      */
     @NotNull
     public Builder<T> remove(@NotNull final T definition) {
-      final var runtimeId = definition.runtimeId();
+      final var id = definition.id();
       final var identifier = definition.identifier();
       Preconditions.checkArgument(this.identifierRegistry.containsKey(identifier),
         "Identifier is mot registered!");
-      Preconditions.checkArgument(this.runtimeIdRegistry.containsKey(runtimeId),
-        "Runtime ID is not registered!");
-      this.runtimeIdRegistry.remove(runtimeId);
+      Preconditions.checkArgument(this.idRegistry.containsKey(id),
+        "ID is not registered!");
+      this.idRegistry.remove(id);
       this.identifierRegistry.remove(identifier);
       return this;
     }

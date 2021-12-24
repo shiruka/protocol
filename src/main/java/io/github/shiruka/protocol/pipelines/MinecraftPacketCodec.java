@@ -3,6 +3,7 @@ package io.github.shiruka.protocol.pipelines;
 import io.github.shiruka.network.PacketBuffer;
 import io.github.shiruka.protocol.MinecraftPacket;
 import io.github.shiruka.protocol.PacketRegistry;
+import io.github.shiruka.protocol.server.MinecraftServer;
 import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
@@ -11,26 +12,27 @@ import io.netty.handler.codec.MessageToMessageCodec;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.DataFormatException;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * a class that represents Minecraft packet codec pipelines.
  */
 @Log4j2
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor
 public final class MinecraftPacketCodec extends MessageToMessageCodec<ByteBuf, List<MinecraftPacket>> {
-
-  /**
-   * the instance.
-   */
-  public static final MinecraftPacketCodec INSTANCE = new MinecraftPacketCodec();
 
   /**
    * the name.
    */
   public static final String NAME = "rn-mc-codec";
+
+  /**
+   * the server.
+   */
+  @NotNull
+  private final MinecraftServer server;
 
   @Override
   protected void encode(final ChannelHandlerContext ctx, final List<MinecraftPacket> msg,
