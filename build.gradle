@@ -60,8 +60,12 @@ dependencies {
   compileOnlyApi "org.projectlombok:lombok:1.18.22"
   annotationProcessor "org.projectlombok:lombok:1.18.22"
 
-  compileOnlyApi "io.github.shiruka:api:3.0.14-SNAPSHOT"
-  compileOnlyApi "io.github.shiruka:network:3.0.5-SNAPSHOT"
+  compileOnlyApi("io.github.shiruka:api:3.0.14-SNAPSHOT") {
+    changing = true
+  }
+  compileOnlyApi("io.github.shiruka:network:3.0.5-SNAPSHOT") {
+    changing = true
+  }
 
   compileOnlyApi "it.unimi.dsi:fastutil:8.5.6"
   compileOnlyApi "io.netty:netty-all:4.1.72.Final"
