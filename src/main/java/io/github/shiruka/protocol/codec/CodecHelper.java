@@ -27,7 +27,7 @@ public interface CodecHelper {
   Logger LOG = LogManager.getLogger(CodecHelper.class);
 
   /**
-   * gets command parameters by id
+   * gets command parameters by id.
    *
    * @param id the id to get.
    *
