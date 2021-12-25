@@ -5,6 +5,7 @@ import io.github.shiruka.network.PacketBuffer;
 import io.github.shiruka.protocol.MinecraftPacket;
 import io.github.shiruka.protocol.MinecraftSession;
 import io.github.shiruka.protocol.packets.Unknown;
+import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
@@ -61,13 +62,25 @@ public interface Codec {
   }
 
   /**
+   * decodes the packet.
+   *
+   * @param buffer the buffer to decode.
+   * @param packetId the packet id to decode.
+   * @param session the session to decode.
+   *
+   * @return decoded packet.
+   */
+  @NotNull
+  MinecraftPacket decode(@NotNull PacketBuffer buffer, int packetId, @NotNull MinecraftChildChannel session);
+
+  /**
    * encodes the packet.
    *
    * @param buffer the buffer to encode.
-   * @param id the id to encode.
+   * @param packet the packet to encode.
    * @param session the session to encode.
    */
-  void encode(@NotNull PacketBuffer buffer, int id, @NotNull MinecraftSession session);
+  void encode(@NotNull PacketBuffer buffer, @NotNull MinecraftPacket packet, @NotNull MinecraftSession session);
 
   /**
    * obtains the helper.
@@ -302,21 +315,43 @@ public interface Codec {
     @NotNull
     private final String protocolVersionAsString;
 
+    @NotNull
     @Override
-    public void encode(@NotNull final PacketBuffer buffer, final int id,
-                       @NotNull final MinecraftSession session) {
-      final var definition = this.packet(id);
-      @NotNull final MinecraftPacket packet;
-      @NotNull final PacketEncoder<MinecraftPacket> encoder;
-      if (definition.isEmpty()) {
-        final var unknownPacket = new Unknown();
-        unknownPacket.packetId(id);
-        packet = unknownPacket;
-        encoder = (PacketEncoder) unknownPacket;
+    public MinecraftPacket decode(@NotNull final PacketBuffer buffer, final int packetId,
+                                  @NotNull final MinecraftChildChannel session) {
+      final var definitionOptional = this.packet(packetId);
+      final MinecraftPacket packet;
+      final PacketEncoder<MinecraftPacket> encoder;
+      if (definitionOptional.isEmpty()) {
+        packet = new Unknown();
+        encoder = (PacketEncoder) packet;
       } else {
-        final var packetDefinition = definition.get();
-        packet = packetDefinition.factory().get();
-        encoder = (PacketEncoder) packetDefinition.encoder();
+        final var definition = definitionOptional.get();
+        packet = definition.factory().get();
+        encoder = (PacketEncoder) definition.encoder();
+      }
+      try {
+        encoder.decode(packet, this.helper, buffer, session);
+      } catch (final Exception e) {
+        throw new PacketEncodeException("Error whilst deserializing %s".formatted(packet), e);
+      }
+      if (Codec.LOG.isDebugEnabled() && buffer.isReadable()) {
+        Codec.LOG.debug("{} still has {} bytes to read!",
+          packet.getClass().getSimpleName(), buffer.remaining());
+      }
+      return packet;
+    }
+
+    @Override
+    public void encode(@NotNull final PacketBuffer buffer, @NotNull final MinecraftPacket packet,
+                       @NotNull final MinecraftSession session) {
+      @NotNull final PacketEncoder<MinecraftPacket> encoder;
+      if (packet instanceof Unknown) {
+        encoder = (PacketEncoder) packet;
+      } else {
+        encoder = (PacketEncoder) this.packet(packet.getClass())
+          .map(PacketDefinition::encoder)
+          .orElseThrow();
       }
       try {
         encoder.encode(packet, this.helper, buffer, session);

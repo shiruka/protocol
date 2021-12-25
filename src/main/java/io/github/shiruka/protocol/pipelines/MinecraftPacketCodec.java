@@ -50,7 +50,7 @@ public final class MinecraftPacketCodec extends MessageToMessageCodec<ByteBuf, L
           header |= (packet.senderId() & 3) << 10;
           header |= (packet.clientId() & 3) << 12;
           packetBuffer.writeUnsignedVarInt(header);
-          this.server.codec().encode(packetBuffer, id, session);
+          this.server.codec().encode(packetBuffer, packet, session);
           uncompressed.writeUnsignedVarInt(packetBuffer.remaining());
           uncompressedBuffer.writeBytes(packetBufferBuffer);
         } catch (final Exception e) {
@@ -76,16 +76,15 @@ public final class MinecraftPacketCodec extends MessageToMessageCodec<ByteBuf, L
       while (buffer.isReadable()) {
         final var packetBuffer = new PacketBuffer(buffer.readSlice());
         if (!packetBuffer.isReadable()) {
-          throw new DataFormatException("Packet cannot be empty");
+          throw new DataFormatException("Packet cannot be empty!");
         }
         try {
           final var header = packetBuffer.readUnsignedVarInt();
           final var packetId = header & 0x3ff;
-          this.server.codec().packet()
+          final var packet = this.server.codec().decode(packetBuffer, packetId, session);
           packet.packetId(packetId);
           packet.senderId(header >>> 10 & 3);
           packet.clientId(header >>> 12 & 3);
-          packet.decode(packetBuffer, session);
           packets.add(packet);
         } catch (final Exception e) {
           MinecraftPacketCodec.log.error("Error occurred whilst decoding packet!", e);

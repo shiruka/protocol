@@ -1,6 +1,5 @@
 package io.github.shiruka.protocol.codec.v291.encoders;
 
-import io.github.shiruka.api.nbt.VarInts;
 import io.github.shiruka.network.PacketBuffer;
 import io.github.shiruka.protocol.MinecraftSession;
 import io.github.shiruka.protocol.codec.CodecHelper;
