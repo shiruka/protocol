@@ -13,12 +13,12 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents automation client connect packet encoders.
  */
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public final class AutomationClientConnectEncoder implements PacketEncoder<AutomationClientConnect> {
+public final class AutomationClientConnectEncoderV291 implements PacketEncoder<AutomationClientConnect> {
 
   /**
    * the instance.
    */
-  public static final AutomationClientConnectEncoder INSTANCE = new AutomationClientConnectEncoder();
+  public static final AutomationClientConnectEncoderV291 INSTANCE = new AutomationClientConnectEncoderV291();
 
   @Override
   public void decode(@NotNull final AutomationClientConnect packet, @NotNull final CodecHelper helper,

@@ -13,12 +13,12 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents add item entity packet encoders.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class AddItemEntityEncoder implements PacketEncoder<AddItemEntity> {
+public final class AddItemEntityEncoderV291 implements PacketEncoder<AddItemEntity> {
 
   /**
    * the instance.
    */
-  public static final AddItemEntityEncoder INSTANCE = new AddItemEntityEncoder();
+  public static final AddItemEntityEncoderV291 INSTANCE = new AddItemEntityEncoderV291();
 
   @Override
   public void decode(@NotNull final AddItemEntity packet, @NotNull final CodecHelper helper,

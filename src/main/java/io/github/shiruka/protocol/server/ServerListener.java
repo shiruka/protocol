@@ -1,6 +1,7 @@
 package io.github.shiruka.protocol.server;
 
 import io.github.shiruka.protocol.MinecraftPacket;
+import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -19,7 +20,7 @@ public interface ServerListener {
    *
    * @param session the session to run.
    */
-  default void onConnect(@NotNull final MinecraftServerSession session) {
+  default void onConnect(@NotNull final MinecraftChildChannel session) {
   }
 
   /**
@@ -27,7 +28,7 @@ public interface ServerListener {
    *
    * @param session the session to run.
    */
-  default void onDisconnect(@NotNull final MinecraftServerSession session) {
+  default void onDisconnect(@NotNull final MinecraftChildChannel session) {
   }
 
   /**
@@ -36,7 +37,7 @@ public interface ServerListener {
    * @param packet the packet to run.
    * @param session the session to run.
    */
-  default void postPacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftServerSession session) {
+  default void postPacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftChildChannel session) {
   }
 
   /**
@@ -45,6 +46,6 @@ public interface ServerListener {
    * @param packet the packet to run.
    * @param session the session to run.
    */
-  default void prePacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftServerSession session) {
+  default void prePacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftChildChannel session) {
   }
 }

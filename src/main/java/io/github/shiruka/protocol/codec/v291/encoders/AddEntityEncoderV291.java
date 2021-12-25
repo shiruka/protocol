@@ -4,55 +4,47 @@ import io.github.shiruka.network.PacketBuffer;
 import io.github.shiruka.protocol.MinecraftSession;
 import io.github.shiruka.protocol.codec.CodecHelper;
 import io.github.shiruka.protocol.codec.PacketEncoder;
-import io.github.shiruka.protocol.packets.AddPlayer;
+import io.github.shiruka.protocol.packets.AddEntity;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * a class that represents add player packet encoders.
+ * a class that represents add entity packet encoders.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class AddPlayerEncoder implements PacketEncoder<AddPlayer> {
+public final class AddEntityEncoderV291 implements PacketEncoder<AddEntity> {
 
   /**
    * the instance.
    */
-  public static final AddPlayerEncoder INSTANCE = new AddPlayerEncoder();
+  public static final AddEntityEncoderV291 INSTANCE = new AddEntityEncoderV291();
 
   @Override
-  public void decode(@NotNull final AddPlayer packet, @NotNull final CodecHelper helper,
+  public void decode(@NotNull final AddEntity packet, @NotNull final CodecHelper helper,
                      @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
-    packet.uuid(buffer.readUUID());
-    packet.username(buffer.readString());
     packet.uniqueEntityId(buffer.readVarLong());
     packet.runtimeEntityId(buffer.readUnsignedVarLong());
-    packet.platformChatId(buffer.readString());
+    packet.identifier(buffer.readString());
     packet.position(buffer.readVector3f());
     packet.motion(buffer.readVector3f());
     packet.rotation(buffer.readVector3f());
-    packet.hand(helper.readItem(buffer, session));
+    buffer.readArray(packet.attributes(), b -> helper.readAttribute(buffer, session));
     helper.readEntityData(buffer, session, packet.metadata());
-    AdventureSettingsEncoder.INSTANCE.decode(packet.adventureSettings(), helper, buffer, session);
-    buffer.readArray(packet.entityLinks(), b -> helper.readEntityLink(b, session));
-    packet.deviceId(buffer.readString());
+    buffer.readArray(packet.entityLinks(), b -> helper.readEntityLink(buffer, session));
   }
 
   @Override
-  public void encode(@NotNull final AddPlayer packet, @NotNull final CodecHelper helper,
+  public void encode(@NotNull final AddEntity packet, @NotNull final CodecHelper helper,
                      @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
-    buffer.writeUUID(packet.uuid());
-    buffer.writeString(packet.username());
     buffer.writeVarLong(packet.uniqueEntityId());
-    buffer.writeUnsignedVarLong(packet.runtimeEntityId());
-    buffer.writeString(packet.platformChatId());
+    buffer.writeUnsignedLong(packet.runtimeEntityId());
+    buffer.writeString(packet.identifier());
     buffer.writeVector3f(packet.position());
     buffer.writeVector3f(packet.motion());
     buffer.writeVector3f(packet.rotation());
-    helper.writeItem(buffer, session, packet.hand());
+    buffer.writeArray(packet.attributes(), (b, data) -> helper.writeAttribute(b, session, data));
     helper.writeEntityData(buffer, session, packet.metadata());
-    AdventureSettingsEncoder.INSTANCE.encode(packet.adventureSettings(), helper, buffer, session);
     buffer.writeArray(packet.entityLinks(), (b, link) -> helper.writeEntityLink(b, session, link));
-    buffer.writeString(packet.deviceId());
   }
 }

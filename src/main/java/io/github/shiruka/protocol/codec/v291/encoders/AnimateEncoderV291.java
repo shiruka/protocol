@@ -13,12 +13,12 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents animate packet encoders.
  */
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public final class AnimateEncoder implements PacketEncoder<Animate> {
+public final class AnimateEncoderV291 implements PacketEncoder<Animate> {
 
   /**
    * the instance.
    */
-  public static final AnimateEncoder INSTANCE = new AnimateEncoder();
+  public static final AnimateEncoderV291 INSTANCE = new AnimateEncoderV291();
 
   @Override
   public void decode(@NotNull final Animate packet, @NotNull final CodecHelper helper,

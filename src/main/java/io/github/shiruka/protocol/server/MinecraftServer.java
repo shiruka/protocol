@@ -6,6 +6,7 @@ import io.github.shiruka.network.options.RakNetChannelOptions;
 import io.github.shiruka.protocol.MinecraftPacket;
 import io.github.shiruka.protocol.PacketHandler;
 import io.github.shiruka.protocol.codec.Codec;
+import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
 import io.github.shiruka.protocol.server.channels.MinecraftServerChannel;
 import io.github.shiruka.protocol.server.pipelines.MinecraftServerInitializer;
 import io.netty.bootstrap.ServerBootstrap;
@@ -14,6 +15,7 @@ import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
+import java.util.function.Function;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -60,7 +62,7 @@ public final class MinecraftServer implements ServerListener, Identifier {
   /**
    * the sessions.
    */
-  private final Map<InetSocketAddress, MinecraftServerSession> sessions = new HashMap<>();
+  private final Map<InetSocketAddress, MinecraftChildChannel> sessions = new HashMap<>();
 
   /**
    * the default Minecraft server session packet handler.
@@ -68,7 +70,8 @@ public final class MinecraftServer implements ServerListener, Identifier {
   @NotNull
   @Getter
   @Setter
-  private PacketHandler defaultPacketHandler = PacketHandler.EMPTY;
+  private Function<MinecraftChildChannel, PacketHandler> defaultPacketHandler = session -> new PacketHandler() {
+  };
 
   /**
    * the max connections.
@@ -125,24 +128,24 @@ public final class MinecraftServer implements ServerListener, Identifier {
   }
 
   @Override
-  public void onConnect(@NotNull final MinecraftServerSession session) {
+  public void onConnect(@NotNull final MinecraftChildChannel session) {
     this.sessions.put(session.address(), session);
     this.serverListener.onConnect(session);
   }
 
   @Override
-  public void onDisconnect(@NotNull final MinecraftServerSession session) {
+  public void onDisconnect(@NotNull final MinecraftChildChannel session) {
     this.sessions.remove(session.address());
     this.serverListener.onDisconnect(session);
   }
 
   @Override
-  public void postPacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftServerSession session) {
+  public void postPacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftChildChannel session) {
     this.serverListener.postPacket(packet, session);
   }
 
   @Override
-  public void prePacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftServerSession session) {
+  public void prePacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftChildChannel session) {
     this.serverListener.prePacket(packet, session);
   }
 }

@@ -19,12 +19,12 @@ import org.jetbrains.annotations.Nullable;
  * a class that represents adventure settings packet encoder.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class AdventureSettingsEncoder implements PacketEncoder<AdventureSettings> {
+public final class AdventureSettingsEncoderV291 implements PacketEncoder<AdventureSettings> {
 
   /**
    * the instance.
    */
-  public static final AdventureSettingsEncoder INSTANCE = new AdventureSettingsEncoder();
+  public static final AdventureSettingsEncoderV291 INSTANCE = new AdventureSettingsEncoderV291();
 
   /**
    * the flags 1.
@@ -69,8 +69,8 @@ public final class AdventureSettingsEncoder implements PacketEncoder<AdventureSe
     buffer.readUnsignedVarInt();
     packet.uniqueEntityId(buffer.readLongLE());
     final var settings = packet.settings();
-    AdventureSettingsEncoder.readFlags(flags1, AdventureSettingsEncoder.FLAGS_1, settings);
-    AdventureSettingsEncoder.readFlags(flags2, AdventureSettingsEncoder.FLAGS_2, settings);
+    AdventureSettingsEncoderV291.readFlags(flags1, AdventureSettingsEncoderV291.FLAGS_1, settings);
+    AdventureSettingsEncoderV291.readFlags(flags2, AdventureSettingsEncoderV291.FLAGS_2, settings);
   }
 
   @Override

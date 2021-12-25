@@ -13,12 +13,12 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents add behavior tree packet encoders.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class AddBehaviorTreeEncoder implements PacketEncoder<AddBehaviorTree> {
+public final class AddBehaviorTreeEncoderV291 implements PacketEncoder<AddBehaviorTree> {
 
   /**
    * the instance.
    */
-  public static final AddBehaviorTreeEncoder INSTANCE = new AddBehaviorTreeEncoder();
+  public static final AddBehaviorTreeEncoderV291 INSTANCE = new AddBehaviorTreeEncoderV291();
 
   @Override
   public void decode(@NotNull final AddBehaviorTree packet, @NotNull final CodecHelper helper,

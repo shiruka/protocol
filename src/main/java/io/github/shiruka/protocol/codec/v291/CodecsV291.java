@@ -1,7 +1,7 @@
 package io.github.shiruka.protocol.codec.v291;
 
 import io.github.shiruka.protocol.codec.Codec;
-import io.github.shiruka.protocol.codec.v291.encoders.LoginEncoder;
+import io.github.shiruka.protocol.codec.v291.encoders.LoginEncoderV291;
 import io.github.shiruka.protocol.packets.Login;
 
 /**
@@ -16,6 +16,6 @@ public interface CodecsV291 {
     .protocolVersion(291)
     .minecraftVersion("1.7.0")
     .helper(new CodecHelperV291())
-    .registerPacket(1, Login::new, LoginEncoder.INSTANCE)
+    .registerPacket(1, Login::new, LoginEncoderV291.INSTANCE)
     .build();
 }

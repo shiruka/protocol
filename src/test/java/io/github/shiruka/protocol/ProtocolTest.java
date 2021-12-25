@@ -5,9 +5,11 @@ import io.github.shiruka.protocol.data.ClientChainData;
 import io.github.shiruka.protocol.packets.Login;
 import io.github.shiruka.protocol.packets.Unknown;
 import io.github.shiruka.protocol.server.MinecraftServer;
-import io.github.shiruka.protocol.server.MinecraftServerSession;
 import io.github.shiruka.protocol.server.ServerListener;
+import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
 import java.util.Locale;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 public final class ProtocolTest {
@@ -15,7 +17,7 @@ public final class ProtocolTest {
   public static void main(final String[] args) {
     new MinecraftServer(CodecsV291.CODEC)
       .maxConnections(1024)
-      .defaultPacketHandler(new Handler())
+      .defaultPacketHandler(Handler::new)
       .motd("Motd")
       .serverListener(new Listener())
       .bind();
@@ -36,7 +38,11 @@ public final class ProtocolTest {
     return builder.toString();
   }
 
+  @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
   private static final class Handler implements PacketHandler {
+
+    @NotNull
+    private final MinecraftChildChannel session;
 
     @Override
     public void handle(@NotNull final Login packet) {
@@ -45,6 +51,7 @@ public final class ProtocolTest {
         packet.chainData().toString(),
         packet.skinData().toString());
       System.out.println(System.currentTimeMillis() - now);
+      this.session.close();
     }
 
     @Override
@@ -55,15 +62,23 @@ public final class ProtocolTest {
   private static final class Listener implements ServerListener {
 
     @Override
-    public void onConnect(@NotNull final MinecraftServerSession session) {
+    public void onConnect(@NotNull final MinecraftChildChannel session) {
+      System.out.println("onConnect()");
     }
 
     @Override
-    public void postPacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftServerSession session) {
+    public void onDisconnect(@NotNull final MinecraftChildChannel session) {
+      System.out.println("onDisconnect()");
     }
 
     @Override
-    public void prePacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftServerSession session) {
+    public void postPacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftChildChannel session) {
+      System.out.println("postPacket()");
+    }
+
+    @Override
+    public void prePacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftChildChannel session) {
+      System.out.println("prePacket()");
     }
   }
 }

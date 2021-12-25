@@ -29,12 +29,12 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents available commands packet encoders.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class AvailableCommandsEncoder implements PacketEncoder<AvailableCommands> {
+public final class AvailableCommandsEncoderV291 implements PacketEncoder<AvailableCommands> {
 
   /**
    * the instance.
    */
-  public static final AvailableCommandsEncoder INSTANCE = new AvailableCommandsEncoder();
+  public static final AvailableCommandsEncoderV291 INSTANCE = new AvailableCommandsEncoderV291();
 
   /**
    * the read byte.
@@ -176,11 +176,11 @@ public final class AvailableCommandsEncoder implements PacketEncoder<AvailableCo
     final var valuesSize = values.size();
     final ToIntFunction<PacketBuffer> indexReader;
     if (valuesSize < 0x100) {
-      indexReader = AvailableCommandsEncoder.READ_BYTE;
+      indexReader = AvailableCommandsEncoderV291.READ_BYTE;
     } else if (valuesSize < 0x10000) {
-      indexReader = AvailableCommandsEncoder.READ_SHORT;
+      indexReader = AvailableCommandsEncoderV291.READ_SHORT;
     } else {
-      indexReader = AvailableCommandsEncoder.READ_INT;
+      indexReader = AvailableCommandsEncoderV291.READ_INT;
     }
     buffer.readArray(enums, b -> {
       final var name = b.readString();
@@ -281,11 +281,11 @@ public final class AvailableCommandsEncoder implements PacketEncoder<AvailableCo
     final ObjIntConsumer<PacketBuffer> indexWriter;
     final int valuesSize = values.size();
     if (valuesSize < 0x100) {
-      indexWriter = AvailableCommandsEncoder.WRITE_BYTE;
+      indexWriter = AvailableCommandsEncoderV291.WRITE_BYTE;
     } else if (valuesSize < 0x10000) {
-      indexWriter = AvailableCommandsEncoder.WRITE_SHORT;
+      indexWriter = AvailableCommandsEncoderV291.WRITE_SHORT;
     } else {
-      indexWriter = AvailableCommandsEncoder.WRITE_INT;
+      indexWriter = AvailableCommandsEncoderV291.WRITE_INT;
     }
     buffer.writeArray(enums, (b, commandEnum) -> {
       b.writeString(commandEnum.name());

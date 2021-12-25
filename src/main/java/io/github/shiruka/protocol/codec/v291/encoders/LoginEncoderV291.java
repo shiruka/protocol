@@ -13,12 +13,12 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents login packet encoders.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class LoginEncoder implements PacketEncoder<Login> {
+public final class LoginEncoderV291 implements PacketEncoder<Login> {
 
   /**
    * the instance.
    */
-  public static final LoginEncoder INSTANCE = new LoginEncoder();
+  public static final LoginEncoderV291 INSTANCE = new LoginEncoderV291();
 
   @Override
   public void decode(@NotNull final Login packet, @NotNull final CodecHelper helper, @NotNull final PacketBuffer buffer,
