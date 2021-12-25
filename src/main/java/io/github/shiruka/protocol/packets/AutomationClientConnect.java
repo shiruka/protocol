@@ -8,6 +8,9 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * a class that represents automation client connect packets.
+ */
 @Getter
 @Setter
 @ToString

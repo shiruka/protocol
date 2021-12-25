@@ -12,6 +12,9 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * a class that represents available commands packets.
+ */
 @Getter
 @Setter
 @ToString

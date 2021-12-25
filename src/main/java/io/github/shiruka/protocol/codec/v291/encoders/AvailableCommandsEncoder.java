@@ -131,6 +131,7 @@ public final class AvailableCommandsEncoder implements PacketEncoder<AvailableCo
    * @param helper the helper to read.
    * @param session the session to read.
    * @param enums the enums read.
+   * @param softEnums the soft enums.
    * @param postFixes the post fixes to read.
    *
    * @return command.

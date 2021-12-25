@@ -102,6 +102,7 @@ public interface Codec {
    * gets the packet by class.
    *
    * @param cls the cls to get.
+   * @param <T> type of the packet.
    *
    * @return packet definition.
    */

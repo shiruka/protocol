@@ -106,6 +106,7 @@ public interface CodecHelper {
    * reads the attribute.
    *
    * @param buffer the buffer to read.
+   * @param session the session to read.
    *
    * @return attribute.
    */
@@ -127,6 +128,7 @@ public interface CodecHelper {
    * reads the entity data.
    *
    * @param buffer the buffer to read.
+   * @param session the session to read.
    * @param map the entity data to read.
    */
   void readEntityData(@NotNull PacketBuffer buffer, @NotNull MinecraftSession session,
@@ -147,6 +149,7 @@ public interface CodecHelper {
    * reads the item.
    *
    * @param buffer the buffer to read.
+   * @param session the session to read.
    *
    * @return item data.
    */
