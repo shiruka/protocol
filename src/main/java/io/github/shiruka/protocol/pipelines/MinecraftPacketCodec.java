@@ -2,7 +2,7 @@ package io.github.shiruka.protocol.pipelines;
 
 import io.github.shiruka.network.PacketBuffer;
 import io.github.shiruka.protocol.MinecraftPacket;
-import io.github.shiruka.protocol.PacketRegistry;
+import io.github.shiruka.protocol.server.MinecraftServer;
 import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
@@ -11,26 +11,27 @@ import io.netty.handler.codec.MessageToMessageCodec;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.DataFormatException;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * a class that represents Minecraft packet codec pipelines.
  */
 @Log4j2
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor
 public final class MinecraftPacketCodec extends MessageToMessageCodec<ByteBuf, List<MinecraftPacket>> {
-
-  /**
-   * the instance.
-   */
-  public static final MinecraftPacketCodec INSTANCE = new MinecraftPacketCodec();
 
   /**
    * the name.
    */
   public static final String NAME = "rn-mc-codec";
+
+  /**
+   * the server.
+   */
+  @NotNull
+  private final MinecraftServer server;
 
   @Override
   protected void encode(final ChannelHandlerContext ctx, final List<MinecraftPacket> msg,
@@ -49,7 +50,7 @@ public final class MinecraftPacketCodec extends MessageToMessageCodec<ByteBuf, L
           header |= (packet.senderId() & 3) << 10;
           header |= (packet.clientId() & 3) << 12;
           packetBuffer.writeUnsignedVarInt(header);
-          packet.encode(packetBuffer, session);
+          this.server.codec().encode(packetBuffer, packet, session);
           uncompressed.writeUnsignedVarInt(packetBuffer.remaining());
           uncompressedBuffer.writeBytes(packetBufferBuffer);
         } catch (final Exception e) {
@@ -75,16 +76,15 @@ public final class MinecraftPacketCodec extends MessageToMessageCodec<ByteBuf, L
       while (buffer.isReadable()) {
         final var packetBuffer = new PacketBuffer(buffer.readSlice());
         if (!packetBuffer.isReadable()) {
-          throw new DataFormatException("Packet cannot be empty");
+          throw new DataFormatException("Packet cannot be empty!");
         }
         try {
           final var header = packetBuffer.readUnsignedVarInt();
           final var packetId = header & 0x3ff;
-          final var packet = PacketRegistry.get(packetId);
+          final var packet = this.server.codec().decode(packetBuffer, packetId, session);
           packet.packetId(packetId);
           packet.senderId(header >>> 10 & 3);
           packet.clientId(header >>> 12 & 3);
-          packet.decode(packetBuffer, session);
           packets.add(packet);
         } catch (final Exception e) {
           MinecraftPacketCodec.log.error("Error occurred whilst decoding packet!", e);

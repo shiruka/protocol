@@ -16,13 +16,13 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents Minecraft child channels.
  */
 @Getter
+@Setter
 @Accessors(fluent = true)
 public final class MinecraftChildChannel extends RakNetChildChannel implements MinecraftServerSession {
 
   /**
    * the dynamic blocking id.
    */
-  @Getter
   private final AtomicInteger dynamicBlockingId = new AtomicInteger(-1);
 
   /**
@@ -35,7 +35,6 @@ public final class MinecraftChildChannel extends RakNetChildChannel implements M
    * the packet handler.
    */
   @NotNull
-  @Setter
   private volatile PacketHandler packetHandler;
 
   /**
@@ -49,7 +48,7 @@ public final class MinecraftChildChannel extends RakNetChildChannel implements M
                                @NotNull final MinecraftServer server) {
     super(parent, address);
     this.server = server;
-    this.packetHandler = server.defaultPacketHandler();
+    this.packetHandler = server.defaultPacketHandler().apply(this);
   }
 
   /**

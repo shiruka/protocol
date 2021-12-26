@@ -1,17 +1,16 @@
-package io.github.shiruka.protocol;
+package io.github.shiruka.protocol.codec;
 
 import io.github.shiruka.api.common.Int2ObjectBiMap;
+import io.github.shiruka.protocol.MinecraftSession;
 import io.github.shiruka.protocol.data.AdventureSetting;
 import io.github.shiruka.protocol.data.LevelEventType;
 import io.github.shiruka.protocol.data.SoundEvent;
 import io.github.shiruka.protocol.data.entity.EntityData;
 import io.github.shiruka.protocol.data.entity.EntityDataType;
 import io.github.shiruka.protocol.data.entity.EntityFlag;
-import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * a class that represents constants.
@@ -37,22 +36,6 @@ public final class Constants {
    * the entity flags.
    */
   public static final Int2ObjectBiMap<EntityFlag> ENTITY_FLAGS = new Int2ObjectBiMap<>();
-
-  /**
-   * the flags 1.
-   */
-  public static final AdventureSetting @Nullable [] FLAGS_1 = {
-    AdventureSetting.WORLD_IMMUTABLE, AdventureSetting.NO_PVM, AdventureSetting.NO_MVP, null,
-    AdventureSetting.SHOW_NAME_TAGS, AdventureSetting.AUTO_JUMP, AdventureSetting.MAY_FLY, AdventureSetting.NO_CLIP,
-    AdventureSetting.WORLD_BUILDER, AdventureSetting.FLYING, AdventureSetting.MUTED};
-
-  /**
-   * the flags 2.
-   */
-  public static final AdventureSetting @Nullable [] FLAGS_2 = {
-    AdventureSetting.MINE, AdventureSetting.DOORS_AND_SWITCHES, AdventureSetting.OPEN_CONTAINERS,
-    AdventureSetting.ATTACK_PLAYERS, AdventureSetting.ATTACK_MOBS, AdventureSetting.OPERATOR, null,
-    AdventureSetting.TELEPORT, AdventureSetting.BUILD, AdventureSetting.DEFAULT_LEVEL_PERMISSIONS};
 
   /**
    * the flags to bit 1.
@@ -108,7 +91,7 @@ public final class Constants {
    *
    * @return {@code true} if the id is blocking item of the session.
    */
-  public static boolean isBlockingItem(final int id, @NotNull final MinecraftChildChannel session) {
+  public static boolean isBlockingItem(final int id, @NotNull final MinecraftSession session) {
     return id == session.dynamicBlockingId().get();
   }
 

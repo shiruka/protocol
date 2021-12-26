@@ -6,6 +6,10 @@ import io.github.shiruka.protocol.packets.AddHangingEntity;
 import io.github.shiruka.protocol.packets.AddItemEntity;
 import io.github.shiruka.protocol.packets.AddPlayer;
 import io.github.shiruka.protocol.packets.AdventureSettings;
+import io.github.shiruka.protocol.packets.Animate;
+import io.github.shiruka.protocol.packets.AutomationClientConnect;
+import io.github.shiruka.protocol.packets.AvailableCommands;
+import io.github.shiruka.protocol.packets.BlockEntityData;
 import io.github.shiruka.protocol.packets.BlockEvent;
 import io.github.shiruka.protocol.packets.ClientToServerHandshake;
 import io.github.shiruka.protocol.packets.Disconnect;
@@ -35,12 +39,6 @@ import org.jetbrains.annotations.NotNull;
  * an interface to determine packet handlers.
  */
 public interface PacketHandler {
-
-  /**
-   * the empty packet handler.
-   */
-  PacketHandler EMPTY = new PacketHandler() {
-  };
 
   /**
    * handles the packet.
@@ -272,5 +270,37 @@ public interface PacketHandler {
    * @param packet the packet to handle.
    */
   default void handle(@NotNull final BlockEvent packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final Animate packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final AutomationClientConnect packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final AvailableCommands packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final BlockEntityData packet) {
   }
 }
