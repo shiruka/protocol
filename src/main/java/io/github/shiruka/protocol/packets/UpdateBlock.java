@@ -20,25 +20,12 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 public final class UpdateBlock extends MinecraftPacket {
 
-  /**
-   * the flags.
-   */
+  //@formatter:off
   private final Set<Flag> flags = EnumSet.noneOf(Flag.class);
-
-  /**
-   * the block position.
-   */
   private Vector3i blockPosition;
-
-  /**
-   * the data layer.
-   */
   private int dataLayer;
-
-  /**
-   * the runtime id.
-   */
   private int runtimeId;
+  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

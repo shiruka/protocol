@@ -17,15 +17,10 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 public final class Disconnect extends MinecraftPacket {
 
-  /**
-   * the kick message.
-   */
+  //@formatter:off
   private String kickMessage;
-
-  /**
-   * the message skipped.
-   */
   private boolean messageSkipped;
+  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

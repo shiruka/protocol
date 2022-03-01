@@ -29,65 +29,20 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 public final class PlayerAuthInput extends MinecraftPacket {
 
-  /**
-   * the input data.
-   */
+  //@formatter:off
   private final Set<PlayerAuthInputData> inputData = EnumSet.noneOf(PlayerAuthInputData.class);
-
-  /**
-   * the player actions.
-   */
   private final List<PlayerBlockActionData> playerActions = new ObjectArrayList<>();
-
-  /**
-   * the delta.
-   */
   private Vector3f delta;
-
-  /**
-   * the input mode.
-   */
   private InputMode inputMode;
-
-  /**
-   * the item stack request.
-   */
   private ItemStackRequest itemStackRequest;
-
-  /**
-   * the item use transaction.
-   */
   private ItemUseTransaction itemUseTransaction;
-
-  /**
-   * the motion.
-   */
   private Vector2f motion;
-
-  /**
-   * the play mode.
-   */
   private ClientPlayMode playMode;
-
-  /**
-   * the position.
-   */
   private Vector3f position;
-
-  /**
-   * the rotation.
-   */
   private Vector3f rotation;
-
-  /**
-   * the tick.
-   */
   private long tick;
-
-  /**
-   * the vr gaze direction.
-   */
   private Vector3f vrGazeDirection;
+  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

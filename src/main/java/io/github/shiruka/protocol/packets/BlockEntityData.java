@@ -19,15 +19,10 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 public final class BlockEntityData extends MinecraftPacket {
 
-  /**
-   * the block position.
-   */
+  //@formatter:off
   private Vector3i blockPosition;
-
-  /**
-   * the data.
-   */
   private CompoundTag data;
+  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

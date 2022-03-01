@@ -18,40 +18,15 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 public final class MoveEntityAbsolute extends MinecraftPacket {
 
-  /**
-   * the flag on ground.
-   */
+  //@formatter:off
   private static final int FLAG_ON_GROUND = 1;
-
-  /**
-   * the flag teleported.
-   */
   private static final int FLAG_TELEPORTED = 2;
-
-  /**
-   * the on ground.
-   */
   private boolean onGround;
-
-  /**
-   * the position.
-   */
   private Vector3f position;
-
-  /**
-   * the rotation.
-   */
   private Vector3f rotation;
-
-  /**
-   * the runtime entity id.
-   */
   private long runtimeEntityId;
-
-  /**
-   * the teleported.
-   */
   private boolean teleported;
+  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

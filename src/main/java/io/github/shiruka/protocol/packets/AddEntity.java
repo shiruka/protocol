@@ -23,55 +23,18 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 public final class AddEntity extends MinecraftPacket {
 
-  /**
-   * the attributes.
-   */
+  //@formatter:off
   private final List<AttributeData> attributes = new ObjectArrayList<>();
-
-  /**
-   * the entity links.
-   */
   private final List<EntityLinkData> entityLinks = new ObjectArrayList<>();
-
-  /**
-   * the metadata.
-   */
   private final EntityDataMap metadata = new EntityDataMap();
-
-  /**
-   * the entity type.
-   */
   private int entityType;
-
-  /**
-   * the identifier.
-   */
   private String identifier;
-
-  /**
-   * the motion.
-   */
   private Vector3f motion;
-
-  /**
-   * the position.
-   */
   private Vector3f position;
-
-  /**
-   * the rotation.
-   */
   private Vector3f rotation;
-
-  /**
-   * the runtime entity id.
-   */
   private long runtimeEntityId;
-
-  /**
-   * the unique entity id.
-   */
   private long uniqueEntityId;
+  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

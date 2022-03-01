@@ -17,10 +17,9 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 public final class RiderJump extends MinecraftPacket {
 
-  /**
-   * teh jump strength.
-   */
+  //@formatter:off
   private int jumpStrength;
+  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

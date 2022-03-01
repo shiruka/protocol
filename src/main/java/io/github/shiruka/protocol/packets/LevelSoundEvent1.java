@@ -19,35 +19,14 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 public final class LevelSoundEvent1 extends MinecraftPacket {
 
-  /**
-   * the baby sound.
-   */
+  //@formatter:off
   private boolean babySound;
-
-  /**
-   * the extra data.
-   */
   private int extraData;
-
-  /**
-   * the pitch.
-   */
   private int pitch;
-
-  /**
-   * the position.
-   */
   private Vector3f position;
-
-  /**
-   * the relative volume disabled.
-   */
   private boolean relativeVolumeDisabled;
-
-  /**
-   * the sound.
-   */
   private SoundEvent sound;
+  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

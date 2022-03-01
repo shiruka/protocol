@@ -18,25 +18,12 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 public class AddHangingEntity extends MinecraftPacket {
 
-  /**
-   * the direction.
-   */
+  //@formatter:off
   private int direction;
-
-  /**
-   * the position.
-   */
   private Vector3f position;
-
-  /**
-   * the runtime entity id.
-   */
   private long runtimeEntityId;
-
-  /**
-   * the unique entity id.
-   */
   private long uniqueEntityId;
+  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

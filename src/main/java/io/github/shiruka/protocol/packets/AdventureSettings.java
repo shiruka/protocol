@@ -22,25 +22,12 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 public final class AdventureSettings extends MinecraftPacket {
 
-  /**
-   * the settings.
-   */
+  //@formatter:off
   private final Set<AdventureSetting> settings = EnumSet.noneOf(AdventureSetting.class);
-
-  /**
-   * the command permission.
-   */
   private CommandPermission commandPermission = CommandPermission.NORMAL;
-
-  /**
-   * the player permission.
-   */
   private PlayerPermission playerPermission = PlayerPermission.VISITOR;
-
-  /**
-   * the unique entity id.
-   */
   private long uniqueEntityId;
+  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

@@ -20,15 +20,10 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 public final class ResourcePackClientResponse extends MinecraftPacket {
 
-  /**
-   * the pack ids.
-   */
+  //@formatter:off
   private final List<String> packIds = new ObjectArrayList<>();
-
-  /**
-   * the status.
-   */
   private ResourcePackClientResponseStatus status;
+  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

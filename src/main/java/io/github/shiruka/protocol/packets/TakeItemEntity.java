@@ -17,15 +17,10 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 public final class TakeItemEntity extends MinecraftPacket {
 
-  /**
-   * the item runtime entity id.
-   */
+  //@formatter:off
   private long itemRuntimeEntityId;
-
-  /**
-   * the runtime entity id.
-   */
   private long runtimeEntityId;
+  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

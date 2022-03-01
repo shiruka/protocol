@@ -20,40 +20,15 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 public final class AddItemEntity extends MinecraftPacket {
 
-  /**
-   * the metadata.
-   */
+  //@formatter:off
   private final EntityDataMap metadata = new EntityDataMap();
-
-  /**
-   * the from fishing.
-   */
   private boolean fromFishing;
-
-  /**
-   * the item in hand.
-   */
   private ItemData itemInHand;
-
-  /**
-   * the motion.
-   */
   private Vector3f motion;
-
-  /**
-   * the position.
-   */
   private Vector3f position;
-
-  /**
-   * the runtime entity id.
-   */
   private long runtimeEntityId;
-
-  /**
-   * the unique entity id.
-   */
   private long uniqueEntityId;
+  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

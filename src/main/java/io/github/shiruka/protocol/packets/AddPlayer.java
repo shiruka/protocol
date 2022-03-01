@@ -24,75 +24,22 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 public final class AddPlayer extends MinecraftPacket {
 
-  /**
-   * the adventure settings.
-   */
+  //@formatter:off
   private final AdventureSettings adventureSettings = new AdventureSettings();
-
-  /**
-   * the entity links.
-   */
   private final List<EntityLinkData> entityLinks = new ObjectArrayList<>();
-
-  /**
-   * the metadata.
-   */
   private final EntityDataMap metadata = new EntityDataMap();
-
-  /**
-   * the build platform.
-   */
   private int buildPlatform;
-
-  /**
-   * the device id.
-   */
   private String deviceId;
-
-  /**
-   * the hand.
-   */
   private ItemData hand;
-
-  /**
-   * the motion.
-   */
   private Vector3f motion;
-
-  /**
-   * the platform chat id.
-   */
   private String platformChatId;
-
-  /**
-   * the position.
-   */
   private Vector3f position;
-
-  /**
-   * the rotation.
-   */
   private Vector3f rotation;
-
-  /**
-   * the runtime entity id.
-   */
   private long runtimeEntityId;
-
-  /**
-   * the unique entity id.
-   */
   private long uniqueEntityId;
-
-  /**
-   * the username.
-   */
   private String username;
-
-  /**
-   * the uuid.
-   */
   private UUID uuid;
+  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

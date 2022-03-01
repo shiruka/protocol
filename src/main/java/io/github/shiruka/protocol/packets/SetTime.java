@@ -17,10 +17,9 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 public final class SetTime extends MinecraftPacket {
 
-  /**
-   * the time.
-   */
+  //@formatter:off
   private int time;
+  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

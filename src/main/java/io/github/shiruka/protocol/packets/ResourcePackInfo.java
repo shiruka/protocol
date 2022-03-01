@@ -20,30 +20,13 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 public final class ResourcePackInfo extends MinecraftPacket {
 
-  /**
-   * the behavior pack infos.
-   */
+  //@formatter:off
   private final List<ResourcePackInfoEntry> behaviorPackInfos = new ObjectArrayList<>();
-
-  /**
-   * the resource pack infos.
-   */
   private final List<ResourcePackInfoEntry> resourcePackInfos = new ObjectArrayList<>();
-
-  /**
-   * the forced to accept.
-   */
   private boolean forcedToAccept;
-
-  /**
-   * the forcing server packs enabled.
-   */
   private boolean forcingServerPacksEnabled;
-
-  /**
-   * the scripting enabled.
-   */
   private boolean scriptingEnabled;
+  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

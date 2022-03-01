@@ -5,20 +5,24 @@ import io.github.shiruka.protocol.MinecraftSession;
 import io.github.shiruka.protocol.codec.CodecHelper;
 import io.github.shiruka.protocol.codec.PacketEncoder;
 import io.github.shiruka.protocol.packets.Login;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * a class that represents login packet encoders.
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class LoginEncoderV291 implements PacketEncoder<Login> {
+public final class LoginEncoderV291 extends PacketEncoder.Base<Login> {
 
   /**
    * the instance.
    */
   public static final LoginEncoderV291 INSTANCE = new LoginEncoderV291();
+
+  /**
+   * ctor.
+   */
+  private LoginEncoderV291() {
+    super(Login::new, 1);
+  }
 
   @Override
   public void decode(@NotNull final Login packet, @NotNull final CodecHelper helper, @NotNull final PacketBuffer buffer,

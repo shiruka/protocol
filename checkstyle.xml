@@ -24,6 +24,10 @@
     <property name="message" value="Line has trailing spaces."/>
   </module>
   <module name="TreeWalker">
+    <module name="SuppressionCommentFilter">
+      <property name="offCommentFormat" value="@formatter:off"/>
+      <property name="onCommentFormat" value="@formatter:on"/>
+    </module>
     <module name="RequireThis"/>
     <module name="RequireEmptyLineBeforeBlockTagGroup"/>
     <module name="InvalidJavadocPosition"/>

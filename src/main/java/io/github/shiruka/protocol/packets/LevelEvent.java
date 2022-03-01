@@ -19,20 +19,11 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 public final class LevelEvent extends MinecraftPacket {
 
-  /**
-   * the data.
-   */
+  //@formatter:off
   private int data;
-
-  /**
-   * the position.
-   */
   private Vector3f position;
-
-  /**
-   * the type.
-   */
   private LevelEventType type;
+  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

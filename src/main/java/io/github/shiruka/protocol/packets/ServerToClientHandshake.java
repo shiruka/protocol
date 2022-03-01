@@ -17,10 +17,9 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 public final class ServerToClientHandshake extends MinecraftPacket {
 
-  /**
-   * the jwt.
-   */
+  //@formatter:off
   private String jwt;
+  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

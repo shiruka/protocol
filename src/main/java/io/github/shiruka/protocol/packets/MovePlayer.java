@@ -21,50 +21,17 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 public final class MovePlayer extends MinecraftPacket {
 
-  /**
-   * the entity type.
-   */
+  //@formatter:off
   private int entityType;
-
-  /**
-   * the mode.
-   */
   private Mode mode;
-
-  /**
-   * te on ground.
-   */
   private boolean onGround;
-
-  /**
-   * the position.
-   */
   private Vector3f position;
-
-  /**
-   * the riding runtime entity id.
-   */
   private long ridingRuntimeEntityId;
-
-  /**
-   * the rotation.
-   */
   private Vector3f rotation;
-
-  /**
-   * the runtime entity id.
-   */
   private long runtimeEntityId;
-
-  /**
-   * the teleportation cause.
-   */
   private TeleportationCause teleportationCause;
-
-  /**
-   * the tick.
-   */
   private long tick;
+  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {
