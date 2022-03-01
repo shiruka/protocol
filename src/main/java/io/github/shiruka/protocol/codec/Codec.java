@@ -319,6 +319,19 @@ public interface Codec {
     }
 
     /**
+     * removes the packet.
+     *
+     * @param packetClass the packet class to remove.
+     *
+     * @return {@code this} for the builder chain.
+     */
+    @NotNull
+    public Builder removePacket(@NotNull final Class<? extends MinecraftPacket> packetClass) {
+      this.packets.remove(packetClass);
+      return this;
+    }
+
+    /**
      * scans the encoder package and registers the found packets.
      *
      * @return {@code this} for the builder chain.
@@ -335,19 +348,6 @@ public interface Codec {
           .map(PacketEncoder.Base.class::cast)
           .ifPresent(this::registerPacket);
       }
-      return this;
-    }
-
-    /**
-     * removes the packet.
-     *
-     * @param packetClass the packet class to remove.
-     *
-     * @return {@code this} for the builder chain.
-     */
-    @NotNull
-    public Builder removePacket(@NotNull final Class<? extends MinecraftPacket> packetClass) {
-      this.packets.remove(packetClass);
       return this;
     }
 
