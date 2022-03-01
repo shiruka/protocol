@@ -13,15 +13,10 @@ import org.jetbrains.annotations.NotNull;
 public final class LoginEncoderV291 extends PacketEncoder.Base<Login> {
 
   /**
-   * the instance.
-   */
-  public static final LoginEncoderV291 INSTANCE = new LoginEncoderV291();
-
-  /**
    * ctor.
    */
   private LoginEncoderV291() {
-    super(Login::new, 1);
+    super(1);
   }
 
   @Override

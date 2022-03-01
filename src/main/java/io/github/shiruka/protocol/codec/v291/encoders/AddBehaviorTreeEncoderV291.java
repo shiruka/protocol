@@ -5,20 +5,19 @@ import io.github.shiruka.protocol.MinecraftSession;
 import io.github.shiruka.protocol.codec.CodecHelper;
 import io.github.shiruka.protocol.codec.PacketEncoder;
 import io.github.shiruka.protocol.packets.AddBehaviorTree;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * a class that represents add behavior tree packet encoders.
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class AddBehaviorTreeEncoderV291 implements PacketEncoder<AddBehaviorTree> {
+public final class AddBehaviorTreeEncoderV291 extends PacketEncoder.Base<AddBehaviorTree> {
 
   /**
-   * the instance.
+   * ctor.
    */
-  public static final AddBehaviorTreeEncoderV291 INSTANCE = new AddBehaviorTreeEncoderV291();
+  private AddBehaviorTreeEncoderV291() {
+    super(89);
+  }
 
   @Override
   public void decode(@NotNull final AddBehaviorTree packet, @NotNull final CodecHelper helper,

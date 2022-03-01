@@ -5,20 +5,19 @@ import io.github.shiruka.protocol.MinecraftSession;
 import io.github.shiruka.protocol.codec.CodecHelper;
 import io.github.shiruka.protocol.codec.PacketEncoder;
 import io.github.shiruka.protocol.packets.BlockEntityData;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * a class that represents block entity data packet encoders.
  */
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public final class BlockEntityDataEncoderV291 implements PacketEncoder<BlockEntityData> {
+public final class BlockEntityDataEncoderV291 extends PacketEncoder.Base<BlockEntityData> {
 
   /**
-   * the instance.
+   * ctor.
    */
-  public static final BlockEntityDataEncoderV291 INSTANCE = new BlockEntityDataEncoderV291();
+  private BlockEntityDataEncoderV291() {
+    super(56);
+  }
 
   @Override
   public void decode(@NotNull final BlockEntityData packet, @NotNull final CodecHelper helper,

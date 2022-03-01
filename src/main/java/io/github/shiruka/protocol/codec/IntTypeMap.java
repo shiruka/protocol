@@ -2,6 +2,8 @@ package io.github.shiruka.protocol.codec;
 
 import com.google.common.base.Preconditions;
 import io.github.shiruka.api.common.Int2ObjectBiMap;
+import it.unimi.dsi.fastutil.ints.IntCollection;
+import it.unimi.dsi.fastutil.objects.ObjectCollection;
 import java.util.stream.IntStream;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -83,6 +85,28 @@ public final class IntTypeMap<T> {
   }
 
   /**
+   * checks if the key contains.
+   *
+   * @param key the key to check.
+   *
+   * @return {@code true} if the key contains.
+   */
+  public boolean containsKey(final int key) {
+    return this.map.containsKey(key);
+  }
+
+  /**
+   * checks if the value contains.
+   *
+   * @param value the value to check.
+   *
+   * @return {@code true} if the value contains.
+   */
+  public boolean containsValue(final T value) {
+    return this.map.containsValue(value);
+  }
+
+  /**
    * gets the id.
    *
    * @param value the value to get.
@@ -91,6 +115,16 @@ public final class IntTypeMap<T> {
    */
   public int id(@NotNull final T value) {
     return this.map.get(value);
+  }
+
+  /**
+   * obtains the keys.
+   *
+   * @return keys.
+   */
+  @NotNull
+  public IntCollection keys() {
+    return this.map.keys();
   }
 
   /**
@@ -112,6 +146,16 @@ public final class IntTypeMap<T> {
    */
   public T type(final int id) {
     return this.map.get(id);
+  }
+
+  /**
+   * obtains the values.
+   *
+   * @return values.
+   */
+  @NotNull
+  public ObjectCollection<T> values() {
+    return this.map.values();
   }
 
   /**

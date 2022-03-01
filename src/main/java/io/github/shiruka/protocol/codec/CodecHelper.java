@@ -12,6 +12,7 @@ import io.github.shiruka.protocol.data.entity.EntityDataType;
 import io.github.shiruka.protocol.data.entity.EntityFlag;
 import io.github.shiruka.protocol.data.entity.EntityLinkData;
 import io.github.shiruka.protocol.data.inventory.ItemData;
+import io.github.shiruka.protocol.packets.AdventureSettings;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -103,6 +104,14 @@ public interface CodecHelper {
   IdentifierDefinitionRegistry<ItemDefinition> itemDefinitions();
 
   /**
+   * reads the adventure settings and write into the packet.
+   *
+   * @param packet the packet to read.
+   * @param buffer the buffer to read.
+   */
+  void readAdventureSettings(@NotNull AdventureSettings packet, @NotNull PacketBuffer buffer);
+
+  /**
    * reads the attribute.
    *
    * @param buffer the buffer to read.
@@ -154,6 +163,14 @@ public interface CodecHelper {
    */
   @NotNull
   ItemData readItem(@NotNull PacketBuffer buffer, @NotNull MinecraftSession session);
+
+  /**
+   * writes the adventure settings packet to buffer.
+   *
+   * @param packet the packet to write.
+   * @param buffer the buffer to write.
+   */
+  void writeAdventureSettings(@NotNull AdventureSettings packet, @NotNull PacketBuffer buffer);
 
   /**
    * writes the attribute data.

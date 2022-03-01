@@ -7,14 +7,11 @@ import io.github.shiruka.protocol.MinecraftSession;
 import io.github.shiruka.protocol.packets.Unknown;
 import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import java.util.Optional;
 import java.util.function.Supplier;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -24,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
-import tr.com.infumia.infumialib.reflection.RefField;
+import tr.com.infumia.infumialib.reflection.RefConstructed;
 import tr.com.infumia.infumialib.reflection.clazz.ClassOf;
 
 /**
@@ -54,7 +51,7 @@ public interface Codec {
                       @NotNull final CodecHelper helper,
                       @NotNull final Object2ObjectMap<Class<? extends MinecraftPacket>, PacketDefinition<?>> packets,
                       @NotNull final Int2ObjectMap<PacketDefinition<?>> packetsById) {
-    return new Impl(helper, minecraftVersion, packets, packetsById, protocolVersion, String.valueOf(protocolVersion));
+    return new Impl(minecraftVersion, protocolVersion, String.valueOf(protocolVersion), helper, packets, packetsById);
   }
 
   /**
@@ -342,8 +339,8 @@ public interface Codec {
       final var classes = new Reflections(Builder.ENCODERS_PACKAGE.formatted(this.protocolVersion))
         .get(Scanners.SubTypes.of(PacketEncoder.Base.class).asClass());
       for (final var cls : classes) {
-        new ClassOf<>(cls).getField("INSTANCE")
-          .flatMap(RefField::getValue)
+        new ClassOf<>(cls).getConstructor()
+          .flatMap(RefConstructed::create)
           .filter(PacketEncoder.Base.class::isInstance)
           .map(PacketEncoder.Base.class::cast)
           .ifPresent(this::registerPacket);
@@ -378,60 +375,22 @@ public interface Codec {
 
   /**
    * a simple implementation of {@link Codec}.
+   *
+   * @param minecraftVersion the minecraft version.
+   * @param protocolVersion the protocol version.
+   * @param protocolVersionAsString the protocol version as string.
+   * @param helper the helper.
+   * @param packets the packets.
+   * @param packetsById the packets by id.
    */
-  @RequiredArgsConstructor
-  @Accessors(fluent = true)
-  final class Impl implements Codec {
+  record Impl(
+    @NotNull String minecraftVersion,
+    int protocolVersion,
+    @NotNull String protocolVersionAsString,
+    @NotNull CodecHelper helper,
+    @NotNull Object2ObjectMap<Class<? extends MinecraftPacket>, PacketDefinition<?>> packets,
+    @NotNull Int2ObjectMap<PacketDefinition<?>> packetsById
+  ) implements Codec {
 
-    /**
-     * the helper.
-     */
-    @Getter
-    @NotNull
-    private final CodecHelper helper;
-
-    /**
-     * the minecraft version.
-     */
-    @Getter
-    @NotNull
-    private final String minecraftVersion;
-
-    /**
-     * the packets.
-     */
-    @NotNull
-    private final Object2ObjectMap<Class<? extends MinecraftPacket>, PacketDefinition<?>> packets;
-
-    /**
-     * the packets by id.
-     */
-    @NotNull
-    private final Int2ObjectMap<PacketDefinition<?>> packetsById;
-
-    /**
-     * the protocol version.
-     */
-    @Getter
-    private final int protocolVersion;
-
-    /**
-     * the protocol version as string.
-     */
-    @Getter
-    @NotNull
-    private final String protocolVersionAsString;
-
-    @NotNull
-    @Override
-    public Object2ObjectMap<Class<? extends MinecraftPacket>, PacketDefinition<?>> packets() {
-      return Object2ObjectMaps.unmodifiable(this.packets);
-    }
-
-    @NotNull
-    @Override
-    public Int2ObjectMap<PacketDefinition<?>> packetsById() {
-      return Int2ObjectMaps.unmodifiable(this.packetsById);
-    }
   }
 }

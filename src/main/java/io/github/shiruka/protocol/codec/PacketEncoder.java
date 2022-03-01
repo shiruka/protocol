@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
+import tr.com.infumia.infumialib.misc.TypeParameterMatcher;
+import tr.com.infumia.infumialib.reflection.clazz.ClassOf;
 
 /**
  * an interface to determine packet serializers.
@@ -50,6 +52,7 @@ public interface PacketEncoder<T extends MinecraftPacket> {
    */
   @Getter
   @Accessors(fluent = true)
+  @SuppressWarnings("unchecked")
   @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
   abstract class Base<T extends MinecraftPacket> implements PacketEncoder<T> {
 
@@ -63,5 +66,20 @@ public interface PacketEncoder<T extends MinecraftPacket> {
      * the id.
      */
     private final int id;
+
+    /**
+     * ctor.
+     *
+     * @param id the id.
+     */
+    protected Base(final int id) {
+      this.id = id;
+      final var constructor = new ClassOf<>(TypeParameterMatcher.find(this, Base.class, "T"))
+        .getConstructor()
+        .orElseThrow();
+      this.factory = () -> constructor.create()
+        .map(instance -> (T) instance)
+        .orElseThrow();
+    }
   }
 }

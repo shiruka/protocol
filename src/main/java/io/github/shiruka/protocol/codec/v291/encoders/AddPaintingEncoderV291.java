@@ -5,20 +5,19 @@ import io.github.shiruka.protocol.MinecraftSession;
 import io.github.shiruka.protocol.codec.CodecHelper;
 import io.github.shiruka.protocol.codec.PacketEncoder;
 import io.github.shiruka.protocol.packets.AddPainting;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * a class that represents add painting packet encoders.
  */
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public final class AddPaintingEncoderV291 implements PacketEncoder<AddPainting> {
+public final class AddPaintingEncoderV291 extends PacketEncoder.Base<AddPainting> {
 
   /**
-   * the instance.
+   * ctor.
    */
-  public static final AddPaintingEncoderV291 INSTANCE = new AddPaintingEncoderV291();
+  private AddPaintingEncoderV291() {
+    super(22);
+  }
 
   @Override
   public void decode(@NotNull final AddPainting packet, @NotNull final CodecHelper helper,

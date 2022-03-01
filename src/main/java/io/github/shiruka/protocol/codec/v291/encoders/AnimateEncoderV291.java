@@ -5,20 +5,19 @@ import io.github.shiruka.protocol.MinecraftSession;
 import io.github.shiruka.protocol.codec.CodecHelper;
 import io.github.shiruka.protocol.codec.PacketEncoder;
 import io.github.shiruka.protocol.packets.Animate;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * a class that represents animate packet encoders.
  */
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public final class AnimateEncoderV291 implements PacketEncoder<Animate> {
+public final class AnimateEncoderV291 extends PacketEncoder.Base<Animate> {
 
   /**
-   * the instance.
+   * ctor.
    */
-  public static final AnimateEncoderV291 INSTANCE = new AnimateEncoderV291();
+  private AnimateEncoderV291() {
+    super(44);
+  }
 
   @Override
   public void decode(@NotNull final Animate packet, @NotNull final CodecHelper helper,

@@ -5,20 +5,19 @@ import io.github.shiruka.protocol.MinecraftSession;
 import io.github.shiruka.protocol.codec.CodecHelper;
 import io.github.shiruka.protocol.codec.PacketEncoder;
 import io.github.shiruka.protocol.packets.AddHangingEntity;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * a class that represents add hanging entity packet encoders.
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class AddHangingEntityEncoderV291 implements PacketEncoder<AddHangingEntity> {
+public final class AddHangingEntityEncoderV291 extends PacketEncoder.Base<AddHangingEntity> {
 
   /**
-   * the instance.
+   * ctor.
    */
-  public static final AddHangingEntityEncoderV291 INSTANCE = new AddHangingEntityEncoderV291();
+  private AddHangingEntityEncoderV291() {
+    super(16);
+  }
 
   @Override
   public void decode(@NotNull final AddHangingEntity packet, @NotNull final CodecHelper helper,

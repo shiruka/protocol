@@ -5,20 +5,19 @@ import io.github.shiruka.protocol.MinecraftSession;
 import io.github.shiruka.protocol.codec.CodecHelper;
 import io.github.shiruka.protocol.codec.PacketEncoder;
 import io.github.shiruka.protocol.packets.AutomationClientConnect;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * a class that represents automation client connect packet encoders.
  */
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public final class AutomationClientConnectEncoderV291 implements PacketEncoder<AutomationClientConnect> {
+public final class AutomationClientConnectEncoderV291 extends PacketEncoder.Base<AutomationClientConnect> {
 
   /**
-   * the instance.
+   * ctor.
    */
-  public static final AutomationClientConnectEncoderV291 INSTANCE = new AutomationClientConnectEncoderV291();
+  private AutomationClientConnectEncoderV291() {
+    super(95);
+  }
 
   @Override
   public void decode(@NotNull final AutomationClientConnect packet, @NotNull final CodecHelper helper,
