@@ -17,10 +17,9 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 public class AutomationClientConnect extends MinecraftPacket {
 
-  /**
-   * the address.
-   */
+  //@formatter:off
   private String address;
+  //@formatter:on
 
   @Override
   public final void handle(@NotNull final PacketHandler handler) {

@@ -16,10 +16,9 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 public final class AddPainting extends AddHangingEntity {
 
-  /**
-   * the motive.
-   */
+  //@formatter:off
   private String motive;
+  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

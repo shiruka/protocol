@@ -17,10 +17,9 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 public final class AddBehaviorTree extends MinecraftPacket {
 
-  /**
-   * the behavior tree json.
-   */
+  //@formatter:off
   private String behaviorTreeJson;
+  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

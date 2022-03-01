@@ -17,10 +17,9 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 public final class RemoveEntity extends MinecraftPacket {
 
-  /**
-   * the unique entity id.
-   */
+  //@formatter:off
   private long uniqueEntityId;
+  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

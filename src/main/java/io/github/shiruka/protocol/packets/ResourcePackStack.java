@@ -21,35 +21,14 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 public final class ResourcePackStack extends MinecraftPacket {
 
-  /**
-   * the behaviour packs.
-   */
+  //@formatter:off
   private final List<ResourcePackStackEntry> behaviorPacks = new ObjectArrayList<>();
-
-  /**
-   * the experiments.
-   */
   private final List<ExperimentData> experiments = new ObjectArrayList<>();
-
-  /**
-   * the resource packs.
-   */
   private final List<ResourcePackStackEntry> resourcePacks = new ObjectArrayList<>();
-
-  /**
-   * the experiments previously toggled.
-   */
   private boolean experimentsPreviouslyToggled;
-
-  /**
-   * the forced to accept.
-   */
   private boolean forcedToAccept;
-
-  /**
-   * the game version.
-   */
   private String gameVersion;
+  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

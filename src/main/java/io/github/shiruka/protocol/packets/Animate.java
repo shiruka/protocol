@@ -20,20 +20,11 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 public class Animate extends MinecraftPacket {
 
-  /**
-   * the action.
-   */
+  //@formatter:off
   private Action action;
-
-  /**
-   * the rowing time.
-   */
   private float rowingTime;
-
-  /**
-   * the runtime entity id.
-   */
   private long runtimeEntityId;
+  //@formatter:on
 
   @Override
   public final void handle(@NotNull final PacketHandler handler) {

@@ -17,15 +17,10 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 public final class TickSync extends MinecraftPacket {
 
-  /**
-   * the request timestamp.
-   */
+  //@formatter:off
   private long requestTimestamp;
-
-  /**
-   * the response timestamp.
-   */
   private long responseTimestamp;
+  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

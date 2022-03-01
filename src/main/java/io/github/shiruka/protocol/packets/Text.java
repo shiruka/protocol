@@ -20,40 +20,15 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 public final class Text extends MinecraftPacket {
 
-  /**
-   * the parameters.
-   */
+  //@formatter:off
   private final List<String> parameters = new ObjectArrayList<>();
-
-  /**
-   * the message.
-   */
   private String message;
-
-  /**
-   * the needs translation.
-   */
   private boolean needsTranslation;
-
-  /**
-   * the platform chat id.
-   */
   private String platformChatId = "";
-
-  /**
-   * hte source name.
-   */
   private String sourceName;
-
-  /**
-   * the type.
-   */
   private TextType type;
-
-  /**
-   * the xbox unique id.
-   */
   private String xboxUniqueId;
+  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

@@ -18,20 +18,11 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 public final class BlockEvent extends MinecraftPacket {
 
-  /**
-   * the block position.
-   */
+  //@formatter:off
   private Vector3i blockPosition;
-
-  /**
-   * the event data.
-   */
   private int eventData;
-
-  /**
-   * the event type.
-   */
   private int eventType;
+  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

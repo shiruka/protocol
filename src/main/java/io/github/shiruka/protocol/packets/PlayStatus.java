@@ -18,10 +18,9 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 public final class PlayStatus extends MinecraftPacket {
 
-  /**
-   * the status.
-   */
+  //@formatter:off
   private PlayStatusStatus status;
+  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

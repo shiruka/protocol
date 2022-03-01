@@ -21,15 +21,10 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 public class AvailableCommands extends MinecraftPacket {
 
-  /**
-   * the commands.
-   */
+  //@formatter:off
   private final List<CommandData> commands = new ObjectArrayList<>();
-
-  /**
-   * the constraints.
-   */
   private final List<CommandEnumConstraintData> constraints = new ObjectArrayList<>();
+  //@formatter:on
 
   @Override
   public final void handle(@NotNull final PacketHandler handler) {

@@ -25,10 +25,9 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 public final class Unknown extends MinecraftPacket implements PacketEncoder<Unknown>, ReferenceCounted {
 
-  /**
-   * the payload.
-   */
+  //@formatter:off
   private PacketBuffer payload;
+  //@formatter:on
 
   @Override
   public void decode(@NotNull final Unknown packet, @NotNull final CodecHelper helper,
