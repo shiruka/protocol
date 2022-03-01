@@ -21,7 +21,7 @@ public final class LoginEncoderV291 extends PacketEncoder.Base<Login> {
    * ctor.
    */
   private LoginEncoderV291() {
-    super(Login::new, 1);
+    super(1);
   }
 
   @Override
