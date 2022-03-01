@@ -22,6 +22,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.reflections.Reflections;
+import org.reflections.scanners.Scanners;
+import tr.com.infumia.infumialib.reflection.RefField;
+import tr.com.infumia.infumialib.reflection.clazz.ClassOf;
 
 /**
  * an interface to determine codecs.
@@ -217,6 +221,11 @@ public interface Codec {
   final class Builder {
 
     /**
+     * the encoders package.
+     */
+    private static final String ENCODERS_PACKAGE = "io.github.shiruka.protocol.codec.%s.encoders";
+
+    /**
      * the packets.
      */
     @NotNull
@@ -306,6 +315,27 @@ public interface Codec {
       Preconditions.checkArgument(!this.packets.containsKey(packetClass),
         "Packet already registered!");
       this.packets.put(packetClass, new PacketDefinition<>(id, factory, encoder));
+      return this;
+    }
+
+    /**
+     * registers the packets from the encoders package.
+     *
+     * @return {@code this} for the builder chain.
+     */
+    @NotNull
+    public Builder registerPacketsFromPackage() {
+      Preconditions.checkState(this.protocolVersion != 0, "Protocol version not set!");
+      final var packageName = Builder.ENCODERS_PACKAGE.formatted(this.protocolVersion);
+      final var reflections = new Reflections(packageName);
+      final var classes = reflections.get(Scanners.SubTypes.of(PacketEncoder.Base.class).asClass());
+      for (final var cls : classes) {
+        new ClassOf<>(cls).getField("INSTANCE")
+          .flatMap(RefField::getValue)
+          .filter(PacketEncoder.Base.class::isInstance)
+          .map(PacketEncoder.Base.class::cast)
+          .ifPresent(this::registerPacket);
+      }
       return this;
     }
 
