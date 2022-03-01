@@ -8,7 +8,7 @@ import io.github.shiruka.protocol.codec.Codec;
 public interface CodecV291 {
 
   /**
-   * the codec.
+   * the instance.
    */
   Codec INSTANCE = Codec.newBuilder()
     .protocolVersion(291)
