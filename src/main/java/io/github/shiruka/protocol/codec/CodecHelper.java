@@ -131,8 +131,7 @@ public interface CodecHelper {
    * @param session the session to read.
    * @param map the entity data to read.
    */
-  void readEntityData(@NotNull PacketBuffer buffer, @NotNull MinecraftSession session,
-                      @NotNull EntityDataMap map);
+  void readEntityData(@NotNull PacketBuffer buffer, @NotNull MinecraftSession session, @NotNull EntityDataMap map);
 
   /**
    * reads the entity link.

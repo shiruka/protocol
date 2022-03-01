@@ -249,7 +249,6 @@ public class CodecHelperV291 implements CodecHelper {
    * the item definitions.
    */
   @Getter
-  @NotNull
   protected final IdentifierDefinitionRegistry<ItemDefinition> itemDefinitions =
     IdentifierDefinitionRegistry.<ItemDefinition>newBuilder()
       .build();

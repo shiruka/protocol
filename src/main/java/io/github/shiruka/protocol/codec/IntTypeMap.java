@@ -21,6 +21,7 @@ public final class IntTypeMap<T> {
   /**
    * the map.
    */
+  @NotNull
   private final Int2ObjectBiMap<T> map;
 
   /**
@@ -99,9 +100,7 @@ public final class IntTypeMap<T> {
    */
   @NotNull
   public Builder<T> toBuilder() {
-    final var builder = new Builder<T>(this.type);
-    this.map.forEach((t, value) -> builder.insert(value, t));
-    return builder;
+    return new Builder<T>(this);
   }
 
   /**
@@ -135,6 +134,16 @@ public final class IntTypeMap<T> {
      */
     @Nullable
     private Object[] map = new Object[0];
+
+    /**
+     * ctor.
+     *
+     * @param copy the copy.
+     */
+    private Builder(@NotNull final IntTypeMap<T> copy) {
+      this(copy.type);
+      copy.map.forEach((t, value) -> this.insert(value, t));
+    }
 
     /**
      * calculates power of two ceiling.
