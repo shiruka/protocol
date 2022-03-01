@@ -326,8 +326,7 @@ public interface Codec {
     @NotNull
     public Builder registerPacketsFromPackage() {
       Preconditions.checkState(this.protocolVersion != 0, "Protocol version not set!");
-      final var packageName = Builder.ENCODERS_PACKAGE.formatted(this.protocolVersion);
-      final var classes = new Reflections(packageName)
+      final var classes = new Reflections(Builder.ENCODERS_PACKAGE.formatted(this.protocolVersion))
         .get(Scanners.SubTypes.of(PacketEncoder.Base.class).asClass());
       for (final var cls : classes) {
         new ClassOf<>(cls).getField("INSTANCE")
