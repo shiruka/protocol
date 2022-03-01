@@ -5,7 +5,9 @@ import io.github.shiruka.protocol.MinecraftPacket;
 import io.github.shiruka.protocol.MinecraftSession;
 import java.util.function.Supplier;
 import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -46,22 +48,20 @@ public interface PacketEncoder<T extends MinecraftPacket> {
    *
    * @param <T> type of the packet.
    */
-  @NoArgsConstructor(access = AccessLevel.PROTECTED)
+  @Getter
+  @Accessors(fluent = true)
+  @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
   abstract class Base<T extends MinecraftPacket> implements PacketEncoder<T> {
 
     /**
-     * obtains the factory.
-     *
-     * @return factory.
+     * the factory.
      */
     @NotNull
-    public abstract Supplier<T> factory();
+    private final Supplier<T> factory;
 
     /**
-     * obtains the id.
-     *
-     * @return id.
+     * the id.
      */
-    public abstract int id();
+    private final int id;
   }
 }
