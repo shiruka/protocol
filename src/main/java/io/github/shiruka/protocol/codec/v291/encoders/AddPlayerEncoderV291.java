@@ -5,20 +5,19 @@ import io.github.shiruka.protocol.MinecraftSession;
 import io.github.shiruka.protocol.codec.CodecHelper;
 import io.github.shiruka.protocol.codec.PacketEncoder;
 import io.github.shiruka.protocol.packets.AddPlayer;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * a class that represents add player packet encoders.
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class AddPlayerEncoderV291 implements PacketEncoder<AddPlayer> {
+public final class AddPlayerEncoderV291 extends PacketEncoder.Base<AddPlayer> {
 
   /**
-   * the instance.
+   * ctor.
    */
-  public static final AddPlayerEncoderV291 INSTANCE = new AddPlayerEncoderV291();
+  private AddPlayerEncoderV291() {
+    super(12);
+  }
 
   @Override
   public void decode(@NotNull final AddPlayer packet, @NotNull final CodecHelper helper,
@@ -33,7 +32,7 @@ public final class AddPlayerEncoderV291 implements PacketEncoder<AddPlayer> {
     packet.rotation(buffer.readVector3f());
     packet.hand(helper.readItem(buffer, session));
     helper.readEntityData(buffer, session, packet.metadata());
-    AdventureSettingsEncoderV291.INSTANCE.decode(packet.adventureSettings(), helper, buffer, session);
+    helper.readAdventureSettings(packet.adventureSettings(), buffer);
     buffer.readArray(packet.entityLinks(), b -> helper.readEntityLink(b, session));
     packet.deviceId(buffer.readString());
   }
@@ -51,7 +50,7 @@ public final class AddPlayerEncoderV291 implements PacketEncoder<AddPlayer> {
     buffer.writeVector3f(packet.rotation());
     helper.writeItem(buffer, session, packet.hand());
     helper.writeEntityData(buffer, session, packet.metadata());
-    AdventureSettingsEncoderV291.INSTANCE.encode(packet.adventureSettings(), helper, buffer, session);
+    helper.writeAdventureSettings(packet.adventureSettings(), buffer);
     buffer.writeArray(packet.entityLinks(), (b, link) -> helper.writeEntityLink(b, session, link));
     buffer.writeString(packet.deviceId());
   }

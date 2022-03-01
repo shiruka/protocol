@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
-import tr.com.infumia.infumialib.reflection.RefField;
+import tr.com.infumia.infumialib.reflection.RefConstructed;
 import tr.com.infumia.infumialib.reflection.clazz.ClassOf;
 
 /**
@@ -339,8 +339,8 @@ public interface Codec {
       final var classes = new Reflections(Builder.ENCODERS_PACKAGE.formatted(this.protocolVersion))
         .get(Scanners.SubTypes.of(PacketEncoder.Base.class).asClass());
       for (final var cls : classes) {
-        new ClassOf<>(cls).getField("INSTANCE")
-          .flatMap(RefField::getValue)
+        new ClassOf<>(cls).getConstructor()
+          .flatMap(RefConstructed::create)
           .filter(PacketEncoder.Base.class::isInstance)
           .map(PacketEncoder.Base.class::cast)
           .ifPresent(this::registerPacket);

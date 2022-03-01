@@ -21,50 +21,49 @@ import java.util.function.ObjIntConsumer;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * a class that represents available commands packet encoders.
+ * a class that represents available commands' packet encoders.
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class AvailableCommandsEncoderV291 implements PacketEncoder<AvailableCommands> {
-
-  /**
-   * the instance.
-   */
-  public static final AvailableCommandsEncoderV291 INSTANCE = new AvailableCommandsEncoderV291();
+public final class AvailableCommandsEncoderV291 extends PacketEncoder.Base<AvailableCommands> {
 
   /**
    * the read byte.
    */
-  protected static final ToIntFunction<PacketBuffer> READ_BYTE = PacketBuffer::readUnsignedByte;
+  private static final ToIntFunction<PacketBuffer> READ_BYTE = PacketBuffer::readUnsignedByte;
 
   /**
    * the read int.
    */
-  protected static final ToIntFunction<PacketBuffer> READ_INT = PacketBuffer::readIntLE;
+  private static final ToIntFunction<PacketBuffer> READ_INT = PacketBuffer::readIntLE;
 
   /**
    * the read short.
    */
-  protected static final ToIntFunction<PacketBuffer> READ_SHORT = PacketBuffer::readUnsignedShortLE;
+  private static final ToIntFunction<PacketBuffer> READ_SHORT = PacketBuffer::readUnsignedShortLE;
 
   /**
    * the write byte.
    */
-  protected static final ObjIntConsumer<PacketBuffer> WRITE_BYTE = PacketBuffer::writeByte;
+  private static final ObjIntConsumer<PacketBuffer> WRITE_BYTE = PacketBuffer::writeByte;
 
   /**
    * the write int.
    */
-  protected static final ObjIntConsumer<PacketBuffer> WRITE_INT = PacketBuffer::writeIntLE;
+  private static final ObjIntConsumer<PacketBuffer> WRITE_INT = PacketBuffer::writeIntLE;
 
   /**
-   * teh write short.
+   * the write short.
    */
-  protected static final ObjIntConsumer<PacketBuffer> WRITE_SHORT = PacketBuffer::writeShortLE;
+  private static final ObjIntConsumer<PacketBuffer> WRITE_SHORT = PacketBuffer::writeShortLE;
+
+  /**
+   * ctor.
+   */
+  private AvailableCommandsEncoderV291() {
+    super(76);
+  }
 
   @Override
   public void decode(@NotNull final AvailableCommands packet, @NotNull final CodecHelper helper,
@@ -137,11 +136,11 @@ public final class AvailableCommandsEncoderV291 implements PacketEncoder<Availab
    * @return command.
    */
   @NotNull
-  protected CommandData readCommand(@NotNull final PacketBuffer buffer, @NotNull final CodecHelper helper,
-                                    @NotNull final MinecraftSession session,
-                                    @NotNull final List<CommandEnumData> enums,
-                                    @NotNull final List<CommandEnumData> softEnums,
-                                    @NotNull final List<String> postFixes) {
+  private CommandData readCommand(@NotNull final PacketBuffer buffer, @NotNull final CodecHelper helper,
+                                  @NotNull final MinecraftSession session,
+                                  @NotNull final List<CommandEnumData> enums,
+                                  @NotNull final List<CommandEnumData> softEnums,
+                                  @NotNull final List<String> postFixes) {
     final var name = buffer.readString();
     final var description = buffer.readString();
     final var flags = buffer.readByte();
@@ -170,9 +169,9 @@ public final class AvailableCommandsEncoderV291 implements PacketEncoder<Availab
    * @param values the value to read.
    * @param enums the enums to read.
    */
-  protected void readCommandEnums(@NotNull final PacketBuffer buffer, @NotNull final CodecHelper helper,
-                                  @NotNull final MinecraftSession session, @NotNull final List<String> values,
-                                  @NotNull final List<CommandEnumData> enums) {
+  private void readCommandEnums(@NotNull final PacketBuffer buffer, @NotNull final CodecHelper helper,
+                                @NotNull final MinecraftSession session, @NotNull final List<String> values,
+                                @NotNull final List<CommandEnumData> enums) {
     final var valuesSize = values.size();
     final ToIntFunction<PacketBuffer> indexReader;
     if (valuesSize < 0x100) {
@@ -204,11 +203,11 @@ public final class AvailableCommandsEncoderV291 implements PacketEncoder<Availab
    *
    * @return command parameter data.
    */
-  protected CommandParamData readParameter(@NotNull final PacketBuffer buffer, @NotNull final CodecHelper helper,
-                                           @NotNull final MinecraftSession session,
-                                           @NotNull final List<CommandEnumData> enums,
-                                           @NotNull final List<CommandEnumData> softEnums,
-                                           @NotNull final List<String> postFixes) {
+  private CommandParamData readParameter(@NotNull final PacketBuffer buffer, @NotNull final CodecHelper helper,
+                                         @NotNull final MinecraftSession session,
+                                         @NotNull final List<CommandEnumData> enums,
+                                         @NotNull final List<CommandEnumData> softEnums,
+                                         @NotNull final List<String> postFixes) {
     final var name = buffer.readString();
     final var type = CommandSymbolData.deserialize(buffer.readIntLE());
     final var optional = buffer.readBoolean();
@@ -243,10 +242,10 @@ public final class AvailableCommandsEncoderV291 implements PacketEncoder<Availab
    * @param softEnums the soft enums to read.
    * @param postFixes the post fixes to read.
    */
-  protected void writeCommand(@NotNull final PacketBuffer buffer, @NotNull final CodecHelper helper,
-                              @NotNull final MinecraftSession session, @NotNull final CommandData commandData,
-                              @NotNull final List<CommandEnumData> enums,
-                              @NotNull final List<CommandEnumData> softEnums, @NotNull final List<String> postFixes) {
+  private void writeCommand(@NotNull final PacketBuffer buffer, @NotNull final CodecHelper helper,
+                            @NotNull final MinecraftSession session, @NotNull final CommandData commandData,
+                            @NotNull final List<CommandEnumData> enums,
+                            @NotNull final List<CommandEnumData> softEnums, @NotNull final List<String> postFixes) {
     buffer.writeString(commandData.name());
     buffer.writeString(commandData.description());
     final var flags = commandData.flags().stream()
@@ -275,11 +274,11 @@ public final class AvailableCommandsEncoderV291 implements PacketEncoder<Availab
    * @param values the values to write.
    * @param enums the enums to write.
    */
-  protected void writeCommandEnums(@NotNull final PacketBuffer buffer, @NotNull final CodecHelper helper,
-                                   @NotNull final MinecraftSession session,
-                                   final List<String> values, final List<CommandEnumData> enums) {
+  private void writeCommandEnums(@NotNull final PacketBuffer buffer, @NotNull final CodecHelper helper,
+                                 @NotNull final MinecraftSession session,
+                                 final List<String> values, final List<CommandEnumData> enums) {
     final ObjIntConsumer<PacketBuffer> indexWriter;
-    final int valuesSize = values.size();
+    final var valuesSize = values.size();
     if (valuesSize < 0x100) {
       indexWriter = AvailableCommandsEncoderV291.WRITE_BYTE;
     } else if (valuesSize < 0x10000) {
@@ -309,11 +308,11 @@ public final class AvailableCommandsEncoderV291 implements PacketEncoder<Availab
    * @param softEnums the soft enums to write.
    * @param postFixes the post fixes to write.
    */
-  protected void writeParameter(@NotNull final PacketBuffer buffer, @NotNull final CodecHelper helper,
-                                @NotNull final MinecraftSession session, @NotNull final CommandParamData param,
-                                @NotNull final List<CommandEnumData> enums,
-                                @NotNull final List<CommandEnumData> softEnums,
-                                @NotNull final List<String> postFixes) {
+  private void writeParameter(@NotNull final PacketBuffer buffer, @NotNull final CodecHelper helper,
+                              @NotNull final MinecraftSession session, @NotNull final CommandParamData param,
+                              @NotNull final List<CommandEnumData> enums,
+                              @NotNull final List<CommandEnumData> softEnums,
+                              @NotNull final List<String> postFixes) {
     buffer.writeString(param.name());
     final int index;
     var postfix = false;

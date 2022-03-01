@@ -9,10 +9,13 @@ import io.github.shiruka.protocol.MinecraftSession;
 import io.github.shiruka.protocol.codec.CodecHelper;
 import io.github.shiruka.protocol.codec.IdentifierDefinitionRegistry;
 import io.github.shiruka.protocol.codec.IntTypeMap;
+import io.github.shiruka.protocol.data.AdventureSetting;
 import io.github.shiruka.protocol.data.AttributeData;
 import io.github.shiruka.protocol.data.ItemDefinition;
+import io.github.shiruka.protocol.data.PlayerPermission;
 import io.github.shiruka.protocol.data.command.CommandEnumData;
 import io.github.shiruka.protocol.data.command.CommandParam;
+import io.github.shiruka.protocol.data.command.CommandPermission;
 import io.github.shiruka.protocol.data.entity.EntityData;
 import io.github.shiruka.protocol.data.entity.EntityDataMap;
 import io.github.shiruka.protocol.data.entity.EntityDataType;
@@ -21,9 +24,12 @@ import io.github.shiruka.protocol.data.entity.EntityFlags;
 import io.github.shiruka.protocol.data.entity.EntityLinkData;
 import io.github.shiruka.protocol.data.entity.EntityLinkDataType;
 import io.github.shiruka.protocol.data.inventory.ItemData;
+import io.github.shiruka.protocol.packets.AdventureSettings;
 import io.netty.buffer.ByteBufInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,7 +44,40 @@ import org.jetbrains.annotations.NotNull;
 public class CodecHelperV291 implements CodecHelper {
 
   /**
-   * teh command parameters.
+   * the adventure setting flags 1.
+   */
+  @Getter
+  protected final IntTypeMap<AdventureSetting> adventureSettingFlags1 = IntTypeMap.newBuilder(AdventureSetting.class)
+    .insert(1, AdventureSetting.WORLD_IMMUTABLE)
+    .insert(1 << 1, AdventureSetting.NO_PVM)
+    .insert(1 << 2, AdventureSetting.NO_MVP)
+    .insert(1 << 4, AdventureSetting.SHOW_NAME_TAGS)
+    .insert(1 << 5, AdventureSetting.AUTO_JUMP)
+    .insert(1 << 6, AdventureSetting.MAY_FLY)
+    .insert(1 << 7, AdventureSetting.NO_CLIP)
+    .insert(1 << 8, AdventureSetting.WORLD_BUILDER)
+    .insert(1 << 9, AdventureSetting.FLYING)
+    .insert(1 << 10, AdventureSetting.MUTED)
+    .build();
+
+  /**
+   * the adventure setting flags 2.
+   */
+  @Getter
+  protected final IntTypeMap<AdventureSetting> adventureSettingFlags2 = IntTypeMap.newBuilder(AdventureSetting.class)
+    .insert(1, AdventureSetting.MINE)
+    .insert(1 << 1, AdventureSetting.DOORS_AND_SWITCHES)
+    .insert(1 << 2, AdventureSetting.OPEN_CONTAINERS)
+    .insert(1 << 3, AdventureSetting.ATTACK_PLAYERS)
+    .insert(1 << 4, AdventureSetting.ATTACK_MOBS)
+    .insert(1 << 5, AdventureSetting.OPERATOR)
+    .insert(1 << 7, AdventureSetting.TELEPORT)
+    .insert(1 << 8, AdventureSetting.BUILD)
+    .insert(1 << 9, AdventureSetting.DEFAULT_LEVEL_PERMISSIONS)
+    .build();
+
+  /**
+   * the command parameters.
    */
   @Getter
   protected final IntTypeMap<CommandParam> commandParameters = IntTypeMap.newBuilder(CommandParam.class)
@@ -253,6 +292,37 @@ public class CodecHelperV291 implements CodecHelper {
     IdentifierDefinitionRegistry.<ItemDefinition>newBuilder()
       .build();
 
+  /**
+   * reads the flags.
+   *
+   * @param flags the flags to read.
+   * @param mappings the mappings to read.
+   * @param settings the settings to read.
+   */
+  private static void readFlags(final int flags, @NotNull final Collection<AdventureSetting> mappings,
+                                @NotNull final Set<AdventureSetting> settings) {
+    final var array = mappings.toArray(new AdventureSetting[0]);
+    for (var index = 0; index < array.length; index++) {
+      final var setting = array[index];
+      if ((flags & 1 << index) != 0) {
+        settings.add(setting);
+      }
+    }
+  }
+
+  @Override
+  public void readAdventureSettings(@NotNull final AdventureSettings packet, @NotNull final PacketBuffer buffer) {
+    final var flags1 = buffer.readUnsignedVarInt();
+    packet.commandPermission(CommandPermission.byOrdinal(buffer.readUnsignedVarInt()));
+    final var flags2 = buffer.readUnsignedVarInt();
+    packet.playerPermission(PlayerPermission.byOrdinal(buffer.readUnsignedVarInt()));
+    buffer.readUnsignedVarInt();
+    packet.uniqueEntityId(buffer.readLongLE());
+    final var settings = packet.settings();
+    CodecHelperV291.readFlags(flags1, this.adventureSettingFlags1.values(), settings);
+    CodecHelperV291.readFlags(flags2, this.adventureSettingFlags2.values(), settings);
+  }
+
   @NotNull
   @Override
   public AttributeData readAttribute(@NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
@@ -362,6 +432,25 @@ public class CodecHelperV291 implements CodecHelper {
       .canPlace(canPlace.toArray(new String[0]))
       .canBreak(canBreak.toArray(new String[0]))
       .build();
+  }
+
+  @Override
+  public void writeAdventureSettings(@NotNull final AdventureSettings packet, @NotNull final PacketBuffer buffer) {
+    var flags1 = 0;
+    var flags2 = 0;
+    for (final var setting : packet.settings()) {
+      if (this.adventureSettingFlags1.containsValue(setting)) {
+        flags1 |= this.adventureSettingFlags1.id(setting);
+      } else if (this.adventureSettingFlags2.containsValue(setting)) {
+        flags2 |= this.adventureSettingFlags2.id(setting);
+      }
+    }
+    buffer.writeUnsignedVarInt(flags1);
+    buffer.writeUnsignedVarInt(packet.commandPermission().ordinal());
+    buffer.writeUnsignedVarInt(flags2);
+    buffer.writeUnsignedVarInt(packet.playerPermission().ordinal());
+    buffer.writeUnsignedVarInt(0);
+    buffer.writeLongLE(packet.uniqueEntityId());
   }
 
   @Override

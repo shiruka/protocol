@@ -2,7 +2,6 @@ package io.github.shiruka.protocol.codec;
 
 import io.github.shiruka.api.common.Int2ObjectBiMap;
 import io.github.shiruka.protocol.MinecraftSession;
-import io.github.shiruka.protocol.data.AdventureSetting;
 import io.github.shiruka.protocol.data.LevelEventType;
 import io.github.shiruka.protocol.data.SoundEvent;
 import io.github.shiruka.protocol.data.entity.EntityData;
@@ -23,49 +22,39 @@ public final class Constants {
   public static final String BLOCKING_ITEM_IDENTIFIER = "minecraft:shield";
 
   /**
-   * the entity data.
-   */
-  public static final Int2ObjectBiMap<EntityData> ENTITY_DATA = new Int2ObjectBiMap<>();
-
-  /**
-   * the entity data types.
-   */
-  public static final Int2ObjectBiMap<EntityDataType> ENTITY_DATA_TYPES = new Int2ObjectBiMap<>();
-
-  /**
-   * the entity flags.
-   */
-  public static final Int2ObjectBiMap<EntityFlag> ENTITY_FLAGS = new Int2ObjectBiMap<>();
-
-  /**
-   * the flags to bit 1.
-   */
-  public static final Object2IntMap<AdventureSetting> FLAGS_TO_BIT_1 = new Object2IntOpenHashMap<>();
-
-  /**
-   * the flags to bit 2.
-   */
-  public static final Object2IntMap<AdventureSetting> FLAGS_TO_BIT_2 = new Object2IntOpenHashMap<>();
-
-  /**
-   * the game rule types.
-   */
-  public static final Object2IntMap<Class<?>> GAME_RULE_TYPES = new Object2IntOpenHashMap<>(3, 0.5f);
-
-  /**
-   * the level events.
-   */
-  public static final Int2ObjectBiMap<LevelEventType> LEVEL_EVENTS = new Int2ObjectBiMap<>();
-
-  /**
    * the minecraft version.
    */
   public static final String MINECRAFT_VERSION = "1.18.2";
 
   /**
+   * the entity data.
+   */
+  private static final Int2ObjectBiMap<EntityData> ENTITY_DATA = new Int2ObjectBiMap<>();
+
+  /**
+   * the entity data types.
+   */
+  private static final Int2ObjectBiMap<EntityDataType> ENTITY_DATA_TYPES = new Int2ObjectBiMap<>();
+
+  /**
+   * the entity flags.
+   */
+  private static final Int2ObjectBiMap<EntityFlag> ENTITY_FLAGS = new Int2ObjectBiMap<>();
+
+  /**
+   * the game rule types.
+   */
+  private static final Object2IntMap<Class<?>> GAME_RULE_TYPES = new Object2IntOpenHashMap<>(3, 0.5f);
+
+  /**
+   * the level events.
+   */
+  private static final Int2ObjectBiMap<LevelEventType> LEVEL_EVENTS = new Int2ObjectBiMap<>();
+
+  /**
    * the protocol version.
    */
-  public static final int PROTOCOL_VERSION = 475;
+  private static final int PROTOCOL_VERSION = 475;
 
   /**
    * the protocol version as string.
@@ -75,7 +64,7 @@ public final class Constants {
   /**
    * the sound events.
    */
-  public static final Int2ObjectBiMap<SoundEvent> SOUND_EVENTS = new Int2ObjectBiMap<>();
+  private static final Int2ObjectBiMap<SoundEvent> SOUND_EVENTS = new Int2ObjectBiMap<>();
 
   /**
    * ctor.
@@ -99,7 +88,6 @@ public final class Constants {
    * registers the constants.
    */
   public static void register() {
-    Constants.registerFlagsToBit();
     Constants.registerEntityDataTypes();
     Constants.registerEntityData();
     Constants.registerEntityFlags();
@@ -483,31 +471,6 @@ public final class Constants {
     // 448
     Constants.addEntityFlag(98, EntityFlag.IN_ASCENDABLE_BLOCK);
     Constants.addEntityFlag(99, EntityFlag.OVER_DESCENDABLE_BLOCK);
-  }
-
-  /**
-   * registers the flags to bit.
-   */
-  private static void registerFlagsToBit() {
-    Constants.FLAGS_TO_BIT_1.put(AdventureSetting.WORLD_IMMUTABLE, 1);
-    Constants.FLAGS_TO_BIT_1.put(AdventureSetting.NO_PVM, 1 << 1);
-    Constants.FLAGS_TO_BIT_1.put(AdventureSetting.NO_MVP, 1 << 2);
-    Constants.FLAGS_TO_BIT_1.put(AdventureSetting.SHOW_NAME_TAGS, 1 << 4);
-    Constants.FLAGS_TO_BIT_1.put(AdventureSetting.AUTO_JUMP, 1 << 5);
-    Constants.FLAGS_TO_BIT_1.put(AdventureSetting.MAY_FLY, 1 << 6);
-    Constants.FLAGS_TO_BIT_1.put(AdventureSetting.NO_CLIP, 1 << 7);
-    Constants.FLAGS_TO_BIT_1.put(AdventureSetting.WORLD_BUILDER, 1 << 8);
-    Constants.FLAGS_TO_BIT_1.put(AdventureSetting.FLYING, 1 << 9);
-    Constants.FLAGS_TO_BIT_1.put(AdventureSetting.MUTED, 1 << 10);
-    Constants.FLAGS_TO_BIT_2.put(AdventureSetting.MINE, 1);
-    Constants.FLAGS_TO_BIT_2.put(AdventureSetting.DOORS_AND_SWITCHES, 1 << 1);
-    Constants.FLAGS_TO_BIT_2.put(AdventureSetting.OPEN_CONTAINERS, 1 << 2);
-    Constants.FLAGS_TO_BIT_2.put(AdventureSetting.ATTACK_PLAYERS, 1 << 3);
-    Constants.FLAGS_TO_BIT_2.put(AdventureSetting.ATTACK_MOBS, 1 << 4);
-    Constants.FLAGS_TO_BIT_2.put(AdventureSetting.OPERATOR, 1 << 5);
-    Constants.FLAGS_TO_BIT_2.put(AdventureSetting.TELEPORT, 1 << 7);
-    Constants.FLAGS_TO_BIT_2.put(AdventureSetting.BUILD, 1 << 8);
-    Constants.FLAGS_TO_BIT_2.put(AdventureSetting.DEFAULT_LEVEL_PERMISSIONS, 1 << 9);
   }
 
   /**

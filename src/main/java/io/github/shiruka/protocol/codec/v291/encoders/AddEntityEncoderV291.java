@@ -5,20 +5,19 @@ import io.github.shiruka.protocol.MinecraftSession;
 import io.github.shiruka.protocol.codec.CodecHelper;
 import io.github.shiruka.protocol.codec.PacketEncoder;
 import io.github.shiruka.protocol.packets.AddEntity;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * a class that represents add entity packet encoders.
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class AddEntityEncoderV291 implements PacketEncoder<AddEntity> {
+public final class AddEntityEncoderV291 extends PacketEncoder.Base<AddEntity> {
 
   /**
-   * the instance.
+   * ctor.
    */
-  public static final AddEntityEncoderV291 INSTANCE = new AddEntityEncoderV291();
+  private AddEntityEncoderV291() {
+    super(13);
+  }
 
   @Override
   public void decode(@NotNull final AddEntity packet, @NotNull final CodecHelper helper,
