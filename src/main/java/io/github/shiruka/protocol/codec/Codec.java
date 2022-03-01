@@ -375,6 +375,13 @@ public interface Codec {
 
   /**
    * a simple implementation of {@link Codec}.
+   *
+   * @param minecraftVersion the minecraft version.
+   * @param protocolVersion the protocol version.
+   * @param protocolVersionAsString the protocol version as string.
+   * @param helper the helper.
+   * @param packets the packets.
+   * @param packetsById the packets by id.
    */
   record Impl(
     @NotNull String minecraftVersion,
