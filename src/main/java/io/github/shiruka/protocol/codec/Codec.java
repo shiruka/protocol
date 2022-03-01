@@ -319,12 +319,12 @@ public interface Codec {
     }
 
     /**
-     * registers the packets from the encoders package.
+     * scans the encoder package and registers the found packets.
      *
      * @return {@code this} for the builder chain.
      */
     @NotNull
-    public Builder registerPacketsFromPackage() {
+    public Builder scanPackageAndRegister() {
       Preconditions.checkState(this.protocolVersion != 0, "Protocol version not set!");
       final var classes = new Reflections(Builder.ENCODERS_PACKAGE.formatted(this.protocolVersion))
         .get(Scanners.SubTypes.of(PacketEncoder.Base.class).asClass());
