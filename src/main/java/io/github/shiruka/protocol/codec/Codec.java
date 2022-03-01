@@ -223,7 +223,7 @@ public interface Codec {
     /**
      * the encoders package.
      */
-    private static final String ENCODERS_PACKAGE = "io.github.shiruka.protocol.codec.%s.encoders";
+    private static final String ENCODERS_PACKAGE = "io.github.shiruka.protocol.codec.v%s.encoders";
 
     /**
      * the packets.
@@ -327,8 +327,8 @@ public interface Codec {
     public Builder registerPacketsFromPackage() {
       Preconditions.checkState(this.protocolVersion != 0, "Protocol version not set!");
       final var packageName = Builder.ENCODERS_PACKAGE.formatted(this.protocolVersion);
-      final var reflections = new Reflections(packageName);
-      final var classes = reflections.get(Scanners.SubTypes.of(PacketEncoder.Base.class).asClass());
+      final var classes = new Reflections(packageName)
+        .get(Scanners.SubTypes.of(PacketEncoder.Base.class).asClass());
       for (final var cls : classes) {
         new ClassOf<>(cls).getField("INSTANCE")
           .flatMap(RefField::getValue)

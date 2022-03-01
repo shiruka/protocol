@@ -67,6 +67,7 @@ dependencies {
   compileOnlyApi "io.github.shiruka:api:${api}"
   compileOnlyApi "io.github.shiruka:network:${network}"
 
+  compileOnlyApi "tr.com.infumia:InfumiaShared:${infumia}"
   compileOnlyApi "it.unimi.dsi:fastutil:${fastutil}"
   compileOnlyApi "it.unimi.dsi:fastutil-core:${fastutil}"
   compileOnlyApi "io.netty:netty-all:${nettyall}"
