@@ -5,7 +5,6 @@ import io.github.shiruka.protocol.MinecraftSession;
 import io.github.shiruka.protocol.codec.CodecHelper;
 import io.github.shiruka.protocol.codec.PacketEncoder;
 import io.github.shiruka.protocol.packets.Login;
-import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 
 /**

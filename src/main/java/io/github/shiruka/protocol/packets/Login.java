@@ -18,20 +18,11 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 public final class Login extends MinecraftPacket {
 
-  /**
-   * the chain data.
-   */
+  //@formatter:off
   private AsciiString chainData;
-
-  /**
-   * the protocol version.
-   */
   private int protocolVersion;
-
-  /**
-   * the skin data.
-   */
   private AsciiString skinData;
+  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {
