@@ -11,22 +11,16 @@ import org.jetbrains.annotations.NotNull;
 /**
  * a class that represents block event packet encoders.
  */
-@PacketId(26)
-public final class BlockEvenV291 extends PacketEncoder.Base<BlockEvent> {
+@PacketId(4)
+public final class ClickToServerHandshakeEncoderV291 extends PacketEncoder.Base<BlockEvent> {
 
   @Override
   public void decode(@NotNull final BlockEvent packet, @NotNull final CodecHelper helper,
                      @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
-    packet.blockPosition(buffer.readBlockPosition());
-    packet.eventType(buffer.readVarInt());
-    packet.eventData(buffer.readVarInt());
   }
 
   @Override
   public void encode(@NotNull final BlockEvent packet, @NotNull final CodecHelper helper,
                      @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
-    buffer.writeBlockPosition(packet.blockPosition());
-    buffer.writeVarInt(packet.eventType());
-    buffer.writeVarInt(packet.eventData());
   }
 }
