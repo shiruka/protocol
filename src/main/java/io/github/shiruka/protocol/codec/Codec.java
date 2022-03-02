@@ -246,7 +246,7 @@ public interface Codec {
      * the protocol version.
      */
     @Setter
-    private int protocolVersion;
+    private int protocolVersion = -1;
 
     /**
      * ctor.
@@ -335,7 +335,7 @@ public interface Codec {
      */
     @NotNull
     public Builder scanPackageAndRegister() {
-      Preconditions.checkState(this.protocolVersion != 0, "Protocol version not set!");
+      Preconditions.checkState(this.protocolVersion != -1, "Protocol version not set!");
       return this.scanPackageAndRegister(Builder.ENCODERS_PACKAGE.formatted(this.protocolVersion));
     }
 
