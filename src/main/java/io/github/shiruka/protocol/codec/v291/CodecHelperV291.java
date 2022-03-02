@@ -27,7 +27,6 @@ import io.github.shiruka.protocol.data.inventory.ItemData;
 import io.github.shiruka.protocol.packets.AdventureSettings;
 import io.netty.buffer.ByteBufInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 import lombok.AccessLevel;
@@ -420,10 +419,8 @@ public class CodecHelperV291 implements CodecHelper {
         throw new IllegalStateException("Unable to load NBT data!", e);
       }
     }
-    final var canPlace = new ArrayList<String>();
-    final var canBreak = new ArrayList<String>();
-    buffer.readArray(canPlace, PacketBuffer::readString);
-    buffer.readArray(canBreak, PacketBuffer::readString);
+    final var canPlace = buffer.readArrayUnsignedInt(buffer::readString);
+    final var canBreak = buffer.readArrayUnsignedInt(buffer::readString);
     return ItemData.newBuilder()
       .definition(definition)
       .damage(damage)
@@ -573,8 +570,8 @@ public class CodecHelperV291 implements CodecHelper {
       }
       buffer.setShortLE(sizeIndex, buffer.size() - afterSizeIndex);
     }
-    buffer.writeArray(item.canPlace(), PacketBuffer::writeString);
-    buffer.writeArray(item.canBreak(), PacketBuffer::writeString);
+    buffer.writeArrayUnsignedInt(item.canPlace(), buffer::writeString);
+    buffer.writeArrayUnsignedInt(item.canBreak(), buffer::writeString);
   }
 
   /**

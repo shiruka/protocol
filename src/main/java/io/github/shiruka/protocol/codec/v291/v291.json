@@ -67,7 +67,7 @@
       },
       {
         "name": "position",
-        "type": "blockPosition",
+        "type": "vector3i",
         "use-read": "toFloat",
         "use-write": "toInt"
       },
@@ -125,7 +125,7 @@
       },
       {
         "name": "position",
-        "type": "blockPosition",
+        "type": "vector3i",
         "use-read": "toFloat",
         "user-write": "toInt"
       },

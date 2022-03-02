@@ -6,7 +6,6 @@ import io.github.shiruka.protocol.common.PacketHandler;
 import io.github.shiruka.protocol.data.entity.EntityDataMap;
 import io.github.shiruka.protocol.data.entity.EntityLinkData;
 import io.github.shiruka.protocol.data.inventory.ItemData;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.Getter;
@@ -26,10 +25,15 @@ public final class AddPlayer extends MinecraftPacket {
 
   //@formatter:off
   private final AdventureSettings adventureSettings = new AdventureSettings();
-  private final List<EntityLinkData> entityLinks = new ObjectArrayList<>();
+
   private final EntityDataMap metadata = new EntityDataMap();
+
   private int buildPlatform;
+
   private String deviceId;
+
+  private List<EntityLinkData> entityLinks;
+
   private ItemData hand;
   private Vector3f motion;
   private String platformChatId;

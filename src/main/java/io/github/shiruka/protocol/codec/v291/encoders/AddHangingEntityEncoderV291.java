@@ -19,7 +19,7 @@ public final class AddHangingEntityEncoderV291 extends PacketEncoder.Base<AddHan
                      @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
     packet.uniqueEntityId(buffer.readVarLong());
     packet.runtimeEntityId(buffer.readUnsignedVarLong());
-    packet.position(buffer.readBlockPosition().toFloat());
+    packet.position(buffer.readVector3i().toFloat());
     packet.direction(buffer.readVarInt());
   }
 
@@ -28,7 +28,7 @@ public final class AddHangingEntityEncoderV291 extends PacketEncoder.Base<AddHan
                      @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
     buffer.writeVarLong(packet.uniqueEntityId());
     buffer.writeUnsignedVarLong(packet.runtimeEntityId());
-    buffer.writeBlockPosition(packet.position().toInt());
+    buffer.writeVector3i(packet.position().toInt());
     buffer.writeVarInt(packet.direction());
   }
 }

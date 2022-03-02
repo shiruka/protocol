@@ -6,7 +6,6 @@ import io.github.shiruka.protocol.common.PacketHandler;
 import io.github.shiruka.protocol.data.AttributeData;
 import io.github.shiruka.protocol.data.entity.EntityDataMap;
 import io.github.shiruka.protocol.data.entity.EntityLinkData;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,9 +23,9 @@ import org.jetbrains.annotations.NotNull;
 public final class AddEntity extends MinecraftPacket {
 
   //@formatter:off
-  private final List<AttributeData> attributes = new ObjectArrayList<>();
-  private final List<EntityLinkData> entityLinks = new ObjectArrayList<>();
   private final EntityDataMap metadata = new EntityDataMap();
+  private List<AttributeData> attributes;
+  private List<EntityLinkData> entityLinks;
   private int entityType;
   private String identifier;
   private Vector3f motion;

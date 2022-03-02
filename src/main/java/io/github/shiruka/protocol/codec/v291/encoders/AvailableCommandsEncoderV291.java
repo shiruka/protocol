@@ -100,10 +100,12 @@ public final class AvailableCommandsEncoderV291 extends PacketEncoder.Base<Avail
    *
    * @param buffer the buffer to read.
    * @param values the value to read.
-   * @param enums the enums to read.
+   *
+   * @return command enum data.
    */
-  private static void readCommandEnums(@NotNull final PacketBuffer buffer, @NotNull final List<String> values,
-                                       @NotNull final List<CommandEnumData> enums) {
+  @NotNull
+  private static List<CommandEnumData> readCommandEnums(@NotNull final PacketBuffer buffer,
+                                                        @NotNull final List<String> values) {
     final var valuesSize = values.size();
     final ToIntFunction<PacketBuffer> indexReader;
     if (valuesSize < 0x100) {
@@ -113,12 +115,13 @@ public final class AvailableCommandsEncoderV291 extends PacketEncoder.Base<Avail
     } else {
       indexReader = AvailableCommandsEncoderV291.READ_INT;
     }
-    buffer.readArray(enums, b -> {
-      final var name = b.readString();
-      final var length = b.readUnsignedVarInt();
-      final var enumValues = IntStream.range(0, length)
-        .mapToObj(index -> values.get(indexReader.applyAsInt(b)))
-        .toArray(String[]::new);
+    return buffer.readArrayUnsignedInt(() -> {
+      final var name = buffer.readString();
+      final var length = buffer.readUnsignedVarInt();
+      final var enumValues = new String[length];
+      for (var index = 0; index < length; index++) {
+        enumValues[index] = values.get(indexReader.applyAsInt(buffer));
+      }
       return new CommandEnumData(false, name, enumValues);
     });
   }
@@ -214,13 +217,13 @@ public final class AvailableCommandsEncoderV291 extends PacketEncoder.Base<Avail
     } else {
       indexWriter = AvailableCommandsEncoderV291.WRITE_INT;
     }
-    buffer.writeArray(enums, (b, commandEnum) -> {
-      b.writeString(commandEnum.name());
+    buffer.writeArrayUnsignedInt(enums, commandEnum -> {
+      buffer.writeString(commandEnum.name());
       buffer.writeUnsignedVarInt(commandEnum.values().length);
       for (final var value : commandEnum.values()) {
         final var index = values.indexOf(value);
         Preconditions.checkArgument(index > -1, "Invalid enum value detected: %s", value);
-        indexWriter.accept(b, index);
+        indexWriter.accept(buffer, index);
       }
     });
   }
@@ -272,15 +275,11 @@ public final class AvailableCommandsEncoderV291 extends PacketEncoder.Base<Avail
   @Override
   public void decode(@NotNull final AvailableCommands packet, @NotNull final CodecHelper helper,
                      @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
-    final var enumValues = new ObjectArrayList<String>();
-    final var postFixes = new ObjectArrayList<String>();
-    final var enums = new ObjectArrayList<CommandEnumData>();
-    final var softEnums = new ObjectArrayList<CommandEnumData>();
-    buffer.readArray(enumValues, PacketBuffer::readString);
-    buffer.readArray(postFixes, PacketBuffer::readString);
-    AvailableCommandsEncoderV291.readCommandEnums(buffer, enumValues, enums);
-    buffer.readArray(softEnums, b -> helper.readCommandEnum(b, true));
-    buffer.readArray(packet.commands(), b -> AvailableCommandsEncoderV291.readCommand(b, helper, enums, softEnums, postFixes));
+    final var enumValues = buffer.readArrayUnsignedInt(buffer::readString);
+    final var postFixes = buffer.readArrayUnsignedInt(buffer::readString);
+    final var enums = AvailableCommandsEncoderV291.readCommandEnums(buffer, enumValues);
+    final var softEnums = buffer.readArrayUnsignedInt(() -> helper.readCommandEnum(buffer, true));
+    packet.commands(buffer.readArrayUnsignedInt(() -> AvailableCommandsEncoderV291.readCommand(buffer, helper, enums, softEnums, postFixes)));
   }
 
   @Override
@@ -318,12 +317,12 @@ public final class AvailableCommandsEncoderV291 extends PacketEncoder.Base<Avail
     final var postFixes = new ObjectArrayList<>(postfixSet);
     final var enums = new ObjectArrayList<>(enumsSet);
     final var softEnums = new ObjectArrayList<>(softEnumsSet);
-    buffer.writeArray(enumValues, PacketBuffer::writeString);
-    buffer.writeArray(postFixes, PacketBuffer::writeString);
+    buffer.writeArrayUnsignedInt(enumValues, buffer::writeString);
+    buffer.writeArrayUnsignedInt(postFixes, buffer::writeString);
     AvailableCommandsEncoderV291.writeCommandEnums(buffer, enumValues, enums);
-    buffer.writeArray(packet.commands(), (b, command) -> {
-      AvailableCommandsEncoderV291.writeCommand(b, helper, command, enums, softEnums, postFixes);
+    buffer.writeArrayUnsignedInt(packet.commands(), command -> {
+      AvailableCommandsEncoderV291.writeCommand(buffer, helper, command, enums, softEnums, postFixes);
     });
-    buffer.writeArray(softEnums, (b, data) -> helper.writeCommandEnum(b, session, data));
+    buffer.writeArrayUnsignedInt(softEnums, data -> helper.writeCommandEnum(buffer, session, data));
   }
 }
