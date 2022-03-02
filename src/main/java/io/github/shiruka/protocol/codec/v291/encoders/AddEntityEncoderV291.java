@@ -37,7 +37,7 @@ public final class AddEntityEncoderV291 extends PacketEncoder.Base<AddEntity> {
     buffer.writeVector3f(packet.position());
     buffer.writeVector3f(packet.motion());
     buffer.writeVector3f(packet.rotation());
-    buffer.writeArrayUnsignedInt(packet.attributes(), data -> helper.writeAttribute(buffer, session, data));
+    buffer.writeArrayUnsignedInt(packet.attributes(), data -> helper.writeAttribute(buffer, data));
     helper.writeEntityData(buffer, session, packet.metadata());
     buffer.writeArrayUnsignedInt(packet.entityLinks(), link -> helper.writeEntityLink(buffer, session, link));
   }

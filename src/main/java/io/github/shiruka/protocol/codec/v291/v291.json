@@ -2,7 +2,7 @@
   {
     "name": "AddBehaviorTree",
     "id": 89,
-    "fields": [
+    "lines": [
       {
         "name": "behaviorTreeJson",
         "type": "string"
@@ -12,7 +12,7 @@
   {
     "name": "AddEntity",
     "id": 13,
-    "fields": [
+    "lines": [
       {
         "name": "uniqueEntityId",
         "type": "varLong"
@@ -40,7 +40,7 @@
       {
         "name": "attributes",
         "type": "array",
-        "array-type": "attribute"
+        "arrayType": "attribute"
       },
       {
         "name": "metadata",
@@ -49,14 +49,14 @@
       {
         "name": "entityLinks",
         "type": "array",
-        "array-type": "entityLink"
+        "arrayType": "entityLink"
       }
     ]
   },
   {
     "name": "AddHangingEntity",
     "id": 16,
-    "fields": [
+    "lines": [
       {
         "name": "uniqueEntityId",
         "type": "varLong"
@@ -68,8 +68,8 @@
       {
         "name": "position",
         "type": "vector3i",
-        "use-read": "toFloat",
-        "use-write": "toInt"
+        "useRead": "toFloat",
+        "useWrite": "toInt"
       },
       {
         "name": "direction",
@@ -80,7 +80,7 @@
   {
     "name": "AddItemEntity",
     "id": 15,
-    "fields": [
+    "lines": [
       {
         "name": "uniqueEntityId",
         "type": "varLong"
@@ -114,7 +114,7 @@
   {
     "name": "AddPainting",
     "id": 22,
-    "fields": [
+    "lines": [
       {
         "name": "uniqueEntityId",
         "type": "varLong"
@@ -126,13 +126,13 @@
       {
         "name": "position",
         "type": "vector3i",
-        "use-read": "toFloat",
-        "user-write": "toInt"
+        "useRead": "toFloat",
+        "useWrite": "toInt"
       },
       {
         "name": "direction",
-        "type-read": "int",
-        "type-write": "varInt"
+        "readType": "int",
+        "writeType": "varInt"
       },
       {
         "name": "motive",
@@ -143,7 +143,7 @@
   {
     "name": "AddPlayer",
     "id": 12,
-    "fields": [
+    "lines": [
       {
         "name": "uuid",
         "type": "UUID"
@@ -191,7 +191,7 @@
       {
         "name": "entityLinks",
         "type": "array",
-        "array-type": "entityLink"
+        "arrayType": "entityLink"
       },
       {
         "name": "deviceId",
@@ -202,7 +202,7 @@
   {
     "name": "AdventureSettings",
     "id": 55,
-    "fields": [
+    "lines": [
       {
         "name": "adventureSettings",
         "type": "adventureSettings"
@@ -212,10 +212,11 @@
   {
     "name": "Animate",
     "id": 44,
-    "fields": [
+    "lines": [
       {
         "name": "action",
-        "type": "animate.action"
+        "type": "animate.action",
+        "separate": true
       },
       {
         "name": "runtimeEntityId",
@@ -231,9 +232,121 @@
   {
     "name": "AutomationClientConnect",
     "id": 95,
-    "fields": [
+    "lines": [
       {
         "name": "address",
+        "type": "string"
+      }
+    ]
+  },
+  {
+    "name": "AvailableCommands",
+    "id": 76,
+    "lines": [
+      {
+        "name": "commands",
+        "type": "commands"
+      }
+    ]
+  },
+  {
+    "name": "BlockEntityData",
+    "id": 56,
+    "lines": [
+      {
+        "name": "blockPosition",
+        "type": "vector3i"
+      },
+      {
+        "name": "data",
+        "type": "compoundTag"
+      }
+    ]
+  },
+  {
+    "name": "BlockEvent",
+    "id": 26,
+    "lines": [
+      {
+        "name": "blockPosition",
+        "type": "vector3i"
+      },
+      {
+        "name": "eventType",
+        "type": "varInt"
+      },
+      {
+        "name": "eventData",
+        "type": "varInt"
+      }
+    ]
+  },
+  {
+    "name": "ClientToServerHandshake",
+    "id": 4,
+    "lines": [
+    ]
+  },
+  {
+    "name": "Disconnect",
+    "id": 5,
+    "lines": [
+      {
+        "name": "messageSkipped",
+        "type": "boolean",
+        "separate": true
+      },
+      {
+        "name": "kickMessage",
+        "type": "string",
+        "condition": "!messageSkipped"
+      }
+    ]
+  },
+  {
+    "name": "Login",
+    "id": 1,
+    "lines": [
+      {
+        "name": "protocolVersion",
+        "type": "int"
+      },
+      {
+        "name": "jwt",
+        "readType": "slice",
+        "writeType": "unsignedVarInt",
+        "readSeparate": true,
+        "onlyVariable": true,
+        "writeValue": "chainData.length() + skinData.length() + 8"
+      },
+      {
+        "name": "chainData",
+        "type": "LEAsciiString",
+        "readWith": "jwt"
+      },
+      {
+        "name": "skinData",
+        "type": "LEAsciiString",
+        "readWith": "jwt"
+      }
+    ]
+  },
+  {
+    "name": "PlayStatus",
+    "id": 2,
+    "lines": [
+      {
+        "name": "status",
+        "type": "playStatus"
+      }
+    ]
+  },
+  {
+    "name": "ServerToClientHandshake",
+    "id": 3,
+    "lines": [
+      {
+        "name": "jwt",
         "type": "string"
       }
     ]

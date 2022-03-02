@@ -4,6 +4,7 @@ import io.github.shiruka.network.PacketBuffer;
 import io.github.shiruka.protocol.common.MinecraftSession;
 import io.github.shiruka.protocol.data.AttributeData;
 import io.github.shiruka.protocol.data.ItemDefinition;
+import io.github.shiruka.protocol.data.command.CommandData;
 import io.github.shiruka.protocol.data.command.CommandEnumData;
 import io.github.shiruka.protocol.data.command.CommandParam;
 import io.github.shiruka.protocol.data.entity.EntityData;
@@ -13,6 +14,7 @@ import io.github.shiruka.protocol.data.entity.EntityFlag;
 import io.github.shiruka.protocol.data.entity.EntityLinkData;
 import io.github.shiruka.protocol.data.inventory.ItemData;
 import io.github.shiruka.protocol.packets.AdventureSettings;
+import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -134,6 +136,14 @@ public interface CodecHelper {
   CommandEnumData readCommandEnum(@NotNull PacketBuffer buffer, boolean soft);
 
   /**
+   * reads the commands.
+   *
+   * @param buffer the buffer to read.
+   */
+  @NotNull
+  List<CommandData> readCommands(@NotNull PacketBuffer buffer);
+
+  /**
    * reads the entity data.
    *
    * @param buffer the buffer to read.
@@ -176,19 +186,25 @@ public interface CodecHelper {
    * writes the attribute data.
    *
    * @param buffer the buffer to write.
-   * @param session the session to write.
    * @param data the data to write.
    */
-  void writeAttribute(@NotNull PacketBuffer buffer, @NotNull MinecraftSession session, @NotNull AttributeData data);
+  void writeAttribute(@NotNull PacketBuffer buffer, @NotNull AttributeData data);
 
   /**
    * writes the command enum.
    *
    * @param buffer the buffer to write.
-   * @param session the session to write.
    * @param data the data to write.
    */
-  void writeCommandEnum(@NotNull PacketBuffer buffer, @NotNull MinecraftSession session, @NotNull CommandEnumData data);
+  void writeCommandEnum(@NotNull PacketBuffer buffer, @NotNull CommandEnumData data);
+
+  /**
+   * writes the commands.
+   *
+   * @param buffer the buffer to write.
+   * @param commands the commands to write.
+   */
+  void writeCommands(@NotNull PacketBuffer buffer, @NotNull List<CommandData> commands);
 
   /**
    * writes the entity data.
