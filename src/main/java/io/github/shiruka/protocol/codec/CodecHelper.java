@@ -17,7 +17,7 @@ import io.github.shiruka.protocol.data.entity.EntityLinkData;
 import io.github.shiruka.protocol.data.inventory.ItemData;
 import io.github.shiruka.protocol.packets.AdventureSettings;
 import io.github.shiruka.protocol.packets.ResourcePackInfo;
-import java.util.Collection;
+import io.github.shiruka.protocol.packets.ResourcePackStack;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -189,14 +189,24 @@ public interface CodecHelper {
   ItemData readItem(@NotNull PacketBuffer buffer, @NotNull MinecraftSession session);
 
   /**
-   * reads the resource pack info entries.
+   * reads the resource pack info entry.
    *
    * @param buffer the buffer to read.
    *
-   * @return resource pack info entries.
+   * @return resource pack info entry.
    */
   @NotNull
-  List<ResourcePackInfo.Entry> readResourcePackInfoEntries(@NotNull PacketBuffer buffer);
+  ResourcePackInfo.Entry readResourcePackInfoEntry(@NotNull PacketBuffer buffer);
+
+  /**
+   * reads the resource pack stack entry.
+   *
+   * @param buffer the buffer to read.
+   *
+   * @return resource pack stack entry.
+   */
+  @NotNull
+  ResourcePackStack.Entry readResourcePackStackEntry(@NotNull PacketBuffer buffer);
 
   /**
    * obtains the sound events.
@@ -266,10 +276,18 @@ public interface CodecHelper {
   void writeItem(@NotNull PacketBuffer buffer, @NotNull MinecraftSession session, @NotNull ItemData item);
 
   /**
-   * writes the resource pack info entries to buffer.
+   * writes the resource pack entry.
    *
    * @param buffer the buffer to write.
-   * @param entries the entries to write.
+   * @param entry the entry to write.
    */
-  void writeResourcePackInfoEntries(@NotNull PacketBuffer buffer, @NotNull Collection<ResourcePackInfo.Entry> entries);
+  void writeResourcePackEntry(@NotNull PacketBuffer buffer, @NotNull ResourcePackInfo.Entry entry);
+
+  /**
+   * writes the entry to buffer.
+   *
+   * @param buffer the buffer to write.
+   * @param entry the entry to write.
+   */
+  void writeResourcePackStackEntry(@NotNull PacketBuffer buffer, @NotNull ResourcePackStack.Entry entry);
 }

@@ -18,15 +18,15 @@ public final class ResourcePackInfoEncoderV291 extends PacketEncoder.Base<Resour
   public void decode(@NotNull final ResourcePackInfo packet, @NotNull final CodecHelper helper,
                      @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
     packet.forcedToAccept(buffer.readBoolean());
-    packet.behaviorPackInfos(helper.readResourcePackInfoEntries(buffer));
-    packet.resourcePackInfos(helper.readResourcePackInfoEntries(buffer));
+    packet.behaviorPackInfos(buffer.readArrayShortLE(() -> helper.readResourcePackInfoEntry(buffer)));
+    packet.resourcePackInfos(buffer.readArrayShortLE(() -> helper.readResourcePackInfoEntry(buffer)));
   }
 
   @Override
   public void encode(@NotNull final ResourcePackInfo packet, @NotNull final CodecHelper helper,
                      @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
     buffer.writeBoolean(packet.forcedToAccept());
-    helper.writeResourcePackInfoEntries(buffer, packet.behaviorPackInfos());
-    helper.writeResourcePackInfoEntries(buffer, packet.resourcePackInfos());
+    buffer.writeArrayShortLE(packet.behaviorPackInfos(), entry -> helper.writeResourcePackEntry(buffer, entry));
+    buffer.writeArrayShortLE(packet.resourcePackInfos(), entry -> helper.writeResourcePackEntry(buffer, entry));
   }
 }

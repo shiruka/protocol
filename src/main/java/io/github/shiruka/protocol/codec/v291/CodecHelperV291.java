@@ -35,9 +35,9 @@ import io.github.shiruka.protocol.data.entity.EntityLinkDataType;
 import io.github.shiruka.protocol.data.inventory.ItemData;
 import io.github.shiruka.protocol.packets.AdventureSettings;
 import io.github.shiruka.protocol.packets.ResourcePackInfo;
+import io.github.shiruka.protocol.packets.ResourcePackStack;
 import io.netty.buffer.ByteBufInputStream;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import it.unimi.dsi.fastutil.objects.ObjectList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.io.IOException;
 import java.util.Arrays;
@@ -759,25 +759,6 @@ public class CodecHelperV291 implements CodecHelper {
     .build();
 
   /**
-   * reads the resource pack info entry.
-   *
-   * @param buffer the buffer to read.
-   *
-   * @return resource pack info entry.
-   */
-  @NotNull
-  private static ResourcePackInfo.Entry readEntry(@NotNull final PacketBuffer buffer) {
-    final var packId = buffer.readString();
-    final var packVersion = buffer.readString();
-    final var packSize = buffer.readLongLE();
-    final var contentKey = buffer.readString();
-    final var subPackName = buffer.readString();
-    final var contentId = buffer.readString();
-    return new ResourcePackInfo.Entry(packId, packVersion, packSize, contentKey, subPackName, contentId,
-      false, false);
-  }
-
-  /**
    * reads the flags.
    *
    * @param flags the flags to read.
@@ -793,21 +774,6 @@ public class CodecHelperV291 implements CodecHelper {
         settings.add(setting);
       }
     }
-  }
-
-  /**
-   * writse the resource pack entry.
-   *
-   * @param buffer the buffer to write.
-   * @param entry the entry to write.
-   */
-  private static void writeEntry(@NotNull final PacketBuffer buffer, @NotNull final ResourcePackInfo.Entry entry) {
-    buffer.writeString(entry.packId());
-    buffer.writeString(entry.packVersion());
-    buffer.writeLongLE(entry.packSize());
-    buffer.writeString(entry.contentKey());
-    buffer.writeString(entry.subPackName());
-    buffer.writeString(entry.contentId());
   }
 
   @Override
@@ -944,8 +910,24 @@ public class CodecHelperV291 implements CodecHelper {
 
   @NotNull
   @Override
-  public ObjectList<ResourcePackInfo.Entry> readResourcePackInfoEntries(@NotNull final PacketBuffer buffer) {
-    return buffer.readArrayShortLE(() -> CodecHelperV291.readEntry(buffer));
+  public ResourcePackInfo.Entry readResourcePackInfoEntry(@NotNull final PacketBuffer buffer) {
+    final var packId = buffer.readString();
+    final var packVersion = buffer.readString();
+    final var packSize = buffer.readLongLE();
+    final var contentKey = buffer.readString();
+    final var subPackName = buffer.readString();
+    final var contentId = buffer.readString();
+    return new ResourcePackInfo.Entry(packId, packVersion, packSize, contentKey, subPackName, contentId,
+      false, false);
+  }
+
+  @NotNull
+  @Override
+  public ResourcePackStack.Entry readResourcePackStackEntry(@NotNull final PacketBuffer buffer) {
+    final var packId = buffer.readString();
+    final var packVersion = buffer.readString();
+    final var subPackName = buffer.readString();
+    return new ResourcePackStack.Entry(packId, packVersion, subPackName);
   }
 
   @Override
@@ -1134,9 +1116,20 @@ public class CodecHelperV291 implements CodecHelper {
   }
 
   @Override
-  public void writeResourcePackInfoEntries(@NotNull final PacketBuffer buffer,
-                                           @NotNull final Collection<ResourcePackInfo.Entry> entries) {
-    buffer.writeArrayShortLE(entries, entry -> CodecHelperV291.writeEntry(buffer, entry));
+  public void writeResourcePackEntry(@NotNull final PacketBuffer buffer, @NotNull final ResourcePackInfo.Entry entry) {
+    buffer.writeString(entry.packId());
+    buffer.writeString(entry.packVersion());
+    buffer.writeLongLE(entry.packSize());
+    buffer.writeString(entry.contentKey());
+    buffer.writeString(entry.subPackName());
+    buffer.writeString(entry.contentId());
+  }
+
+  @Override
+  public void writeResourcePackStackEntry(@NotNull final PacketBuffer buffer, @NotNull final ResourcePackStack.Entry entry) {
+    buffer.writeString(entry.packId());
+    buffer.writeString(entry.packVersion());
+    buffer.writeString(entry.subPackName());
   }
 
   /**
