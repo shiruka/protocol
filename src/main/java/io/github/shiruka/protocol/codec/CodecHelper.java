@@ -139,6 +139,8 @@ public interface CodecHelper {
    * reads the commands.
    *
    * @param buffer the buffer to read.
+   *
+   * @return command data.
    */
   @NotNull
   List<CommandData> readCommands(@NotNull PacketBuffer buffer);
