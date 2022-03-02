@@ -59,6 +59,11 @@ public interface PacketEncoder<T extends MinecraftPacket> {
   abstract class Base<T extends MinecraftPacket> implements PacketEncoder<T> {
 
     /**
+     * the annotate warning.
+     */
+    private static final String ANNOTATE = "Annotate %s class with PacketId annotation!";
+
+    /**
      * the factory.
      */
     @NotNull
@@ -73,7 +78,11 @@ public interface PacketEncoder<T extends MinecraftPacket> {
      * ctor.
      */
     protected Base() {
-      this.id = new ClassOf<>(this).getAnnotation(PacketId.class).orElseThrow().value();
+      this.id = new ClassOf<>(this)
+        .getAnnotation(PacketId.class)
+        .orElseThrow(() ->
+          new IllegalStateException(Base.ANNOTATE.formatted(this.getClass().getSimpleName())))
+        .value();
       final var constructor = new ClassOf<>(TypeParameterMatcher.find(this, Base.class, "T"))
         .getConstructor()
         .orElseThrow();
