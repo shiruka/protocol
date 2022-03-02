@@ -25,15 +25,10 @@ public final class AddPlayer extends MinecraftPacket {
 
   //@formatter:off
   private final AdventureSettings adventureSettings = new AdventureSettings();
-
   private final EntityDataMap metadata = new EntityDataMap();
-
   private int buildPlatform;
-
   private String deviceId;
-
   private List<EntityLinkData> entityLinks;
-
   private ItemData hand;
   private Vector3f motion;
   private String platformChatId;
