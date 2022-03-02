@@ -60,6 +60,215 @@ public final class AvailableCommandsEncoderV291 extends PacketEncoder.Base<Avail
    */
   private static final ObjIntConsumer<PacketBuffer> WRITE_SHORT = PacketBuffer::writeShortLE;
 
+  /**
+   * reads the command.
+   *
+   * @param buffer the buffer to read.
+   * @param helper the helper to read.
+   * @param enums the enums read.
+   * @param softEnums the soft enums.
+   * @param postFixes the post fixes to read.
+   *
+   * @return command.
+   */
+  @NotNull
+  private static CommandData readCommand(@NotNull final PacketBuffer buffer, @NotNull final CodecHelper helper,
+                                         @NotNull final List<CommandEnumData> enums,
+                                         @NotNull final List<CommandEnumData> softEnums,
+                                         @NotNull final List<String> postFixes) {
+    final var name = buffer.readString();
+    final var description = buffer.readString();
+    final var flags = buffer.readByte();
+    final var permissions = buffer.readByte();
+    final var aliasesIndex = buffer.readIntLE();
+    final var overloads = new CommandParamData[buffer.readUnsignedVarInt()][];
+    for (var index = 0; index < overloads.length; index++) {
+      overloads[index] = new CommandParamData[buffer.readUnsignedVarInt()];
+      Arrays.setAll(overloads[index], index2 ->
+        AvailableCommandsEncoderV291.readParameter(buffer, helper, enums, softEnums, postFixes));
+    }
+    final var flagList = IntStream.range(0, 6)
+      .filter(index -> (flags & 1 << index) != 0)
+      .mapToObj(index -> CommandData.Flag.VALUES[index])
+      .collect(Collectors.toCollection(ObjectArrayList::new));
+    final var aliases = aliasesIndex == -1 ? null : enums.get(aliasesIndex);
+    return new CommandData(name, description, flagList, permissions, aliases, overloads);
+  }
+
+  /**
+   * reads the command enums.
+   *
+   * @param buffer the buffer to read.
+   * @param values the value to read.
+   * @param enums the enums to read.
+   */
+  private static void readCommandEnums(@NotNull final PacketBuffer buffer, @NotNull final List<String> values,
+                                       @NotNull final List<CommandEnumData> enums) {
+    final var valuesSize = values.size();
+    final ToIntFunction<PacketBuffer> indexReader;
+    if (valuesSize < 0x100) {
+      indexReader = AvailableCommandsEncoderV291.READ_BYTE;
+    } else if (valuesSize < 0x10000) {
+      indexReader = AvailableCommandsEncoderV291.READ_SHORT;
+    } else {
+      indexReader = AvailableCommandsEncoderV291.READ_INT;
+    }
+    buffer.readArray(enums, b -> {
+      final var name = b.readString();
+      final var length = b.readUnsignedVarInt();
+      final var enumValues = IntStream.range(0, length)
+        .mapToObj(index -> values.get(indexReader.applyAsInt(b)))
+        .toArray(String[]::new);
+      return new CommandEnumData(false, name, enumValues);
+    });
+  }
+
+  /**
+   * reads the parameter.
+   *
+   * @param buffer the buffer to read.
+   * @param helper the helper to read.
+   * @param enums the enums to read.
+   * @param softEnums the soft enums to read.
+   * @param postFixes the post fixes to read.
+   *
+   * @return command parameter data.
+   */
+  @NotNull
+  private static CommandParamData readParameter(@NotNull final PacketBuffer buffer, @NotNull final CodecHelper helper,
+                                                @NotNull final List<CommandEnumData> enums,
+                                                @NotNull final List<CommandEnumData> softEnums,
+                                                @NotNull final List<String> postFixes) {
+    final var name = buffer.readString();
+    final var type = CommandSymbolData.deserialize(buffer.readIntLE());
+    final var optional = buffer.readBoolean();
+    final var optionsByte = buffer.readByte();
+    String postfix = null;
+    CommandEnumData enumData = null;
+    CommandParam commandParam = null;
+    if (type.postfix()) {
+      postfix = postFixes.get(type.value());
+    } else if (type.commandEnum()) {
+      enumData = enums.get(type.value());
+    } else if (type.softEnum()) {
+      enumData = softEnums.get(type.value());
+    } else {
+      commandParam = helper.commandParam(type.value());
+    }
+    final var options = IntStream.range(0, 8)
+      .filter(index -> (optionsByte & 1 << index) != 0)
+      .mapToObj(index -> CommandParamOption.VALUES[index])
+      .collect(Collectors.toCollection(ObjectArrayList::new));
+    return new CommandParamData(name, optional, enumData, commandParam, postfix, options);
+  }
+
+  /**
+   * writes the command.
+   *
+   * @param buffer the buffer
+   * @param helper the helper to read.
+   * @param commandData the command data to read.
+   * @param enums the enums to read.
+   * @param softEnums the soft enums to read.
+   * @param postFixes the post fixes to read.
+   */
+  private static void writeCommand(@NotNull final PacketBuffer buffer, @NotNull final CodecHelper helper,
+                                   @NotNull final CommandData commandData,
+                                   @NotNull final List<CommandEnumData> enums,
+                                   @NotNull final List<CommandEnumData> softEnums,
+                                   @NotNull final List<String> postFixes) {
+    buffer.writeString(commandData.name());
+    buffer.writeString(commandData.description());
+    final var flags = commandData.flags().stream()
+      .mapToInt(flag -> 1 << flag.ordinal())
+      .reduce(0, (a, b) -> a | b);
+    buffer.writeByte(flags);
+    buffer.writeByte(commandData.permission());
+    final var aliases = commandData.aliases();
+    buffer.writeIntLE(enums.indexOf(aliases));
+    final var overloads = commandData.overloads();
+    buffer.writeUnsignedVarInt(overloads.length);
+    for (final var overload : overloads) {
+      buffer.writeUnsignedVarInt(overload.length);
+      for (final var param : overload) {
+        AvailableCommandsEncoderV291.writeParameter(buffer, helper, param, enums, softEnums, postFixes);
+      }
+    }
+  }
+
+  /**
+   * writes the command enums.
+   *
+   * @param buffer the buffer to write.
+   * @param values the values to write.
+   * @param enums the enums to write.
+   */
+  private static void writeCommandEnums(@NotNull final PacketBuffer buffer, @NotNull final List<String> values,
+                                        @NotNull final List<CommandEnumData> enums) {
+    final ObjIntConsumer<PacketBuffer> indexWriter;
+    final var valuesSize = values.size();
+    if (valuesSize < 0x100) {
+      indexWriter = AvailableCommandsEncoderV291.WRITE_BYTE;
+    } else if (valuesSize < 0x10000) {
+      indexWriter = AvailableCommandsEncoderV291.WRITE_SHORT;
+    } else {
+      indexWriter = AvailableCommandsEncoderV291.WRITE_INT;
+    }
+    buffer.writeArray(enums, (b, commandEnum) -> {
+      b.writeString(commandEnum.name());
+      buffer.writeUnsignedVarInt(commandEnum.values().length);
+      for (final var value : commandEnum.values()) {
+        final var index = values.indexOf(value);
+        Preconditions.checkArgument(index > -1, "Invalid enum value detected: %s", value);
+        indexWriter.accept(b, index);
+      }
+    });
+  }
+
+  /**
+   * writes the parameter.
+   *
+   * @param buffer the buffer to write.
+   * @param helper the helper to write.
+   * @param param the param to write.
+   * @param enums the enums to write.
+   * @param softEnums the soft enums to write.
+   * @param postFixes the post fixes to write.
+   */
+  private static void writeParameter(@NotNull final PacketBuffer buffer, @NotNull final CodecHelper helper,
+                                     @NotNull final CommandParamData param, @NotNull final List<CommandEnumData> enums,
+                                     @NotNull final List<CommandEnumData> softEnums,
+                                     @NotNull final List<String> postFixes) {
+    buffer.writeString(param.name());
+    final int index;
+    var postfix = false;
+    var enumData = false;
+    var softEnum = false;
+    final var postfixString = param.postfix();
+    if (postfixString != null) {
+      postfix = true;
+      index = postFixes.indexOf(postfixString);
+    } else {
+      final var commandEnumData = param.enumData();
+      if (commandEnumData != null) {
+        if (commandEnumData.isSoft()) {
+          softEnum = true;
+          index = softEnums.indexOf(commandEnumData);
+        } else {
+          enumData = true;
+          index = enums.indexOf(commandEnumData);
+        }
+      } else {
+        final var type = param.type();
+        Preconditions.checkState(type != null, "No param type specified: %s", param);
+        index = type.value(helper);
+      }
+    }
+    final var type = new CommandSymbolData(index, enumData, softEnum, postfix);
+    buffer.writeIntLE(type.serialize());
+    buffer.writeBoolean(param.optional());
+  }
+
   @Override
   public void decode(@NotNull final AvailableCommands packet, @NotNull final CodecHelper helper,
                      @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
@@ -69,9 +278,9 @@ public final class AvailableCommandsEncoderV291 extends PacketEncoder.Base<Avail
     final var softEnums = new ObjectArrayList<CommandEnumData>();
     buffer.readArray(enumValues, PacketBuffer::readString);
     buffer.readArray(postFixes, PacketBuffer::readString);
-    this.readCommandEnums(buffer, helper, session, enumValues, enums);
+    AvailableCommandsEncoderV291.readCommandEnums(buffer, enumValues, enums);
     buffer.readArray(softEnums, b -> helper.readCommandEnum(b, true));
-    buffer.readArray(packet.commands(), b -> this.readCommand(b, helper, session, enums, softEnums, postFixes));
+    buffer.readArray(packet.commands(), b -> AvailableCommandsEncoderV291.readCommand(b, helper, enums, softEnums, postFixes));
   }
 
   @Override
@@ -111,230 +320,10 @@ public final class AvailableCommandsEncoderV291 extends PacketEncoder.Base<Avail
     final var softEnums = new ObjectArrayList<>(softEnumsSet);
     buffer.writeArray(enumValues, PacketBuffer::writeString);
     buffer.writeArray(postFixes, PacketBuffer::writeString);
-    this.writeCommandEnums(buffer, helper, session, enumValues, enums);
+    AvailableCommandsEncoderV291.writeCommandEnums(buffer, enumValues, enums);
     buffer.writeArray(packet.commands(), (b, command) -> {
-      this.writeCommand(b, helper, session, command, enums, softEnums, postFixes);
+      AvailableCommandsEncoderV291.writeCommand(b, helper, command, enums, softEnums, postFixes);
     });
     buffer.writeArray(softEnums, (b, data) -> helper.writeCommandEnum(b, session, data));
-  }
-
-  /**
-   * reads the command.
-   *
-   * @param buffer the buffer to read.
-   * @param helper the helper to read.
-   * @param session the session to read.
-   * @param enums the enums read.
-   * @param softEnums the soft enums.
-   * @param postFixes the post fixes to read.
-   *
-   * @return command.
-   */
-  @NotNull
-  private CommandData readCommand(@NotNull final PacketBuffer buffer, @NotNull final CodecHelper helper,
-                                  @NotNull final MinecraftSession session,
-                                  @NotNull final List<CommandEnumData> enums,
-                                  @NotNull final List<CommandEnumData> softEnums,
-                                  @NotNull final List<String> postFixes) {
-    final var name = buffer.readString();
-    final var description = buffer.readString();
-    final var flags = buffer.readByte();
-    final var permissions = buffer.readByte();
-    final var aliasesIndex = buffer.readIntLE();
-    final var overloads = new CommandParamData[buffer.readUnsignedVarInt()][];
-    for (var index = 0; index < overloads.length; index++) {
-      overloads[index] = new CommandParamData[buffer.readUnsignedVarInt()];
-      Arrays.setAll(overloads[index], index2 ->
-        this.readParameter(buffer, helper, session, enums, softEnums, postFixes));
-    }
-    final var flagList = IntStream.range(0, 6)
-      .filter(index -> (flags & 1 << index) != 0)
-      .mapToObj(index -> CommandData.Flag.VALUES[index])
-      .collect(Collectors.toCollection(ObjectArrayList::new));
-    final var aliases = aliasesIndex == -1 ? null : enums.get(aliasesIndex);
-    return new CommandData(name, description, flagList, permissions, aliases, overloads);
-  }
-
-  /**
-   * reads the command enums.
-   *
-   * @param buffer the buffer to read.
-   * @param helper the helper to read.
-   * @param session the session to read.
-   * @param values the value to read.
-   * @param enums the enums to read.
-   */
-  private void readCommandEnums(@NotNull final PacketBuffer buffer, @NotNull final CodecHelper helper,
-                                @NotNull final MinecraftSession session, @NotNull final List<String> values,
-                                @NotNull final List<CommandEnumData> enums) {
-    final var valuesSize = values.size();
-    final ToIntFunction<PacketBuffer> indexReader;
-    if (valuesSize < 0x100) {
-      indexReader = AvailableCommandsEncoderV291.READ_BYTE;
-    } else if (valuesSize < 0x10000) {
-      indexReader = AvailableCommandsEncoderV291.READ_SHORT;
-    } else {
-      indexReader = AvailableCommandsEncoderV291.READ_INT;
-    }
-    buffer.readArray(enums, b -> {
-      final var name = b.readString();
-      final var length = b.readUnsignedVarInt();
-      final var enumValues = IntStream.range(0, length)
-        .mapToObj(index -> values.get(indexReader.applyAsInt(b)))
-        .toArray(String[]::new);
-      return new CommandEnumData(false, name, enumValues);
-    });
-  }
-
-  /**
-   * reads the parameter.
-   *
-   * @param buffer the buffer to read.
-   * @param helper the helper to read.
-   * @param session the session to read.
-   * @param enums the enums to read.
-   * @param softEnums the soft enums to read.
-   * @param postFixes the post fixes to read.
-   *
-   * @return command parameter data.
-   */
-  private CommandParamData readParameter(@NotNull final PacketBuffer buffer, @NotNull final CodecHelper helper,
-                                         @NotNull final MinecraftSession session,
-                                         @NotNull final List<CommandEnumData> enums,
-                                         @NotNull final List<CommandEnumData> softEnums,
-                                         @NotNull final List<String> postFixes) {
-    final var name = buffer.readString();
-    final var type = CommandSymbolData.deserialize(buffer.readIntLE());
-    final var optional = buffer.readBoolean();
-    final var optionsByte = buffer.readByte();
-    String postfix = null;
-    CommandEnumData enumData = null;
-    CommandParam commandParam = null;
-    if (type.postfix()) {
-      postfix = postFixes.get(type.value());
-    } else if (type.commandEnum()) {
-      enumData = enums.get(type.value());
-    } else if (type.softEnum()) {
-      enumData = softEnums.get(type.value());
-    } else {
-      commandParam = helper.commandParam(type.value());
-    }
-    final var options = IntStream.range(0, 8)
-      .filter(index -> (optionsByte & 1 << index) != 0)
-      .mapToObj(index -> CommandParamOption.VALUES[index])
-      .collect(Collectors.toCollection(ObjectArrayList::new));
-    return new CommandParamData(name, optional, enumData, commandParam, postfix, options);
-  }
-
-  /**
-   * writes the command.
-   *
-   * @param buffer the buffer
-   * @param helper the helper to read.
-   * @param session the session to read.
-   * @param commandData the command data to read.
-   * @param enums the enums to read.
-   * @param softEnums the soft enums to read.
-   * @param postFixes the post fixes to read.
-   */
-  private void writeCommand(@NotNull final PacketBuffer buffer, @NotNull final CodecHelper helper,
-                            @NotNull final MinecraftSession session, @NotNull final CommandData commandData,
-                            @NotNull final List<CommandEnumData> enums,
-                            @NotNull final List<CommandEnumData> softEnums, @NotNull final List<String> postFixes) {
-    buffer.writeString(commandData.name());
-    buffer.writeString(commandData.description());
-    final var flags = commandData.flags().stream()
-      .mapToInt(flag -> 1 << flag.ordinal())
-      .reduce(0, (a, b) -> a | b);
-    buffer.writeByte(flags);
-    buffer.writeByte(commandData.permission());
-    final var aliases = commandData.aliases();
-    buffer.writeIntLE(enums.indexOf(aliases));
-    final var overloads = commandData.overloads();
-    buffer.writeUnsignedVarInt(overloads.length);
-    for (final var overload : overloads) {
-      buffer.writeUnsignedVarInt(overload.length);
-      for (final var param : overload) {
-        this.writeParameter(buffer, helper, session, param, enums, softEnums, postFixes);
-      }
-    }
-  }
-
-  /**
-   * writes the command enums.
-   *
-   * @param buffer the buffer to write.
-   * @param helper the helper to write.
-   * @param session the session to write.
-   * @param values the values to write.
-   * @param enums the enums to write.
-   */
-  private void writeCommandEnums(@NotNull final PacketBuffer buffer, @NotNull final CodecHelper helper,
-                                 @NotNull final MinecraftSession session,
-                                 final List<String> values, final List<CommandEnumData> enums) {
-    final ObjIntConsumer<PacketBuffer> indexWriter;
-    final var valuesSize = values.size();
-    if (valuesSize < 0x100) {
-      indexWriter = AvailableCommandsEncoderV291.WRITE_BYTE;
-    } else if (valuesSize < 0x10000) {
-      indexWriter = AvailableCommandsEncoderV291.WRITE_SHORT;
-    } else {
-      indexWriter = AvailableCommandsEncoderV291.WRITE_INT;
-    }
-    buffer.writeArray(enums, (b, commandEnum) -> {
-      b.writeString(commandEnum.name());
-      buffer.writeUnsignedVarInt(commandEnum.values().length);
-      for (final var value : commandEnum.values()) {
-        final var index = values.indexOf(value);
-        Preconditions.checkArgument(index > -1, "Invalid enum value detected: %s", value);
-        indexWriter.accept(b, index);
-      }
-    });
-  }
-
-  /**
-   * writes the parameter.
-   *
-   * @param buffer the buffer to write.
-   * @param helper the helper to write.
-   * @param session the session to write.
-   * @param param the param to write.
-   * @param enums the enums to write.
-   * @param softEnums the soft enums to write.
-   * @param postFixes the post fixes to write.
-   */
-  private void writeParameter(@NotNull final PacketBuffer buffer, @NotNull final CodecHelper helper,
-                              @NotNull final MinecraftSession session, @NotNull final CommandParamData param,
-                              @NotNull final List<CommandEnumData> enums,
-                              @NotNull final List<CommandEnumData> softEnums,
-                              @NotNull final List<String> postFixes) {
-    buffer.writeString(param.name());
-    final int index;
-    var postfix = false;
-    var enumData = false;
-    var softEnum = false;
-    final var postfixString = param.postfix();
-    if (postfixString != null) {
-      postfix = true;
-      index = postFixes.indexOf(postfixString);
-    } else {
-      final var commandEnumData = param.enumData();
-      if (commandEnumData != null) {
-        if (commandEnumData.isSoft()) {
-          softEnum = true;
-          index = softEnums.indexOf(commandEnumData);
-        } else {
-          enumData = true;
-          index = enums.indexOf(commandEnumData);
-        }
-      } else {
-        final var type = param.type();
-        Preconditions.checkState(type != null, "No param type specified: %s", param);
-        index = type.value(helper);
-      }
-    }
-    final var type = new CommandSymbolData(index, enumData, softEnum, postfix);
-    buffer.writeIntLE(type.serialize());
-    buffer.writeBoolean(param.optional());
   }
 }

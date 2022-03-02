@@ -211,7 +211,7 @@
   },
   {
     "name": "Animate",
-    "id": 55,
+    "id": 44,
     "fields": [
       {
         "name": "action",
@@ -225,6 +225,16 @@
         "name": "rowingTime",
         "type": "floatLE",
         "condition": "action == Animate.Action.ROW_LEFT || action == Animate.Action.ROW_RIGHT"
+      }
+    ]
+  },
+  {
+    "name": "AutomationClientConnect",
+    "id": 95,
+    "fields": [
+      {
+        "name": "address",
+        "type": "string"
       }
     ]
   }
