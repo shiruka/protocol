@@ -52,5 +52,29 @@
         "array-type": "entityLink"
       }
     ]
+  },
+  {
+    "name": "AddHangingEntity",
+    "id": 16,
+    "fields": [
+      {
+        "name": "uniqueEntityId",
+        "type": "varLong"
+      },
+      {
+        "name": "runtimeEntityId",
+        "type": "unsignedVarLong"
+      },
+      {
+        "name": "position",
+        "type": "BlockPosition",
+        "use-read": "toFloat",
+        "use-write": "toInt"
+      },
+      {
+        "name": "direction",
+        "type": "varInt"
+      }
+    ]
   }
 ]
