@@ -4,20 +4,15 @@ import io.github.shiruka.network.PacketBuffer;
 import io.github.shiruka.protocol.MinecraftSession;
 import io.github.shiruka.protocol.codec.CodecHelper;
 import io.github.shiruka.protocol.codec.PacketEncoder;
+import io.github.shiruka.protocol.codec.PacketId;
 import io.github.shiruka.protocol.packets.Animate;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * a class that represents animate packet encoders.
  */
+@PacketId(44)
 public final class AnimateEncoderV291 extends PacketEncoder.Base<Animate> {
-
-  /**
-   * ctor.
-   */
-  private AnimateEncoderV291() {
-    super(44);
-  }
 
   @Override
   public void decode(@NotNull final Animate packet, @NotNull final CodecHelper helper,

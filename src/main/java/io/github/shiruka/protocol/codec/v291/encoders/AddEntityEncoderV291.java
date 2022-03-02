@@ -4,20 +4,15 @@ import io.github.shiruka.network.PacketBuffer;
 import io.github.shiruka.protocol.MinecraftSession;
 import io.github.shiruka.protocol.codec.CodecHelper;
 import io.github.shiruka.protocol.codec.PacketEncoder;
+import io.github.shiruka.protocol.codec.PacketId;
 import io.github.shiruka.protocol.packets.AddEntity;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * a class that represents add entity packet encoders.
  */
+@PacketId(13)
 public final class AddEntityEncoderV291 extends PacketEncoder.Base<AddEntity> {
-
-  /**
-   * ctor.
-   */
-  private AddEntityEncoderV291() {
-    super(13);
-  }
 
   @Override
   public void decode(@NotNull final AddEntity packet, @NotNull final CodecHelper helper,

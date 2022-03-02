@@ -47,6 +47,8 @@ public interface PacketEncoder<T extends MinecraftPacket> {
 
   /**
    * an abstract class that represents base packet encoders.
+   * <p>
+   * annotate your class with {@link PacketId} to specify the packet id.
    *
    * @param <T> type of the packet.
    */
@@ -69,11 +71,9 @@ public interface PacketEncoder<T extends MinecraftPacket> {
 
     /**
      * ctor.
-     *
-     * @param id the id.
      */
-    protected Base(final int id) {
-      this.id = id;
+    protected Base() {
+      this.id = new ClassOf<>(this).getAnnotation(PacketId.class).orElseThrow().value();
       final var constructor = new ClassOf<>(TypeParameterMatcher.find(this, Base.class, "T"))
         .getConstructor()
         .orElseThrow();

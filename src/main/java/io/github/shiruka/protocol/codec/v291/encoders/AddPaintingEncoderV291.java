@@ -4,20 +4,15 @@ import io.github.shiruka.network.PacketBuffer;
 import io.github.shiruka.protocol.MinecraftSession;
 import io.github.shiruka.protocol.codec.CodecHelper;
 import io.github.shiruka.protocol.codec.PacketEncoder;
+import io.github.shiruka.protocol.codec.PacketId;
 import io.github.shiruka.protocol.packets.AddPainting;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * a class that represents add painting packet encoders.
  */
+@PacketId(22)
 public final class AddPaintingEncoderV291 extends PacketEncoder.Base<AddPainting> {
-
-  /**
-   * ctor.
-   */
-  private AddPaintingEncoderV291() {
-    super(22);
-  }
 
   @Override
   public void decode(@NotNull final AddPainting packet, @NotNull final CodecHelper helper,
