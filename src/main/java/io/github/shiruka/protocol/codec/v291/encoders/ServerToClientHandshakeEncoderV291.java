@@ -5,22 +5,24 @@ import io.github.shiruka.protocol.codec.CodecHelper;
 import io.github.shiruka.protocol.codec.PacketEncoder;
 import io.github.shiruka.protocol.codec.PacketId;
 import io.github.shiruka.protocol.common.MinecraftSession;
-import io.github.shiruka.protocol.packets.ClientToServerHandshake;
+import io.github.shiruka.protocol.packets.ServerToClientHandshake;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * a class that represents client to server handshake packet encoders.
+ * a class that represents server to client handshake packet encoders.
  */
-@PacketId(4)
-public final class ClientToServerHandshakeEncoderV291 extends PacketEncoder.Base<ClientToServerHandshake> {
+@PacketId(3)
+public final class ServerToClientHandshakeEncoderV291 extends PacketEncoder.Base<ServerToClientHandshake> {
 
   @Override
-  public void decode(@NotNull final ClientToServerHandshake packet, @NotNull final CodecHelper helper,
+  public void decode(@NotNull final ServerToClientHandshake packet, @NotNull final CodecHelper helper,
                      @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+    packet.jwt(buffer.readString());
   }
 
   @Override
-  public void encode(@NotNull final ClientToServerHandshake packet, @NotNull final CodecHelper helper,
+  public void encode(@NotNull final ServerToClientHandshake packet, @NotNull final CodecHelper helper,
                      @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+    buffer.writeString(packet.jwt());
   }
 }

@@ -20,7 +20,6 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.reflections.Reflections;
-import org.reflections.scanners.Scanners;
 import tr.com.infumia.infumialib.reflection.RefConstructed;
 import tr.com.infumia.infumialib.reflection.clazz.ClassOf;
 
@@ -349,11 +348,10 @@ public interface Codec {
     @NotNull
     public Builder scanPackageAndRegister(@NotNull final String packageName) {
       final var classes = new Reflections(packageName)
-        .get(Scanners.SubTypes.of(PacketEncoder.Base.class).asClass());
+        .getSubTypesOf(PacketEncoder.Base.class);
       for (final var cls : classes) {
         new ClassOf<>(cls).getConstructor()
           .flatMap(RefConstructed::create)
-          .filter(PacketEncoder.Base.class::isInstance)
           .map(PacketEncoder.Base.class::cast)
           .ifPresent(this::registerPacket);
       }
