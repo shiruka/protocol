@@ -67,13 +67,135 @@
       },
       {
         "name": "position",
-        "type": "BlockPosition",
+        "type": "blockPosition",
         "use-read": "toFloat",
         "use-write": "toInt"
       },
       {
         "name": "direction",
         "type": "varInt"
+      }
+    ]
+  },
+  {
+    "name": "AddItemEntity",
+    "id": 15,
+    "fields": [
+      {
+        "name": "uniqueEntityId",
+        "type": "varLong"
+      },
+      {
+        "name": "runtimeEntityId",
+        "type": "unsignedVarLong"
+      },
+      {
+        "name": "itemInHand",
+        "type": "item"
+      },
+      {
+        "name": "position",
+        "type": "vector3f"
+      },
+      {
+        "name": "motion",
+        "type": "vector3f"
+      },
+      {
+        "name": "metadata",
+        "type": "entityData"
+      },
+      {
+        "name": "fromFishing",
+        "type": "boolean"
+      }
+    ]
+  },
+  {
+    "name": "AddPainting",
+    "id": 22,
+    "fields": [
+      {
+        "name": "uniqueEntityId",
+        "type": "varLong"
+      },
+      {
+        "name": "runtimeEntityId",
+        "type": "unsignedVarLong"
+      },
+      {
+        "name": "position",
+        "type": "blockPosition",
+        "use-read": "toFloat",
+        "user-write": "toInt"
+      },
+      {
+        "name": "direction",
+        "type-read": "int",
+        "type-write": "varInt"
+      },
+      {
+        "name": "motive",
+        "type": "string"
+      }
+    ]
+  },
+  {
+    "name": "AddPlayer",
+    "id": 12,
+    "fields": [
+      {
+        "name": "uuid",
+        "type": "UUID"
+      },
+      {
+        "name": "username",
+        "type": "string"
+      },
+      {
+        "name": "uniqueEntityId",
+        "type": "varLong"
+      },
+      {
+        "name": "runtimeEntityId",
+        "type": "unsignedVarLong"
+      },
+      {
+        "name": "platformChatId",
+        "type": "string"
+      },
+      {
+        "name": "position",
+        "type": "vector3f"
+      },
+      {
+        "name": "motion",
+        "type": "vector3f"
+      },
+      {
+        "name": "rotation",
+        "type": "vector3f"
+      },
+      {
+        "name": "hand",
+        "type": "item"
+      },
+      {
+        "name": "metadata",
+        "type": "entityData"
+      },
+      {
+        "name": "adventureSettings",
+        "type": "adventureSettings"
+      },
+      {
+        "name": "entityLinks",
+        "type": "array",
+        "array-type": "entityLink"
+      },
+      {
+        "name": "deviceId",
+        "type": "string"
       }
     ]
   }
