@@ -1,2 +1,12 @@
-{
-}
+[
+  {
+    "name": "AddBehaviorTree",
+    "id": 89,
+    "fields": [
+      {
+        "name": "behaviorTreeJson",
+        "type": "string"
+      }
+    ]
+  }
+]
