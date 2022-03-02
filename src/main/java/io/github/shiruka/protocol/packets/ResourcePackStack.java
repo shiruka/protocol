@@ -22,12 +22,12 @@ import org.jetbrains.annotations.NotNull;
 public final class ResourcePackStack extends MinecraftPacket {
 
   //@formatter:off
-  private final List<ResourcePackStackEntry> behaviorPacks = new ObjectArrayList<>();
-  private final List<ExperimentData> experiments = new ObjectArrayList<>();
-  private final List<ResourcePackStackEntry> resourcePacks = new ObjectArrayList<>();
+  private List<ResourcePackStackEntry> behaviorPacks = new ObjectArrayList<>();
+  private List<ExperimentData> experiments = new ObjectArrayList<>();
   private boolean experimentsPreviouslyToggled;
   private boolean forcedToAccept;
   private String gameVersion;
+  private List<ResourcePackStackEntry> resourcePacks = new ObjectArrayList<>();
   //@formatter:on
 
   @Override

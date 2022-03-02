@@ -54,7 +54,7 @@ public enum TextType {
   /**
    * the cache.
    */
-  private static final TextType[] CACHE = TextType.values();
+  private static final TextType[] VALUES = TextType.values();
 
   /**
    * gets text type by ordinal.
@@ -65,6 +65,6 @@ public enum TextType {
    */
   @NotNull
   public static TextType byOrdinal(final int ordinal) {
-    return TextType.CACHE[ordinal];
+    return TextType.VALUES[ordinal];
   }
 }

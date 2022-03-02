@@ -30,7 +30,7 @@ public enum GamePublishSetting {
   /**
    * the cache.
    */
-  private static final GamePublishSetting[] CACHE = GamePublishSetting.values();
+  private static final GamePublishSetting[] VALUES = GamePublishSetting.values();
 
   /**
    * gets the game publish setting by ordinal.
@@ -41,6 +41,6 @@ public enum GamePublishSetting {
    */
   @NotNull
   public static GamePublishSetting byOrdinal(final int ordinal) {
-    return GamePublishSetting.CACHE[ordinal];
+    return GamePublishSetting.VALUES[ordinal];
   }
 }

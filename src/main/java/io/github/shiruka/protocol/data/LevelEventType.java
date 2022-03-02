@@ -3,13 +3,15 @@ package io.github.shiruka.protocol.data;
 /**
  * an enum class that contains level event types.
  */
-public enum LevelEventType {
+public enum LevelEventType implements CommonLevelEvent {
   /**
    * the undefined.
    */
   UNDEFINED,
   /**
    * the sound click.
+   * <p>
+   * sound starts.
    */
   SOUND_CLICK,
   /**
@@ -150,6 +152,8 @@ public enum LevelEventType {
   SOUND_INK_SACE_USED,
   /**
    * the particle shoot.
+   * <p>
+   * particle starts.
    */
   PARTICLE_SHOOT,
   /**
@@ -298,6 +302,8 @@ public enum LevelEventType {
   SCULK_CATALYST_BLOOM,
   /**
    * the start raining.
+   * <p>
+   * world starts.
    */
   START_RAINING,
   /**
@@ -326,6 +332,8 @@ public enum LevelEventType {
   SIM_TIME_SCALE,
   /**
    * the activate block.
+   * <p>
+   * block starts.
    */
   ACTIVATE_BLOCK,
   /**
@@ -390,6 +398,8 @@ public enum LevelEventType {
   CAULDRON_TAKE_POWDER_SNOW,
   /**
    * the block start break.
+   * <p>
+   * breaking starts
    */
   BLOCK_START_BREAK,
   /**
@@ -402,6 +412,8 @@ public enum LevelEventType {
   BLOCK_UPDATE_BREAK,
   /**
    * the set data.
+   * <p>
+   * other starts
    */
   SET_DATA,
   /**
@@ -409,343 +421,11 @@ public enum LevelEventType {
    */
   ALL_PLAYERS_SLEEPING,
   /**
-   * the jump prevented.
-   */
-  JUMP_PREVENTED,
-  /**
    * the sleeping players.
    */
   SLEEPING_PLAYERS,
   /**
-   * the particle bubble.
+   * the jump prevented.
    */
-  PARTICLE_BUBBLE,
-  /**
-   * the particle bubble manual.
-   */
-  PARTICLE_BUBBLE_MANUAL,
-  /**
-   * the particle critical.
-   */
-  PARTICLE_CRITICAL,
-  /**
-   * the particle block force field.
-   */
-  PARTICLE_BLOCK_FORCE_FIELD,
-  /**
-   * the particle smoke.
-   */
-  PARTICLE_SMOKE,
-  /**
-   * the particle explode.
-   */
-  PARTICLE_EXPLODE,
-  /**
-   * the particle evaporation.
-   */
-  PARTICLE_EVAPORATION,
-  /**
-   * the particle flame.
-   */
-  PARTICLE_FLAME,
-  /**
-   * the particle candle flame.
-   */
-  PARTICLE_CANDLE_FLAME,
-  /**
-   * the particle lava.
-   */
-  PARTICLE_LAVA,
-  /**
-   * the particle large smoke.
-   */
-  PARTICLE_LARGE_SMOKE,
-  /**
-   * the particle redstone.
-   */
-  PARTICLE_REDSTONE,
-  /**
-   * the particle rising red dust.
-   */
-  PARTICLE_RISING_RED_DUST,
-  /**
-   * the particle item break.
-   */
-  PARTICLE_ITEM_BREAK,
-  /**
-   * the particle snowball poof.
-   */
-  PARTICLE_SNOWBALL_POOF,
-  /**
-   * the particle huge explode.
-   */
-  PARTICLE_HUGE_EXPLODE,
-  /**
-   * the particle huge explode seed.
-   */
-  PARTICLE_HUGE_EXPLODE_SEED,
-  /**
-   * the particle mob flame.
-   */
-  PARTICLE_MOB_FLAME,
-  /**
-   * the particle heart.
-   */
-  PARTICLE_HEART,
-  /**
-   * the particle terrain.
-   */
-  PARTICLE_TERRAIN,
-  /**
-   * the particle town aura.
-   */
-  PARTICLE_TOWN_AURA,
-  /**
-   * the particle portal.
-   */
-  PARTICLE_PORTAL,
-  /**
-   * the particle mob portal.
-   */
-  PARTICLE_MOB_PORTAL,
-  /**
-   * the particle splash.
-   */
-  PARTICLE_SPLASH,
-  /**
-   * the particle splash manual.
-   */
-  PARTICLE_SPLASH_MANUAL,
-  /**
-   * the particle water wake.
-   */
-  PARTICLE_WATER_WAKE,
-  /**
-   * the particle drip water.
-   */
-  PARTICLE_DRIP_WATER,
-  /**
-   * the particle drip lava.
-   */
-  PARTICLE_DRIP_LAVA,
-  /**
-   * the particle drip honey.
-   */
-  PARTICLE_DRIP_HONEY,
-  /**
-   * the particle falling dust.
-   */
-  PARTICLE_FALLING_DUST,
-  /**
-   * the particle mob spell.
-   */
-  PARTICLE_MOB_SPELL,
-  /**
-   * the particle mob spell ambient.
-   */
-  PARTICLE_MOB_SPELL_AMBIENT,
-  /**
-   * the particle mob spell instantaneous.
-   */
-  PARTICLE_MOB_SPELL_INSTANTANEOUS,
-  /**
-   * the particle ink.
-   */
-  PARTICLE_INK,
-  /**
-   * the particle slime.
-   */
-  PARTICLE_SLIME,
-  /**
-   * the particle rain splash.
-   */
-  PARTICLE_RAIN_SPLASH,
-  /**
-   * the particle villager angry.
-   */
-  PARTICLE_VILLAGER_ANGRY,
-  /**
-   * the particle villager happy.
-   */
-  PARTICLE_VILLAGER_HAPPY,
-  /**
-   * the particle enchantment table.
-   */
-  PARTICLE_ENCHANTMENT_TABLE,
-  /**
-   * the particle tracking emitter.
-   */
-  PARTICLE_TRACKING_EMITTER,
-  /**
-   * the particle note.
-   */
-  PARTICLE_NOTE,
-  /**
-   * the particle witch spell.
-   */
-  PARTICLE_WITCH_SPELL,
-  /**
-   * the particle carrot.
-   */
-  PARTICLE_CARROT,
-  /**
-   * the particle mob appearance.
-   */
-  PARTICLE_MOB_APPEARANCE,
-  /**
-   * the particle end rod.
-   */
-  PARTICLE_END_ROD,
-  /**
-   * the particle rising dragons breath.
-   */
-  PARTICLE_RISING_DRAGONS_BREATH,
-  /**
-   * the particle spit.
-   */
-  PARTICLE_SPIT,
-  /**
-   * the particle totem.
-   */
-  PARTICLE_TOTEM,
-  /**
-   * the particle food.
-   */
-  PARTICLE_FOOD,
-  /**
-   * the particle fireworks starter.
-   */
-  PARTICLE_FIREWORKS_STARTER,
-  /**
-   * the particle fireworks spark.
-   */
-  PARTICLE_FIREWORKS_SPARK,
-  /**
-   * the particle fireworks overlay.
-   */
-  PARTICLE_FIREWORKS_OVERLAY,
-  /**
-   * the particle balloon gas.
-   */
-  PARTICLE_BALLOON_GAS,
-  /**
-   * the particle colored flame.
-   */
-  PARTICLE_COLORED_FLAME,
-  /**
-   * the particle sparkler.
-   */
-  PARTICLE_SPARKLER,
-  /**
-   * the particle conduit.
-   */
-  PARTICLE_CONDUIT,
-  /**
-   * the particle bubble column up.
-   */
-  PARTICLE_BUBBLE_COLUMN_UP,
-  /**
-   * the particle bubble column down.
-   */
-  PARTICLE_BUBBLE_COLUMN_DOWN,
-  /**
-   * the particle sneeze.
-   */
-  PARTICLE_SNEEZE,
-  /**
-   * the particle shulker bullet.
-   */
-  PARTICLE_SHULKER_BULLET,
-  /**
-   * the particle bleach.
-   */
-  PARTICLE_BLEACH,
-  /**
-   * the particle dragon destroy block.
-   */
-  PARTICLE_DRAGON_DESTROY_BLOCK,
-  /**
-   * the particle mycelium dust.
-   */
-  PARTICLE_MYCELIUM_DUST,
-  /**
-   * the particle falling red dust.
-   */
-  PARTICLE_FALLING_RED_DUST,
-  /**
-   * the particle campfire smoke.
-   */
-  PARTICLE_CAMPFIRE_SMOKE,
-  /**
-   * the particle tall campfire smoke.
-   */
-  PARTICLE_TALL_CAMPFIRE_SMOKE,
-  /**
-   * the particle falling dragons breath.
-   */
-  PARTICLE_FALLING_DRAGONS_BREATH,
-  /**
-   * the particle dragons breath.
-   */
-  PARTICLE_DRAGONS_BREATH,
-  /**
-   * the particle blue flame.
-   */
-  PARTICLE_BLUE_FLAME,
-  /**
-   * the particle soul.
-   */
-  PARTICLE_SOUL,
-  /**
-   * the particle obsidian tear.
-   */
-  PARTICLE_OBSIDIAN_TEAR,
-  /**
-   * the particle stalactite drip water.
-   */
-  PARTICLE_STALACTITE_DRIP_WATER,
-  /**
-   * the particle stalactite drip lava.
-   */
-  PARTICLE_STALACTITE_DRIP_LAVA,
-  /**
-   * the particle portal reverse.
-   */
-  PARTICLE_PORTAL_REVERSE,
-  /**
-   * the particle snowflake.
-   */
-  PARTICLE_SNOWFLAKE,
-  /**
-   * the particle vibration signal.
-   */
-  PARTICLE_VIBRATION_SIGNAL,
-  /**
-   * the particle sculk sensor redstone.
-   */
-  PARTICLE_SCULK_SENSOR_REDSTONE,
-  /**
-   * the particle spore blossom shower.
-   */
-  PARTICLE_SPORE_BLOSSOM_SHOWER,
-  /**
-   * the particle spore blossom ambient.
-   */
-  PARTICLE_SPORE_BLOSSOM_AMBIENT,
-  /**
-   * the particle wax.
-   */
-  PARTICLE_WAX,
-  /**
-   * the particle electric spark.
-   */
-  PARTICLE_ELECTRIC_SPARK,
-  /**
-   * the particle shriek.
-   */
-  PARTICLE_SHRIEK,
-  /**
-   * the particle sculk soul.
-   */
-  PARTICLE_SCULK_SOUL
+  JUMP_PREVENTED
 }

@@ -3,7 +3,9 @@ package io.github.shiruka.protocol.codec;
 import io.github.shiruka.network.PacketBuffer;
 import io.github.shiruka.protocol.common.MinecraftSession;
 import io.github.shiruka.protocol.data.AttributeData;
+import io.github.shiruka.protocol.data.CommonLevelEvent;
 import io.github.shiruka.protocol.data.ItemDefinition;
+import io.github.shiruka.protocol.data.SoundEvent;
 import io.github.shiruka.protocol.data.command.CommandData;
 import io.github.shiruka.protocol.data.command.CommandEnumData;
 import io.github.shiruka.protocol.data.command.CommandParam;
@@ -14,6 +16,8 @@ import io.github.shiruka.protocol.data.entity.EntityFlag;
 import io.github.shiruka.protocol.data.entity.EntityLinkData;
 import io.github.shiruka.protocol.data.inventory.ItemData;
 import io.github.shiruka.protocol.packets.AdventureSettings;
+import io.github.shiruka.protocol.packets.ResourcePackInfo;
+import java.util.Collection;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -106,6 +110,14 @@ public interface CodecHelper {
   IdentifierDefinitionRegistry<ItemDefinition> itemDefinitions();
 
   /**
+   * obtains the level events.
+   *
+   * @return level events.
+   */
+  @NotNull
+  IntTypeMap<CommonLevelEvent> levelEvents();
+
+  /**
    * reads the adventure settings and write into the packet.
    *
    * @param packet the packet to read.
@@ -177,6 +189,24 @@ public interface CodecHelper {
   ItemData readItem(@NotNull PacketBuffer buffer, @NotNull MinecraftSession session);
 
   /**
+   * reads the resource pack info entries.
+   *
+   * @param buffer the buffer to read.
+   *
+   * @return resource pack info entries.
+   */
+  @NotNull
+  List<ResourcePackInfo.Entry> readResourcePackInfoEntries(@NotNull PacketBuffer buffer);
+
+  /**
+   * obtains the sound events.
+   *
+   * @return sound events.
+   */
+  @NotNull
+  IntTypeMap<SoundEvent> soundEvents();
+
+  /**
    * writes the adventure settings packet to buffer.
    *
    * @param packet the packet to write.
@@ -234,4 +264,12 @@ public interface CodecHelper {
    * @param item the item to write.
    */
   void writeItem(@NotNull PacketBuffer buffer, @NotNull MinecraftSession session, @NotNull ItemData item);
+
+  /**
+   * writes the resource pack info entries to buffer.
+   *
+   * @param buffer the buffer to write.
+   * @param entries the entries to write.
+   */
+  void writeResourcePackInfoEntries(@NotNull PacketBuffer buffer, @NotNull Collection<ResourcePackInfo.Entry> entries);
 }

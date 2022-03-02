@@ -511,7 +511,7 @@ public enum EntityData {
   /**
    * the cache.
    */
-  private static final EntityData[] CACHE = EntityData.values();
+  private static final EntityData[] VALUES = EntityData.values();
 
   /**
    * the flags.

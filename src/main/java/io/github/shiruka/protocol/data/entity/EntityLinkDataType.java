@@ -23,7 +23,7 @@ public enum EntityLinkDataType {
   /**
    * the cache.
    */
-  private static final EntityLinkDataType[] CACHE = EntityLinkDataType.values();
+  private static final EntityLinkDataType[] VALUES = EntityLinkDataType.values();
 
   /**
    * gets type by ordinal.
@@ -34,8 +34,8 @@ public enum EntityLinkDataType {
    */
   @NotNull
   public static EntityLinkDataType byOrdinal(final int ordinal) {
-    Preconditions.checkState(ordinal >= 0 && ordinal < EntityLinkDataType.CACHE.length,
+    Preconditions.checkState(ordinal >= 0 && ordinal < EntityLinkDataType.VALUES.length,
       "Unknown EntityLinkDataType ID: %s", ordinal);
-    return EntityLinkDataType.CACHE[ordinal];
+    return EntityLinkDataType.VALUES[ordinal];
   }
 }

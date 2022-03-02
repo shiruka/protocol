@@ -3,7 +3,7 @@ package io.github.shiruka.protocol.packets;
 import io.github.shiruka.api.common.vectors.Vector3f;
 import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.PacketHandler;
-import io.github.shiruka.protocol.data.LevelEventType;
+import io.github.shiruka.protocol.data.CommonLevelEvent;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -22,7 +22,7 @@ public final class LevelEvent extends MinecraftPacket {
   //@formatter:off
   private int data;
   private Vector3f position;
-  private LevelEventType type;
+  private CommonLevelEvent type;
   //@formatter:on
 
   @Override

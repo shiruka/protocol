@@ -25,7 +25,7 @@ public enum AuthoritativeMovementMode {
   /**
    * the cache.
    */
-  private static final AuthoritativeMovementMode[] CACHE = AuthoritativeMovementMode.values();
+  private static final AuthoritativeMovementMode[] VALUES = AuthoritativeMovementMode.values();
 
   /**
    * gets authoritative movement mode by ordinal.
@@ -36,6 +36,6 @@ public enum AuthoritativeMovementMode {
    */
   @NotNull
   public static AuthoritativeMovementMode byOrdinal(final int ordinal) {
-    return AuthoritativeMovementMode.CACHE[ordinal];
+    return AuthoritativeMovementMode.VALUES[ordinal];
   }
 }

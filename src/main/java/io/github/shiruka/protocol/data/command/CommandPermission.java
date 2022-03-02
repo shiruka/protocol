@@ -30,7 +30,7 @@ public enum CommandPermission {
   /**
    * the cache.
    */
-  private static final CommandPermission[] CACHE = CommandPermission.values();
+  private static final CommandPermission[] VALUES = CommandPermission.values();
 
   /**
    * gets the command permission by ordinal.
@@ -41,6 +41,6 @@ public enum CommandPermission {
    */
   @NotNull
   public static CommandPermission byOrdinal(final int ordinal) {
-    return CommandPermission.CACHE[ordinal];
+    return CommandPermission.VALUES[ordinal];
   }
 }
