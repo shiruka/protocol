@@ -2,8 +2,8 @@ package io.github.shiruka.protocol.codec;
 
 import com.google.common.base.Preconditions;
 import io.github.shiruka.network.PacketBuffer;
-import io.github.shiruka.protocol.MinecraftPacket;
-import io.github.shiruka.protocol.MinecraftSession;
+import io.github.shiruka.protocol.common.MinecraftPacket;
+import io.github.shiruka.protocol.common.MinecraftSession;
 import io.github.shiruka.protocol.packets.Unknown;
 import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;

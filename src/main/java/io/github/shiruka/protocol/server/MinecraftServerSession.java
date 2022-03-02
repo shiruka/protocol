@@ -1,6 +1,6 @@
 package io.github.shiruka.protocol.server;
 
-import io.github.shiruka.protocol.MinecraftSession;
+import io.github.shiruka.protocol.common.MinecraftSession;
 import org.jetbrains.annotations.NotNull;
 
 /**

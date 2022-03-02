@@ -1,4 +1,4 @@
-package io.github.shiruka.protocol;
+package io.github.shiruka.protocol.common;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.atomic.AtomicInteger;

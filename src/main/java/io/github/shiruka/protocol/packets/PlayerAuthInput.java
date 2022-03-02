@@ -2,8 +2,8 @@ package io.github.shiruka.protocol.packets;
 
 import io.github.shiruka.api.common.vectors.Vector2f;
 import io.github.shiruka.api.common.vectors.Vector3f;
-import io.github.shiruka.protocol.MinecraftPacket;
-import io.github.shiruka.protocol.PacketHandler;
+import io.github.shiruka.protocol.common.MinecraftPacket;
+import io.github.shiruka.protocol.common.PacketHandler;
 import io.github.shiruka.protocol.data.ClientPlayMode;
 import io.github.shiruka.protocol.data.InputMode;
 import io.github.shiruka.protocol.data.PlayerAuthInputData;
@@ -14,6 +14,8 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -25,7 +27,9 @@ import org.jetbrains.annotations.NotNull;
  */
 @Setter
 @Getter
+@Builder
 @ToString
+@EqualsAndHashCode(callSuper = false)
 @Accessors(fluent = true)
 public final class PlayerAuthInput extends MinecraftPacket {
 

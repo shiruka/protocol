@@ -1,10 +1,10 @@
 package io.github.shiruka.protocol.codec.v291.encoders;
 
 import io.github.shiruka.network.PacketBuffer;
-import io.github.shiruka.protocol.MinecraftSession;
 import io.github.shiruka.protocol.codec.CodecHelper;
 import io.github.shiruka.protocol.codec.PacketEncoder;
 import io.github.shiruka.protocol.codec.PacketId;
+import io.github.shiruka.protocol.common.MinecraftSession;
 import io.github.shiruka.protocol.packets.Animate;
 import org.jetbrains.annotations.NotNull;
 

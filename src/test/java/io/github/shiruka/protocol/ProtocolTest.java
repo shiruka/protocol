@@ -1,6 +1,8 @@
 package io.github.shiruka.protocol;
 
 import io.github.shiruka.protocol.codec.v291.CodecV291;
+import io.github.shiruka.protocol.common.MinecraftPacket;
+import io.github.shiruka.protocol.common.PacketHandler;
 import io.github.shiruka.protocol.data.ClientChainData;
 import io.github.shiruka.protocol.packets.Login;
 import io.github.shiruka.protocol.packets.Unknown;
@@ -8,8 +10,6 @@ import io.github.shiruka.protocol.server.MinecraftServer;
 import io.github.shiruka.protocol.server.ServerListener;
 import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
 import java.util.Locale;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 public final class ProtocolTest {
@@ -38,11 +38,14 @@ public final class ProtocolTest {
     return builder.toString();
   }
 
-  @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
   private static final class Handler implements PacketHandler {
 
     @NotNull
     private final MinecraftChildChannel session;
+
+    private Handler(@NotNull final MinecraftChildChannel session) {
+      this.session = session;
+    }
 
     @Override
     public void handle(@NotNull final Login packet) {

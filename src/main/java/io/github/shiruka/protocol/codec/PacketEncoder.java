@@ -1,8 +1,8 @@
 package io.github.shiruka.protocol.codec;
 
 import io.github.shiruka.network.PacketBuffer;
-import io.github.shiruka.protocol.MinecraftPacket;
-import io.github.shiruka.protocol.MinecraftSession;
+import io.github.shiruka.protocol.common.MinecraftPacket;
+import io.github.shiruka.protocol.common.MinecraftSession;
 import java.util.function.Supplier;
 import lombok.AccessLevel;
 import lombok.Getter;
