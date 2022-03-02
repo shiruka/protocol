@@ -198,5 +198,15 @@
         "type": "string"
       }
     ]
+  },
+  {
+    "name": "AdventureSettings",
+    "id": 55,
+    "fields": [
+      {
+        "name": "adventureSettings",
+        "type": "adventureSettings"
+      }
+    ]
   }
 ]
