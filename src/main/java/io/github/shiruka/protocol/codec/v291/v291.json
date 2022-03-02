@@ -8,5 +8,49 @@
         "type": "string"
       }
     ]
+  },
+  {
+    "name": "AddEntity",
+    "id": 13,
+    "fields": [
+      {
+        "name": "uniqueEntityId",
+        "type": "varLong"
+      },
+      {
+        "name": "runtimeEntityId",
+        "type": "unsignedVarLong"
+      },
+      {
+        "name": "identifier",
+        "type": "string"
+      },
+      {
+        "name": "position",
+        "type": "vector3f"
+      },
+      {
+        "name": "motion",
+        "type": "vector3f"
+      },
+      {
+        "name": "rotation",
+        "type": "vector3f"
+      },
+      {
+        "name": "attributes",
+        "type": "array",
+        "array-type": "attribute"
+      },
+      {
+        "name": "metadata",
+        "type": "entityData"
+      },
+      {
+        "name": "entityLinks",
+        "type": "array",
+        "array-type": "entityLink"
+      }
+    ]
   }
 ]
