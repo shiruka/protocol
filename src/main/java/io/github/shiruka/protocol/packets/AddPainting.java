@@ -1,6 +1,6 @@
 package io.github.shiruka.protocol.packets;
 
-import io.github.shiruka.protocol.PacketHandler;
+import io.github.shiruka.protocol.common.PacketHandler;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

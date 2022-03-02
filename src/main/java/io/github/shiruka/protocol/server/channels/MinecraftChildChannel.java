@@ -1,7 +1,7 @@
 package io.github.shiruka.protocol.server.channels;
 
 import io.github.shiruka.network.server.channels.RakNetChildChannel;
-import io.github.shiruka.protocol.PacketHandler;
+import io.github.shiruka.protocol.common.PacketHandler;
 import io.github.shiruka.protocol.server.MinecraftServer;
 import io.github.shiruka.protocol.server.MinecraftServerSession;
 import io.netty.channel.ChannelHandlerContext;

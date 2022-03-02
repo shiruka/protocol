@@ -1,7 +1,7 @@
 package io.github.shiruka.protocol.packets;
 
-import io.github.shiruka.protocol.MinecraftPacket;
-import io.github.shiruka.protocol.PacketHandler;
+import io.github.shiruka.protocol.common.MinecraftPacket;
+import io.github.shiruka.protocol.common.PacketHandler;
 import io.github.shiruka.protocol.data.ExperimentData;
 import io.github.shiruka.protocol.data.ResourcePackStackEntry;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;

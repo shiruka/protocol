@@ -1,23 +1,18 @@
 package io.github.shiruka.protocol.codec.v291.encoders;
 
 import io.github.shiruka.network.PacketBuffer;
-import io.github.shiruka.protocol.MinecraftSession;
 import io.github.shiruka.protocol.codec.CodecHelper;
 import io.github.shiruka.protocol.codec.PacketEncoder;
+import io.github.shiruka.protocol.codec.PacketId;
+import io.github.shiruka.protocol.common.MinecraftSession;
 import io.github.shiruka.protocol.packets.AddHangingEntity;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * a class that represents add hanging entity packet encoders.
  */
+@PacketId(16)
 public final class AddHangingEntityEncoderV291 extends PacketEncoder.Base<AddHangingEntity> {
-
-  /**
-   * ctor.
-   */
-  private AddHangingEntityEncoderV291() {
-    super(16);
-  }
 
   @Override
   public void decode(@NotNull final AddHangingEntity packet, @NotNull final CodecHelper helper,

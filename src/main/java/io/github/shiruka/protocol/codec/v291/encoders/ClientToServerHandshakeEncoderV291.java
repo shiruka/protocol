@@ -5,24 +5,22 @@ import io.github.shiruka.protocol.codec.CodecHelper;
 import io.github.shiruka.protocol.codec.PacketEncoder;
 import io.github.shiruka.protocol.codec.PacketId;
 import io.github.shiruka.protocol.common.MinecraftSession;
-import io.github.shiruka.protocol.packets.AutomationClientConnect;
+import io.github.shiruka.protocol.packets.ClientToServerHandshake;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * a class that represents automation client connect packet encoders.
+ * a class that represents client to server handshake packet encoders.
  */
-@PacketId(95)
-public final class AutomationClientConnectEncoderV291 extends PacketEncoder.Base<AutomationClientConnect> {
+@PacketId(4)
+public final class ClientToServerHandshakeEncoderV291 extends PacketEncoder.Base<ClientToServerHandshake> {
 
   @Override
-  public void decode(@NotNull final AutomationClientConnect packet, @NotNull final CodecHelper helper,
+  public void decode(@NotNull final ClientToServerHandshake packet, @NotNull final CodecHelper helper,
                      @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
-    packet.address(buffer.readString());
   }
 
   @Override
-  public void encode(@NotNull final AutomationClientConnect packet, @NotNull final CodecHelper helper,
+  public void encode(@NotNull final ClientToServerHandshake packet, @NotNull final CodecHelper helper,
                      @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
-    buffer.writeString(packet.address());
   }
 }

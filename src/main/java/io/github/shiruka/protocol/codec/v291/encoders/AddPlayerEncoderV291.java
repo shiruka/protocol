@@ -1,23 +1,18 @@
 package io.github.shiruka.protocol.codec.v291.encoders;
 
 import io.github.shiruka.network.PacketBuffer;
-import io.github.shiruka.protocol.MinecraftSession;
 import io.github.shiruka.protocol.codec.CodecHelper;
 import io.github.shiruka.protocol.codec.PacketEncoder;
+import io.github.shiruka.protocol.codec.PacketId;
+import io.github.shiruka.protocol.common.MinecraftSession;
 import io.github.shiruka.protocol.packets.AddPlayer;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * a class that represents add player packet encoders.
  */
+@PacketId(12)
 public final class AddPlayerEncoderV291 extends PacketEncoder.Base<AddPlayer> {
-
-  /**
-   * ctor.
-   */
-  private AddPlayerEncoderV291() {
-    super(12);
-  }
 
   @Override
   public void decode(@NotNull final AddPlayer packet, @NotNull final CodecHelper helper,

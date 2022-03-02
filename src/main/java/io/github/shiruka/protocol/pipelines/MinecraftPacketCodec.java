@@ -1,7 +1,7 @@
 package io.github.shiruka.protocol.pipelines;
 
 import io.github.shiruka.network.PacketBuffer;
-import io.github.shiruka.protocol.MinecraftPacket;
+import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.server.MinecraftServer;
 import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
 import io.netty.buffer.ByteBuf;

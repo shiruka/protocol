@@ -1,7 +1,7 @@
 package io.github.shiruka.protocol.codec;
 
 import io.github.shiruka.network.PacketBuffer;
-import io.github.shiruka.protocol.MinecraftSession;
+import io.github.shiruka.protocol.common.MinecraftSession;
 import io.github.shiruka.protocol.data.AttributeData;
 import io.github.shiruka.protocol.data.ItemDefinition;
 import io.github.shiruka.protocol.data.command.CommandEnumData;

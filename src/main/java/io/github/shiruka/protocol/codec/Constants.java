@@ -1,7 +1,7 @@
 package io.github.shiruka.protocol.codec;
 
 import io.github.shiruka.api.common.Int2ObjectBiMap;
-import io.github.shiruka.protocol.MinecraftSession;
+import io.github.shiruka.protocol.common.MinecraftSession;
 import io.github.shiruka.protocol.data.LevelEventType;
 import io.github.shiruka.protocol.data.SoundEvent;
 import io.github.shiruka.protocol.data.entity.EntityData;

@@ -1,11 +1,11 @@
 package io.github.shiruka.protocol.packets;
 
 import io.github.shiruka.network.PacketBuffer;
-import io.github.shiruka.protocol.MinecraftPacket;
-import io.github.shiruka.protocol.MinecraftSession;
-import io.github.shiruka.protocol.PacketHandler;
 import io.github.shiruka.protocol.codec.CodecHelper;
 import io.github.shiruka.protocol.codec.PacketEncoder;
+import io.github.shiruka.protocol.common.MinecraftPacket;
+import io.github.shiruka.protocol.common.MinecraftSession;
+import io.github.shiruka.protocol.common.PacketHandler;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.util.ReferenceCounted;
 import lombok.AllArgsConstructor;

@@ -1,8 +1,8 @@
 package io.github.shiruka.protocol.packets;
 
 import io.github.shiruka.api.common.vectors.Vector3f;
-import io.github.shiruka.protocol.MinecraftPacket;
-import io.github.shiruka.protocol.PacketHandler;
+import io.github.shiruka.protocol.common.MinecraftPacket;
+import io.github.shiruka.protocol.common.PacketHandler;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

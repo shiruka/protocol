@@ -1,6 +1,6 @@
 package io.github.shiruka.protocol.codec;
 
-import io.github.shiruka.protocol.MinecraftPacket;
+import io.github.shiruka.protocol.common.MinecraftPacket;
 import java.util.function.Supplier;
 import org.jetbrains.annotations.NotNull;
 

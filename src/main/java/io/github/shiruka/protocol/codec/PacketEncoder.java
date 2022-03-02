@@ -1,8 +1,8 @@
 package io.github.shiruka.protocol.codec;
 
 import io.github.shiruka.network.PacketBuffer;
-import io.github.shiruka.protocol.MinecraftPacket;
-import io.github.shiruka.protocol.MinecraftSession;
+import io.github.shiruka.protocol.common.MinecraftPacket;
+import io.github.shiruka.protocol.common.MinecraftSession;
 import java.util.function.Supplier;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -47,6 +47,8 @@ public interface PacketEncoder<T extends MinecraftPacket> {
 
   /**
    * an abstract class that represents base packet encoders.
+   * <p>
+   * annotate your class with {@link PacketId} to specify the packet id.
    *
    * @param <T> type of the packet.
    */
@@ -55,6 +57,11 @@ public interface PacketEncoder<T extends MinecraftPacket> {
   @SuppressWarnings("unchecked")
   @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
   abstract class Base<T extends MinecraftPacket> implements PacketEncoder<T> {
+
+    /**
+     * the annotate warning.
+     */
+    private static final String ANNOTATE = "Annotate %s class with PacketId annotation!";
 
     /**
      * the factory.
@@ -69,11 +76,13 @@ public interface PacketEncoder<T extends MinecraftPacket> {
 
     /**
      * ctor.
-     *
-     * @param id the id.
      */
-    protected Base(final int id) {
-      this.id = id;
+    protected Base() {
+      this.id = new ClassOf<>(this)
+        .getAnnotation(PacketId.class)
+        .orElseThrow(() ->
+          new IllegalStateException(Base.ANNOTATE.formatted(this.getClass().getSimpleName())))
+        .value();
       final var constructor = new ClassOf<>(TypeParameterMatcher.find(this, Base.class, "T"))
         .getConstructor()
         .orElseThrow();

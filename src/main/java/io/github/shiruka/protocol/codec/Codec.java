@@ -2,8 +2,8 @@ package io.github.shiruka.protocol.codec;
 
 import com.google.common.base.Preconditions;
 import io.github.shiruka.network.PacketBuffer;
-import io.github.shiruka.protocol.MinecraftPacket;
-import io.github.shiruka.protocol.MinecraftSession;
+import io.github.shiruka.protocol.common.MinecraftPacket;
+import io.github.shiruka.protocol.common.MinecraftSession;
 import io.github.shiruka.protocol.packets.Unknown;
 import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -20,7 +20,6 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.reflections.Reflections;
-import org.reflections.scanners.Scanners;
 import tr.com.infumia.infumialib.reflection.RefConstructed;
 import tr.com.infumia.infumialib.reflection.clazz.ClassOf;
 
@@ -246,7 +245,7 @@ public interface Codec {
      * the protocol version.
      */
     @Setter
-    private int protocolVersion;
+    private int protocolVersion = -1;
 
     /**
      * ctor.
@@ -335,13 +334,24 @@ public interface Codec {
      */
     @NotNull
     public Builder scanPackageAndRegister() {
-      Preconditions.checkState(this.protocolVersion != 0, "Protocol version not set!");
-      final var classes = new Reflections(Builder.ENCODERS_PACKAGE.formatted(this.protocolVersion))
-        .get(Scanners.SubTypes.of(PacketEncoder.Base.class).asClass());
+      Preconditions.checkState(this.protocolVersion != -1, "Protocol version not set!");
+      return this.scanPackageAndRegister(Builder.ENCODERS_PACKAGE.formatted(this.protocolVersion));
+    }
+
+    /**
+     * scans the encoder package and registers the found packets.
+     *
+     * @param packageName the package name to scan.
+     *
+     * @return {@code this} for the builder chain.
+     */
+    @NotNull
+    public Builder scanPackageAndRegister(@NotNull final String packageName) {
+      final var classes = new Reflections(packageName)
+        .getSubTypesOf(PacketEncoder.Base.class);
       for (final var cls : classes) {
         new ClassOf<>(cls).getConstructor()
           .flatMap(RefConstructed::create)
-          .filter(PacketEncoder.Base.class::isInstance)
           .map(PacketEncoder.Base.class::cast)
           .ifPresent(this::registerPacket);
       }
