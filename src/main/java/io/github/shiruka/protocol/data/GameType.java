@@ -38,7 +38,7 @@ public enum GameType {
   /**
    * the cache.
    */
-  private static final GameType[] CACHE = GameType.values();
+  private static final GameType[] VALUES = GameType.values();
 
   /**
    * gets game type by ordinal.
@@ -49,6 +49,6 @@ public enum GameType {
    */
   @NotNull
   public static GameType byOrdinal(final int ordinal) {
-    return GameType.CACHE[ordinal];
+    return GameType.VALUES[ordinal];
   }
 }

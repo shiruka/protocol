@@ -8,13 +8,17 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * a class that represents entity data maps.
  */
-@SuppressWarnings({"unchecked"})
+@ToString
+@EqualsAndHashCode
+@SuppressWarnings("unchecked")
 public final class EntityDataMap implements Map<EntityData, Object> {
 
   /**
@@ -305,28 +309,6 @@ public final class EntityDataMap implements Map<EntityData, Object> {
   @NotNull
   public Vector3f getVector3f(@NotNull final EntityData key, @NotNull final Vector3f defaultValue) {
     return this.getOrDefault(key, defaultValue);
-  }
-
-  @Override
-  public int hashCode() {
-    return this.map.hashCode();
-  }
-
-  @Override
-  public boolean equals(final Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null || this.getClass() != obj.getClass()) {
-      return false;
-    }
-    final var that = (EntityDataMap) obj;
-    return this.map.equals(that.map);
-  }
-
-  @Override
-  public String toString() {
-    return this.map.toString();
   }
 
   /**

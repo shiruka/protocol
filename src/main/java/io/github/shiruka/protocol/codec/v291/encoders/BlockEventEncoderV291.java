@@ -17,7 +17,7 @@ public final class BlockEventEncoderV291 extends PacketEncoder.Base<BlockEvent> 
   @Override
   public void decode(@NotNull final BlockEvent packet, @NotNull final CodecHelper helper,
                      @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
-    packet.blockPosition(buffer.readBlockPosition());
+    packet.blockPosition(buffer.readVector3i());
     packet.eventType(buffer.readVarInt());
     packet.eventData(buffer.readVarInt());
   }
@@ -25,7 +25,7 @@ public final class BlockEventEncoderV291 extends PacketEncoder.Base<BlockEvent> 
   @Override
   public void encode(@NotNull final BlockEvent packet, @NotNull final CodecHelper helper,
                      @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
-    buffer.writeBlockPosition(packet.blockPosition());
+    buffer.writeVector3i(packet.blockPosition());
     buffer.writeVarInt(packet.eventType());
     buffer.writeVarInt(packet.eventData());
   }

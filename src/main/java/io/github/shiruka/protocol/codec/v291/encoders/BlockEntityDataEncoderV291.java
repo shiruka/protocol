@@ -17,14 +17,14 @@ public final class BlockEntityDataEncoderV291 extends PacketEncoder.Base<BlockEn
   @Override
   public void decode(@NotNull final BlockEntityData packet, @NotNull final CodecHelper helper,
                      @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
-    packet.blockPosition(buffer.readBlockPosition());
+    packet.blockPosition(buffer.readVector3i());
     packet.data(buffer.readCompoundTag());
   }
 
   @Override
   public void encode(@NotNull final BlockEntityData packet, @NotNull final CodecHelper helper,
                      @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
-    buffer.writeBlockPosition(packet.blockPosition());
+    buffer.writeVector3i(packet.blockPosition());
     buffer.writeCompoundTag(packet.data());
   }
 }

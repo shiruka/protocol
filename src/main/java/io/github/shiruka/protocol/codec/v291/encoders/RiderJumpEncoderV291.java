@@ -5,24 +5,24 @@ import io.github.shiruka.protocol.codec.CodecHelper;
 import io.github.shiruka.protocol.codec.PacketEncoder;
 import io.github.shiruka.protocol.codec.PacketId;
 import io.github.shiruka.protocol.common.MinecraftSession;
-import io.github.shiruka.protocol.packets.AvailableCommands;
+import io.github.shiruka.protocol.packets.RiderJump;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * a class that represents available commands' packet encoders.
+ * a class that represents rider jump packet encoders.
  */
-@PacketId(76)
-public final class AvailableCommandsEncoderV291 extends PacketEncoder.Base<AvailableCommands> {
+@PacketId(20)
+public final class RiderJumpEncoderV291 extends PacketEncoder.Base<RiderJump> {
 
   @Override
-  public void decode(@NotNull final AvailableCommands packet, @NotNull final CodecHelper helper,
+  public void decode(@NotNull final RiderJump packet, @NotNull final CodecHelper helper,
                      @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
-    packet.commands(helper.readCommands(buffer));
+    packet.jumpStrength(buffer.readVarInt());
   }
 
   @Override
-  public void encode(@NotNull final AvailableCommands packet, @NotNull final CodecHelper helper,
+  public void encode(@NotNull final RiderJump packet, @NotNull final CodecHelper helper,
                      @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
-    helper.writeCommands(buffer, packet.commands());
+    buffer.writeUnsignedVarInt(packet.jumpStrength());
   }
 }

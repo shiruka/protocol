@@ -28,7 +28,7 @@ public final class AddPlayerEncoderV291 extends PacketEncoder.Base<AddPlayer> {
     packet.hand(helper.readItem(buffer, session));
     helper.readEntityData(buffer, session, packet.metadata());
     helper.readAdventureSettings(packet.adventureSettings(), buffer);
-    buffer.readArray(packet.entityLinks(), b -> helper.readEntityLink(b, session));
+    packet.entityLinks(buffer.readArrayUnsignedInt(() -> helper.readEntityLink(buffer, session)));
     packet.deviceId(buffer.readString());
   }
 
@@ -46,7 +46,7 @@ public final class AddPlayerEncoderV291 extends PacketEncoder.Base<AddPlayer> {
     helper.writeItem(buffer, session, packet.hand());
     helper.writeEntityData(buffer, session, packet.metadata());
     helper.writeAdventureSettings(packet.adventureSettings(), buffer);
-    buffer.writeArray(packet.entityLinks(), (b, link) -> helper.writeEntityLink(b, session, link));
+    buffer.writeArrayUnsignedInt(packet.entityLinks(), link -> helper.writeEntityLink(buffer, session, link));
     buffer.writeString(packet.deviceId());
   }
 }

@@ -28,9 +28,11 @@ public interface PacketEncoder<T extends MinecraftPacket> {
    * @param helper the helper to decode.
    * @param buffer the buffer to decode.
    * @param session the session to decode.
+   *
+   * @throws Exception if something goes wrong when decoding.
    */
   void decode(@NotNull T packet, @NotNull CodecHelper helper, @NotNull PacketBuffer buffer,
-              @NotNull MinecraftSession session);
+              @NotNull MinecraftSession session) throws Exception;
 
   /**
    * encodes the packet.
@@ -41,9 +43,11 @@ public interface PacketEncoder<T extends MinecraftPacket> {
    * @param helper the helper to encode.
    * @param buffer the buffer to encode.
    * @param session the session to decode.
+   *
+   * @throws Exception if something goes wrong when encoding.
    */
   void encode(@NotNull T packet, @NotNull CodecHelper helper, @NotNull PacketBuffer buffer,
-              @NotNull MinecraftSession session);
+              @NotNull MinecraftSession session) throws Exception;
 
   /**
    * an abstract class that represents base packet encoders.

@@ -26,7 +26,7 @@ public enum PlayerPermission {
   /**
    * the cache.
    */
-  private static final PlayerPermission[] CACHE = PlayerPermission.values();
+  private static final PlayerPermission[] VALUES = PlayerPermission.values();
 
   /**
    * gets the player permission by ordinal.
@@ -37,6 +37,6 @@ public enum PlayerPermission {
    */
   @NotNull
   public static PlayerPermission byOrdinal(final int ordinal) {
-    return PlayerPermission.CACHE[ordinal];
+    return PlayerPermission.VALUES[ordinal];
   }
 }

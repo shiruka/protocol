@@ -5,30 +5,26 @@ import io.github.shiruka.protocol.codec.CodecHelper;
 import io.github.shiruka.protocol.codec.PacketEncoder;
 import io.github.shiruka.protocol.codec.PacketId;
 import io.github.shiruka.protocol.common.MinecraftSession;
-import io.github.shiruka.protocol.packets.AddHangingEntity;
+import io.github.shiruka.protocol.packets.TakeItemEntity;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * a class that represents add hanging entity packet encoders.
+ * a class that represents take item entity packet encoders.
  */
-@PacketId(16)
-public final class AddHangingEntityEncoderV291 extends PacketEncoder.Base<AddHangingEntity> {
+@PacketId(17)
+public final class TakeItemEntityEncoderV291 extends PacketEncoder.Base<TakeItemEntity> {
 
   @Override
-  public void decode(@NotNull final AddHangingEntity packet, @NotNull final CodecHelper helper,
+  public void decode(@NotNull final TakeItemEntity packet, @NotNull final CodecHelper helper,
                      @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
-    packet.uniqueEntityId(buffer.readVarLong());
+    packet.itemRuntimeEntityId(buffer.readUnsignedVarLong());
     packet.runtimeEntityId(buffer.readUnsignedVarLong());
-    packet.position(buffer.readVector3i().toFloat());
-    packet.direction(buffer.readVarInt());
   }
 
   @Override
-  public void encode(@NotNull final AddHangingEntity packet, @NotNull final CodecHelper helper,
+  public void encode(@NotNull final TakeItemEntity packet, @NotNull final CodecHelper helper,
                      @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
-    buffer.writeVarLong(packet.uniqueEntityId());
+    buffer.writeUnsignedVarLong(packet.itemRuntimeEntityId());
     buffer.writeUnsignedVarLong(packet.runtimeEntityId());
-    buffer.writeVector3i(packet.position().toInt());
-    buffer.writeVarInt(packet.direction());
   }
 }

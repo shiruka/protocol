@@ -23,9 +23,9 @@ public final class AddEntityEncoderV291 extends PacketEncoder.Base<AddEntity> {
     packet.position(buffer.readVector3f());
     packet.motion(buffer.readVector3f());
     packet.rotation(buffer.readVector3f());
-    buffer.readArray(packet.attributes(), b -> helper.readAttribute(buffer, session));
+    packet.attributes(buffer.readArrayUnsignedInt(() -> helper.readAttribute(buffer, session)));
     helper.readEntityData(buffer, session, packet.metadata());
-    buffer.readArray(packet.entityLinks(), b -> helper.readEntityLink(buffer, session));
+    packet.entityLinks(buffer.readArrayUnsignedInt(() -> helper.readEntityLink(buffer, session)));
   }
 
   @Override
@@ -37,8 +37,8 @@ public final class AddEntityEncoderV291 extends PacketEncoder.Base<AddEntity> {
     buffer.writeVector3f(packet.position());
     buffer.writeVector3f(packet.motion());
     buffer.writeVector3f(packet.rotation());
-    buffer.writeArray(packet.attributes(), (b, data) -> helper.writeAttribute(b, session, data));
+    buffer.writeArrayUnsignedInt(packet.attributes(), data -> helper.writeAttribute(buffer, data));
     helper.writeEntityData(buffer, session, packet.metadata());
-    buffer.writeArray(packet.entityLinks(), (b, link) -> helper.writeEntityLink(b, session, link));
+    buffer.writeArrayUnsignedInt(packet.entityLinks(), link -> helper.writeEntityLink(buffer, session, link));
   }
 }

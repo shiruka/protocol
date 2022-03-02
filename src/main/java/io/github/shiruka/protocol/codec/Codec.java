@@ -89,7 +89,7 @@ public interface Codec {
     try {
       encoder.decode(packet, this.helper(), buffer, session);
     } catch (final Exception e) {
-      throw new PacketEncodeException("Error whilst deserializing %s".formatted(packet), e);
+      throw new PacketEncodeException("Error whilst decoding %s".formatted(packet), e);
     }
     if (Codec.LOG.isDebugEnabled() && buffer.isReadable()) {
       Codec.LOG.debug("{} still has {} bytes to read!",
@@ -118,7 +118,7 @@ public interface Codec {
     try {
       encoder.encode(packet, this.helper(), buffer, session);
     } catch (final Exception e) {
-      throw new PacketEncodeException("Error whilst deserializing %s".formatted(packet), e);
+      throw new PacketEncodeException("Error whilst encoding %s".formatted(packet), e);
     }
     if (Codec.LOG.isDebugEnabled() && buffer.isReadable()) {
       Codec.LOG.debug("{} still has {} bytes to read!",

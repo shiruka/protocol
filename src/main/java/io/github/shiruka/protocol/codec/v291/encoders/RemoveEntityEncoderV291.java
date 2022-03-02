@@ -5,24 +5,24 @@ import io.github.shiruka.protocol.codec.CodecHelper;
 import io.github.shiruka.protocol.codec.PacketEncoder;
 import io.github.shiruka.protocol.codec.PacketId;
 import io.github.shiruka.protocol.common.MinecraftSession;
-import io.github.shiruka.protocol.packets.AvailableCommands;
+import io.github.shiruka.protocol.packets.RemoveEntity;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * a class that represents available commands' packet encoders.
+ * a class that represents remove entity packet encoders.
  */
-@PacketId(76)
-public final class AvailableCommandsEncoderV291 extends PacketEncoder.Base<AvailableCommands> {
+@PacketId(14)
+public final class RemoveEntityEncoderV291 extends PacketEncoder.Base<RemoveEntity> {
 
   @Override
-  public void decode(@NotNull final AvailableCommands packet, @NotNull final CodecHelper helper,
+  public void decode(@NotNull final RemoveEntity packet, @NotNull final CodecHelper helper,
                      @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
-    packet.commands(helper.readCommands(buffer));
+    packet.uniqueEntityId(buffer.readVarLong());
   }
 
   @Override
-  public void encode(@NotNull final AvailableCommands packet, @NotNull final CodecHelper helper,
+  public void encode(@NotNull final RemoveEntity packet, @NotNull final CodecHelper helper,
                      @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
-    helper.writeCommands(buffer, packet.commands());
+    buffer.writeVarLong(packet.uniqueEntityId());
   }
 }

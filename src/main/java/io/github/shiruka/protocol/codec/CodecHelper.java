@@ -3,7 +3,10 @@ package io.github.shiruka.protocol.codec;
 import io.github.shiruka.network.PacketBuffer;
 import io.github.shiruka.protocol.common.MinecraftSession;
 import io.github.shiruka.protocol.data.AttributeData;
+import io.github.shiruka.protocol.data.CommonLevelEvent;
 import io.github.shiruka.protocol.data.ItemDefinition;
+import io.github.shiruka.protocol.data.SoundEvent;
+import io.github.shiruka.protocol.data.command.CommandData;
 import io.github.shiruka.protocol.data.command.CommandEnumData;
 import io.github.shiruka.protocol.data.command.CommandParam;
 import io.github.shiruka.protocol.data.entity.EntityData;
@@ -13,6 +16,9 @@ import io.github.shiruka.protocol.data.entity.EntityFlag;
 import io.github.shiruka.protocol.data.entity.EntityLinkData;
 import io.github.shiruka.protocol.data.inventory.ItemData;
 import io.github.shiruka.protocol.packets.AdventureSettings;
+import io.github.shiruka.protocol.packets.ResourcePackInfo;
+import io.github.shiruka.protocol.packets.ResourcePackStack;
+import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -104,6 +110,14 @@ public interface CodecHelper {
   IdentifierDefinitionRegistry<ItemDefinition> itemDefinitions();
 
   /**
+   * obtains the level events.
+   *
+   * @return level events.
+   */
+  @NotNull
+  IntTypeMap<CommonLevelEvent> levelEvents();
+
+  /**
    * reads the adventure settings and write into the packet.
    *
    * @param packet the packet to read.
@@ -132,6 +146,16 @@ public interface CodecHelper {
    */
   @NotNull
   CommandEnumData readCommandEnum(@NotNull PacketBuffer buffer, boolean soft);
+
+  /**
+   * reads the commands.
+   *
+   * @param buffer the buffer to read.
+   *
+   * @return command data.
+   */
+  @NotNull
+  List<CommandData> readCommands(@NotNull PacketBuffer buffer);
 
   /**
    * reads the entity data.
@@ -165,6 +189,34 @@ public interface CodecHelper {
   ItemData readItem(@NotNull PacketBuffer buffer, @NotNull MinecraftSession session);
 
   /**
+   * reads the resource pack info entry.
+   *
+   * @param buffer the buffer to read.
+   *
+   * @return resource pack info entry.
+   */
+  @NotNull
+  ResourcePackInfo.Entry readResourcePackInfoEntry(@NotNull PacketBuffer buffer);
+
+  /**
+   * reads the resource pack stack entry.
+   *
+   * @param buffer the buffer to read.
+   *
+   * @return resource pack stack entry.
+   */
+  @NotNull
+  ResourcePackStack.Entry readResourcePackStackEntry(@NotNull PacketBuffer buffer);
+
+  /**
+   * obtains the sound events.
+   *
+   * @return sound events.
+   */
+  @NotNull
+  IntTypeMap<SoundEvent> soundEvents();
+
+  /**
    * writes the adventure settings packet to buffer.
    *
    * @param packet the packet to write.
@@ -176,19 +228,25 @@ public interface CodecHelper {
    * writes the attribute data.
    *
    * @param buffer the buffer to write.
-   * @param session the session to write.
    * @param data the data to write.
    */
-  void writeAttribute(@NotNull PacketBuffer buffer, @NotNull MinecraftSession session, @NotNull AttributeData data);
+  void writeAttribute(@NotNull PacketBuffer buffer, @NotNull AttributeData data);
 
   /**
    * writes the command enum.
    *
    * @param buffer the buffer to write.
-   * @param session the session to write.
    * @param data the data to write.
    */
-  void writeCommandEnum(@NotNull PacketBuffer buffer, @NotNull MinecraftSession session, @NotNull CommandEnumData data);
+  void writeCommandEnum(@NotNull PacketBuffer buffer, @NotNull CommandEnumData data);
+
+  /**
+   * writes the commands.
+   *
+   * @param buffer the buffer to write.
+   * @param commands the commands to write.
+   */
+  void writeCommands(@NotNull PacketBuffer buffer, @NotNull List<CommandData> commands);
 
   /**
    * writes the entity data.
@@ -216,4 +274,20 @@ public interface CodecHelper {
    * @param item the item to write.
    */
   void writeItem(@NotNull PacketBuffer buffer, @NotNull MinecraftSession session, @NotNull ItemData item);
+
+  /**
+   * writes the resource pack entry.
+   *
+   * @param buffer the buffer to write.
+   * @param entry the entry to write.
+   */
+  void writeResourcePackEntry(@NotNull PacketBuffer buffer, @NotNull ResourcePackInfo.Entry entry);
+
+  /**
+   * writes the entry to buffer.
+   *
+   * @param buffer the buffer to write.
+   * @param entry the entry to write.
+   */
+  void writeResourcePackStackEntry(@NotNull PacketBuffer buffer, @NotNull ResourcePackStack.Entry entry);
 }
