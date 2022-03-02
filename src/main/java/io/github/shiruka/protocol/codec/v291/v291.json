@@ -208,5 +208,24 @@
         "type": "adventureSettings"
       }
     ]
+  },
+  {
+    "name": "Animate",
+    "id": 55,
+    "fields": [
+      {
+        "name": "action",
+        "type": "animate.action"
+      },
+      {
+        "name": "runtimeEntityId",
+        "type": "unsignedVarLong"
+      },
+      {
+        "name": "rowingTime",
+        "type": "floatLE",
+        "condition": "action == Animate.Action.ROW_LEFT || action == Animate.Action.ROW_RIGHT"
+      }
+    ]
   }
 ]
