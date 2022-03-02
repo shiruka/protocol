@@ -5,22 +5,22 @@ import io.github.shiruka.protocol.MinecraftSession;
 import io.github.shiruka.protocol.codec.CodecHelper;
 import io.github.shiruka.protocol.codec.PacketEncoder;
 import io.github.shiruka.protocol.codec.PacketId;
-import io.github.shiruka.protocol.packets.BlockEvent;
+import io.github.shiruka.protocol.packets.ClientToServerHandshake;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * a class that represents block event packet encoders.
  */
 @PacketId(4)
-public final class ClickToServerHandshakeEncoderV291 extends PacketEncoder.Base<BlockEvent> {
+public final class ClientToServerHandshakeEncoderV291 extends PacketEncoder.Base<ClientToServerHandshake> {
 
   @Override
-  public void decode(@NotNull final BlockEvent packet, @NotNull final CodecHelper helper,
+  public void decode(@NotNull final ClientToServerHandshake packet, @NotNull final CodecHelper helper,
                      @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
   }
 
   @Override
-  public void encode(@NotNull final BlockEvent packet, @NotNull final CodecHelper helper,
+  public void encode(@NotNull final ClientToServerHandshake packet, @NotNull final CodecHelper helper,
                      @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
   }
 }
