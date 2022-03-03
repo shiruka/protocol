@@ -308,9 +308,11 @@ public interface Codec {
       Preconditions.checkArgument(id >= 0,
         "Id cannot be negative!");
       final var packetClass = factory.get().getClass();
-      Preconditions.checkArgument(!this.packets.containsKey(packetClass),
-        "Packet already registered!");
-      this.packets.put(packetClass, new PacketDefinition<>(id, factory, encoder));
+      if (this.packets.containsKey(packetClass)) {
+        this.updatePacketEncoder()
+      } else {
+        this.packets.put(packetClass, new PacketDefinition<>(id, factory, encoder));
+      }
       return this;
     }
 
@@ -361,16 +363,15 @@ public interface Codec {
     /**
      * updates the encoder.
      *
-     * @param factory the factory to update.
+     * @param packetClass the packet class to update.
      * @param serializer the serializer to update.
      * @param <T> type of the packet.
      *
      * @return {@code this} for the builder chain.
      */
     @NotNull
-    public <T extends MinecraftPacket> Builder updatePacketEncoder(@NotNull final Supplier<T> factory,
+    public <T extends MinecraftPacket> Builder updatePacketEncoder(@NotNull final Class<T> packetClass,
                                                                    @NotNull final PacketEncoder<T> serializer) {
-      final var packetClass = factory.get().getClass();
       final var wildDefinition = this.packets.get(packetClass);
       Preconditions.checkNotNull(wildDefinition, "Packet does not exist!");
       final var uncheckedDefinition = (PacketDefinition<T>) wildDefinition;
