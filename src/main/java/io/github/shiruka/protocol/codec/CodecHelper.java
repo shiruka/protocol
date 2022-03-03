@@ -4,6 +4,7 @@ import io.github.shiruka.network.PacketBuffer;
 import io.github.shiruka.protocol.common.MinecraftSession;
 import io.github.shiruka.protocol.data.AttributeData;
 import io.github.shiruka.protocol.data.CommonLevelEvent;
+import io.github.shiruka.protocol.data.EntityEventType;
 import io.github.shiruka.protocol.data.GameRuleValue;
 import io.github.shiruka.protocol.data.ItemDefinition;
 import io.github.shiruka.protocol.data.SoundEvent;
@@ -17,6 +18,7 @@ import io.github.shiruka.protocol.data.entity.EntityFlag;
 import io.github.shiruka.protocol.data.entity.EntityLinkData;
 import io.github.shiruka.protocol.data.inventory.ItemData;
 import io.github.shiruka.protocol.packets.AdventureSettings;
+import io.github.shiruka.protocol.packets.BookEdit;
 import io.github.shiruka.protocol.packets.ResourcePackInfo;
 import io.github.shiruka.protocol.packets.ResourcePackStack;
 import io.github.shiruka.protocol.packets.StartGame;
@@ -34,6 +36,14 @@ public interface CodecHelper {
    * the log.
    */
   Logger LOG = LogManager.getLogger(CodecHelper.class);
+
+  /**
+   * obtains the book edit types.
+   *
+   * @return book edit types.
+   */
+  @NotNull
+  IntTypeMap<BookEdit.Action> bookEditTypes();
 
   /**
    * gets command parameters by id.
@@ -86,6 +96,14 @@ public interface CodecHelper {
    */
   @NotNull
   IntTypeMap<EntityDataType> entityDataTypes();
+
+  /**
+   * obtains the entity event types.
+   *
+   * @return entity event types.
+   */
+  @NotNull
+  IntTypeMap<EntityEventType> entityEventTypes();
 
   /**
    * obtains the entity flags.

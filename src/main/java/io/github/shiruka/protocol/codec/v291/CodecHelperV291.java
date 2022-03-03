@@ -13,6 +13,7 @@ import io.github.shiruka.protocol.common.MinecraftSession;
 import io.github.shiruka.protocol.data.AdventureSetting;
 import io.github.shiruka.protocol.data.AttributeData;
 import io.github.shiruka.protocol.data.CommonLevelEvent;
+import io.github.shiruka.protocol.data.EntityEventType;
 import io.github.shiruka.protocol.data.GamePublishSetting;
 import io.github.shiruka.protocol.data.GameRuleValue;
 import io.github.shiruka.protocol.data.GameType;
@@ -37,6 +38,7 @@ import io.github.shiruka.protocol.data.entity.EntityLinkData;
 import io.github.shiruka.protocol.data.entity.EntityLinkDataType;
 import io.github.shiruka.protocol.data.inventory.ItemData;
 import io.github.shiruka.protocol.packets.AdventureSettings;
+import io.github.shiruka.protocol.packets.BookEdit;
 import io.github.shiruka.protocol.packets.ResourcePackInfo;
 import io.github.shiruka.protocol.packets.ResourcePackStack;
 import io.github.shiruka.protocol.packets.StartGame;
@@ -182,6 +184,18 @@ public class CodecHelperV291 implements CodecHelper {
     .build();
 
   /**
+   * the book edit type.
+   */
+  @Getter
+  protected final IntTypeMap<BookEdit.Action> bookEditTypes = IntTypeMap.newBuilder(BookEdit.Action.class)
+    .insert(0, BookEdit.Action.REPLACE_PAGE)
+    .insert(1, BookEdit.Action.ADD_PAGE)
+    .insert(2, BookEdit.Action.DELETE_PAGE)
+    .insert(3, BookEdit.Action.SWAP_PAGES)
+    .insert(4, BookEdit.Action.SIGN_BOOK)
+    .build();
+
+  /**
    * the command parameters.
    */
   @Getter
@@ -309,6 +323,67 @@ public class CodecHelperV291 implements CodecHelper {
     .insert(6, EntityDataType.VECTOR3I)
     .insert(7, EntityDataType.LONG)
     .insert(8, EntityDataType.VECTOR3F)
+    .build();
+
+  /**
+   * the book edit type.
+   */
+  @Getter
+  protected final IntTypeMap<EntityEventType> entityEventTypes = IntTypeMap.newBuilder(EntityEventType.class)
+    .insert(0, EntityEventType.NONE)
+    .insert(1, EntityEventType.JUMP)
+    .insert(2, EntityEventType.HURT)
+    .insert(3, EntityEventType.DEATH)
+    .insert(4, EntityEventType.ATTACK_START)
+    .insert(5, EntityEventType.ATTACK_STOP)
+    .insert(6, EntityEventType.TAME_FAILED)
+    .insert(7, EntityEventType.TAME_SUCCEEDED)
+    .insert(8, EntityEventType.SHAKE_WETNESS)
+    .insert(9, EntityEventType.USE_ITEM)
+    .insert(10, EntityEventType.EAT_GRASS)
+    .insert(11, EntityEventType.FISH_HOOK_BUBBLE)
+    .insert(12, EntityEventType.FISH_HOOK_POSITION)
+    .insert(13, EntityEventType.FISH_HOOK_TIME)
+    .insert(14, EntityEventType.FISH_HOOK_TEASE)
+    .insert(15, EntityEventType.SQUID_FLEEING)
+    .insert(16, EntityEventType.ZOMBIE_VILLAGER_CURE)
+    .insert(17, EntityEventType.PLAY_AMBIENT)
+    .insert(18, EntityEventType.RESPAWN)
+    .insert(19, EntityEventType.GOLEM_FLOWER_OFFER)
+    .insert(20, EntityEventType.GOLEM_FLOWER_WITHDRAW)
+    .insert(21, EntityEventType.LOVE_PARTICLES)
+    .insert(22, EntityEventType.VILLAGER_ANGRY)
+    .insert(23, EntityEventType.VILLAGER_HAPPY)
+    .insert(24, EntityEventType.WITCH_HAT_MAGIC)
+    .insert(25, EntityEventType.FIREWORK_EXPLODE)
+    .insert(26, EntityEventType.IN_LOVE_HEARTS)
+    .insert(27, EntityEventType.SILVERFISH_MERGE_WITH_STONE)
+    .insert(28, EntityEventType.GUARDIAN_ATTACK_ANIMATION)
+    .insert(29, EntityEventType.WITCH_DRINK_POTION)
+    .insert(30, EntityEventType.WITCH_THROW_POTION)
+    .insert(31, EntityEventType.PRIME_TNT_MINECART)
+    .insert(32, EntityEventType.PRIME_CREEPER)
+    .insert(33, EntityEventType.AIR_SUPPLY)
+    .insert(34, EntityEventType.PLAYER_ADD_XP_LEVELS)
+    .insert(35, EntityEventType.ELDER_GUARDIAN_CURSE)
+    .insert(36, EntityEventType.AGENT_ARM_SWING)
+    .insert(37, EntityEventType.ENDER_DRAGON_DEATH)
+    .insert(38, EntityEventType.DUST_PARTICLES)
+    .insert(39, EntityEventType.ARROW_SHAKE)
+    .insert(57, EntityEventType.EATING_ITEM)
+    .insert(60, EntityEventType.BABY_ANIMAL_FEED)
+    .insert(61, EntityEventType.DEATH_SMOKE_CLOUD)
+    .insert(62, EntityEventType.COMPLETE_TRADE)
+    .insert(63, EntityEventType.REMOVE_LEASH)
+    .insert(64, EntityEventType.CARAVAN)
+    .insert(65, EntityEventType.CONSUME_TOTEM)
+    .insert(66, EntityEventType.CHECK_TREASURE_HUNTER_ACHIEVEMENT)
+    .insert(67, EntityEventType.ENTITY_SPAWN)
+    .insert(68, EntityEventType.DRAGON_FLAMING)
+    .insert(69, EntityEventType.UPDATE_ITEM_STACK_SIZE)
+    .insert(70, EntityEventType.START_SWIMMING)
+    .insert(71, EntityEventType.BALLOON_POP)
+    .insert(72, EntityEventType.TREASURE_HUNT)
     .build();
 
   /**
