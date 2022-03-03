@@ -307,12 +307,8 @@ public interface Codec {
                                                               @NotNull final PacketEncoder<T> encoder) {
       Preconditions.checkArgument(id >= 0,
         "Id cannot be negative!");
-      final var packetClass = factory.get().getClass();
-      if (this.packets.containsKey(packetClass)) {
-        this.updatePacketEncoder(packetClass, encoder)
-      } else {
-        this.packets.put(packetClass, new PacketDefinition<>(id, factory, encoder));
-      }
+      final var packetClass = (Class<T>) factory.get().getClass();
+      this.packets.put(packetClass, new PacketDefinition<>(id, factory, encoder));
       return this;
     }
 
@@ -357,29 +353,6 @@ public interface Codec {
           .map(PacketEncoder.Base.class::cast)
           .ifPresent(this::registerPacket);
       }
-      return this;
-    }
-
-    /**
-     * updates the encoder.
-     *
-     * @param packetClass the packet class to update.
-     * @param encoder the encoder to update.
-     * @param <T> type of the packet.
-     *
-     * @return {@code this} for the builder chain.
-     */
-    @NotNull
-    public <T extends MinecraftPacket> Builder updatePacketEncoder(@NotNull final Class<T> packetClass,
-                                                                   @NotNull final PacketEncoder<T> encoder) {
-      final var wildDefinition = this.packets.get(packetClass);
-      Preconditions.checkNotNull(wildDefinition,
-        "Packet %s does not exist!", packetClass.getSimpleName());
-      final var uncheckedDefinition = (PacketDefinition<T>) wildDefinition;
-      this.packets.replace(
-        packetClass,
-        new PacketDefinition<>(uncheckedDefinition.id(), uncheckedDefinition.factory(), encoder)
-      );
       return this;
     }
   }
