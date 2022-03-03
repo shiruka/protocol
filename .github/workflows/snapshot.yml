@@ -9,16 +9,16 @@ jobs:
     name: Upload snapshot
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - uses: DeLaGuardo/setup-graalvm@4.0
+      - uses: DeLaGuardo/setup-graalvm@5.0
         with:
           graalvm: 21.3.0
           java: java17
 
-      - uses: crazy-max/ghaction-import-gpg@v3.2.0
+      - uses: crazy-max/ghaction-import-gpg@v4.2.0
         with:
-          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.GPG_PASSPHRASE }}
 
       - uses: release-drafter/release-drafter@master
