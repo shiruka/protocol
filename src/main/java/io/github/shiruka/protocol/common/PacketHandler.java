@@ -11,6 +11,7 @@ import io.github.shiruka.protocol.packets.AutomationClientConnect;
 import io.github.shiruka.protocol.packets.AvailableCommands;
 import io.github.shiruka.protocol.packets.BlockEntityData;
 import io.github.shiruka.protocol.packets.BlockEvent;
+import io.github.shiruka.protocol.packets.BlockPickRequest;
 import io.github.shiruka.protocol.packets.ClientToServerHandshake;
 import io.github.shiruka.protocol.packets.Disconnect;
 import io.github.shiruka.protocol.packets.LevelEvent;
@@ -302,5 +303,13 @@ public interface PacketHandler {
    * @param packet the packet to handle.
    */
   default void handle(@NotNull final BlockEntityData packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final BlockPickRequest packet) {
   }
 }

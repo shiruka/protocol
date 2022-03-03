@@ -13,6 +13,9 @@ import io.github.shiruka.protocol.common.MinecraftSession;
 import io.github.shiruka.protocol.data.AdventureSetting;
 import io.github.shiruka.protocol.data.AttributeData;
 import io.github.shiruka.protocol.data.CommonLevelEvent;
+import io.github.shiruka.protocol.data.GamePublishSetting;
+import io.github.shiruka.protocol.data.GameRuleValue;
+import io.github.shiruka.protocol.data.GameType;
 import io.github.shiruka.protocol.data.ItemDefinition;
 import io.github.shiruka.protocol.data.LevelEventType;
 import io.github.shiruka.protocol.data.ParticleType;
@@ -36,6 +39,7 @@ import io.github.shiruka.protocol.data.inventory.ItemData;
 import io.github.shiruka.protocol.packets.AdventureSettings;
 import io.github.shiruka.protocol.packets.ResourcePackInfo;
 import io.github.shiruka.protocol.packets.ResourcePackStack;
+import io.github.shiruka.protocol.packets.StartGame;
 import io.netty.buffer.ByteBufInputStream;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
@@ -873,6 +877,18 @@ public class CodecHelperV291 implements CodecHelper {
     return new EntityLinkData(from, to, EntityLinkDataType.byOrdinal(type), immediate);
   }
 
+  @Override
+  public GameRuleValue readGameRule(@NotNull final PacketBuffer buffer) {
+    final var name = buffer.readString();
+    final var type = buffer.readUnsignedVarInt();
+    return switch (type) {
+      case 1 -> new GameRuleValue(name, buffer.readBoolean());
+      case 2 -> new GameRuleValue(name, buffer.readUnsignedVarInt());
+      case 3 -> new GameRuleValue(name, buffer.readFloatLE());
+      default -> throw new IllegalStateException("Invalid game rule type received!");
+    };
+  }
+
   @NotNull
   @Override
   public ItemData readItem(@NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
@@ -906,6 +922,41 @@ public class CodecHelperV291 implements CodecHelper {
       .canPlace(canPlace.toArray(new String[0]))
       .canBreak(canBreak.toArray(new String[0]))
       .build();
+  }
+
+  @Override
+  public void readLevelSettings(@NotNull final StartGame packet, @NotNull final PacketBuffer buffer) {
+    packet.seed(buffer.readVarInt());
+    packet.dimensionId(buffer.readVarInt());
+    packet.generatorId(buffer.readVarInt());
+    packet.levelGameType(GameType.byOrdinal(buffer.readVarInt()));
+    packet.difficulty(buffer.readVarInt());
+    packet.defaultSpawn(buffer.readVector3i());
+    packet.achievementsDisabled(buffer.readBoolean());
+    packet.dayCycleStopTime(buffer.readVarInt());
+    packet.eduEditionOffers(buffer.readBoolean() ? 1 : 0);
+    packet.eduFeaturesEnabled(buffer.readBoolean());
+    packet.rainLevel(buffer.readFloatLE());
+    packet.lightningLevel(buffer.readFloatLE());
+    packet.multiplayerGame(buffer.readBoolean());
+    packet.broadcastingToLan(buffer.readBoolean());
+    buffer.readBoolean();
+    packet.commandsEnabled(buffer.readBoolean());
+    packet.texturePacksRequired(buffer.readBoolean());
+    packet.gameRules(buffer.readArrayUnsignedInt(() -> this.readGameRule(buffer)));
+    packet.bonusChestEnabled(buffer.readBoolean());
+    packet.startingWithMap(buffer.readBoolean());
+    packet.trustingPlayers(buffer.readBoolean());
+    packet.defaultPlayerPermission(PlayerPermission.byOrdinal(buffer.readVarInt()));
+    packet.xblBroadcastMode(GamePublishSetting.byOrdinal(buffer.readVarInt()));
+    packet.serverChunkTickRange(buffer.readIntLE());
+    buffer.readBoolean();
+    packet.platformBroadcastMode(GamePublishSetting.byOrdinal(buffer.readVarInt()));
+    buffer.readBoolean();
+    packet.behaviorPackLocked(buffer.readBoolean());
+    packet.resourcePackLocked(buffer.readBoolean());
+    packet.fromLockedWorldTemplate(buffer.readBoolean());
+    packet.usingMsaGamerTagsOnly(buffer.readBoolean());
   }
 
   @NotNull
@@ -1086,6 +1137,20 @@ public class CodecHelperV291 implements CodecHelper {
   }
 
   @Override
+  public void writeGameRule(@NotNull final PacketBuffer buffer, @NotNull final GameRuleValue gameRule) {
+    final var value = gameRule.value();
+    final var type = this.gameRuleTypes.id(value.getClass());
+    buffer.writeString(gameRule.name());
+    buffer.writeUnsignedVarInt(type);
+    switch (type) {
+      case 1 -> buffer.writeBoolean((boolean) value);
+      case 2 -> buffer.writeUnsignedVarInt((int) value);
+      case 3 -> buffer.writeFloatLE((float) value);
+      default -> throw new IllegalStateException("Invalid game rule type received!");
+    }
+  }
+
+  @Override
   public void writeItem(@NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session,
                         @NotNull final ItemData item) {
     final var definition = item.definition();
@@ -1113,6 +1178,41 @@ public class CodecHelperV291 implements CodecHelper {
     }
     buffer.writeArrayUnsignedInt(item.canPlace(), buffer::writeString);
     buffer.writeArrayUnsignedInt(item.canBreak(), buffer::writeString);
+  }
+
+  @Override
+  public void writeLevelSettings(@NotNull final StartGame packet, @NotNull final PacketBuffer buffer) {
+    buffer.writeVarInt(packet.seed());
+    buffer.writeVarInt(packet.dimensionId());
+    buffer.writeVarInt(packet.generatorId());
+    buffer.writeVarInt(packet.levelGameType().ordinal());
+    buffer.writeVarInt(packet.difficulty());
+    buffer.writeVector3i(packet.defaultSpawn());
+    buffer.writeBoolean(packet.achievementsDisabled());
+    buffer.writeVarInt(packet.dayCycleStopTime());
+    buffer.writeBoolean(packet.eduEditionOffers() != 0);
+    buffer.writeBoolean(packet.eduFeaturesEnabled());
+    buffer.writeFloatLE(packet.rainLevel());
+    buffer.writeFloatLE(packet.lightningLevel());
+    buffer.writeBoolean(packet.multiplayerGame());
+    buffer.writeBoolean(packet.broadcastingToLan());
+    buffer.writeBoolean(packet.xblBroadcastMode() != GamePublishSetting.NO_MULTI_PLAY);
+    buffer.writeBoolean(packet.commandsEnabled());
+    buffer.writeBoolean(packet.texturePacksRequired());
+    buffer.writeArrayUnsignedInt(packet.gameRules(), rule -> this.writeGameRule(buffer, rule));
+    buffer.writeBoolean(packet.bonusChestEnabled());
+    buffer.writeBoolean(packet.startingWithMap());
+    buffer.writeBoolean(packet.trustingPlayers());
+    buffer.writeVarInt(packet.defaultPlayerPermission().ordinal());
+    buffer.writeVarInt(packet.xblBroadcastMode().ordinal());
+    buffer.writeIntLE(packet.serverChunkTickRange());
+    buffer.writeBoolean(packet.platformBroadcastMode() != GamePublishSetting.NO_MULTI_PLAY);
+    buffer.writeVarInt(packet.platformBroadcastMode().ordinal());
+    buffer.writeBoolean(packet.xblBroadcastMode() != GamePublishSetting.NO_MULTI_PLAY);
+    buffer.writeBoolean(packet.behaviorPackLocked());
+    buffer.writeBoolean(packet.resourcePackLocked());
+    buffer.writeBoolean(packet.fromLockedWorldTemplate());
+    buffer.writeBoolean(packet.usingMsaGamerTagsOnly());
   }
 
   @Override
