@@ -11,8 +11,12 @@ import io.github.shiruka.protocol.packets.AutomationClientConnect;
 import io.github.shiruka.protocol.packets.AvailableCommands;
 import io.github.shiruka.protocol.packets.BlockEntityData;
 import io.github.shiruka.protocol.packets.BlockEvent;
+import io.github.shiruka.protocol.packets.BlockPickRequest;
+import io.github.shiruka.protocol.packets.BookEdit;
 import io.github.shiruka.protocol.packets.ClientToServerHandshake;
 import io.github.shiruka.protocol.packets.Disconnect;
+import io.github.shiruka.protocol.packets.EntityEvent;
+import io.github.shiruka.protocol.packets.Explode;
 import io.github.shiruka.protocol.packets.LevelEvent;
 import io.github.shiruka.protocol.packets.LevelSoundEvent1;
 import io.github.shiruka.protocol.packets.Login;
@@ -302,5 +306,37 @@ public interface PacketHandler {
    * @param packet the packet to handle.
    */
   default void handle(@NotNull final BlockEntityData packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final BlockPickRequest packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final BookEdit packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final Explode packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final EntityEvent packet) {
   }
 }

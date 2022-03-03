@@ -36,7 +36,6 @@ public final class StartGame extends MinecraftPacket {
   //@formatter:off
   private final List<BlockPropertyData> blockProperties = new ObjectArrayList<>();
   private final List<ExperimentData> experiments = new ObjectArrayList<>();
-  private final List<GameRuleValue> gameRules = new ObjectArrayList<>();
   private boolean achievementsDisabled;
   private boolean behaviorPackLocked;
   private ListTag blockPalette;
@@ -60,6 +59,7 @@ public final class StartGame extends MinecraftPacket {
   private boolean forceExperimentalGameplay;
   private boolean fromLockedWorldTemplate;
   private boolean fromWorldTemplate;
+  private List<GameRuleValue> gameRules = new ObjectArrayList<>();
   private int generatorId;
   private boolean inventoriesServerAuthoritative;
   private List<ItemEntry> itemEntries = new ObjectArrayList<>();

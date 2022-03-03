@@ -13,6 +13,10 @@ import io.github.shiruka.protocol.common.MinecraftSession;
 import io.github.shiruka.protocol.data.AdventureSetting;
 import io.github.shiruka.protocol.data.AttributeData;
 import io.github.shiruka.protocol.data.CommonLevelEvent;
+import io.github.shiruka.protocol.data.EntityEventType;
+import io.github.shiruka.protocol.data.GamePublishSetting;
+import io.github.shiruka.protocol.data.GameRuleValue;
+import io.github.shiruka.protocol.data.GameType;
 import io.github.shiruka.protocol.data.ItemDefinition;
 import io.github.shiruka.protocol.data.LevelEventType;
 import io.github.shiruka.protocol.data.ParticleType;
@@ -34,8 +38,10 @@ import io.github.shiruka.protocol.data.entity.EntityLinkData;
 import io.github.shiruka.protocol.data.entity.EntityLinkDataType;
 import io.github.shiruka.protocol.data.inventory.ItemData;
 import io.github.shiruka.protocol.packets.AdventureSettings;
+import io.github.shiruka.protocol.packets.BookEdit;
 import io.github.shiruka.protocol.packets.ResourcePackInfo;
 import io.github.shiruka.protocol.packets.ResourcePackStack;
+import io.github.shiruka.protocol.packets.StartGame;
 import io.netty.buffer.ByteBufInputStream;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
@@ -178,6 +184,18 @@ public class CodecHelperV291 implements CodecHelper {
     .build();
 
   /**
+   * the book edit type.
+   */
+  @Getter
+  protected final IntTypeMap<BookEdit.Action> bookEditTypes = IntTypeMap.newBuilder(BookEdit.Action.class)
+    .insert(0, BookEdit.Action.REPLACE_PAGE)
+    .insert(1, BookEdit.Action.ADD_PAGE)
+    .insert(2, BookEdit.Action.DELETE_PAGE)
+    .insert(3, BookEdit.Action.SWAP_PAGES)
+    .insert(4, BookEdit.Action.SIGN_BOOK)
+    .build();
+
+  /**
    * the command parameters.
    */
   @Getter
@@ -305,6 +323,67 @@ public class CodecHelperV291 implements CodecHelper {
     .insert(6, EntityDataType.VECTOR3I)
     .insert(7, EntityDataType.LONG)
     .insert(8, EntityDataType.VECTOR3F)
+    .build();
+
+  /**
+   * the book edit type.
+   */
+  @Getter
+  protected final IntTypeMap<EntityEventType> entityEventTypes = IntTypeMap.newBuilder(EntityEventType.class)
+    .insert(0, EntityEventType.NONE)
+    .insert(1, EntityEventType.JUMP)
+    .insert(2, EntityEventType.HURT)
+    .insert(3, EntityEventType.DEATH)
+    .insert(4, EntityEventType.ATTACK_START)
+    .insert(5, EntityEventType.ATTACK_STOP)
+    .insert(6, EntityEventType.TAME_FAILED)
+    .insert(7, EntityEventType.TAME_SUCCEEDED)
+    .insert(8, EntityEventType.SHAKE_WETNESS)
+    .insert(9, EntityEventType.USE_ITEM)
+    .insert(10, EntityEventType.EAT_GRASS)
+    .insert(11, EntityEventType.FISH_HOOK_BUBBLE)
+    .insert(12, EntityEventType.FISH_HOOK_POSITION)
+    .insert(13, EntityEventType.FISH_HOOK_TIME)
+    .insert(14, EntityEventType.FISH_HOOK_TEASE)
+    .insert(15, EntityEventType.SQUID_FLEEING)
+    .insert(16, EntityEventType.ZOMBIE_VILLAGER_CURE)
+    .insert(17, EntityEventType.PLAY_AMBIENT)
+    .insert(18, EntityEventType.RESPAWN)
+    .insert(19, EntityEventType.GOLEM_FLOWER_OFFER)
+    .insert(20, EntityEventType.GOLEM_FLOWER_WITHDRAW)
+    .insert(21, EntityEventType.LOVE_PARTICLES)
+    .insert(22, EntityEventType.VILLAGER_ANGRY)
+    .insert(23, EntityEventType.VILLAGER_HAPPY)
+    .insert(24, EntityEventType.WITCH_HAT_MAGIC)
+    .insert(25, EntityEventType.FIREWORK_EXPLODE)
+    .insert(26, EntityEventType.IN_LOVE_HEARTS)
+    .insert(27, EntityEventType.SILVERFISH_MERGE_WITH_STONE)
+    .insert(28, EntityEventType.GUARDIAN_ATTACK_ANIMATION)
+    .insert(29, EntityEventType.WITCH_DRINK_POTION)
+    .insert(30, EntityEventType.WITCH_THROW_POTION)
+    .insert(31, EntityEventType.PRIME_TNT_MINECART)
+    .insert(32, EntityEventType.PRIME_CREEPER)
+    .insert(33, EntityEventType.AIR_SUPPLY)
+    .insert(34, EntityEventType.PLAYER_ADD_XP_LEVELS)
+    .insert(35, EntityEventType.ELDER_GUARDIAN_CURSE)
+    .insert(36, EntityEventType.AGENT_ARM_SWING)
+    .insert(37, EntityEventType.ENDER_DRAGON_DEATH)
+    .insert(38, EntityEventType.DUST_PARTICLES)
+    .insert(39, EntityEventType.ARROW_SHAKE)
+    .insert(57, EntityEventType.EATING_ITEM)
+    .insert(60, EntityEventType.BABY_ANIMAL_FEED)
+    .insert(61, EntityEventType.DEATH_SMOKE_CLOUD)
+    .insert(62, EntityEventType.COMPLETE_TRADE)
+    .insert(63, EntityEventType.REMOVE_LEASH)
+    .insert(64, EntityEventType.CARAVAN)
+    .insert(65, EntityEventType.CONSUME_TOTEM)
+    .insert(66, EntityEventType.CHECK_TREASURE_HUNTER_ACHIEVEMENT)
+    .insert(67, EntityEventType.ENTITY_SPAWN)
+    .insert(68, EntityEventType.DRAGON_FLAMING)
+    .insert(69, EntityEventType.UPDATE_ITEM_STACK_SIZE)
+    .insert(70, EntityEventType.START_SWIMMING)
+    .insert(71, EntityEventType.BALLOON_POP)
+    .insert(72, EntityEventType.TREASURE_HUNT)
     .build();
 
   /**
@@ -873,6 +952,18 @@ public class CodecHelperV291 implements CodecHelper {
     return new EntityLinkData(from, to, EntityLinkDataType.byOrdinal(type), immediate);
   }
 
+  @Override
+  public GameRuleValue readGameRule(@NotNull final PacketBuffer buffer) {
+    final var name = buffer.readString();
+    final var type = buffer.readUnsignedVarInt();
+    return switch (type) {
+      case 1 -> new GameRuleValue(name, buffer.readBoolean());
+      case 2 -> new GameRuleValue(name, buffer.readUnsignedVarInt());
+      case 3 -> new GameRuleValue(name, buffer.readFloatLE());
+      default -> throw new IllegalStateException("Invalid game rule type received!");
+    };
+  }
+
   @NotNull
   @Override
   public ItemData readItem(@NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
@@ -906,6 +997,41 @@ public class CodecHelperV291 implements CodecHelper {
       .canPlace(canPlace.toArray(new String[0]))
       .canBreak(canBreak.toArray(new String[0]))
       .build();
+  }
+
+  @Override
+  public void readLevelSettings(@NotNull final StartGame packet, @NotNull final PacketBuffer buffer) {
+    packet.seed(buffer.readVarInt());
+    packet.dimensionId(buffer.readVarInt());
+    packet.generatorId(buffer.readVarInt());
+    packet.levelGameType(GameType.byOrdinal(buffer.readVarInt()));
+    packet.difficulty(buffer.readVarInt());
+    packet.defaultSpawn(buffer.readVector3i());
+    packet.achievementsDisabled(buffer.readBoolean());
+    packet.dayCycleStopTime(buffer.readVarInt());
+    packet.eduEditionOffers(buffer.readBoolean() ? 1 : 0);
+    packet.eduFeaturesEnabled(buffer.readBoolean());
+    packet.rainLevel(buffer.readFloatLE());
+    packet.lightningLevel(buffer.readFloatLE());
+    packet.multiplayerGame(buffer.readBoolean());
+    packet.broadcastingToLan(buffer.readBoolean());
+    buffer.readBoolean();
+    packet.commandsEnabled(buffer.readBoolean());
+    packet.texturePacksRequired(buffer.readBoolean());
+    packet.gameRules(buffer.readArrayUnsignedInt(() -> this.readGameRule(buffer)));
+    packet.bonusChestEnabled(buffer.readBoolean());
+    packet.startingWithMap(buffer.readBoolean());
+    packet.trustingPlayers(buffer.readBoolean());
+    packet.defaultPlayerPermission(PlayerPermission.byOrdinal(buffer.readVarInt()));
+    packet.xblBroadcastMode(GamePublishSetting.byOrdinal(buffer.readVarInt()));
+    packet.serverChunkTickRange(buffer.readIntLE());
+    buffer.readBoolean();
+    packet.platformBroadcastMode(GamePublishSetting.byOrdinal(buffer.readVarInt()));
+    buffer.readBoolean();
+    packet.behaviorPackLocked(buffer.readBoolean());
+    packet.resourcePackLocked(buffer.readBoolean());
+    packet.fromLockedWorldTemplate(buffer.readBoolean());
+    packet.usingMsaGamerTagsOnly(buffer.readBoolean());
   }
 
   @NotNull
@@ -1086,6 +1212,20 @@ public class CodecHelperV291 implements CodecHelper {
   }
 
   @Override
+  public void writeGameRule(@NotNull final PacketBuffer buffer, @NotNull final GameRuleValue gameRule) {
+    final var value = gameRule.value();
+    final var type = this.gameRuleTypes.id(value.getClass());
+    buffer.writeString(gameRule.name());
+    buffer.writeUnsignedVarInt(type);
+    switch (type) {
+      case 1 -> buffer.writeBoolean((boolean) value);
+      case 2 -> buffer.writeUnsignedVarInt((int) value);
+      case 3 -> buffer.writeFloatLE((float) value);
+      default -> throw new IllegalStateException("Invalid game rule type received!");
+    }
+  }
+
+  @Override
   public void writeItem(@NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session,
                         @NotNull final ItemData item) {
     final var definition = item.definition();
@@ -1113,6 +1253,41 @@ public class CodecHelperV291 implements CodecHelper {
     }
     buffer.writeArrayUnsignedInt(item.canPlace(), buffer::writeString);
     buffer.writeArrayUnsignedInt(item.canBreak(), buffer::writeString);
+  }
+
+  @Override
+  public void writeLevelSettings(@NotNull final StartGame packet, @NotNull final PacketBuffer buffer) {
+    buffer.writeVarInt(packet.seed());
+    buffer.writeVarInt(packet.dimensionId());
+    buffer.writeVarInt(packet.generatorId());
+    buffer.writeVarInt(packet.levelGameType().ordinal());
+    buffer.writeVarInt(packet.difficulty());
+    buffer.writeVector3i(packet.defaultSpawn());
+    buffer.writeBoolean(packet.achievementsDisabled());
+    buffer.writeVarInt(packet.dayCycleStopTime());
+    buffer.writeBoolean(packet.eduEditionOffers() != 0);
+    buffer.writeBoolean(packet.eduFeaturesEnabled());
+    buffer.writeFloatLE(packet.rainLevel());
+    buffer.writeFloatLE(packet.lightningLevel());
+    buffer.writeBoolean(packet.multiplayerGame());
+    buffer.writeBoolean(packet.broadcastingToLan());
+    buffer.writeBoolean(packet.xblBroadcastMode() != GamePublishSetting.NO_MULTI_PLAY);
+    buffer.writeBoolean(packet.commandsEnabled());
+    buffer.writeBoolean(packet.texturePacksRequired());
+    buffer.writeArrayUnsignedInt(packet.gameRules(), rule -> this.writeGameRule(buffer, rule));
+    buffer.writeBoolean(packet.bonusChestEnabled());
+    buffer.writeBoolean(packet.startingWithMap());
+    buffer.writeBoolean(packet.trustingPlayers());
+    buffer.writeVarInt(packet.defaultPlayerPermission().ordinal());
+    buffer.writeVarInt(packet.xblBroadcastMode().ordinal());
+    buffer.writeIntLE(packet.serverChunkTickRange());
+    buffer.writeBoolean(packet.platformBroadcastMode() != GamePublishSetting.NO_MULTI_PLAY);
+    buffer.writeVarInt(packet.platformBroadcastMode().ordinal());
+    buffer.writeBoolean(packet.xblBroadcastMode() != GamePublishSetting.NO_MULTI_PLAY);
+    buffer.writeBoolean(packet.behaviorPackLocked());
+    buffer.writeBoolean(packet.resourcePackLocked());
+    buffer.writeBoolean(packet.fromLockedWorldTemplate());
+    buffer.writeBoolean(packet.usingMsaGamerTagsOnly());
   }
 
   @Override

@@ -4,6 +4,8 @@ import io.github.shiruka.network.PacketBuffer;
 import io.github.shiruka.protocol.common.MinecraftSession;
 import io.github.shiruka.protocol.data.AttributeData;
 import io.github.shiruka.protocol.data.CommonLevelEvent;
+import io.github.shiruka.protocol.data.EntityEventType;
+import io.github.shiruka.protocol.data.GameRuleValue;
 import io.github.shiruka.protocol.data.ItemDefinition;
 import io.github.shiruka.protocol.data.SoundEvent;
 import io.github.shiruka.protocol.data.command.CommandData;
@@ -16,8 +18,10 @@ import io.github.shiruka.protocol.data.entity.EntityFlag;
 import io.github.shiruka.protocol.data.entity.EntityLinkData;
 import io.github.shiruka.protocol.data.inventory.ItemData;
 import io.github.shiruka.protocol.packets.AdventureSettings;
+import io.github.shiruka.protocol.packets.BookEdit;
 import io.github.shiruka.protocol.packets.ResourcePackInfo;
 import io.github.shiruka.protocol.packets.ResourcePackStack;
+import io.github.shiruka.protocol.packets.StartGame;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,6 +36,14 @@ public interface CodecHelper {
    * the log.
    */
   Logger LOG = LogManager.getLogger(CodecHelper.class);
+
+  /**
+   * obtains the book edit types.
+   *
+   * @return book edit types.
+   */
+  @NotNull
+  IntTypeMap<BookEdit.Action> bookEditTypes();
 
   /**
    * gets command parameters by id.
@@ -84,6 +96,14 @@ public interface CodecHelper {
    */
   @NotNull
   IntTypeMap<EntityDataType> entityDataTypes();
+
+  /**
+   * obtains the entity event types.
+   *
+   * @return entity event types.
+   */
+  @NotNull
+  IntTypeMap<EntityEventType> entityEventTypes();
 
   /**
    * obtains the entity flags.
@@ -178,6 +198,16 @@ public interface CodecHelper {
   EntityLinkData readEntityLink(@NotNull PacketBuffer buffer, @NotNull MinecraftSession session);
 
   /**
+   * reads the game rule value.
+   *
+   * @param buffer the buffer to read.
+   *
+   * @return game rule value.
+   */
+  @NotNull
+  GameRuleValue readGameRule(@NotNull PacketBuffer buffer);
+
+  /**
    * reads the item.
    *
    * @param buffer the buffer to read.
@@ -187,6 +217,14 @@ public interface CodecHelper {
    */
   @NotNull
   ItemData readItem(@NotNull PacketBuffer buffer, @NotNull MinecraftSession session);
+
+  /**
+   * reads the buffer to write the level settings to the start game packet.
+   *
+   * @param packet the packet to read.
+   * @param buffer the buffer to read.
+   */
+  void readLevelSettings(@NotNull StartGame packet, @NotNull PacketBuffer buffer);
 
   /**
    * reads the resource pack info entry.
@@ -267,6 +305,14 @@ public interface CodecHelper {
   void writeEntityLink(@NotNull PacketBuffer buffer, @NotNull MinecraftSession session, @NotNull EntityLinkData link);
 
   /**
+   * writes the game rule to buffer.
+   *
+   * @param buffer the buffer to write.
+   * @param gameRule the game rule to write.
+   */
+  void writeGameRule(@NotNull PacketBuffer buffer, @NotNull GameRuleValue gameRule);
+
+  /**
    * writes the item.
    *
    * @param buffer the buffer to write.
@@ -274,6 +320,14 @@ public interface CodecHelper {
    * @param item the item to write.
    */
   void writeItem(@NotNull PacketBuffer buffer, @NotNull MinecraftSession session, @NotNull ItemData item);
+
+  /**
+   * writes the level settings.
+   *
+   * @param packet the packet to write.
+   * @param buffer the buffer to write.
+   */
+  void writeLevelSettings(@NotNull StartGame packet, @NotNull PacketBuffer buffer);
 
   /**
    * writes the resource pack entry.
