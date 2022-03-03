@@ -1,7 +1,6 @@
 package io.github.shiruka.protocol.codec.v313;
 
 import io.github.shiruka.protocol.codec.Codec;
-import io.github.shiruka.protocol.codec.v291.CodecHelperV291;
 import io.github.shiruka.protocol.codec.v291.CodecV291;
 
 /**
