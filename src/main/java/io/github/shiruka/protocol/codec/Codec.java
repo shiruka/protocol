@@ -20,6 +20,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Range;
 import org.reflections.Reflections;
 
 /**
@@ -302,12 +303,23 @@ public interface Codec {
      * @return {@code this} for the builder chain.
      */
     @NotNull
-    public <T extends MinecraftPacket> Builder registerPacket(final int id, @NotNull final Supplier<T> factory,
+    public <T extends MinecraftPacket> Builder registerPacket(@Range(from = 0, to = Integer.MAX_VALUE) final int id,
+                                                              @NotNull final Supplier<T> factory,
                                                               @NotNull final PacketEncoder<T> encoder) {
-      Preconditions.checkArgument(id >= 0,
-        "Id cannot be negative!");
-      final var packetClass = (Class<T>) factory.get().getClass();
-      this.packets.put(packetClass, new PacketDefinition<>(id, factory, encoder));
+      return this.registerPacket(new PacketDefinition<>(id, factory, encoder));
+    }
+
+    /**
+     * registers the packet.
+     *
+     * @param definition the definition o register.
+     * @param <T> type of the packet.
+     *
+     * @return {@code this} for the builder chain.
+     */
+    @NotNull
+    public <T extends MinecraftPacket> Builder registerPacket(@NotNull final PacketDefinition<T> definition) {
+      this.packets.put(definition.factory().get().getClass(), definition);
       return this;
     }
 
