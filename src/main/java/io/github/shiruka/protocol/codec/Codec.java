@@ -10,6 +10,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Supplier;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +21,6 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.reflections.Reflections;
-import tr.com.infumia.infumialib.reflection.RefConstructed;
-import tr.com.infumia.infumialib.reflection.clazz.ClassOf;
 
 /**
  * an interface to determine codecs.
@@ -313,6 +312,25 @@ public interface Codec {
     }
 
     /**
+     * registers the packets by packet encoders.
+     *
+     * @param classes the classes to scan.
+     *
+     * @return {@code this} for the builder chain.
+     */
+    @NotNull
+    public Builder registerPackets(@NotNull final Collection<Class<? extends PacketEncoder.Base>> classes) {
+      for (final var cls : classes) {
+        try {
+          this.registerPacket(cls.getConstructor().newInstance());
+        } catch (final Exception e) {
+          throw new RuntimeException(e);
+        }
+      }
+      return this;
+    }
+
+    /**
      * removes the packet.
      *
      * @param packetClass the packet class to remove.
@@ -345,15 +363,7 @@ public interface Codec {
      */
     @NotNull
     public Builder scanPackageAndRegister(@NotNull final String packageName) {
-      final var classes = new Reflections(packageName)
-        .getSubTypesOf(PacketEncoder.Base.class);
-      for (final var cls : classes) {
-        new ClassOf<>(cls).getConstructor()
-          .flatMap(RefConstructed::create)
-          .map(PacketEncoder.Base.class::cast)
-          .ifPresent(this::registerPacket);
-      }
-      return this;
+      return this.registerPackets(new Reflections(packageName).getSubTypesOf(PacketEncoder.Base.class));
     }
   }
 
