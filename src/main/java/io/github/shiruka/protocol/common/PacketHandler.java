@@ -53,6 +53,7 @@ import io.github.shiruka.protocol.packet.ResourcePackStack;
 import io.github.shiruka.protocol.packet.RiderJump;
 import io.github.shiruka.protocol.packet.ScriptCustomEvent;
 import io.github.shiruka.protocol.packet.ServerToClientHandshake;
+import io.github.shiruka.protocol.packet.SetLocalPlayerAsInitialized;
 import io.github.shiruka.protocol.packet.SetTime;
 import io.github.shiruka.protocol.packet.StartGame;
 import io.github.shiruka.protocol.packet.TakeItemEntity;
@@ -563,5 +564,13 @@ public interface PacketHandler {
    * @param packet the packet to handle.
    */
   default void handle(@NotNull final ScriptCustomEvent packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final SetLocalPlayerAsInitialized packet) {
   }
 }
