@@ -1,6 +1,5 @@
 package io.github.shiruka.protocol.packets;
 
-import io.github.shiruka.api.common.vectors.Vector3f;
 import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.PacketHandler;
 import lombok.AccessLevel;
@@ -13,7 +12,7 @@ import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * a class that represents add hanging entity packets.
+ * a class that represents mob effect packets.
  */
 @Setter
 @Getter
@@ -21,17 +20,46 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
-public final class AddHangingEntity extends MinecraftPacket.Base {
+public final class MobEffect extends MinecraftPacket.Base {
 
   //@formatter:off
-  int direction;
-  Vector3f position;
+  int amplifier;
+  int duration;
+  int effectId;
+  Event event;
+  boolean particles;
   long runtimeEntityId;
-  long uniqueEntityId;
   //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {
     handler.handle(this);
+  }
+
+  /**
+   * an enum class that contains mob effect events.
+   */
+  public enum Event {
+    /**
+     * the none.
+     */
+    NONE,
+    /**
+     * the add.
+     */
+    ADD,
+    /**
+     * the modify.
+     */
+    MODIFY,
+    /**
+     * the remove;
+     */
+    REMOVE;
+
+    /**
+     * the values.
+     */
+    public static final Event[] VALUES = Event.values();
   }
 }

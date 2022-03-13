@@ -32,6 +32,7 @@ import io.github.shiruka.protocol.packets.LevelChunk;
 import io.github.shiruka.protocol.packets.LevelEvent;
 import io.github.shiruka.protocol.packets.LevelSoundEvent1;
 import io.github.shiruka.protocol.packets.Login;
+import io.github.shiruka.protocol.packets.MobEffect;
 import io.github.shiruka.protocol.packets.MoveEntityAbsolute;
 import io.github.shiruka.protocol.packets.MovePlayer;
 import io.github.shiruka.protocol.packets.NetworkStackLatency;
@@ -51,6 +52,7 @@ import io.github.shiruka.protocol.packets.Text;
 import io.github.shiruka.protocol.packets.TickSync;
 import io.github.shiruka.protocol.packets.Transfer;
 import io.github.shiruka.protocol.packets.Unknown;
+import io.github.shiruka.protocol.packets.UpdateAttributes;
 import io.github.shiruka.protocol.packets.UpdateBlock;
 import org.jetbrains.annotations.NotNull;
 
@@ -473,5 +475,21 @@ public interface PacketHandler {
    * @param packet the packet to handle.
    */
   default void handle(@NotNull final AddPainting packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final MobEffect packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final UpdateAttributes packet) {
   }
 }

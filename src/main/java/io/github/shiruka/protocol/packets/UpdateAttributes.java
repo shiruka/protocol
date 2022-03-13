@@ -1,8 +1,10 @@
 package io.github.shiruka.protocol.packets;
 
-import io.github.shiruka.api.common.vectors.Vector3f;
 import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.PacketHandler;
+import io.github.shiruka.protocol.data.AttributeData;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +15,7 @@ import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * a class that represents add hanging entity packets.
+ * a class that represents update attributes packets.
  */
 @Setter
 @Getter
@@ -21,13 +23,12 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
-public final class AddHangingEntity extends MinecraftPacket.Base {
+public final class UpdateAttributes extends MinecraftPacket.Base {
 
   //@formatter:off
-  int direction;
-  Vector3f position;
-  long runtimeEntityId;
-  long uniqueEntityId;
+  private @Builder.Default List<AttributeData> attributes = new ObjectArrayList<>();
+  private long runtimeEntityId;
+  private long tick;
   //@formatter:on
 
   @Override

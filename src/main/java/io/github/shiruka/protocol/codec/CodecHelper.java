@@ -158,6 +158,17 @@ public interface CodecHelper {
   AttributeData readAttribute(@NotNull PacketBuffer buffer, @NotNull MinecraftSession session);
 
   /**
+   * reads the attribute.
+   *
+   * @param buffer the buffer to read.
+   * @param session the session to read.
+   *
+   * @return attribute.
+   */
+  @NotNull
+  AttributeData readAttributeFull(@NotNull PacketBuffer buffer, @NotNull MinecraftSession session);
+
+  /**
    * reads the boss event action.
    *
    * @param packet the packet to read.
@@ -278,6 +289,14 @@ public interface CodecHelper {
    * @param data the data to write.
    */
   void writeAttribute(@NotNull PacketBuffer buffer, @NotNull AttributeData data);
+
+  /**
+   * writes the attribute data.
+   *
+   * @param buffer the buffer to write.
+   * @param data the data to write.
+   */
+  void writeAttributeFull(@NotNull PacketBuffer buffer, @NotNull AttributeData data);
 
   /**
    * writes the boss event.

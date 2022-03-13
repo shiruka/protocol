@@ -879,6 +879,17 @@ public class CodecHelperV291 implements CodecHelper {
     return new AttributeData(name, min, max, val);
   }
 
+  @NotNull
+  @Override
+  public AttributeData readAttributeFull(@NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+    final var min = buffer.readFloatLE();
+    final var max = buffer.readFloatLE();
+    final var val = buffer.readFloatLE();
+    final var def = buffer.readFloatLE();
+    final var name = buffer.readString();
+    return new AttributeData(name, min, max, val, def);
+  }
+
   @Override
   public void readBossEventAction(@NotNull final BossEvent packet, @NotNull final PacketBuffer buffer) {
     switch (packet.action()) {
@@ -1110,6 +1121,15 @@ public class CodecHelperV291 implements CodecHelper {
     buffer.writeFloatLE(data.minimum());
     buffer.writeFloatLE(data.maximum());
     buffer.writeFloatLE(data.value());
+  }
+
+  @Override
+  public void writeAttributeFull(@NotNull final PacketBuffer buffer, @NotNull final AttributeData data) {
+    buffer.writeFloatLE(data.minimum());
+    buffer.writeFloatLE(data.maximum());
+    buffer.writeFloatLE(data.value());
+    buffer.writeFloatLE(data.defaultValue());
+    buffer.writeString(data.name());
   }
 
   @Override
