@@ -3,10 +3,13 @@ package io.github.shiruka.protocol.packets;
 import io.github.shiruka.api.common.vectors.Vector3f;
 import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.PacketHandler;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -16,16 +19,16 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class MoveEntityAbsolute extends MinecraftPacket.Base {
 
   //@formatter:off
-  private static final int FLAG_ON_GROUND = 1;
-  private static final int FLAG_TELEPORTED = 2;
-  private boolean onGround;
-  private Vector3f position;
-  private Vector3f rotation;
-  private long runtimeEntityId;
-  private boolean teleported;
+  boolean onGround;
+  Vector3f position;
+  Vector3f rotation;
+  long runtimeEntityId;
+  boolean teleported;
   //@formatter:on
 
   @Override

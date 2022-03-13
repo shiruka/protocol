@@ -4,10 +4,13 @@ import io.github.shiruka.api.common.vectors.Vector3f;
 import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.PacketHandler;
 import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,18 +22,20 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class MovePlayer extends MinecraftPacket.Base {
 
   //@formatter:off
-  private int entityType;
-  private Mode mode;
-  private boolean onGround;
-  private Vector3f position;
-  private long ridingRuntimeEntityId;
-  private Vector3f rotation;
-  private long runtimeEntityId;
-  private TeleportationCause teleportationCause;
-  private long tick;
+  int entityType;
+  Mode mode;
+  boolean onGround;
+  Vector3f position;
+  long ridingRuntimeEntityId;
+  Vector3f rotation;
+  long runtimeEntityId;
+  TeleportationCause teleportationCause;
+  long tick;
   //@formatter:on
 
   @Override

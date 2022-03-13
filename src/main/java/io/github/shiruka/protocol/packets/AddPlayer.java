@@ -8,10 +8,13 @@ import io.github.shiruka.protocol.data.entity.EntityLinkData;
 import io.github.shiruka.protocol.data.inventory.ItemData;
 import java.util.List;
 import java.util.UUID;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -21,23 +24,25 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class AddPlayer extends MinecraftPacket.Base {
 
   //@formatter:off
-  private final AdventureSettings adventureSettings = new AdventureSettings();
-  private final EntityDataMap metadata = new EntityDataMap();
-  private int buildPlatform;
-  private String deviceId;
-  private List<EntityLinkData> entityLinks;
-  private ItemData hand;
-  private Vector3f motion;
-  private String platformChatId;
-  private Vector3f position;
-  private Vector3f rotation;
-  private long runtimeEntityId;
-  private long uniqueEntityId;
-  private String username;
-  private UUID uuid;
+  @Builder.Default AdventureSettings adventureSettings = AdventureSettings.newBuilder().build();
+  int buildPlatform;
+  String deviceId;
+  List<EntityLinkData> entityLinks;
+  ItemData hand;
+  @Builder.Default EntityDataMap metadata = new EntityDataMap();
+  Vector3f motion;
+  String platformChatId;
+  Vector3f position;
+  Vector3f rotation;
+  long runtimeEntityId;
+  long uniqueEntityId;
+  String username;
+  UUID uuid;
   //@formatter:on
 
   @Override

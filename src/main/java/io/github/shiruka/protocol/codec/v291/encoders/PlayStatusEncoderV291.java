@@ -17,7 +17,7 @@ public final class PlayStatusEncoderV291 extends PacketEncoder.Base<PlayStatus> 
   @Override
   public void decode(@NotNull final PlayStatus packet, @NotNull final CodecHelper helper,
                      @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
-    packet.status(PlayStatus.Status.byOrdinal(buffer.readInt()));
+    packet.status(PlayStatus.Status.VALUES[buffer.readInt()]);
   }
 
   @Override

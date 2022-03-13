@@ -17,7 +17,7 @@ public final class ResourcePackClientResponseEncoderV291 extends PacketEncoder.B
   @Override
   public void decode(@NotNull final ResourcePackClientResponse packet, @NotNull final CodecHelper helper,
                      @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
-    packet.status(ResourcePackClientResponse.Status.byOrdinal(buffer.readUnsignedByte()));
+    packet.status(ResourcePackClientResponse.Status.VALUES[buffer.readUnsignedByte()]);
     buffer.readArrayShortLE(buffer::readString);
   }
 

@@ -5,10 +5,13 @@ import io.github.shiruka.protocol.common.PacketHandler;
 import io.github.shiruka.protocol.data.command.CommandData;
 import io.github.shiruka.protocol.data.command.CommandEnumConstraintData;
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -18,15 +21,17 @@ import org.jetbrains.annotations.NotNull;
 @Setter
 @ToString
 @Accessors(fluent = true)
-public class AvailableCommands extends MinecraftPacket.Base {
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder(builderMethodName = "newBuilder", toBuilder = true)
+public final class AvailableCommands extends MinecraftPacket.Base {
 
   //@formatter:off
-  private List<CommandData> commands;
-  private List<CommandEnumConstraintData> constraints;
+  List<CommandData> commands;
+  List<CommandEnumConstraintData> constraints;
   //@formatter:on
 
   @Override
-  public final void handle(@NotNull final PacketHandler handler) {
+  public void handle(@NotNull final PacketHandler handler) {
     handler.handle(this);
   }
 }

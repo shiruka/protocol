@@ -4,10 +4,13 @@ import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.PacketHandler;
 import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.longs.LongList;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -17,21 +20,23 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
-public class LevelChunk extends MinecraftPacket.ReferencedCount {
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder(builderMethodName = "newBuilder", toBuilder = true)
+public final class LevelChunk extends MinecraftPacket.ReferencedCount {
 
   //@formatter:off
-  private LongList blobIds;
-  private boolean cachingEnabled;
-  private int chunkX;
-  private int chunkZ;
-  private ByteBuf data;
-  private boolean requestSubChunks;
-  private int subChunkLimit;
-  private int subChunksLength;
+  LongList blobIds;
+  boolean cachingEnabled;
+  int chunkX;
+  int chunkZ;
+  ByteBuf data;
+  boolean requestSubChunks;
+  int subChunkLimit;
+  int subChunksLength;
   //@formatter:on
 
   @Override
-  public final void handle(@NotNull final PacketHandler handler) {
+  public void handle(@NotNull final PacketHandler handler) {
     handler.handle(this);
   }
 

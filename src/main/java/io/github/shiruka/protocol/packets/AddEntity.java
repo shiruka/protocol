@@ -7,10 +7,13 @@ import io.github.shiruka.protocol.data.AttributeData;
 import io.github.shiruka.protocol.data.entity.EntityDataMap;
 import io.github.shiruka.protocol.data.entity.EntityLinkData;
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -20,19 +23,21 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class AddEntity extends MinecraftPacket.Base {
 
   //@formatter:off
-  private final EntityDataMap metadata = new EntityDataMap();
-  private List<AttributeData> attributes;
-  private List<EntityLinkData> entityLinks;
-  private int entityType;
-  private String identifier;
-  private Vector3f motion;
-  private Vector3f position;
-  private Vector3f rotation;
-  private long runtimeEntityId;
-  private long uniqueEntityId;
+  List<AttributeData> attributes;
+  List<EntityLinkData> entityLinks;
+  int entityType;
+  String identifier;
+  @Builder.Default EntityDataMap metadata = new EntityDataMap();
+  Vector3f motion;
+  Vector3f position;
+  Vector3f rotation;
+  long runtimeEntityId;
+  long uniqueEntityId;
   //@formatter:on
 
   @Override

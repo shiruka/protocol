@@ -1,9 +1,7 @@
 package io.github.shiruka.protocol.packets;
 
-import io.github.shiruka.api.common.vectors.Vector3f;
 import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.PacketHandler;
-import io.github.shiruka.protocol.data.CommonLevelEvent;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,7 +12,7 @@ import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * a class that represents level event packets.
+ * a class that represents entity fall packets.
  */
 @Setter
 @Getter
@@ -22,12 +20,12 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
-public final class LevelEvent extends MinecraftPacket.Base {
+public final class EntityFall extends MinecraftPacket.Base {
 
   //@formatter:off
-  int data;
-  Vector3f position;
-  CommonLevelEvent type;
+  float fallDistance;
+  boolean inVoid;
+  long runtimeEntityId;
   //@formatter:on
 
   @Override

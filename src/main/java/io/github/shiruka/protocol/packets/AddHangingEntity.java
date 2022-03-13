@@ -3,10 +3,15 @@ package io.github.shiruka.protocol.packets;
 import io.github.shiruka.api.common.vectors.Vector3f;
 import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.PacketHandler;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -15,14 +20,18 @@ import org.jetbrains.annotations.NotNull;
 @Setter
 @Getter
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Accessors(fluent = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder(builderMethodName = "newBuilder", toBuilder = true)
 public class AddHangingEntity extends MinecraftPacket.Base {
 
   //@formatter:off
-  private int direction;
-  private Vector3f position;
-  private long runtimeEntityId;
-  private long uniqueEntityId;
+  int direction;
+  Vector3f position;
+  long runtimeEntityId;
+  long uniqueEntityId;
   //@formatter:on
 
   @Override

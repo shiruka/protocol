@@ -20,6 +20,7 @@ import io.github.shiruka.protocol.packets.ChunkRadiusUpdated;
 import io.github.shiruka.protocol.packets.ClientToServerHandshake;
 import io.github.shiruka.protocol.packets.Disconnect;
 import io.github.shiruka.protocol.packets.EntityEvent;
+import io.github.shiruka.protocol.packets.EntityFall;
 import io.github.shiruka.protocol.packets.Explode;
 import io.github.shiruka.protocol.packets.GameRulesChanged;
 import io.github.shiruka.protocol.packets.GuiDataPickItem;
@@ -455,5 +456,13 @@ public interface PacketHandler {
    * @param packet the packet to handle.
    */
   default void handle(@NotNull final NpcRequest packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final EntityFall packet) {
   }
 }

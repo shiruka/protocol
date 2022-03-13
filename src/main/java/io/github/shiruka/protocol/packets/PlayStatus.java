@@ -2,10 +2,13 @@ package io.github.shiruka.protocol.packets;
 
 import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.PacketHandler;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -15,10 +18,12 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class PlayStatus extends MinecraftPacket.Base {
 
   //@formatter:off
-  private Status status;
+  Status status;
   //@formatter:on
 
   @Override
@@ -67,18 +72,6 @@ public final class PlayStatus extends MinecraftPacket.Base {
     /**
      * the cache.
      */
-    private static final Status[] VALUES = Status.values();
-
-    /**
-     * gets play status status by ordinal.
-     *
-     * @param ordinal the ordinal.
-     *
-     * @return play status status.
-     */
-    @NotNull
-    public static Status byOrdinal(final int ordinal) {
-      return Status.VALUES[ordinal];
-    }
+    public static final Status[] VALUES = Status.values();
   }
 }

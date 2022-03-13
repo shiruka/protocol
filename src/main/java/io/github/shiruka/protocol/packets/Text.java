@@ -4,10 +4,13 @@ import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.PacketHandler;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -17,16 +20,18 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class Text extends MinecraftPacket.Base {
 
   //@formatter:off
-  private String message;
-  private boolean needsTranslation;
-  private List<String> parameters = new ObjectArrayList<>();
-  private String platformChatId = "";
-  private String sourceName;
-  private Type type;
-  private String xboxUniqueId;
+  String message;
+  boolean needsTranslation;
+  @Builder.Default List<String> parameters = new ObjectArrayList<>();
+  @Builder.Default String platformChatId = "";
+  String sourceName;
+  Type type;
+  String xboxUniqueId;
   //@formatter:on
 
   @Override
@@ -86,18 +91,6 @@ public final class Text extends MinecraftPacket.Base {
     /**
      * the cache.
      */
-    private static final Type[] VALUES = Type.values();
-
-    /**
-     * gets text type by ordinal.
-     *
-     * @param ordinal the ordinal.
-     *
-     * @return text type.
-     */
-    @NotNull
-    public static Type byOrdinal(final int ordinal) {
-      return Type.VALUES[ordinal];
-    }
+    public static final Type[] VALUES = Type.values();
   }
 }

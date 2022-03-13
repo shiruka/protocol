@@ -17,7 +17,7 @@ public final class TextEncoderV291 extends PacketEncoder.Base<Text> {
   @Override
   public void decode(@NotNull final Text packet, @NotNull final CodecHelper helper,
                      @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
-    final var type = Text.Type.byOrdinal(buffer.readUnsignedByte());
+    final var type = Text.Type.VALUES[buffer.readUnsignedByte()];
     packet.type(type);
     packet.needsTranslation(buffer.readBoolean());
     switch (type) {

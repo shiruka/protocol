@@ -5,10 +5,13 @@ import io.github.shiruka.protocol.common.PacketHandler;
 import io.github.shiruka.protocol.data.ExperimentData;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -18,15 +21,17 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class ResourcePackStack extends MinecraftPacket.Base {
 
   //@formatter:off
-  private List<Entry> behaviorPacks = new ObjectArrayList<>();
-  private List<ExperimentData> experiments = new ObjectArrayList<>();
-  private boolean experimentsPreviouslyToggled;
-  private boolean forcedToAccept;
-  private String gameVersion;
-  private List<Entry> resourcePacks = new ObjectArrayList<>();
+  @Builder.Default List<Entry> behaviorPacks = new ObjectArrayList<>();
+  @Builder.Default List<ExperimentData> experiments = new ObjectArrayList<>();
+  boolean experimentsPreviouslyToggled;
+  boolean forcedToAccept;
+  String gameVersion;
+  @Builder.Default List<Entry> resourcePacks = new ObjectArrayList<>();
   //@formatter:on
 
   @Override

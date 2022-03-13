@@ -1,10 +1,12 @@
 package io.github.shiruka.protocol.packets;
 
 import io.github.shiruka.protocol.common.PacketHandler;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -14,10 +16,11 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public final class AddPainting extends AddHangingEntity {
 
   //@formatter:off
-  private String motive;
+  String motive;
   //@formatter:on
 
   @Override

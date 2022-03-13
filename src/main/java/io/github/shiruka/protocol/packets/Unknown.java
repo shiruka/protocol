@@ -8,11 +8,14 @@ import io.github.shiruka.protocol.common.MinecraftSession;
 import io.github.shiruka.protocol.common.PacketHandler;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.util.ReferenceCounted;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -23,10 +26,12 @@ import org.jetbrains.annotations.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(fluent = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class Unknown extends MinecraftPacket.Base implements PacketEncoder<Unknown>, ReferenceCounted {
 
   //@formatter:off
-  private PacketBuffer payload;
+  PacketBuffer payload;
   //@formatter:on
 
   @Override

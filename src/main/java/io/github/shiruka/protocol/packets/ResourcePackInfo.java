@@ -4,10 +4,13 @@ import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.PacketHandler;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -17,14 +20,16 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class ResourcePackInfo extends MinecraftPacket.Base {
 
   //@formatter:off
-  private List<Entry> behaviorPackInfos = new ObjectArrayList<>();
-  private boolean forcedToAccept;
-  private boolean forcingServerPacksEnabled;
-  private List<Entry> resourcePackInfos = new ObjectArrayList<>();
-  private boolean scriptingEnabled;
+  @Builder.Default List<Entry> behaviorPackInfos = new ObjectArrayList<>();
+  boolean forcedToAccept;
+  boolean forcingServerPacksEnabled;
+  @Builder.Default List<Entry> resourcePackInfos = new ObjectArrayList<>();
+  boolean scriptingEnabled;
   //@formatter:on
 
   @Override

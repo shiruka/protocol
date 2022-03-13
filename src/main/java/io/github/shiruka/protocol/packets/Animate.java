@@ -4,11 +4,13 @@ import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.PacketHandler;
 import java.util.Arrays;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -18,22 +20,25 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
-public class Animate extends MinecraftPacket.Base {
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder(builderMethodName = "newBuilder", toBuilder = true)
+public final class Animate extends MinecraftPacket.Base {
 
   //@formatter:off
-  private Action action;
-  private float rowingTime;
-  private long runtimeEntityId;
+  Action action;
+  float rowingTime;
+  long runtimeEntityId;
   //@formatter:on
 
   @Override
-  public final void handle(@NotNull final PacketHandler handler) {
+  public void handle(@NotNull final PacketHandler handler) {
     handler.handle(this);
   }
 
   /**
    * an enum class that contains animate actions.
    */
+  @Getter
   @Accessors(fluent = true)
   @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
   public enum Action {
@@ -74,7 +79,6 @@ public class Animate extends MinecraftPacket.Base {
     /**
      * the id.
      */
-    @Getter
     private final int id;
 
     /**

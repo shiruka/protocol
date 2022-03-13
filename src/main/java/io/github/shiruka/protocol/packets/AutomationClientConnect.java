@@ -2,10 +2,13 @@ package io.github.shiruka.protocol.packets;
 
 import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.PacketHandler;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -15,14 +18,16 @@ import org.jetbrains.annotations.NotNull;
 @Setter
 @ToString
 @Accessors(fluent = true)
-public class AutomationClientConnect extends MinecraftPacket.Base {
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder(builderMethodName = "newBuilder", toBuilder = true)
+public final class AutomationClientConnect extends MinecraftPacket.Base {
 
   //@formatter:off
-  private String address;
+  String address;
   //@formatter:on
 
   @Override
-  public final void handle(@NotNull final PacketHandler handler) {
+  public void handle(@NotNull final PacketHandler handler) {
     handler.handle(this);
   }
 }

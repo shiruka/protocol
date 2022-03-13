@@ -2,10 +2,13 @@ package io.github.shiruka.protocol.packets;
 
 import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.PacketHandler;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -15,11 +18,13 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class Disconnect extends MinecraftPacket.Base {
 
   //@formatter:off
-  private String kickMessage;
-  private boolean messageSkipped;
+  String kickMessage;
+  boolean messageSkipped;
   //@formatter:on
 
   @Override

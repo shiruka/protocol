@@ -4,10 +4,13 @@ import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.PacketHandler;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -17,11 +20,13 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class ResourcePackClientResponse extends MinecraftPacket.Base {
 
   //@formatter:off
-  private final List<String> packIds = new ObjectArrayList<>();
-  private Status status;
+  @Builder.Default List<String> packIds = new ObjectArrayList<>();
+  Status status;
   //@formatter:on
 
   @Override
@@ -57,18 +62,6 @@ public final class ResourcePackClientResponse extends MinecraftPacket.Base {
     /**
      * the cache.
      */
-    private static final Status[] VALUES = Status.values();
-
-    /**
-     * gets resource pack client response status by ordinal.
-     *
-     * @param ordinal the ordinal.
-     *
-     * @return resource pack client response status.
-     */
-    @NotNull
-    public static Status byOrdinal(final int ordinal) {
-      return Status.VALUES[ordinal];
-    }
+    public static final Status[] VALUES = Status.values();
   }
 }

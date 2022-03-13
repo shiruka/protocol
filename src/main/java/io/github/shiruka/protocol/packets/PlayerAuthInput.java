@@ -14,12 +14,14 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -27,25 +29,26 @@ import org.jetbrains.annotations.NotNull;
  */
 @Setter
 @Getter
-@Builder
 @ToString
-@EqualsAndHashCode(callSuper = false)
 @Accessors(fluent = true)
+@EqualsAndHashCode(callSuper = false)
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class PlayerAuthInput extends MinecraftPacket.Base {
 
   //@formatter:off
-  private final Set<PlayerAuthInputData> inputData = EnumSet.noneOf(PlayerAuthInputData.class);
-  private final List<PlayerBlockActionData> playerActions = new ObjectArrayList<>();
-  private Vector3f delta;
-  private InputMode inputMode;
-  private ItemStackRequest itemStackRequest;
-  private ItemUseTransaction itemUseTransaction;
-  private Vector2f motion;
-  private ClientPlayMode playMode;
-  private Vector3f position;
-  private Vector3f rotation;
-  private long tick;
-  private Vector3f vrGazeDirection;
+  Vector3f delta;
+  @Builder.Default Set<PlayerAuthInputData> inputData = EnumSet.noneOf(PlayerAuthInputData.class);
+  InputMode inputMode;
+  ItemStackRequest itemStackRequest;
+  ItemUseTransaction itemUseTransaction;
+  Vector2f motion;
+  ClientPlayMode playMode;
+  @Builder.Default List<PlayerBlockActionData> playerActions = new ObjectArrayList<>();
+  Vector3f position;
+  Vector3f rotation;
+  long tick;
+  Vector3f vrGazeDirection;
   //@formatter:on
 
   @Override

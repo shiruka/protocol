@@ -2,10 +2,13 @@ package io.github.shiruka.protocol.packets;
 
 import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.PacketHandler;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -15,15 +18,17 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
-public class Transfer extends MinecraftPacket.Base {
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder(builderMethodName = "newBuilder", toBuilder = true)
+public final class Transfer extends MinecraftPacket.Base {
 
   //@formatter:off
-  private String address;
-  private int port;
+  String address;
+  int port;
   //@formatter:on
 
   @Override
-  public final void handle(@NotNull final PacketHandler handler) {
+  public void handle(@NotNull final PacketHandler handler) {
     handler.handle(this);
   }
 }
