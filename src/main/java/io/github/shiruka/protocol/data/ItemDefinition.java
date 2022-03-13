@@ -1,6 +1,6 @@
 package io.github.shiruka.protocol.data;
 
-import io.github.shiruka.protocol.codec.IdentifierDefinition;
+import io.github.shiruka.protocol.common.IdentifierDefinition;
 import org.jetbrains.annotations.NotNull;
 
 /**

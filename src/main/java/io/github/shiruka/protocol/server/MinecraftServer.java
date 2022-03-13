@@ -3,7 +3,7 @@ package io.github.shiruka.protocol.server;
 import io.github.shiruka.network.Constants;
 import io.github.shiruka.network.Identifier;
 import io.github.shiruka.network.options.RakNetChannelOptions;
-import io.github.shiruka.protocol.codec.Codec;
+import io.github.shiruka.protocol.common.Codec;
 import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.PacketHandler;
 import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;

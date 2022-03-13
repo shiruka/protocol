@@ -1,9 +1,9 @@
 package io.github.shiruka.protocol.server.pipelines;
 
 import io.github.shiruka.network.pipelines.UserDataCodec;
-import io.github.shiruka.protocol.pipelines.CompressorCodec;
-import io.github.shiruka.protocol.pipelines.MinecraftPacketCodec;
-import io.github.shiruka.protocol.pipelines.MinecraftPacketHandler;
+import io.github.shiruka.protocol.pipeline.CompressorCodec;
+import io.github.shiruka.protocol.pipeline.MinecraftPacketCodec;
+import io.github.shiruka.protocol.pipeline.MinecraftPacketHandler;
 import io.github.shiruka.protocol.server.MinecraftServer;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;

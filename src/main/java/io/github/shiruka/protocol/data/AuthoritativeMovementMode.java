@@ -1,7 +1,7 @@
 package io.github.shiruka.protocol.data;
 
-import io.github.shiruka.protocol.packets.PlayerAuthInput;
-import io.github.shiruka.protocol.packets.StartGame;
+import io.github.shiruka.protocol.packet.PlayerAuthInput;
+import io.github.shiruka.protocol.packet.StartGame;
 import org.jetbrains.annotations.NotNull;
 
 /**

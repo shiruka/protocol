@@ -6,9 +6,9 @@ import io.github.shiruka.api.common.vectors.Vector3i;
 import io.github.shiruka.api.nbt.CompoundTag;
 import io.github.shiruka.api.nbt.Tag;
 import io.github.shiruka.network.PacketBuffer;
-import io.github.shiruka.protocol.codec.CodecHelper;
-import io.github.shiruka.protocol.codec.IdentifierDefinitionRegistry;
-import io.github.shiruka.protocol.codec.IntTypeMap;
+import io.github.shiruka.protocol.common.CodecHelper;
+import io.github.shiruka.protocol.common.IdentifierDefinitionRegistry;
+import io.github.shiruka.protocol.common.IntTypeMap;
 import io.github.shiruka.protocol.common.MinecraftSession;
 import io.github.shiruka.protocol.data.AdventureSetting;
 import io.github.shiruka.protocol.data.AttributeData;
@@ -37,12 +37,13 @@ import io.github.shiruka.protocol.data.entity.EntityFlags;
 import io.github.shiruka.protocol.data.entity.EntityLinkData;
 import io.github.shiruka.protocol.data.entity.EntityLinkDataType;
 import io.github.shiruka.protocol.data.inventory.ItemData;
-import io.github.shiruka.protocol.packets.AdventureSettings;
-import io.github.shiruka.protocol.packets.BookEdit;
-import io.github.shiruka.protocol.packets.BossEvent;
-import io.github.shiruka.protocol.packets.ResourcePackInfo;
-import io.github.shiruka.protocol.packets.ResourcePackStack;
-import io.github.shiruka.protocol.packets.StartGame;
+import io.github.shiruka.protocol.packet.AdventureSettings;
+import io.github.shiruka.protocol.packet.BookEdit;
+import io.github.shiruka.protocol.packet.BossEvent;
+import io.github.shiruka.protocol.packet.Event;
+import io.github.shiruka.protocol.packet.ResourcePackInfo;
+import io.github.shiruka.protocol.packet.ResourcePackStack;
+import io.github.shiruka.protocol.packet.StartGame;
 import io.netty.buffer.ByteBufInputStream;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
@@ -52,6 +53,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.ObjIntConsumer;
 import java.util.function.ToIntFunction;
@@ -62,6 +65,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
+import tr.com.infumia.infumialib.misc.MutableMap;
 
 /**
  * a class that represents codec helpers for v291.
@@ -94,6 +98,22 @@ public class CodecHelperV291 implements CodecHelper {
    * the level event world.
    */
   protected static final int LEVEL_EVENT_WORLD = 3000;
+
+  /**
+   * the entity data type.
+   */
+  @Getter
+  protected final IntTypeMap<EntityDataType> entityDataTypes = IntTypeMap.newBuilder(EntityDataType.class)
+    .insert(0, EntityDataType.BYTE)
+    .insert(1, EntityDataType.SHORT)
+    .insert(2, EntityDataType.INT)
+    .insert(3, EntityDataType.FLOAT)
+    .insert(4, EntityDataType.STRING)
+    .insert(5, EntityDataType.NBT)
+    .insert(6, EntityDataType.VECTOR3I)
+    .insert(7, EntityDataType.LONG)
+    .insert(8, EntityDataType.VECTOR3F)
+    .build();
 
   /**
    * the read byte.
@@ -216,114 +236,6 @@ public class CodecHelperV291 implements CodecHelper {
     .insert(33, CommandParam.TEXT)
     .insert(36, CommandParam.JSON)
     .insert(43, CommandParam.COMMAND)
-    .build();
-
-  /**
-   * the entity data.
-   */
-  @Getter
-  protected final IntTypeMap<EntityData> entityData = IntTypeMap.newBuilder(EntityData.class)
-    .insert(0, EntityData.FLAGS)
-    .insert(1, EntityData.HEALTH)
-    .insert(2, EntityData.VARIANT)
-    .insert(3, EntityData.COLOR)
-    .insert(4, EntityData.NAMETAG)
-    .insert(5, EntityData.OWNER_EID)
-    .insert(6, EntityData.TARGET_EID)
-    .insert(7, EntityData.AIR_SUPPLY)
-    .insert(8, EntityData.EFFECT_COLOR)
-    .insert(9, EntityData.EFFECT_AMBIENT)
-    .insert(10, EntityData.JUMP_DURATION)
-    .insert(11, EntityData.HURT_TIME)
-    .insert(12, EntityData.HURT_DIRECTION)
-    .insert(13, EntityData.ROW_TIME_LEFT)
-    .insert(14, EntityData.ROW_TIME_RIGHT)
-    .insert(15, EntityData.EXPERIENCE_VALUE)
-    .insert(16, EntityData.DISPLAY_ITEM)
-    .insert(17, EntityData.DISPLAY_OFFSET)
-    .insert(18, EntityData.CUSTOM_DISPLAY)
-    .insert(19, EntityData.SWELL)
-    .insert(20, EntityData.OLD_SWELL)
-    .insert(21, EntityData.SWELL_DIRECTION)
-    .insert(22, EntityData.CHARGE_AMOUNT)
-    .insert(23, EntityData.CARRIED_BLOCK)
-    .insert(24, EntityData.CLIENT_EVENT)
-    .insert(25, EntityData.USING_ITEM)
-    .insert(26, EntityData.PLAYER_FLAGS)
-    .insert(27, EntityData.PLAYER_INDEX)
-    .insert(28, EntityData.BED_POSITION)
-    .insert(29, EntityData.X_POWER)
-    .insert(30, EntityData.Y_POWER)
-    .insert(31, EntityData.Z_POWER)
-    .insert(32, EntityData.AUX_POWER)
-    .insert(33, EntityData.FISH_X)
-    .insert(34, EntityData.FISH_Z)
-    .insert(35, EntityData.FISH_ANGLE)
-    .insert(36, EntityData.POTION_AUX_VALUE)
-    .insert(37, EntityData.LEASH_HOLDER_EID)
-    .insert(38, EntityData.SCALE)
-    .insert(39, EntityData.INTERACTIVE_TAG)
-    .insert(40, EntityData.NPC_SKIN_ID)
-    .insert(41, EntityData.URL_TAG)
-    .insert(42, EntityData.MAX_AIR_SUPPLY)
-    .insert(43, EntityData.MARK_VARIANT)
-    .insert(44, EntityData.CONTAINER_TYPE)
-    .insert(45, EntityData.CONTAINER_BASE_SIZE)
-    .insert(46, EntityData.CONTAINER_STRENGTH_MODIFIER)
-    .insert(47, EntityData.BLOCK_TARGET)
-    .insert(48, EntityData.WITHER_INVULNERABLE_TICKS)
-    .insert(49, EntityData.WITHER_TARGET_1)
-    .insert(50, EntityData.WITHER_TARGET_2)
-    .insert(51, EntityData.WITHER_TARGET_3)
-    .insert(52, EntityData.WITHER_AERIAL_ATTACK)
-    .insert(53, EntityData.BOUNDING_BOX_WIDTH)
-    .insert(54, EntityData.BOUNDING_BOX_HEIGHT)
-    .insert(55, EntityData.FUSE_LENGTH)
-    .insert(56, EntityData.RIDER_SEAT_POSITION)
-    .insert(57, EntityData.RIDER_ROTATION_LOCKED)
-    .insert(58, EntityData.RIDER_MAX_ROTATION)
-    .insert(59, EntityData.RIDER_MIN_ROTATION)
-    .insert(60, EntityData.AREA_EFFECT_CLOUD_RADIUS)
-    .insert(61, EntityData.AREA_EFFECT_CLOUD_WAITING)
-    .insert(62, EntityData.AREA_EFFECT_CLOUD_PARTICLE_ID)
-    .insert(63, EntityData.SHULKER_PEEK_ID)
-    .insert(64, EntityData.SHULKER_ATTACH_FACE)
-    .insert(66, EntityData.SHULKER_ATTACH_POS)
-    .insert(67, EntityData.TRADE_TARGET_EID)
-    .insert(69, EntityData.COMMAND_BLOCK_ENABLED) // Unsure
-    .insert(70, EntityData.COMMAND_BLOCK_COMMAND)
-    .insert(71, EntityData.COMMAND_BLOCK_LAST_OUTPUT)
-    .insert(72, EntityData.COMMAND_BLOCK_TRACK_OUTPUT)
-    .insert(73, EntityData.CONTROLLING_RIDER_SEAT_INDEX)
-    .insert(74, EntityData.STRENGTH)
-    .insert(75, EntityData.MAX_STRENGTH)
-    .insert(76, EntityData.EVOKER_SPELL_COLOR)
-    .insert(77, EntityData.LIMITED_LIFE)
-    .insert(78, EntityData.ARMOR_STAND_POSE_INDEX)
-    .insert(79, EntityData.ENDER_CRYSTAL_TIME_OFFSET)
-    .insert(80, EntityData.NAMETAG_ALWAYS_SHOW)
-    .insert(81, EntityData.COLOR_2)
-    .insert(83, EntityData.SCORE_TAG)
-    .insert(84, EntityData.BALLOON_ATTACHED_ENTITY)
-    .insert(85, EntityData.PUFFERFISH_SIZE)
-    .insert(86, EntityData.BOAT_BUBBLE_TIME)
-    .insert(87, EntityData.AGENT_ID)
-    .build();
-
-  /**
-   * the entity data type.
-   */
-  @Getter
-  protected final IntTypeMap<EntityDataType> entityDataTypes = IntTypeMap.newBuilder(EntityDataType.class)
-    .insert(0, EntityDataType.BYTE)
-    .insert(1, EntityDataType.SHORT)
-    .insert(2, EntityDataType.INT)
-    .insert(3, EntityDataType.FLOAT)
-    .insert(4, EntityDataType.STRING)
-    .insert(5, EntityDataType.NBT)
-    .insert(6, EntityDataType.VECTOR3I)
-    .insert(7, EntityDataType.LONG)
-    .insert(8, EntityDataType.VECTOR3F)
     .build();
 
   /**
@@ -454,6 +366,139 @@ public class CodecHelperV291 implements CodecHelper {
     .insert(59, EntityFlag.LAYING_EGG)
     .insert(60, EntityFlag.RIDER_CAN_PICK)
     .build();
+
+  /**
+   * the event type readers.
+   */
+  @Getter
+  protected final MutableMap<Event.Type, Function<PacketBuffer, Event.Data>> eventTypeReaders = MutableMap
+    .<Event.Type, Function<PacketBuffer, Event.Data>>of()
+    .with(Event.Type.ACHIEVEMENT_AWARDED, this::readAchievementAwarded)
+    .with(Event.Type.ENTITY_INTERACT, this::readEntityInteract)
+    .with(Event.Type.PORTAL_BUILT, this::readPortalBuilt)
+    .with(Event.Type.PORTAL_USED, this::readPortalUsed)
+    .with(Event.Type.MOB_KILLED, this::readMobKilled)
+    .with(Event.Type.CAULDRON_USED, this::readCauldronUsed)
+    .with(Event.Type.PLAYER_DEATH, this::readPlayerDeath)
+    .with(Event.Type.BOSS_KILLED, this::readBossKilled)
+    .with(Event.Type.AGENT_COMMAND, this::readAgentCommand)
+    .with(Event.Type.AGENT_CREATED, (b, h) -> AgentCreatedEventData.INSTANCE)
+    .with(Event.Type.PATTERN_REMOVED, this::readPatternRemoved)
+    .with(Event.Type.SLASH_COMMAND_EXECUTED, this::readSlashCommandExecuted)
+    .with(Event.Type.FISH_BUCKETED, this::readFishBucketed)
+
+  /**
+   * the entity data.
+   */
+  @Getter
+  protected final IntTypeMap<EntityData> entityData = IntTypeMap.newBuilder(EntityData.class)
+    .insert(0, EntityData.FLAGS)
+    .insert(1, EntityData.HEALTH)
+    .insert(2, EntityData.VARIANT)
+    .insert(3, EntityData.COLOR)
+    .insert(4, EntityData.NAMETAG)
+    .insert(5, EntityData.OWNER_EID)
+    .insert(6, EntityData.TARGET_EID)
+    .insert(7, EntityData.AIR_SUPPLY)
+    .insert(8, EntityData.EFFECT_COLOR)
+    .insert(9, EntityData.EFFECT_AMBIENT)
+    .insert(10, EntityData.JUMP_DURATION)
+    .insert(11, EntityData.HURT_TIME)
+    .insert(12, EntityData.HURT_DIRECTION)
+    .insert(13, EntityData.ROW_TIME_LEFT)
+    .insert(14, EntityData.ROW_TIME_RIGHT)
+    .insert(15, EntityData.EXPERIENCE_VALUE)
+    .insert(16, EntityData.DISPLAY_ITEM)
+    .insert(17, EntityData.DISPLAY_OFFSET)
+    .insert(18, EntityData.CUSTOM_DISPLAY)
+    .insert(19, EntityData.SWELL)
+    .insert(20, EntityData.OLD_SWELL)
+    .insert(21, EntityData.SWELL_DIRECTION)
+    .insert(22, EntityData.CHARGE_AMOUNT)
+    .insert(23, EntityData.CARRIED_BLOCK)
+    .insert(24, EntityData.CLIENT_EVENT)
+    .insert(25, EntityData.USING_ITEM)
+    .insert(26, EntityData.PLAYER_FLAGS)
+    .insert(27, EntityData.PLAYER_INDEX)
+    .insert(28, EntityData.BED_POSITION)
+    .insert(29, EntityData.X_POWER)
+    .insert(30, EntityData.Y_POWER)
+    .insert(31, EntityData.Z_POWER)
+    .insert(32, EntityData.AUX_POWER)
+    .insert(33, EntityData.FISH_X)
+    .insert(34, EntityData.FISH_Z)
+    .insert(35, EntityData.FISH_ANGLE)
+    .insert(36, EntityData.POTION_AUX_VALUE)
+    .insert(37, EntityData.LEASH_HOLDER_EID)
+    .insert(38, EntityData.SCALE)
+    .insert(39, EntityData.INTERACTIVE_TAG)
+    .insert(40, EntityData.NPC_SKIN_ID)
+    .insert(41, EntityData.URL_TAG)
+    .insert(42, EntityData.MAX_AIR_SUPPLY)
+    .insert(43, EntityData.MARK_VARIANT)
+    .insert(44, EntityData.CONTAINER_TYPE)
+    .insert(45, EntityData.CONTAINER_BASE_SIZE)
+    .insert(46, EntityData.CONTAINER_STRENGTH_MODIFIER)
+    .insert(47, EntityData.BLOCK_TARGET)
+    .insert(48, EntityData.WITHER_INVULNERABLE_TICKS)
+    .insert(49, EntityData.WITHER_TARGET_1)
+    .insert(50, EntityData.WITHER_TARGET_2)
+    .insert(51, EntityData.WITHER_TARGET_3)
+    .insert(52, EntityData.WITHER_AERIAL_ATTACK)
+    .insert(53, EntityData.BOUNDING_BOX_WIDTH)
+    .insert(54, EntityData.BOUNDING_BOX_HEIGHT)
+    .insert(55, EntityData.FUSE_LENGTH)
+    .insert(56, EntityData.RIDER_SEAT_POSITION)
+    .insert(57, EntityData.RIDER_ROTATION_LOCKED)
+    .insert(58, EntityData.RIDER_MAX_ROTATION)
+    .insert(59, EntityData.RIDER_MIN_ROTATION)
+    .insert(60, EntityData.AREA_EFFECT_CLOUD_RADIUS)
+    .insert(61, EntityData.AREA_EFFECT_CLOUD_WAITING)
+    .insert(62, EntityData.AREA_EFFECT_CLOUD_PARTICLE_ID)
+    .insert(63, EntityData.SHULKER_PEEK_ID)
+    .insert(64, EntityData.SHULKER_ATTACH_FACE)
+    .insert(66, EntityData.SHULKER_ATTACH_POS)
+    .insert(67, EntityData.TRADE_TARGET_EID)
+    .insert(69, EntityData.COMMAND_BLOCK_ENABLED)
+    .insert(70, EntityData.COMMAND_BLOCK_COMMAND)
+    .insert(71, EntityData.COMMAND_BLOCK_LAST_OUTPUT)
+    .insert(72, EntityData.COMMAND_BLOCK_TRACK_OUTPUT)
+    .insert(73, EntityData.CONTROLLING_RIDER_SEAT_INDEX)
+    .insert(74, EntityData.STRENGTH)
+    .insert(75, EntityData.MAX_STRENGTH)
+    .insert(76, EntityData.EVOKER_SPELL_COLOR)
+    .insert(77, EntityData.LIMITED_LIFE)
+    .insert(78, EntityData.ARMOR_STAND_POSE_INDEX)
+    .insert(79, EntityData.ENDER_CRYSTAL_TIME_OFFSET)
+    .insert(80, EntityData.NAMETAG_ALWAYS_SHOW)
+    .insert(81, EntityData.COLOR_2)
+    .insert(83, EntityData.SCORE_TAG)
+    .insert(84, EntityData.BALLOON_ATTACHED_ENTITY)
+    .insert(85, EntityData.PUFFERFISH_SIZE)
+    .insert(86, EntityData.BOAT_BUBBLE_TIME)
+    .insert(87, EntityData.AGENT_ID)
+    .build();
+
+  /**
+   * the event type writers.
+   */
+  @Getter
+  protected final MutableMap<Event.Type, BiConsumer<PacketBuffer, Event.Data>> eventTypeWriters = MutableMap
+    .<Event.Type, BiConsumer<PacketBuffer, Event.Data>>of()
+    .with(Event.Type.ACHIEVEMENT_AWARDED, this::writeAchievementAwarded)
+    .with(Event.Type.ENTITY_INTERACT, this::writeEntityInteract)
+    .with(Event.Type.PORTAL_BUILT, this::writePortalBuilt)
+    .with(Event.Type.PORTAL_USED, this::writePortalUsed)
+    .with(Event.Type.MOB_KILLED, this::writeMobKilled)
+    .with(Event.Type.CAULDRON_USED, this::writeCauldronUsed)
+    .with(Event.Type.PLAYER_DEATH, this::writePlayerDeath)
+    .with(Event.Type.BOSS_KILLED, this::writeBossKilled)
+    .with(Event.Type.AGENT_COMMAND, this::writeAgentCommand)
+    .with(Event.Type.AGENT_CREATED, (buffer, data) -> {
+    })
+    .with(Event.Type.PATTERN_REMOVED, this::writePatternRemoved)
+    .with(Event.Type.SLASH_COMMAND_EXECUTED, this::writeSlashCommandExecuted)
+    .with(Event.Type.FISH_BUCKETED, this::writeFishBucketed);
 
   /**
    * the game rule types.
@@ -991,6 +1036,15 @@ public class CodecHelperV291 implements CodecHelper {
     return new EntityLinkData(from, to, EntityLinkDataType.byOrdinal(type), immediate);
   }
 
+  @NotNull
+  @Override
+  public Event.Data readEventData(@NotNull final PacketBuffer buffer, @NotNull final Event.Type type) {
+    final var function = Preconditions.checkNotNull(this.eventTypeReaders.get(type),
+      "Unknown event type %s", type);
+    return function.apply(buffer);
+  }
+
+  @NotNull
   @Override
   public GameRuleValue readGameRule(@NotNull final PacketBuffer buffer) {
     final var name = buffer.readString();
@@ -1289,6 +1343,13 @@ public class CodecHelperV291 implements CodecHelper {
   }
 
   @Override
+  public void writeEventData(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+    final var function = Preconditions.checkNotNull(this.eventTypeWriters.get(data.type()),
+      "Unknown event type %s", data.type());
+    function.accept(buffer, data);
+  }
+
+  @Override
   public void writeGameRule(@NotNull final PacketBuffer buffer, @NotNull final GameRuleValue gameRule) {
     final var value = gameRule.value();
     final var type = this.gameRuleTypes.id(value.getClass());
@@ -1393,6 +1454,346 @@ public class CodecHelperV291 implements CodecHelper {
    */
   protected final boolean isAir(@NotNull final ItemDefinition definition) {
     return definition.id() == 0;
+  }
+
+  /**
+   * reads the achievement awarded.
+   *
+   * @param buffer the buffer to read.
+   *
+   * @return achievement awarded.
+   */
+  @NotNull
+  protected AchievementAwardedEventData readAchievementAwarded(@NotNull final PacketBuffer buffer) {
+    return new AchievementAwardedEventData(buffer.readVarInt());
+  }
+
+  /**
+   * reads the agent command.
+   *
+   * @param buffer the buffer to read.
+   *
+   * @return agent command.
+   */
+  @NotNull
+  protected AgentCommandEventData readAgentCommand(@NotNull final PacketBuffer buffer) {
+    final var result = AgentResult.VALUES[buffer.readVarInt()];
+    final var dataValue = buffer.readVarInt();
+    final var command = buffer.readString();
+    final var dataKey = buffer.readString();
+    final var output = buffer.readString();
+    return new AgentCommandEventData(result, command, dataKey, dataValue, output);
+  }
+
+  /**
+   * reads the boss killed.
+   *
+   * @param buffer the buffer to read.
+   *
+   * @return boss killed.
+   */
+  @NotNull
+  protected BossKilledEventData readBossKilled(@NotNull final PacketBuffer buffer) {
+    final var bossUniqueEntityId = buffer.readVarLong();
+    final var playerPartySize = buffer.readVarInt();
+    final var interactionEntityType = buffer.readVarInt();
+    return new BossKilledEventData(bossUniqueEntityId, playerPartySize, interactionEntityType);
+  }
+
+  /**
+   * reads the cauldron used.
+   *
+   * @param buffer the buffer to read.
+   *
+   * @return cauldron used.
+   */
+  @NotNull
+  protected CauldronUsedEventData readCauldronUsed(@NotNull final PacketBuffer buffer) {
+    final var potionId = buffer.readVarInt();
+    final var color = buffer.readVarInt();
+    final var fillLevel = buffer.readVarInt();
+    return new CauldronUsedEventData(potionId, color, fillLevel);
+  }
+
+  /**
+   * reads the entity interact.
+   *
+   * @param buffer the buffer to read.
+   *
+   * @return entity interact.
+   */
+  @NotNull
+  protected EntityInteractEventData readEntityInteract(@NotNull final PacketBuffer buffer) {
+    final var interactionType = buffer.readVarInt();
+    final var interactionEntityType = buffer.readVarInt();
+    final var entityVariant = buffer.readVarInt();
+    final var entityColor = buffer.readUnsignedByte();
+    return new EntityInteractEventData(interactionType, interactionEntityType, entityVariant, entityColor);
+  }
+
+  /**
+   * reads the fish bucketed.
+   *
+   * @param buffer the buffer to read.
+   *
+   * @return fish bucketed
+   */
+  @NotNull
+  protected FishBucketedEventData readFishBucketed(@NotNull final PacketBuffer buffer) {
+    final var pattern = buffer.readVarInt();
+    final var preset = buffer.readVarInt();
+    final var bucketedEntityType = buffer.readVarInt();
+    final var isRelease = buffer.readBoolean();
+    return new FishBucketedEventData(pattern, preset, bucketedEntityType, isRelease);
+  }
+
+  /**
+   * reads the mob killed.
+   *
+   * @param buffer the buffer to read.
+   *
+   * @return mob killed.
+   */
+  @NotNull
+  protected MobKilledEventData readMobKilled(@NotNull final PacketBuffer buffer) {
+    final var killerUniqueEntityId = buffer.readVarLong();
+    final var victimUniqueEntityId = buffer.readVarLong();
+    final var entityDamageCause = buffer.readVarInt();
+    final var villagerTradeTier = buffer.readVarInt();
+    final var villagerDisplayName = buffer.readString();
+    return new MobKilledEventData(killerUniqueEntityId, victimUniqueEntityId, -1, entityDamageCause,
+      villagerTradeTier, villagerDisplayName);
+  }
+
+  /**
+   * reads the pattern removed.
+   *
+   * @param buffer the buffer to read.
+   *
+   * @return patter removed.
+   */
+  @NotNull
+  protected PatternRemovedEventData readPatternRemoved(@NotNull final PacketBuffer buffer) {
+    final var itemId = buffer.readVarInt();
+    final var auxValue = buffer.readVarInt();
+    final var patternsSize = buffer.readVarInt();
+    final var patternIndex = buffer.readVarInt();
+    final var patternColor = buffer.readVarInt();
+    return new PatternRemovedEventData(itemId, auxValue, patternsSize, patternIndex, patternColor);
+  }
+
+  /**
+   * read the player death.
+   *
+   * @param buffer the buffer to read.
+   *
+   * @return player death.
+   */
+  @NotNull
+  protected PlayerDeathEventData readPlayerDeath(@NotNull final PacketBuffer buffer) {
+    final var attackerEntityId = buffer.readVarInt();
+    final var entityDamageCause = buffer.readVarInt();
+    return new PlayerDeathEventData(attackerEntityId, -1, entityDamageCause, false);
+  }
+
+  /**
+   * reads the portal built.
+   *
+   * @param buffer the buffer to read.
+   *
+   * @return portal built.
+   */
+  @NotNull
+  protected PortalBuiltEventData readPortalBuilt(@NotNull final PacketBuffer buffer) {
+    return new PortalBuiltEventData(buffer.readVarInt());
+  }
+
+  /**
+   * reads the portal used.
+   *
+   * @param buffer the buffer to read.
+   *
+   * @return portal used.
+   */
+  @NotNull
+  protected PortalUsedEventData readPortalUsed(@NotNull final PacketBuffer buffer) {
+    final var fromDimensionId = buffer.readVarInt();
+    final var toDimensionId = buffer.readVarInt();
+    return new PortalUsedEventData(fromDimensionId, toDimensionId);
+  }
+
+  /**
+   * reads the slash command executed.
+   *
+   * @param buffer the buffer to read.
+   *
+   * @return slash command executed.
+   */
+  @NotNull
+  protected SlashCommandExecutedEventData readSlashCommandExecuted(@NotNull final PacketBuffer buffer) {
+    final var successCount = buffer.readVarInt();
+    buffer.readVarInt();
+    final var commandName = buffer.readString();
+    final var outputMessages = Arrays.asList(buffer.readString().split(";"));
+    return new SlashCommandExecutedEventData(commandName, successCount, outputMessages);
+  }
+
+  /**
+   * writes the achievement awarded.
+   *
+   * @param buffer the bufeer to write.
+   * @param data the data to write.
+   */
+  protected void writeAchievementAwarded(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+    buffer.writeVarInt(((AchievementAwardedEventData) data).getAchievementId());
+  }
+
+  /**
+   * writes the agent command.
+   *
+   * @param buffer the buffer to write.
+   * @param data the data to write.
+   */
+  protected void writeAgentCommand(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+    final var event = (AgentCommandEventData) data;
+    buffer.writeVarInt(event.getResult().ordinal());
+    buffer.writeVarInt(event.getDataValue());
+    buffer.writeString(event.getCommand());
+    buffer.writeString(event.getDataKey());
+    buffer.writeString(event.getOutput());
+  }
+
+  /**
+   * writes the boss killed.
+   *
+   * @param buffer the buffer to write.
+   * @param data the data to write.
+   */
+  protected void writeBossKilled(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+    final var event = (BossKilledEventData) data;
+    buffer.writeVarLong(event.getBossUniqueEntityId());
+    buffer.writeVarInt(event.getPlayerPartySize());
+    buffer.writeVarInt(event.getBossEntityType());
+  }
+
+  /**
+   * writes the cauldron used.
+   *
+   * @param buffer the buffer to write.
+   * @param data the data to write.
+   */
+  protected void writeCauldronUsed(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+    final var event = (CauldronUsedEventData) data;
+    buffer.writeUnsignedVarInt(event.getPotionId());
+    buffer.writeVarInt(event.getColor());
+    buffer.writeVarInt(event.getFillLevel());
+  }
+
+  /**
+   * writes the entity interact.
+   *
+   * @param buffer the buffer to write.
+   * @param data the data to write.
+   */
+  protected void writeEntityInteract(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+    final var event = (EntityInteractEventData) data;
+    buffer.writeVarInt(event.getInteractionType());
+    buffer.writeVarInt(event.getLegacyEntityTypeId());
+    buffer.writeVarInt(event.getVariant());
+    buffer.writeByte(event.getPaletteColor());
+  }
+
+  /**
+   * writes the fish bucketed.
+   *
+   * @param buffer the buffer to write.
+   * @param data the data to write.
+   */
+  protected void writeFishBucketed(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+    final var event = (FishBucketedEventData) data;
+    buffer.writeVarInt(event.getPattern());
+    buffer.writeVarInt(event.getPreset());
+    buffer.writeVarInt(event.getBucketedEntityType());
+    buffer.writeBoolean(event.isReleaseEvent());
+  }
+
+  /**
+   * writes the mob killed.
+   *
+   * @param buffer the buffer to write.
+   * @param data the data to write.
+   */
+  protected void writeMobKilled(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+    final var event = (MobKilledEventData) data;
+    buffer.writeVarLong(event.getKillerUniqueEntityId());
+    buffer.writeVarLong(event.getVictimUniqueEntityId());
+    buffer.writeVarInt(event.getEntityDamageCause());
+    buffer.writeVarInt(event.getVillagerTradeTier());
+    buffer.writeString(event.getVillagerDisplayName());
+  }
+
+  /**
+   * writes the pattern removed.
+   *
+   * @param buffer the buffer to write.
+   * @param data the data to write.
+   */
+  protected void writePatternRemoved(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+    final var event = (PatternRemovedEventData) data;
+    buffer.writeVarInt(event.getItemId());
+    buffer.writeVarInt(event.getAuxValue());
+    buffer.writeVarInt(event.getPatternsSize());
+    buffer.writeVarInt(event.getPatternIndex());
+    buffer.writeVarInt(event.getPatternColor());
+  }
+
+  /**
+   * writes the player death.
+   *
+   * @param buffer the buffer to write.
+   * @param data the data to write.
+   */
+  protected void writePlayerDeath(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+    final var event = (PlayerDeathEventData) data;
+    buffer.writeVarInt(event.getAttackerEntityId());
+    buffer.writeVarInt(event.getEntityDamageCause());
+  }
+
+  /**
+   * writes the portal built.
+   *
+   * @param buffer the buffer to write.
+   * @param data the data to write.
+   */
+  protected void writePortalBuilt(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+    buffer.writeVarInt(((PortalBuiltEventData) data).getDimensionId());
+  }
+
+  /**
+   * writes the portal used.
+   *
+   * @param buffer the buffer to write.
+   * @param data the data to write.
+   */
+  protected void writePortalUsed(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+    final var event = (PortalUsedEventData) data;
+    buffer.writeVarInt(event.getFromDimensionId());
+    buffer.writeVarInt(event.getToDimensionId());
+  }
+
+  /**
+   * writes the slash command executed.
+   *
+   * @param buffer the buffer to write.
+   * @param data the data to write.
+   */
+  protected void writeSlashCommandExecuted(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+    final var event = (SlashCommandExecutedEventData) data;
+    buffer.writeVarInt(event.getSuccessCount());
+    final var outputMessages = event.getOutputMessages();
+    buffer.writeVarInt(outputMessages.size());
+    buffer.writeString(event.getCommandName());
+    buffer.writeString(String.join(";", outputMessages));
   }
 
   /**

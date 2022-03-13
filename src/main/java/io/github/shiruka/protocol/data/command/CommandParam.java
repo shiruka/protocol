@@ -1,6 +1,6 @@
 package io.github.shiruka.protocol.data.command;
 
-import io.github.shiruka.protocol.codec.CodecHelper;
+import io.github.shiruka.protocol.common.CodecHelper;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

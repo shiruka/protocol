@@ -1,6 +1,6 @@
 package io.github.shiruka.protocol.data.entity;
 
-import io.github.shiruka.protocol.codec.IntTypeMap;
+import io.github.shiruka.protocol.common.IntTypeMap;
 import java.util.EnumSet;
 import java.util.Set;
 import lombok.EqualsAndHashCode;

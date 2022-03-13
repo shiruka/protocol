@@ -1,59 +1,61 @@
 package io.github.shiruka.protocol.common;
 
-import io.github.shiruka.protocol.packets.AddBehaviorTree;
-import io.github.shiruka.protocol.packets.AddEntity;
-import io.github.shiruka.protocol.packets.AddHangingEntity;
-import io.github.shiruka.protocol.packets.AddItemEntity;
-import io.github.shiruka.protocol.packets.AddPainting;
-import io.github.shiruka.protocol.packets.AddPlayer;
-import io.github.shiruka.protocol.packets.AdventureSettings;
-import io.github.shiruka.protocol.packets.Animate;
-import io.github.shiruka.protocol.packets.AutomationClientConnect;
-import io.github.shiruka.protocol.packets.AvailableCommands;
-import io.github.shiruka.protocol.packets.BlockEntityData;
-import io.github.shiruka.protocol.packets.BlockEvent;
-import io.github.shiruka.protocol.packets.BlockPickRequest;
-import io.github.shiruka.protocol.packets.BookEdit;
-import io.github.shiruka.protocol.packets.BossEvent;
-import io.github.shiruka.protocol.packets.Camera;
-import io.github.shiruka.protocol.packets.ChangeDimension;
-import io.github.shiruka.protocol.packets.ChunkRadiusUpdated;
-import io.github.shiruka.protocol.packets.ClientToServerHandshake;
-import io.github.shiruka.protocol.packets.Disconnect;
-import io.github.shiruka.protocol.packets.EntityEvent;
-import io.github.shiruka.protocol.packets.EntityFall;
-import io.github.shiruka.protocol.packets.Explode;
-import io.github.shiruka.protocol.packets.GameRulesChanged;
-import io.github.shiruka.protocol.packets.GuiDataPickItem;
-import io.github.shiruka.protocol.packets.HurtArmor;
-import io.github.shiruka.protocol.packets.ItemFrameDropItem;
-import io.github.shiruka.protocol.packets.LabTable;
-import io.github.shiruka.protocol.packets.LevelChunk;
-import io.github.shiruka.protocol.packets.LevelEvent;
-import io.github.shiruka.protocol.packets.LevelSoundEvent1;
-import io.github.shiruka.protocol.packets.Login;
-import io.github.shiruka.protocol.packets.MobEffect;
-import io.github.shiruka.protocol.packets.MoveEntityAbsolute;
-import io.github.shiruka.protocol.packets.MovePlayer;
-import io.github.shiruka.protocol.packets.NetworkStackLatency;
-import io.github.shiruka.protocol.packets.NpcRequest;
-import io.github.shiruka.protocol.packets.PlayStatus;
-import io.github.shiruka.protocol.packets.PlayerAuthInput;
-import io.github.shiruka.protocol.packets.RemoveEntity;
-import io.github.shiruka.protocol.packets.ResourcePackClientResponse;
-import io.github.shiruka.protocol.packets.ResourcePackInfo;
-import io.github.shiruka.protocol.packets.ResourcePackStack;
-import io.github.shiruka.protocol.packets.RiderJump;
-import io.github.shiruka.protocol.packets.ServerToClientHandshake;
-import io.github.shiruka.protocol.packets.SetTime;
-import io.github.shiruka.protocol.packets.StartGame;
-import io.github.shiruka.protocol.packets.TakeItemEntity;
-import io.github.shiruka.protocol.packets.Text;
-import io.github.shiruka.protocol.packets.TickSync;
-import io.github.shiruka.protocol.packets.Transfer;
-import io.github.shiruka.protocol.packets.Unknown;
-import io.github.shiruka.protocol.packets.UpdateAttributes;
-import io.github.shiruka.protocol.packets.UpdateBlock;
+import io.github.shiruka.protocol.packet.AddBehaviorTree;
+import io.github.shiruka.protocol.packet.AddEntity;
+import io.github.shiruka.protocol.packet.AddHangingEntity;
+import io.github.shiruka.protocol.packet.AddItemEntity;
+import io.github.shiruka.protocol.packet.AddPainting;
+import io.github.shiruka.protocol.packet.AddPlayer;
+import io.github.shiruka.protocol.packet.AdventureSettings;
+import io.github.shiruka.protocol.packet.Animate;
+import io.github.shiruka.protocol.packet.AutomationClientConnect;
+import io.github.shiruka.protocol.packet.AvailableCommands;
+import io.github.shiruka.protocol.packet.BlockEntityData;
+import io.github.shiruka.protocol.packet.BlockEvent;
+import io.github.shiruka.protocol.packet.BlockPickRequest;
+import io.github.shiruka.protocol.packet.BookEdit;
+import io.github.shiruka.protocol.packet.BossEvent;
+import io.github.shiruka.protocol.packet.Camera;
+import io.github.shiruka.protocol.packet.ChangeDimension;
+import io.github.shiruka.protocol.packet.ChunkRadiusUpdated;
+import io.github.shiruka.protocol.packet.ClientToServerHandshake;
+import io.github.shiruka.protocol.packet.Disconnect;
+import io.github.shiruka.protocol.packet.EntityEvent;
+import io.github.shiruka.protocol.packet.EntityFall;
+import io.github.shiruka.protocol.packet.EntityPickRequest;
+import io.github.shiruka.protocol.packet.Event;
+import io.github.shiruka.protocol.packet.Explode;
+import io.github.shiruka.protocol.packet.GameRulesChanged;
+import io.github.shiruka.protocol.packet.GuiDataPickItem;
+import io.github.shiruka.protocol.packet.HurtArmor;
+import io.github.shiruka.protocol.packet.ItemFrameDropItem;
+import io.github.shiruka.protocol.packet.LabTable;
+import io.github.shiruka.protocol.packet.LevelChunk;
+import io.github.shiruka.protocol.packet.LevelEvent;
+import io.github.shiruka.protocol.packet.LevelSoundEvent1;
+import io.github.shiruka.protocol.packet.Login;
+import io.github.shiruka.protocol.packet.MobEffect;
+import io.github.shiruka.protocol.packet.MoveEntityAbsolute;
+import io.github.shiruka.protocol.packet.MovePlayer;
+import io.github.shiruka.protocol.packet.NetworkStackLatency;
+import io.github.shiruka.protocol.packet.NpcRequest;
+import io.github.shiruka.protocol.packet.PlayStatus;
+import io.github.shiruka.protocol.packet.PlayerAuthInput;
+import io.github.shiruka.protocol.packet.RemoveEntity;
+import io.github.shiruka.protocol.packet.ResourcePackClientResponse;
+import io.github.shiruka.protocol.packet.ResourcePackInfo;
+import io.github.shiruka.protocol.packet.ResourcePackStack;
+import io.github.shiruka.protocol.packet.RiderJump;
+import io.github.shiruka.protocol.packet.ServerToClientHandshake;
+import io.github.shiruka.protocol.packet.SetTime;
+import io.github.shiruka.protocol.packet.StartGame;
+import io.github.shiruka.protocol.packet.TakeItemEntity;
+import io.github.shiruka.protocol.packet.Text;
+import io.github.shiruka.protocol.packet.TickSync;
+import io.github.shiruka.protocol.packet.Transfer;
+import io.github.shiruka.protocol.packet.Unknown;
+import io.github.shiruka.protocol.packet.UpdateAttributes;
+import io.github.shiruka.protocol.packet.UpdateBlock;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -491,5 +493,21 @@ public interface PacketHandler {
    * @param packet the packet to handle.
    */
   default void handle(@NotNull final UpdateAttributes packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final EntityPickRequest packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final Event packet) {
   }
 }
