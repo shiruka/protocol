@@ -24,8 +24,8 @@ import org.jetbrains.annotations.NotNull;
 public final class AddPainting extends MinecraftPacket.Base {
 
   //@formatter:off
-  String motive;
   int direction;
+  String motive;
   Vector3f position;
   long runtimeEntityId;
   long uniqueEntityId;
