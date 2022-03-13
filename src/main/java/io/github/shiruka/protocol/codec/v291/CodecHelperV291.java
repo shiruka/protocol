@@ -1095,6 +1095,8 @@ public class CodecHelperV291 implements CodecHelper {
       case ITEM_USE -> this.readItemUse(buffer, packet, session);
       case ITEM_USE_ON_ENTITY -> this.readItemUseOnEntity(buffer, packet, session);
       case ITEM_RELEASE -> this.readItemRelease(buffer, packet, session);
+      default -> {
+      }
     }
   }
 
@@ -1424,6 +1426,8 @@ public class CodecHelperV291 implements CodecHelper {
       case ITEM_USE -> this.writeItemUse(buffer, packet, session);
       case ITEM_USE_ON_ENTITY -> this.writeItemUseOnEntity(buffer, packet, session);
       case ITEM_RELEASE -> this.writeItemRelease(buffer, packet, session);
+      default -> {
+      }
     }
   }
 
@@ -1895,6 +1899,8 @@ public class CodecHelperV291 implements CodecHelper {
     switch (inventorySource.type()) {
       case CONTAINER, UNTRACKED_INTERACTION_UI, NON_IMPLEMENTED -> buffer.writeVarInt(inventorySource.containerId());
       case WORLD_INTERACTION -> buffer.writeUnsignedVarInt(inventorySource.flag().ordinal());
+      default -> {
+      }
     }
   }
 
@@ -1903,6 +1909,7 @@ public class CodecHelperV291 implements CodecHelper {
    *
    * @param buffer the buffer to write.
    * @param packet the packet to write.
+   * @param session the session to write.
    */
   protected void writeItemUse(@NotNull final PacketBuffer buffer, @NotNull final InventoryTransaction packet,
                               @NotNull final MinecraftSession session) {

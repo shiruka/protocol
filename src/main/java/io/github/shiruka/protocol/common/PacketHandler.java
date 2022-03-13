@@ -530,6 +530,11 @@ public interface PacketHandler {
   default void handle(@NotNull final InventoryContent packet) {
   }
 
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
   default void handle(@NotNull final InventoryTransaction packet) {
   }
 }
