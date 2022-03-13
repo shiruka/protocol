@@ -45,11 +45,13 @@ import io.github.shiruka.protocol.packet.NetworkStackLatency;
 import io.github.shiruka.protocol.packet.NpcRequest;
 import io.github.shiruka.protocol.packet.PlayStatus;
 import io.github.shiruka.protocol.packet.PlayerAuthInput;
+import io.github.shiruka.protocol.packet.PurchaseReceipt;
 import io.github.shiruka.protocol.packet.RemoveEntity;
 import io.github.shiruka.protocol.packet.ResourcePackClientResponse;
 import io.github.shiruka.protocol.packet.ResourcePackInfo;
 import io.github.shiruka.protocol.packet.ResourcePackStack;
 import io.github.shiruka.protocol.packet.RiderJump;
+import io.github.shiruka.protocol.packet.ScriptCustomEvent;
 import io.github.shiruka.protocol.packet.ServerToClientHandshake;
 import io.github.shiruka.protocol.packet.SetTime;
 import io.github.shiruka.protocol.packet.StartGame;
@@ -545,5 +547,21 @@ public interface PacketHandler {
    * @param packet the packet to handle.
    */
   default void handle(@NotNull final InventorySlot packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final PurchaseReceipt packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final ScriptCustomEvent packet) {
   }
 }
