@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
-public final class BlockPickRequest extends MinecraftPacket {
+public final class BlockPickRequest extends MinecraftPacket.Base {
 
   //@formatter:off
   private boolean addUserData;

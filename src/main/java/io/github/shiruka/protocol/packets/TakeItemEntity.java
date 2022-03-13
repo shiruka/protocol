@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
-public final class TakeItemEntity extends MinecraftPacket {
+public final class TakeItemEntity extends MinecraftPacket.Base {
 
   //@formatter:off
   private long itemRuntimeEntityId;

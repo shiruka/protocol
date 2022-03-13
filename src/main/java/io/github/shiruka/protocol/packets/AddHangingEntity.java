@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
-public class AddHangingEntity extends MinecraftPacket {
+public class AddHangingEntity extends MinecraftPacket.Base {
 
   //@formatter:off
   private int direction;

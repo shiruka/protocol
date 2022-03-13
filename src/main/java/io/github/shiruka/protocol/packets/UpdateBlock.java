@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
-public final class UpdateBlock extends MinecraftPacket {
+public final class UpdateBlock extends MinecraftPacket.Base {
 
   //@formatter:off
   private final Set<Flag> flags = EnumSet.noneOf(Flag.class);

@@ -31,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
 @ToString
 @EqualsAndHashCode(callSuper = false)
 @Accessors(fluent = true)
-public final class PlayerAuthInput extends MinecraftPacket {
+public final class PlayerAuthInput extends MinecraftPacket.Base {
 
   //@formatter:off
   private final Set<PlayerAuthInputData> inputData = EnumSet.noneOf(PlayerAuthInputData.class);

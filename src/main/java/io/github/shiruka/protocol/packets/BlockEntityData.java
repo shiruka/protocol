@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
-public final class BlockEntityData extends MinecraftPacket {
+public final class BlockEntityData extends MinecraftPacket.Base {
 
   //@formatter:off
   private Vector3i blockPosition;

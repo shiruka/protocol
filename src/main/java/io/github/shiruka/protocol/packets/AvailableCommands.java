@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 @Setter
 @ToString
 @Accessors(fluent = true)
-public class AvailableCommands extends MinecraftPacket {
+public class AvailableCommands extends MinecraftPacket.Base {
 
   //@formatter:off
   private List<CommandData> commands;

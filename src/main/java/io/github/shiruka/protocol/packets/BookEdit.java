@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
-public final class BookEdit extends MinecraftPacket {
+public final class BookEdit extends MinecraftPacket.Base {
 
   //@formatter:off
   private Action action;

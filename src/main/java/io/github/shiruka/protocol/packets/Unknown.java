@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(fluent = true)
-public final class Unknown extends MinecraftPacket implements PacketEncoder<Unknown>, ReferenceCounted {
+public final class Unknown extends MinecraftPacket.Base implements PacketEncoder<Unknown>, ReferenceCounted {
 
   //@formatter:off
   private PacketBuffer payload;

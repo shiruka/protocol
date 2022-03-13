@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
-public final class Disconnect extends MinecraftPacket {
+public final class Disconnect extends MinecraftPacket.Base {
 
   //@formatter:off
   private String kickMessage;

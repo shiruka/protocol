@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 @Setter
 @ToString
 @Accessors(fluent = true)
-public final class AdventureSettings extends MinecraftPacket {
+public final class AdventureSettings extends MinecraftPacket.Base {
 
   //@formatter:off
   private final Set<AdventureSetting> settings = EnumSet.noneOf(AdventureSetting.class);

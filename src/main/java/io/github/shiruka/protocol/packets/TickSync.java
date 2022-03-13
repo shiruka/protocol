@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
-public final class TickSync extends MinecraftPacket {
+public final class TickSync extends MinecraftPacket.Base {
 
   //@formatter:off
   private long requestTimestamp;

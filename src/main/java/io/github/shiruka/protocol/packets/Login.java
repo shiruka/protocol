@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
-public final class Login extends MinecraftPacket {
+public final class Login extends MinecraftPacket.Base {
 
   //@formatter:off
   private AsciiString chainData;
