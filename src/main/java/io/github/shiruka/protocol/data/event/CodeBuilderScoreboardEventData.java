@@ -5,6 +5,9 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * a record class that represents code builder scoreboard event data.
+ *
+ * @param objectiveName the objective name.
+ * @param score the score.
  */
 public record CodeBuilderScoreboardEventData(
   String objectiveName,

@@ -17,7 +17,7 @@ public enum AgentResult {
    */
   QUERY_RESULT_FALSE,
   /**
-   * the query result true;
+   * the query result true.
    */
   QUERY_RESULT_TRUE;
 

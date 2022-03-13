@@ -5,6 +5,10 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * a class that represents cauldron used event data.
+ *
+ * @param color the color.
+ * @param fillLevel the fill level.
+ * @param potionId the potion id.
  */
 public record CauldronUsedEventData(
   int color,

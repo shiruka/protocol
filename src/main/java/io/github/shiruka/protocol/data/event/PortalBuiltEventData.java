@@ -5,6 +5,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * a record class that represents portal built event data.
+ *
+ * @param dimensionId the dimension id.
  */
 public record PortalBuiltEventData(
   int dimensionId
