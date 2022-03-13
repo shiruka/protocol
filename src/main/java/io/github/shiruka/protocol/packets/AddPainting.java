@@ -1,7 +1,9 @@
 package io.github.shiruka.protocol.packets;
 
+import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.PacketHandler;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -17,10 +19,12 @@ import org.jetbrains.annotations.NotNull;
 @ToString
 @Accessors(fluent = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public final class AddPainting extends AddHangingEntity {
+@Builder(builderMethodName = "newBuilder", toBuilder = true)
+public final class AddPainting extends MinecraftPacket.Base {
 
   //@formatter:off
   String motive;
+  AddHangingEntity entity;
   //@formatter:on
 
   @Override

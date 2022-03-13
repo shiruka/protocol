@@ -4,6 +4,7 @@ import io.github.shiruka.protocol.packets.AddBehaviorTree;
 import io.github.shiruka.protocol.packets.AddEntity;
 import io.github.shiruka.protocol.packets.AddHangingEntity;
 import io.github.shiruka.protocol.packets.AddItemEntity;
+import io.github.shiruka.protocol.packets.AddPainting;
 import io.github.shiruka.protocol.packets.AddPlayer;
 import io.github.shiruka.protocol.packets.AdventureSettings;
 import io.github.shiruka.protocol.packets.Animate;
@@ -464,5 +465,13 @@ public interface PacketHandler {
    * @param packet the packet to handle.
    */
   default void handle(@NotNull final EntityFall packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final AddPainting packet) {
   }
 }

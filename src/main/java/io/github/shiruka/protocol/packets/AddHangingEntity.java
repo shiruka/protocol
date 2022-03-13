@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
-public class AddHangingEntity extends MinecraftPacket.Base {
+public final class AddHangingEntity extends MinecraftPacket.Base {
 
   //@formatter:off
   int direction;
