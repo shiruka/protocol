@@ -1,4 +1,3 @@
-InteractPa
 InventoryC
 InventoryS
 InventoryT

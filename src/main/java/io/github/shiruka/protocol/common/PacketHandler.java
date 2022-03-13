@@ -29,6 +29,7 @@ import io.github.shiruka.protocol.packet.GameRulesChanged;
 import io.github.shiruka.protocol.packet.GuiDataPickItem;
 import io.github.shiruka.protocol.packet.HurtArmor;
 import io.github.shiruka.protocol.packet.Interact;
+import io.github.shiruka.protocol.packet.InventoryContent;
 import io.github.shiruka.protocol.packet.ItemFrameDropItem;
 import io.github.shiruka.protocol.packet.LabTable;
 import io.github.shiruka.protocol.packet.LevelChunk;
@@ -518,5 +519,13 @@ public interface PacketHandler {
    * @param packet the packet to handle.
    */
   default void handle(@NotNull final Interact packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final InventoryContent packet) {
   }
 }
