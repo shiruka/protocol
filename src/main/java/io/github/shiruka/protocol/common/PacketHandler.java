@@ -21,6 +21,8 @@ import io.github.shiruka.protocol.packets.ClientToServerHandshake;
 import io.github.shiruka.protocol.packets.Disconnect;
 import io.github.shiruka.protocol.packets.EntityEvent;
 import io.github.shiruka.protocol.packets.Explode;
+import io.github.shiruka.protocol.packets.GameRulesChanged;
+import io.github.shiruka.protocol.packets.GuiDataPickItem;
 import io.github.shiruka.protocol.packets.HurtArmor;
 import io.github.shiruka.protocol.packets.ItemFrameDropItem;
 import io.github.shiruka.protocol.packets.LabTable;
@@ -419,5 +421,21 @@ public interface PacketHandler {
    * @param packet the packet to handle.
    */
   default void handle(@NotNull final LevelChunk packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final GameRulesChanged packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final GuiDataPickItem packet) {
   }
 }
