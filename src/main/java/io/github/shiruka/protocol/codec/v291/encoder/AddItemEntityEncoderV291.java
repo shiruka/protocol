@@ -19,10 +19,10 @@ public final class AddItemEntityEncoderV291 extends PacketEncoder.Base<AddItemEn
                      @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
     packet.uniqueEntityId(buffer.readVarLong());
     packet.runtimeEntityId(buffer.readUnsignedVarLong());
-    packet.itemInHand(helper.readItem(buffer, session));
+    packet.itemInHand(helper.readItem(buffer));
     packet.position(buffer.readVector3f());
     packet.motion(buffer.readVector3f());
-    helper.readEntityData(buffer, session, packet.metadata());
+    helper.readEntityData(buffer, packet.metadata());
     packet.fromFishing(buffer.readBoolean());
   }
 
@@ -31,10 +31,10 @@ public final class AddItemEntityEncoderV291 extends PacketEncoder.Base<AddItemEn
                      @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
     buffer.writeVarLong(packet.uniqueEntityId());
     buffer.writeUnsignedVarLong(packet.runtimeEntityId());
-    helper.writeItem(buffer, session, packet.itemInHand());
+    helper.writeItem(buffer, packet.itemInHand());
     buffer.writeVector3f(packet.position());
     buffer.writeVector3f(packet.motion());
-    helper.writeEntityData(buffer, session, packet.metadata());
+    helper.writeEntityData(buffer, packet.metadata());
     buffer.writeBoolean(packet.fromFishing());
   }
 }

@@ -19,7 +19,7 @@ public final class UpdateAttributesEncoderV291 extends PacketEncoder.Base<Update
                      @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
     packet.runtimeEntityId(buffer.readUnsignedVarLong());
     packet.attributes(buffer.readArrayUnsignedInt(() ->
-      helper.readAttributeFull(buffer, session)));
+      helper.readAttributeFull(buffer)));
   }
 
   @Override

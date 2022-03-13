@@ -30,21 +30,21 @@ import org.jetbrains.annotations.NotNull;
 public final class InventoryTransaction extends MinecraftPacket.Base {
 
   //@formatter:off
-  private int actionType;
-  private @Builder.Default List<InventoryActionData> actions = new ObjectArrayList<>();
-  private int blockFace;
-  private Vector3i blockPosition;
-  private int blockRuntimeId;
-  private Vector3f clickPosition;
-  private Vector3f headPosition;
-  private int hotBarSlot;
-  private ItemData itemInHand;
-  private int legacyRequestId;
-  private @Builder.Default List<LegacySetItemSlotData> legacySlots = new ObjectArrayList<>();
-  private Vector3f playerPosition;
-  private long runtimeEntityId;
-  private Type transactionType;
-  private boolean usingNetIds;
+  int actionType;
+  @Builder.Default List<InventoryActionData> actions = new ObjectArrayList<>();
+  int blockFace;
+  Vector3i blockPosition;
+  int blockRuntimeId;
+  Vector3f clickPosition;
+  Vector3f headPosition;
+  int hotBarSlot;
+  ItemData itemInHand;
+  int legacyRequestId;
+  @Builder.Default List<LegacySetItemSlotData> legacySlots = new ObjectArrayList<>();
+  Vector3f playerPosition;
+  long runtimeEntityId;
+  Type transactionType;
+  boolean usingNetIds;
   //@formatter:on
 
   @Override

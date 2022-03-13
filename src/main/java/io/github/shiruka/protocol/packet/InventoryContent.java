@@ -26,8 +26,8 @@ import org.jetbrains.annotations.NotNull;
 public final class InventoryContent extends MinecraftPacket.Base {
 
   //@formatter:off
-  private int containerId;
-  private @Builder.Default List<ItemData> contents = new ObjectArrayList<>();
+  int containerId;
+  @Builder.Default List<ItemData> contents = new ObjectArrayList<>();
   //@formatter:on
 
   @Override

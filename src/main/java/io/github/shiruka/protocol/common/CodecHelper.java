@@ -152,23 +152,21 @@ public interface CodecHelper {
    * reads the attribute.
    *
    * @param buffer the buffer to read.
-   * @param session the session to read.
    *
    * @return attribute.
    */
   @NotNull
-  AttributeData readAttribute(@NotNull PacketBuffer buffer, @NotNull MinecraftSession session);
+  AttributeData readAttribute(@NotNull PacketBuffer buffer);
 
   /**
    * reads the attribute.
    *
    * @param buffer the buffer to read.
-   * @param session the session to read.
    *
    * @return attribute.
    */
   @NotNull
-  AttributeData readAttributeFull(@NotNull PacketBuffer buffer, @NotNull MinecraftSession session);
+  AttributeData readAttributeFull(@NotNull PacketBuffer buffer);
 
   /**
    * reads the boss event action.
@@ -203,21 +201,19 @@ public interface CodecHelper {
    * reads the entity data.
    *
    * @param buffer the buffer to read.
-   * @param session the session to read.
    * @param map the entity data to read.
    */
-  void readEntityData(@NotNull PacketBuffer buffer, @NotNull MinecraftSession session, @NotNull EntityDataMap map);
+  void readEntityData(@NotNull PacketBuffer buffer, @NotNull EntityDataMap map);
 
   /**
    * reads the entity link.
    *
    * @param buffer the buffer to read.
-   * @param session the session to read.
    *
    * @return entity link data.
    */
   @NotNull
-  EntityLinkData readEntityLink(@NotNull PacketBuffer buffer, @NotNull MinecraftSession session);
+  EntityLinkData readEntityLink(@NotNull PacketBuffer buffer);
 
   /**
    * reads the event data.
@@ -244,33 +240,29 @@ public interface CodecHelper {
    * reads inventory actions.
    *
    * @param buffer the buffer to read.
-   * @param session the session to read.
    *
    * @return inventory actions.
    */
   @NotNull
-  List<InventoryActionData> readInventoryActions(@NotNull PacketBuffer buffer, @NotNull MinecraftSession session);
+  List<InventoryActionData> readInventoryActions(@NotNull PacketBuffer buffer);
 
   /**
    * reads the inventory transaction type.
    *
    * @param buffer the buffer to read.
    * @param packet the packet to read.
-   * @param session the session to read.
    */
-  void readInventoryTransactionType(@NotNull PacketBuffer buffer, @NotNull InventoryTransaction packet,
-                                    @NotNull MinecraftSession session);
+  void readInventoryTransactionType(@NotNull PacketBuffer buffer, @NotNull InventoryTransaction packet);
 
   /**
    * reads the item.
    *
    * @param buffer the buffer to read.
-   * @param session the session to read.
    *
    * @return item data.
    */
   @NotNull
-  ItemData readItem(@NotNull PacketBuffer buffer, @NotNull MinecraftSession session);
+  ItemData readItem(@NotNull PacketBuffer buffer);
 
   /**
    * reads the buffer to write the level settings to the start game packet.
@@ -360,19 +352,17 @@ public interface CodecHelper {
    * writes the entity data.
    *
    * @param buffer the buffer to write.
-   * @param session the session to write.
    * @param map the map to write.
    */
-  void writeEntityData(@NotNull PacketBuffer buffer, @NotNull MinecraftSession session, @NotNull EntityDataMap map);
+  void writeEntityData(@NotNull PacketBuffer buffer, @NotNull EntityDataMap map);
 
   /**
    * writes the entity link.
    *
    * @param buffer the buffer to write.
-   * @param session the session to write.
    * @param link the link to write.
    */
-  void writeEntityLink(@NotNull PacketBuffer buffer, @NotNull MinecraftSession session, @NotNull EntityLinkData link);
+  void writeEntityLink(@NotNull PacketBuffer buffer, @NotNull EntityLinkData link);
 
   /**
    * writes the event data.
@@ -396,29 +386,25 @@ public interface CodecHelper {
    * @param buffer the buffer to write.
    * @param actions the actions to write.
    * @param hasNetworkIds the has network ids to write.
-   * @param session the session to write.
    */
   void writeInventoryActions(@NotNull PacketBuffer buffer, @NotNull List<InventoryActionData> actions,
-                             boolean hasNetworkIds, @NotNull MinecraftSession session);
+                             boolean hasNetworkIds);
 
   /**
    * writes the inventory transaction type.
    *
    * @param buffer the buffer to write.
    * @param packet the packet to write.
-   * @param session the sessions.
    */
-  void writeInventoryTransactionType(@NotNull PacketBuffer buffer, @NotNull InventoryTransaction packet,
-                                     @NotNull MinecraftSession session);
+  void writeInventoryTransactionType(@NotNull PacketBuffer buffer, @NotNull InventoryTransaction packet);
 
   /**
    * writes the item.
    *
    * @param buffer the buffer to write.
-   * @param session the session to write.
    * @param item the item to write.
    */
-  void writeItem(@NotNull PacketBuffer buffer, @NotNull MinecraftSession session, @NotNull ItemData item);
+  void writeItem(@NotNull PacketBuffer buffer, @NotNull ItemData item);
 
   /**
    * writes the level settings.

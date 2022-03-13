@@ -1,5 +1,3 @@
-InventoryS
-
 UpdateBlocSynced
 UpdateEqui
 UpdateSoft

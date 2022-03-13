@@ -30,6 +30,7 @@ import io.github.shiruka.protocol.packet.GuiDataPickItem;
 import io.github.shiruka.protocol.packet.HurtArmor;
 import io.github.shiruka.protocol.packet.Interact;
 import io.github.shiruka.protocol.packet.InventoryContent;
+import io.github.shiruka.protocol.packet.InventorySlot;
 import io.github.shiruka.protocol.packet.InventoryTransaction;
 import io.github.shiruka.protocol.packet.ItemFrameDropItem;
 import io.github.shiruka.protocol.packet.LabTable;
@@ -536,5 +537,13 @@ public interface PacketHandler {
    * @param packet the packet to handle.
    */
   default void handle(@NotNull final InventoryTransaction packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final InventorySlot packet) {
   }
 }

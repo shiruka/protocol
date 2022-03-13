@@ -25,10 +25,10 @@ public final class AddPlayerEncoderV291 extends PacketEncoder.Base<AddPlayer> {
     packet.position(buffer.readVector3f());
     packet.motion(buffer.readVector3f());
     packet.rotation(buffer.readVector3f());
-    packet.hand(helper.readItem(buffer, session));
-    helper.readEntityData(buffer, session, packet.metadata());
+    packet.hand(helper.readItem(buffer));
+    helper.readEntityData(buffer, packet.metadata());
     helper.readAdventureSettings(packet.adventureSettings(), buffer);
-    packet.entityLinks(buffer.readArrayUnsignedInt(() -> helper.readEntityLink(buffer, session)));
+    packet.entityLinks(buffer.readArrayUnsignedInt(() -> helper.readEntityLink(buffer)));
     packet.deviceId(buffer.readString());
   }
 
@@ -43,10 +43,10 @@ public final class AddPlayerEncoderV291 extends PacketEncoder.Base<AddPlayer> {
     buffer.writeVector3f(packet.position());
     buffer.writeVector3f(packet.motion());
     buffer.writeVector3f(packet.rotation());
-    helper.writeItem(buffer, session, packet.hand());
-    helper.writeEntityData(buffer, session, packet.metadata());
+    helper.writeItem(buffer, packet.hand());
+    helper.writeEntityData(buffer, packet.metadata());
     helper.writeAdventureSettings(packet.adventureSettings(), buffer);
-    buffer.writeArrayUnsignedInt(packet.entityLinks(), link -> helper.writeEntityLink(buffer, session, link));
+    buffer.writeArrayUnsignedInt(packet.entityLinks(), link -> helper.writeEntityLink(buffer, link));
     buffer.writeString(packet.deviceId());
   }
 }
