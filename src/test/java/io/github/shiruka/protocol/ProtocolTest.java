@@ -1,7 +1,6 @@
 package io.github.shiruka.protocol;
 
 import io.github.shiruka.protocol.codec.v291.CodecV291;
-import io.github.shiruka.protocol.common.Codec;
 import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.PacketHandler;
 import io.github.shiruka.protocol.data.ClientChainData;
