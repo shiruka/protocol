@@ -1,4 +1,3 @@
-InventoryC
 InventoryS
 InventoryT
 
