@@ -15,11 +15,13 @@ import io.github.shiruka.protocol.data.entity.EntityDataMap;
 import io.github.shiruka.protocol.data.entity.EntityDataType;
 import io.github.shiruka.protocol.data.entity.EntityFlag;
 import io.github.shiruka.protocol.data.entity.EntityLinkData;
+import io.github.shiruka.protocol.data.inventory.InventoryActionData;
 import io.github.shiruka.protocol.data.inventory.ItemData;
 import io.github.shiruka.protocol.packet.AdventureSettings;
 import io.github.shiruka.protocol.packet.BookEdit;
 import io.github.shiruka.protocol.packet.BossEvent;
 import io.github.shiruka.protocol.packet.Event;
+import io.github.shiruka.protocol.packet.InventoryTransaction;
 import io.github.shiruka.protocol.packet.ResourcePackInfo;
 import io.github.shiruka.protocol.packet.ResourcePackStack;
 import io.github.shiruka.protocol.packet.StartGame;
@@ -239,6 +241,27 @@ public interface CodecHelper {
   GameRuleValue readGameRule(@NotNull PacketBuffer buffer);
 
   /**
+   * reads inventory actions.
+   *
+   * @param buffer the buffer to read.
+   * @param session the session to read.
+   *
+   * @return inventory actions.
+   */
+  @NotNull
+  List<InventoryActionData> readInventoryActions(@NotNull PacketBuffer buffer, @NotNull MinecraftSession session);
+
+  /**
+   * reads the inventory transaction type.
+   *
+   * @param buffer the buffer to read.
+   * @param packet the packet to read.
+   * @param session the session to read.
+   */
+  void readInventoryTransactionType(@NotNull PacketBuffer buffer, @NotNull InventoryTransaction packet,
+                                    @NotNull MinecraftSession session);
+
+  /**
    * reads the item.
    *
    * @param buffer the buffer to read.
@@ -366,6 +389,27 @@ public interface CodecHelper {
    * @param gameRule the game rule to write.
    */
   void writeGameRule(@NotNull PacketBuffer buffer, @NotNull GameRuleValue gameRule);
+
+  /**
+   * writes the inventory actions.
+   *
+   * @param buffer the buffer to write.
+   * @param actions the actions to write.
+   * @param hasNetworkIds the has network ids to write.
+   * @param session the session to write.
+   */
+  void writeInventoryActions(@NotNull PacketBuffer buffer, @NotNull List<InventoryActionData> actions,
+                             boolean hasNetworkIds, @NotNull MinecraftSession session);
+
+  /**
+   * writes the inventory transaction type.
+   *
+   * @param buffer the buffer to write.
+   * @param packet the packet to write.
+   * @param session the sessions.
+   */
+  void writeInventoryTransactionType(@NotNull PacketBuffer buffer, @NotNull InventoryTransaction packet,
+                                     @NotNull MinecraftSession session);
 
   /**
    * writes the item.

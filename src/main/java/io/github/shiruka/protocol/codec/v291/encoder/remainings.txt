@@ -1,5 +1,4 @@
 InventoryS
-InventoryT
 
 UpdateBlocSynced
 UpdateEqui

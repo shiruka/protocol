@@ -50,11 +50,14 @@ import io.github.shiruka.protocol.data.event.PlayerDiedEventData;
 import io.github.shiruka.protocol.data.event.PortalBuiltEventData;
 import io.github.shiruka.protocol.data.event.PortalUsedEventData;
 import io.github.shiruka.protocol.data.event.SlashCommandExecutedEventData;
+import io.github.shiruka.protocol.data.inventory.InventoryActionData;
+import io.github.shiruka.protocol.data.inventory.InventorySource;
 import io.github.shiruka.protocol.data.inventory.ItemData;
 import io.github.shiruka.protocol.packet.AdventureSettings;
 import io.github.shiruka.protocol.packet.BookEdit;
 import io.github.shiruka.protocol.packet.BossEvent;
 import io.github.shiruka.protocol.packet.Event;
+import io.github.shiruka.protocol.packet.InventoryTransaction;
 import io.github.shiruka.protocol.packet.ResourcePackInfo;
 import io.github.shiruka.protocol.packet.ResourcePackStack;
 import io.github.shiruka.protocol.packet.StartGame;
@@ -1073,6 +1076,30 @@ public class CodecHelperV291 implements CodecHelper {
 
   @NotNull
   @Override
+  public List<InventoryActionData> readInventoryActions(@NotNull final PacketBuffer buffer,
+                                                        @NotNull final MinecraftSession session) {
+    return buffer.readArrayUnsignedInt(() -> {
+      final var source = this.readInventorySource(buffer);
+      final var slot = buffer.readUnsignedVarInt();
+      final var fromItem = this.readItem(buffer, session);
+      final var toItem = this.readItem(buffer, session);
+      return new InventoryActionData(source, slot, fromItem, toItem);
+    });
+  }
+
+  @Override
+  public void readInventoryTransactionType(@NotNull final PacketBuffer buffer,
+                                           @NotNull final InventoryTransaction packet,
+                                           @NotNull final MinecraftSession session) {
+    switch (packet.transactionType()) {
+      case ITEM_USE -> this.readItemUse(buffer, packet, session);
+      case ITEM_USE_ON_ENTITY -> this.readItemUseOnEntity(buffer, packet, session);
+      case ITEM_RELEASE -> this.readItemRelease(buffer, packet, session);
+    }
+  }
+
+  @NotNull
+  @Override
   public ItemData readItem(@NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
     final var runtimeId = buffer.readVarInt();
     if (runtimeId == 0) {
@@ -1378,6 +1405,29 @@ public class CodecHelperV291 implements CodecHelper {
   }
 
   @Override
+  public void writeInventoryActions(@NotNull final PacketBuffer buffer,
+                                    @NotNull final List<InventoryActionData> actions, final boolean hasNetworkIds,
+                                    @NotNull final MinecraftSession session) {
+    buffer.writeArrayUnsignedInt(actions, action -> {
+      this.writeInventorySource(buffer, action.source());
+      buffer.writeUnsignedVarInt(action.slot());
+      this.writeItem(buffer, session, action.fromItem());
+      this.writeItem(buffer, session, action.toItem());
+    });
+  }
+
+  @Override
+  public void writeInventoryTransactionType(@NotNull final PacketBuffer buffer,
+                                            @NotNull final InventoryTransaction packet,
+                                            @NotNull final MinecraftSession session) {
+    switch (packet.transactionType()) {
+      case ITEM_USE -> this.writeItemUse(buffer, packet, session);
+      case ITEM_USE_ON_ENTITY -> this.writeItemUseOnEntity(buffer, packet, session);
+      case ITEM_RELEASE -> this.writeItemRelease(buffer, packet, session);
+    }
+  }
+
+  @Override
   public void writeItem(@NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session,
                         @NotNull final ItemData item) {
     final var definition = item.definition();
@@ -1457,6 +1507,70 @@ public class CodecHelperV291 implements CodecHelper {
     buffer.writeString(entry.packId());
     buffer.writeString(entry.packVersion());
     buffer.writeString(entry.subPackName());
+  }
+
+  /**
+   * reads the item release.
+   *
+   * @param buffer the buffer to read.
+   * @param packet the packet to read.
+   * @param session the session to read.
+   */
+  public void readItemRelease(@NotNull final PacketBuffer buffer, @NotNull final InventoryTransaction packet,
+                              @NotNull final MinecraftSession session) {
+    packet.actionType(buffer.readUnsignedVarInt());
+    packet.hotBarSlot(buffer.readVarInt());
+    packet.itemInHand(this.readItem(buffer, session));
+    packet.headPosition(buffer.readVector3f());
+  }
+
+  /**
+   * reads the item use on entity.
+   *
+   * @param buffer the buffer to read.
+   * @param packet the packet to read.
+   * @param session the session to read.
+   */
+  public void readItemUseOnEntity(@NotNull final PacketBuffer buffer, @NotNull final InventoryTransaction packet,
+                                  @NotNull final MinecraftSession session) {
+    packet.runtimeEntityId(buffer.readUnsignedVarLong());
+    packet.actionType(buffer.readUnsignedVarInt());
+    packet.hotBarSlot(buffer.readVarInt());
+    packet.itemInHand(this.readItem(buffer, session));
+    packet.playerPosition(buffer.readVector3f());
+    packet.clickPosition(buffer.readVector3f());
+  }
+
+  /**
+   * writes the item release.
+   *
+   * @param buffer the buffer to write.
+   * @param packet the packet to write.
+   * @param session the sesssion to write.
+   */
+  public void writeItemRelease(@NotNull final PacketBuffer buffer, @NotNull final InventoryTransaction packet,
+                               @NotNull final MinecraftSession session) {
+    buffer.writeUnsignedVarLong(packet.actionType());
+    buffer.writeVarInt(packet.hotBarSlot());
+    this.writeItem(buffer, session, packet.itemInHand());
+    buffer.writeVector3f(packet.headPosition());
+  }
+
+  /**
+   * writes the item use on entity.
+   *
+   * @param buffer the buffer to read.
+   * @param packet the packet to read.
+   * @param session the session to read.
+   */
+  public void writeItemUseOnEntity(@NotNull final PacketBuffer buffer, @NotNull final InventoryTransaction packet,
+                                   @NotNull final MinecraftSession session) {
+    buffer.writeUnsignedVarLong(packet.runtimeEntityId());
+    buffer.writeUnsignedVarLong(packet.actionType());
+    buffer.writeVarInt(packet.hotBarSlot());
+    this.writeItem(buffer, session, packet.itemInHand());
+    buffer.writeVector3f(packet.playerPosition());
+    buffer.writeVector3f(packet.clickPosition());
   }
 
   /**
@@ -1559,6 +1673,44 @@ public class CodecHelperV291 implements CodecHelper {
     final var bucketedEntityType = buffer.readVarInt();
     final var isRelease = buffer.readBoolean();
     return new FishBucketedEventData(pattern, preset, bucketedEntityType, isRelease);
+  }
+
+  /**
+   * reads the inventory source.
+   *
+   * @param buffer the buffer to read.
+   *
+   * @return inventory source.
+   */
+  @NotNull
+  protected InventorySource readInventorySource(@NotNull final PacketBuffer buffer) {
+    final var type = InventorySource.Type.byId(buffer.readUnsignedVarInt());
+    return switch (type) {
+      case CONTAINER -> InventorySource.containerId(buffer.readVarInt());
+      case GLOBAL -> InventorySource.global();
+      case WORLD_INTERACTION -> InventorySource.worldInteraction(InventorySource.Flag.VALUES[buffer.readUnsignedVarInt()]);
+      case CREATIVE -> InventorySource.creative();
+      case NON_IMPLEMENTED -> InventorySource.nonImplemented(buffer.readVarInt());
+      default -> InventorySource.invalid();
+    };
+  }
+
+  /**
+   * reads the item use.
+   *
+   * @param buffer the buffer to read.
+   * @param packet the packet to read.
+   * @param session the session to read.
+   */
+  protected void readItemUse(@NotNull final PacketBuffer buffer, @NotNull final InventoryTransaction packet,
+                             @NotNull final MinecraftSession session) {
+    packet.actionType(buffer.readUnsignedVarInt());
+    packet.blockPosition(buffer.readVector3i());
+    packet.blockFace(buffer.readVarInt());
+    packet.hotBarSlot(buffer.readVarInt());
+    packet.itemInHand(this.readItem(buffer, session));
+    packet.playerPosition(buffer.readVector3f());
+    packet.clickPosition(buffer.readVector3f());
   }
 
   /**
@@ -1729,6 +1881,38 @@ public class CodecHelperV291 implements CodecHelper {
     buffer.writeVarInt(event.preset());
     buffer.writeVarInt(event.bucketedEntityType());
     buffer.writeBoolean(event.releaseEvent());
+  }
+
+  /**
+   * writes the inventory source.
+   *
+   * @param buffer the buffer to write.
+   * @param inventorySource the inventory source to write.
+   */
+  protected void writeInventorySource(@NotNull final PacketBuffer buffer,
+                                      @NotNull final InventorySource inventorySource) {
+    buffer.writeUnsignedVarInt(inventorySource.type().id());
+    switch (inventorySource.type()) {
+      case CONTAINER, UNTRACKED_INTERACTION_UI, NON_IMPLEMENTED -> buffer.writeVarInt(inventorySource.containerId());
+      case WORLD_INTERACTION -> buffer.writeUnsignedVarInt(inventorySource.flag().ordinal());
+    }
+  }
+
+  /**
+   * writes the item use.
+   *
+   * @param buffer the buffer to write.
+   * @param packet the packet to write.
+   */
+  protected void writeItemUse(@NotNull final PacketBuffer buffer, @NotNull final InventoryTransaction packet,
+                              @NotNull final MinecraftSession session) {
+    buffer.writeUnsignedVarInt(packet.actionType());
+    buffer.writeVector3i(packet.blockPosition());
+    buffer.writeVarInt(packet.blockFace());
+    buffer.writeVarInt(packet.hotBarSlot());
+    this.writeItem(buffer, session, packet.itemInHand());
+    buffer.writeVector3f(packet.playerPosition());
+    buffer.writeVector3f(packet.clickPosition());
   }
 
   /**
