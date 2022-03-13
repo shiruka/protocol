@@ -2,9 +2,9 @@ package io.github.shiruka.protocol.packet;
 
 import io.github.shiruka.network.PacketBuffer;
 import io.github.shiruka.protocol.common.CodecHelper;
-import io.github.shiruka.protocol.common.PacketEncoder;
 import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.MinecraftSession;
+import io.github.shiruka.protocol.common.PacketEncoder;
 import io.github.shiruka.protocol.common.PacketHandler;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.util.ReferenceCounted;

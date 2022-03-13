@@ -36,6 +36,20 @@ import io.github.shiruka.protocol.data.entity.EntityFlag;
 import io.github.shiruka.protocol.data.entity.EntityFlags;
 import io.github.shiruka.protocol.data.entity.EntityLinkData;
 import io.github.shiruka.protocol.data.entity.EntityLinkDataType;
+import io.github.shiruka.protocol.data.event.AchievementAwardedEventData;
+import io.github.shiruka.protocol.data.event.AgentCommandEventData;
+import io.github.shiruka.protocol.data.event.AgentCreatedEventData;
+import io.github.shiruka.protocol.data.event.AgentResult;
+import io.github.shiruka.protocol.data.event.BossKilledEventData;
+import io.github.shiruka.protocol.data.event.CauldronUsedEventData;
+import io.github.shiruka.protocol.data.event.EntityInteractEventData;
+import io.github.shiruka.protocol.data.event.FishBucketedEventData;
+import io.github.shiruka.protocol.data.event.MobKilledEventData;
+import io.github.shiruka.protocol.data.event.PatternRemovedEventData;
+import io.github.shiruka.protocol.data.event.PlayerDiedEventData;
+import io.github.shiruka.protocol.data.event.PortalBuiltEventData;
+import io.github.shiruka.protocol.data.event.PortalUsedEventData;
+import io.github.shiruka.protocol.data.event.SlashCommandExecutedEventData;
 import io.github.shiruka.protocol.data.inventory.ItemData;
 import io.github.shiruka.protocol.packet.AdventureSettings;
 import io.github.shiruka.protocol.packet.BookEdit;
@@ -98,22 +112,6 @@ public class CodecHelperV291 implements CodecHelper {
    * the level event world.
    */
   protected static final int LEVEL_EVENT_WORLD = 3000;
-
-  /**
-   * the entity data type.
-   */
-  @Getter
-  protected final IntTypeMap<EntityDataType> entityDataTypes = IntTypeMap.newBuilder(EntityDataType.class)
-    .insert(0, EntityDataType.BYTE)
-    .insert(1, EntityDataType.SHORT)
-    .insert(2, EntityDataType.INT)
-    .insert(3, EntityDataType.FLOAT)
-    .insert(4, EntityDataType.STRING)
-    .insert(5, EntityDataType.NBT)
-    .insert(6, EntityDataType.VECTOR3I)
-    .insert(7, EntityDataType.LONG)
-    .insert(8, EntityDataType.VECTOR3F)
-    .build();
 
   /**
    * the read byte.
@@ -236,6 +234,114 @@ public class CodecHelperV291 implements CodecHelper {
     .insert(33, CommandParam.TEXT)
     .insert(36, CommandParam.JSON)
     .insert(43, CommandParam.COMMAND)
+    .build();
+
+  /**
+   * the entity data.
+   */
+  @Getter
+  protected final IntTypeMap<EntityData> entityData = IntTypeMap.newBuilder(EntityData.class)
+    .insert(0, EntityData.FLAGS)
+    .insert(1, EntityData.HEALTH)
+    .insert(2, EntityData.VARIANT)
+    .insert(3, EntityData.COLOR)
+    .insert(4, EntityData.NAMETAG)
+    .insert(5, EntityData.OWNER_EID)
+    .insert(6, EntityData.TARGET_EID)
+    .insert(7, EntityData.AIR_SUPPLY)
+    .insert(8, EntityData.EFFECT_COLOR)
+    .insert(9, EntityData.EFFECT_AMBIENT)
+    .insert(10, EntityData.JUMP_DURATION)
+    .insert(11, EntityData.HURT_TIME)
+    .insert(12, EntityData.HURT_DIRECTION)
+    .insert(13, EntityData.ROW_TIME_LEFT)
+    .insert(14, EntityData.ROW_TIME_RIGHT)
+    .insert(15, EntityData.EXPERIENCE_VALUE)
+    .insert(16, EntityData.DISPLAY_ITEM)
+    .insert(17, EntityData.DISPLAY_OFFSET)
+    .insert(18, EntityData.CUSTOM_DISPLAY)
+    .insert(19, EntityData.SWELL)
+    .insert(20, EntityData.OLD_SWELL)
+    .insert(21, EntityData.SWELL_DIRECTION)
+    .insert(22, EntityData.CHARGE_AMOUNT)
+    .insert(23, EntityData.CARRIED_BLOCK)
+    .insert(24, EntityData.CLIENT_EVENT)
+    .insert(25, EntityData.USING_ITEM)
+    .insert(26, EntityData.PLAYER_FLAGS)
+    .insert(27, EntityData.PLAYER_INDEX)
+    .insert(28, EntityData.BED_POSITION)
+    .insert(29, EntityData.X_POWER)
+    .insert(30, EntityData.Y_POWER)
+    .insert(31, EntityData.Z_POWER)
+    .insert(32, EntityData.AUX_POWER)
+    .insert(33, EntityData.FISH_X)
+    .insert(34, EntityData.FISH_Z)
+    .insert(35, EntityData.FISH_ANGLE)
+    .insert(36, EntityData.POTION_AUX_VALUE)
+    .insert(37, EntityData.LEASH_HOLDER_EID)
+    .insert(38, EntityData.SCALE)
+    .insert(39, EntityData.INTERACTIVE_TAG)
+    .insert(40, EntityData.NPC_SKIN_ID)
+    .insert(41, EntityData.URL_TAG)
+    .insert(42, EntityData.MAX_AIR_SUPPLY)
+    .insert(43, EntityData.MARK_VARIANT)
+    .insert(44, EntityData.CONTAINER_TYPE)
+    .insert(45, EntityData.CONTAINER_BASE_SIZE)
+    .insert(46, EntityData.CONTAINER_STRENGTH_MODIFIER)
+    .insert(47, EntityData.BLOCK_TARGET)
+    .insert(48, EntityData.WITHER_INVULNERABLE_TICKS)
+    .insert(49, EntityData.WITHER_TARGET_1)
+    .insert(50, EntityData.WITHER_TARGET_2)
+    .insert(51, EntityData.WITHER_TARGET_3)
+    .insert(52, EntityData.WITHER_AERIAL_ATTACK)
+    .insert(53, EntityData.BOUNDING_BOX_WIDTH)
+    .insert(54, EntityData.BOUNDING_BOX_HEIGHT)
+    .insert(55, EntityData.FUSE_LENGTH)
+    .insert(56, EntityData.RIDER_SEAT_POSITION)
+    .insert(57, EntityData.RIDER_ROTATION_LOCKED)
+    .insert(58, EntityData.RIDER_MAX_ROTATION)
+    .insert(59, EntityData.RIDER_MIN_ROTATION)
+    .insert(60, EntityData.AREA_EFFECT_CLOUD_RADIUS)
+    .insert(61, EntityData.AREA_EFFECT_CLOUD_WAITING)
+    .insert(62, EntityData.AREA_EFFECT_CLOUD_PARTICLE_ID)
+    .insert(63, EntityData.SHULKER_PEEK_ID)
+    .insert(64, EntityData.SHULKER_ATTACH_FACE)
+    .insert(66, EntityData.SHULKER_ATTACH_POS)
+    .insert(67, EntityData.TRADE_TARGET_EID)
+    .insert(69, EntityData.COMMAND_BLOCK_ENABLED)
+    .insert(70, EntityData.COMMAND_BLOCK_COMMAND)
+    .insert(71, EntityData.COMMAND_BLOCK_LAST_OUTPUT)
+    .insert(72, EntityData.COMMAND_BLOCK_TRACK_OUTPUT)
+    .insert(73, EntityData.CONTROLLING_RIDER_SEAT_INDEX)
+    .insert(74, EntityData.STRENGTH)
+    .insert(75, EntityData.MAX_STRENGTH)
+    .insert(76, EntityData.EVOKER_SPELL_COLOR)
+    .insert(77, EntityData.LIMITED_LIFE)
+    .insert(78, EntityData.ARMOR_STAND_POSE_INDEX)
+    .insert(79, EntityData.ENDER_CRYSTAL_TIME_OFFSET)
+    .insert(80, EntityData.NAMETAG_ALWAYS_SHOW)
+    .insert(81, EntityData.COLOR_2)
+    .insert(83, EntityData.SCORE_TAG)
+    .insert(84, EntityData.BALLOON_ATTACHED_ENTITY)
+    .insert(85, EntityData.PUFFERFISH_SIZE)
+    .insert(86, EntityData.BOAT_BUBBLE_TIME)
+    .insert(87, EntityData.AGENT_ID)
+    .build();
+
+  /**
+   * the entity data type.
+   */
+  @Getter
+  protected final IntTypeMap<EntityDataType> entityDataTypes = IntTypeMap.newBuilder(EntityDataType.class)
+    .insert(0, EntityDataType.BYTE)
+    .insert(1, EntityDataType.SHORT)
+    .insert(2, EntityDataType.INT)
+    .insert(3, EntityDataType.FLOAT)
+    .insert(4, EntityDataType.STRING)
+    .insert(5, EntityDataType.NBT)
+    .insert(6, EntityDataType.VECTOR3I)
+    .insert(7, EntityDataType.LONG)
+    .insert(8, EntityDataType.VECTOR3F)
     .build();
 
   /**
@@ -379,105 +485,13 @@ public class CodecHelperV291 implements CodecHelper {
     .with(Event.Type.PORTAL_USED, this::readPortalUsed)
     .with(Event.Type.MOB_KILLED, this::readMobKilled)
     .with(Event.Type.CAULDRON_USED, this::readCauldronUsed)
-    .with(Event.Type.PLAYER_DEATH, this::readPlayerDeath)
+    .with(Event.Type.PLAYER_DIED, this::readPlayerDied)
     .with(Event.Type.BOSS_KILLED, this::readBossKilled)
     .with(Event.Type.AGENT_COMMAND, this::readAgentCommand)
-    .with(Event.Type.AGENT_CREATED, (b, h) -> AgentCreatedEventData.INSTANCE)
+    .with(Event.Type.AGENT_CREATED, b -> AgentCreatedEventData.INSTANCE)
     .with(Event.Type.PATTERN_REMOVED, this::readPatternRemoved)
     .with(Event.Type.SLASH_COMMAND_EXECUTED, this::readSlashCommandExecuted)
-    .with(Event.Type.FISH_BUCKETED, this::readFishBucketed)
-
-  /**
-   * the entity data.
-   */
-  @Getter
-  protected final IntTypeMap<EntityData> entityData = IntTypeMap.newBuilder(EntityData.class)
-    .insert(0, EntityData.FLAGS)
-    .insert(1, EntityData.HEALTH)
-    .insert(2, EntityData.VARIANT)
-    .insert(3, EntityData.COLOR)
-    .insert(4, EntityData.NAMETAG)
-    .insert(5, EntityData.OWNER_EID)
-    .insert(6, EntityData.TARGET_EID)
-    .insert(7, EntityData.AIR_SUPPLY)
-    .insert(8, EntityData.EFFECT_COLOR)
-    .insert(9, EntityData.EFFECT_AMBIENT)
-    .insert(10, EntityData.JUMP_DURATION)
-    .insert(11, EntityData.HURT_TIME)
-    .insert(12, EntityData.HURT_DIRECTION)
-    .insert(13, EntityData.ROW_TIME_LEFT)
-    .insert(14, EntityData.ROW_TIME_RIGHT)
-    .insert(15, EntityData.EXPERIENCE_VALUE)
-    .insert(16, EntityData.DISPLAY_ITEM)
-    .insert(17, EntityData.DISPLAY_OFFSET)
-    .insert(18, EntityData.CUSTOM_DISPLAY)
-    .insert(19, EntityData.SWELL)
-    .insert(20, EntityData.OLD_SWELL)
-    .insert(21, EntityData.SWELL_DIRECTION)
-    .insert(22, EntityData.CHARGE_AMOUNT)
-    .insert(23, EntityData.CARRIED_BLOCK)
-    .insert(24, EntityData.CLIENT_EVENT)
-    .insert(25, EntityData.USING_ITEM)
-    .insert(26, EntityData.PLAYER_FLAGS)
-    .insert(27, EntityData.PLAYER_INDEX)
-    .insert(28, EntityData.BED_POSITION)
-    .insert(29, EntityData.X_POWER)
-    .insert(30, EntityData.Y_POWER)
-    .insert(31, EntityData.Z_POWER)
-    .insert(32, EntityData.AUX_POWER)
-    .insert(33, EntityData.FISH_X)
-    .insert(34, EntityData.FISH_Z)
-    .insert(35, EntityData.FISH_ANGLE)
-    .insert(36, EntityData.POTION_AUX_VALUE)
-    .insert(37, EntityData.LEASH_HOLDER_EID)
-    .insert(38, EntityData.SCALE)
-    .insert(39, EntityData.INTERACTIVE_TAG)
-    .insert(40, EntityData.NPC_SKIN_ID)
-    .insert(41, EntityData.URL_TAG)
-    .insert(42, EntityData.MAX_AIR_SUPPLY)
-    .insert(43, EntityData.MARK_VARIANT)
-    .insert(44, EntityData.CONTAINER_TYPE)
-    .insert(45, EntityData.CONTAINER_BASE_SIZE)
-    .insert(46, EntityData.CONTAINER_STRENGTH_MODIFIER)
-    .insert(47, EntityData.BLOCK_TARGET)
-    .insert(48, EntityData.WITHER_INVULNERABLE_TICKS)
-    .insert(49, EntityData.WITHER_TARGET_1)
-    .insert(50, EntityData.WITHER_TARGET_2)
-    .insert(51, EntityData.WITHER_TARGET_3)
-    .insert(52, EntityData.WITHER_AERIAL_ATTACK)
-    .insert(53, EntityData.BOUNDING_BOX_WIDTH)
-    .insert(54, EntityData.BOUNDING_BOX_HEIGHT)
-    .insert(55, EntityData.FUSE_LENGTH)
-    .insert(56, EntityData.RIDER_SEAT_POSITION)
-    .insert(57, EntityData.RIDER_ROTATION_LOCKED)
-    .insert(58, EntityData.RIDER_MAX_ROTATION)
-    .insert(59, EntityData.RIDER_MIN_ROTATION)
-    .insert(60, EntityData.AREA_EFFECT_CLOUD_RADIUS)
-    .insert(61, EntityData.AREA_EFFECT_CLOUD_WAITING)
-    .insert(62, EntityData.AREA_EFFECT_CLOUD_PARTICLE_ID)
-    .insert(63, EntityData.SHULKER_PEEK_ID)
-    .insert(64, EntityData.SHULKER_ATTACH_FACE)
-    .insert(66, EntityData.SHULKER_ATTACH_POS)
-    .insert(67, EntityData.TRADE_TARGET_EID)
-    .insert(69, EntityData.COMMAND_BLOCK_ENABLED)
-    .insert(70, EntityData.COMMAND_BLOCK_COMMAND)
-    .insert(71, EntityData.COMMAND_BLOCK_LAST_OUTPUT)
-    .insert(72, EntityData.COMMAND_BLOCK_TRACK_OUTPUT)
-    .insert(73, EntityData.CONTROLLING_RIDER_SEAT_INDEX)
-    .insert(74, EntityData.STRENGTH)
-    .insert(75, EntityData.MAX_STRENGTH)
-    .insert(76, EntityData.EVOKER_SPELL_COLOR)
-    .insert(77, EntityData.LIMITED_LIFE)
-    .insert(78, EntityData.ARMOR_STAND_POSE_INDEX)
-    .insert(79, EntityData.ENDER_CRYSTAL_TIME_OFFSET)
-    .insert(80, EntityData.NAMETAG_ALWAYS_SHOW)
-    .insert(81, EntityData.COLOR_2)
-    .insert(83, EntityData.SCORE_TAG)
-    .insert(84, EntityData.BALLOON_ATTACHED_ENTITY)
-    .insert(85, EntityData.PUFFERFISH_SIZE)
-    .insert(86, EntityData.BOAT_BUBBLE_TIME)
-    .insert(87, EntityData.AGENT_ID)
-    .build();
+    .with(Event.Type.FISH_BUCKETED, this::readFishBucketed);
 
   /**
    * the event type writers.
@@ -491,7 +505,7 @@ public class CodecHelperV291 implements CodecHelper {
     .with(Event.Type.PORTAL_USED, this::writePortalUsed)
     .with(Event.Type.MOB_KILLED, this::writeMobKilled)
     .with(Event.Type.CAULDRON_USED, this::writeCauldronUsed)
-    .with(Event.Type.PLAYER_DEATH, this::writePlayerDeath)
+    .with(Event.Type.PLAYER_DIED, this::writePlayerDied)
     .with(Event.Type.BOSS_KILLED, this::writeBossKilled)
     .with(Event.Type.AGENT_COMMAND, this::writeAgentCommand)
     .with(Event.Type.AGENT_CREATED, (buffer, data) -> {
@@ -1482,7 +1496,7 @@ public class CodecHelperV291 implements CodecHelper {
     final var command = buffer.readString();
     final var dataKey = buffer.readString();
     final var output = buffer.readString();
-    return new AgentCommandEventData(result, command, dataKey, dataValue, output);
+    return new AgentCommandEventData(command, dataKey, dataValue, output, result);
   }
 
   /**
@@ -1497,7 +1511,7 @@ public class CodecHelperV291 implements CodecHelper {
     final var bossUniqueEntityId = buffer.readVarLong();
     final var playerPartySize = buffer.readVarInt();
     final var interactionEntityType = buffer.readVarInt();
-    return new BossKilledEventData(bossUniqueEntityId, playerPartySize, interactionEntityType);
+    return new BossKilledEventData(interactionEntityType, bossUniqueEntityId, playerPartySize);
   }
 
   /**
@@ -1561,8 +1575,8 @@ public class CodecHelperV291 implements CodecHelper {
     final var entityDamageCause = buffer.readVarInt();
     final var villagerTradeTier = buffer.readVarInt();
     final var villagerDisplayName = buffer.readString();
-    return new MobKilledEventData(killerUniqueEntityId, victimUniqueEntityId, -1, entityDamageCause,
-      villagerTradeTier, villagerDisplayName);
+    return new MobKilledEventData(entityDamageCause, -1, killerUniqueEntityId, victimUniqueEntityId,
+      villagerDisplayName, villagerTradeTier);
   }
 
   /**
@@ -1579,21 +1593,21 @@ public class CodecHelperV291 implements CodecHelper {
     final var patternsSize = buffer.readVarInt();
     final var patternIndex = buffer.readVarInt();
     final var patternColor = buffer.readVarInt();
-    return new PatternRemovedEventData(itemId, auxValue, patternsSize, patternIndex, patternColor);
+    return new PatternRemovedEventData(auxValue, itemId, patternColor, patternIndex, patternsSize);
   }
 
   /**
-   * read the player death.
+   * read the player died.
    *
    * @param buffer the buffer to read.
    *
-   * @return player death.
+   * @return player died.
    */
   @NotNull
-  protected PlayerDeathEventData readPlayerDeath(@NotNull final PacketBuffer buffer) {
+  protected PlayerDiedEventData readPlayerDied(@NotNull final PacketBuffer buffer) {
     final var attackerEntityId = buffer.readVarInt();
     final var entityDamageCause = buffer.readVarInt();
-    return new PlayerDeathEventData(attackerEntityId, -1, entityDamageCause, false);
+    return new PlayerDiedEventData(attackerEntityId, -1, entityDamageCause, false);
   }
 
   /**
@@ -1635,7 +1649,7 @@ public class CodecHelperV291 implements CodecHelper {
     buffer.readVarInt();
     final var commandName = buffer.readString();
     final var outputMessages = Arrays.asList(buffer.readString().split(";"));
-    return new SlashCommandExecutedEventData(commandName, successCount, outputMessages);
+    return new SlashCommandExecutedEventData(commandName, outputMessages, successCount);
   }
 
   /**
@@ -1645,7 +1659,7 @@ public class CodecHelperV291 implements CodecHelper {
    * @param data the data to write.
    */
   protected void writeAchievementAwarded(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
-    buffer.writeVarInt(((AchievementAwardedEventData) data).getAchievementId());
+    buffer.writeVarInt(((AchievementAwardedEventData) data).achievementId());
   }
 
   /**
@@ -1656,11 +1670,11 @@ public class CodecHelperV291 implements CodecHelper {
    */
   protected void writeAgentCommand(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
     final var event = (AgentCommandEventData) data;
-    buffer.writeVarInt(event.getResult().ordinal());
-    buffer.writeVarInt(event.getDataValue());
-    buffer.writeString(event.getCommand());
-    buffer.writeString(event.getDataKey());
-    buffer.writeString(event.getOutput());
+    buffer.writeVarInt(event.result().ordinal());
+    buffer.writeVarInt(event.dataValue());
+    buffer.writeString(event.command());
+    buffer.writeString(event.dataKey());
+    buffer.writeString(event.output());
   }
 
   /**
@@ -1671,9 +1685,9 @@ public class CodecHelperV291 implements CodecHelper {
    */
   protected void writeBossKilled(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
     final var event = (BossKilledEventData) data;
-    buffer.writeVarLong(event.getBossUniqueEntityId());
-    buffer.writeVarInt(event.getPlayerPartySize());
-    buffer.writeVarInt(event.getBossEntityType());
+    buffer.writeVarLong(event.bossUniqueEntityId());
+    buffer.writeVarInt(event.playerPartySize());
+    buffer.writeVarInt(event.bossEntityType());
   }
 
   /**
@@ -1684,9 +1698,9 @@ public class CodecHelperV291 implements CodecHelper {
    */
   protected void writeCauldronUsed(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
     final var event = (CauldronUsedEventData) data;
-    buffer.writeUnsignedVarInt(event.getPotionId());
-    buffer.writeVarInt(event.getColor());
-    buffer.writeVarInt(event.getFillLevel());
+    buffer.writeUnsignedVarInt(event.potionId());
+    buffer.writeVarInt(event.color());
+    buffer.writeVarInt(event.fillLevel());
   }
 
   /**
@@ -1697,10 +1711,10 @@ public class CodecHelperV291 implements CodecHelper {
    */
   protected void writeEntityInteract(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
     final var event = (EntityInteractEventData) data;
-    buffer.writeVarInt(event.getInteractionType());
-    buffer.writeVarInt(event.getLegacyEntityTypeId());
-    buffer.writeVarInt(event.getVariant());
-    buffer.writeByte(event.getPaletteColor());
+    buffer.writeVarInt(event.interactionType());
+    buffer.writeVarInt(event.legacyEntityTypeId());
+    buffer.writeVarInt(event.variant());
+    buffer.writeByte(event.paletteColor());
   }
 
   /**
@@ -1711,10 +1725,10 @@ public class CodecHelperV291 implements CodecHelper {
    */
   protected void writeFishBucketed(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
     final var event = (FishBucketedEventData) data;
-    buffer.writeVarInt(event.getPattern());
-    buffer.writeVarInt(event.getPreset());
-    buffer.writeVarInt(event.getBucketedEntityType());
-    buffer.writeBoolean(event.isReleaseEvent());
+    buffer.writeVarInt(event.pattern());
+    buffer.writeVarInt(event.preset());
+    buffer.writeVarInt(event.bucketedEntityType());
+    buffer.writeBoolean(event.releaseEvent());
   }
 
   /**
@@ -1725,11 +1739,11 @@ public class CodecHelperV291 implements CodecHelper {
    */
   protected void writeMobKilled(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
     final var event = (MobKilledEventData) data;
-    buffer.writeVarLong(event.getKillerUniqueEntityId());
-    buffer.writeVarLong(event.getVictimUniqueEntityId());
-    buffer.writeVarInt(event.getEntityDamageCause());
-    buffer.writeVarInt(event.getVillagerTradeTier());
-    buffer.writeString(event.getVillagerDisplayName());
+    buffer.writeVarLong(event.killerUniqueEntityId());
+    buffer.writeVarLong(event.victimUniqueEntityId());
+    buffer.writeVarInt(event.entityDamageCause());
+    buffer.writeVarInt(event.villagerTradeTier());
+    buffer.writeString(event.villagerDisplayName());
   }
 
   /**
@@ -1740,23 +1754,23 @@ public class CodecHelperV291 implements CodecHelper {
    */
   protected void writePatternRemoved(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
     final var event = (PatternRemovedEventData) data;
-    buffer.writeVarInt(event.getItemId());
-    buffer.writeVarInt(event.getAuxValue());
-    buffer.writeVarInt(event.getPatternsSize());
-    buffer.writeVarInt(event.getPatternIndex());
-    buffer.writeVarInt(event.getPatternColor());
+    buffer.writeVarInt(event.itemId());
+    buffer.writeVarInt(event.auxValue());
+    buffer.writeVarInt(event.patternsSize());
+    buffer.writeVarInt(event.patternIndex());
+    buffer.writeVarInt(event.patternColor());
   }
 
   /**
-   * writes the player death.
+   * writes the player died.
    *
    * @param buffer the buffer to write.
    * @param data the data to write.
    */
-  protected void writePlayerDeath(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
-    final var event = (PlayerDeathEventData) data;
-    buffer.writeVarInt(event.getAttackerEntityId());
-    buffer.writeVarInt(event.getEntityDamageCause());
+  protected void writePlayerDied(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+    final var event = (PlayerDiedEventData) data;
+    buffer.writeVarInt(event.attackerEntityId());
+    buffer.writeVarInt(event.entityDamageCause());
   }
 
   /**
@@ -1766,7 +1780,7 @@ public class CodecHelperV291 implements CodecHelper {
    * @param data the data to write.
    */
   protected void writePortalBuilt(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
-    buffer.writeVarInt(((PortalBuiltEventData) data).getDimensionId());
+    buffer.writeVarInt(((PortalBuiltEventData) data).dimensionId());
   }
 
   /**
@@ -1777,8 +1791,8 @@ public class CodecHelperV291 implements CodecHelper {
    */
   protected void writePortalUsed(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
     final var event = (PortalUsedEventData) data;
-    buffer.writeVarInt(event.getFromDimensionId());
-    buffer.writeVarInt(event.getToDimensionId());
+    buffer.writeVarInt(event.fromDimensionId());
+    buffer.writeVarInt(event.toDimensionId());
   }
 
   /**
@@ -1789,10 +1803,10 @@ public class CodecHelperV291 implements CodecHelper {
    */
   protected void writeSlashCommandExecuted(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
     final var event = (SlashCommandExecutedEventData) data;
-    buffer.writeVarInt(event.getSuccessCount());
-    final var outputMessages = event.getOutputMessages();
+    buffer.writeVarInt(event.successCount());
+    final var outputMessages = event.outputMessages();
     buffer.writeVarInt(outputMessages.size());
-    buffer.writeString(event.getCommandName());
+    buffer.writeString(event.commandName());
     buffer.writeString(String.join(";", outputMessages));
   }
 

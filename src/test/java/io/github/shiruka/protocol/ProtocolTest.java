@@ -2,6 +2,7 @@ package io.github.shiruka.protocol;
 
 import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.PacketHandler;
+import io.github.shiruka.protocol.data.BlockInteractionType;
 import io.github.shiruka.protocol.data.ClientChainData;
 import io.github.shiruka.protocol.packet.Event;
 import io.github.shiruka.protocol.packet.Login;

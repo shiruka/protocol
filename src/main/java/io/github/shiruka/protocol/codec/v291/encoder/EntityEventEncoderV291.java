@@ -2,9 +2,9 @@ package io.github.shiruka.protocol.codec.v291.encoder;
 
 import io.github.shiruka.network.PacketBuffer;
 import io.github.shiruka.protocol.common.CodecHelper;
+import io.github.shiruka.protocol.common.MinecraftSession;
 import io.github.shiruka.protocol.common.PacketEncoder;
 import io.github.shiruka.protocol.common.PacketId;
-import io.github.shiruka.protocol.common.MinecraftSession;
 import io.github.shiruka.protocol.packet.EntityEvent;
 import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;

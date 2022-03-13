@@ -62,9 +62,9 @@ public final class Event extends MinecraftPacket.Base {
      */
     CAULDRON_USED,
     /**
-     * the player death.
+     * the player died.
      */
-    PLAYER_DEATH,
+    PLAYER_DIED,
     /**
      * the boss killed.
      */
@@ -98,17 +98,65 @@ public final class Event extends MinecraftPacket.Base {
      */
     PET_DIED,
     /**
-     * the cauldron block used.
+     * the cauldron interact.
      */
-    CAULDRON_BLOCK_USED,
+    CAULDRON_INTERACT,
     /**
-     * the composter block used.
+     * the composter interact.
      */
-    COMPOSTER_BLOCK_USED,
+    COMPOSTER_INTERACT,
     /**
-     * the bell block used.
+     * the bell used.
      */
-    BELL_BLOCK_USED;
+    BELL_USED,
+    /**
+     * the entity definition trigger.
+     */
+    ENTITY_DEFINITION_TRIGGER,
+    /**
+     * the raid update.
+     */
+    RAID_UPDATE,
+    /**
+     * the movement anomaly.
+     */
+    MOVEMENT_ANOMALY,
+    /**
+     * the movement corrected.
+     */
+    MOVEMENT_CORRECTED,
+    /**
+     * the extract honey.
+     */
+    EXTRACT_HONEY,
+    /**
+     * the target block hit.
+     */
+    TARGET_BLOCK_HIT,
+    /**
+     * the piglin barter.
+     */
+    PIGLIN_BARTER,
+    /**
+     * the copper waxed or unwaxed.
+     */
+    COPPER_WAXED_OR_UNWAXED,
+    /**
+     * the code builder action.
+     */
+    CODE_BUILDER_ACTION,
+    /**
+     * the code builder scoreboard.
+     */
+    CODE_BUILDER_SCOREBOARD,
+    /**
+     * the strider ridden in lava in overworld.
+     */
+    STRIDER_RIDDEN_IN_LAVA_IN_OVERWORLD,
+    /**
+     * the sneak close to sculk sensor.
+     */
+    SNEAK_CLOSE_TO_SCULK_SENSOR;
 
     /**
      * the values.
