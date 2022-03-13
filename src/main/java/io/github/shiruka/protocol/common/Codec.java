@@ -218,7 +218,7 @@ public interface Codec {
     /**
      * the encoders package.
      */
-    private static final String ENCODERS_PACKAGE = "io.github.shiruka.protocol.codec.v%s.encoders";
+    private static final String ENCODERS_PACKAGE = "io.github.shiruka.protocol.codec.v%s.encoder";
 
     /**
      * the packets.
@@ -333,7 +333,9 @@ public interface Codec {
     public Builder registerPackets(@NotNull final Collection<Class<? extends PacketEncoder.Base>> classes) {
       for (final var cls : classes) {
         try {
-          this.registerPacket(cls.getConstructor().newInstance());
+          final var constructor = cls.getConstructor();
+          constructor.setAccessible(true);
+          this.registerPacket(constructor.newInstance());
         } catch (final Exception e) {
           throw new RuntimeException(e);
         }
