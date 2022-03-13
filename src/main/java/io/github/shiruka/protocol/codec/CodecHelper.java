@@ -19,6 +19,7 @@ import io.github.shiruka.protocol.data.entity.EntityLinkData;
 import io.github.shiruka.protocol.data.inventory.ItemData;
 import io.github.shiruka.protocol.packets.AdventureSettings;
 import io.github.shiruka.protocol.packets.BookEdit;
+import io.github.shiruka.protocol.packets.BossEvent;
 import io.github.shiruka.protocol.packets.ResourcePackInfo;
 import io.github.shiruka.protocol.packets.ResourcePackStack;
 import io.github.shiruka.protocol.packets.StartGame;
@@ -157,6 +158,14 @@ public interface CodecHelper {
   AttributeData readAttribute(@NotNull PacketBuffer buffer, @NotNull MinecraftSession session);
 
   /**
+   * reads the boss event action.
+   *
+   * @param packet the packet to read.
+   * @param buffer the buffer to read.
+   */
+  void readBossEventAction(@NotNull BossEvent packet, @NotNull PacketBuffer buffer);
+
+  /**
    * reads the command enum.
    *
    * @param buffer the buffer to read.
@@ -269,6 +278,14 @@ public interface CodecHelper {
    * @param data the data to write.
    */
   void writeAttribute(@NotNull PacketBuffer buffer, @NotNull AttributeData data);
+
+  /**
+   * writes the boss event.
+   *
+   * @param packet the packet to write.
+   * @param buffer the buffer to write.
+   */
+  void writeBossEventAction(@NotNull BossEvent packet, @NotNull PacketBuffer buffer);
 
   /**
    * writes the command enum.

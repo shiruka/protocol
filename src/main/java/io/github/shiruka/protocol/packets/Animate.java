@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
-public class Animate extends MinecraftPacket {
+public class Animate extends MinecraftPacket.Base {
 
   //@formatter:off
   private Action action;

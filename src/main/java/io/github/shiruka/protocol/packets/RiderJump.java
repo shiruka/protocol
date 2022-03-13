@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
-public final class RiderJump extends MinecraftPacket {
+public final class RiderJump extends MinecraftPacket.Base {
 
   //@formatter:off
   private int jumpStrength;

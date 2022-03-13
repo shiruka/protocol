@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
-public final class BlockEvent extends MinecraftPacket {
+public final class BlockEvent extends MinecraftPacket.Base {
 
   //@formatter:off
   private Vector3i blockPosition;

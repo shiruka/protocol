@@ -9,20 +9,20 @@ import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * a class that represents add behavior tree packets.
+ * a class that represents chunk radius updated packets.
  */
 @Setter
 @Getter
 @ToString
 @Accessors(fluent = true)
-public final class AddBehaviorTree extends MinecraftPacket.Base {
+public class ChunkRadiusUpdated extends MinecraftPacket.Base {
 
   //@formatter:off
-  private String behaviorTreeJson;
+  private int radius;
   //@formatter:on
 
   @Override
-  public void handle(@NotNull final PacketHandler handler) {
+  public final void handle(@NotNull final PacketHandler handler) {
     handler.handle(this);
   }
 }

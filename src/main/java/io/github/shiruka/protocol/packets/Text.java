@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
-public final class Text extends MinecraftPacket {
+public final class Text extends MinecraftPacket.Base {
 
   //@formatter:off
   private String message;

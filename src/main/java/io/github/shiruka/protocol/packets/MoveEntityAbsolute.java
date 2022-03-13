@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
-public final class MoveEntityAbsolute extends MinecraftPacket {
+public final class MoveEntityAbsolute extends MinecraftPacket.Base {
 
   //@formatter:off
   private static final int FLAG_ON_GROUND = 1;
