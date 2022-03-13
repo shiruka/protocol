@@ -1,10 +1,12 @@
 package io.github.shiruka.protocol;
 
+import io.github.shiruka.protocol.codec.Codecs;
 import io.github.shiruka.protocol.codec.v291.CodecV291;
 import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.PacketHandler;
 import io.github.shiruka.protocol.data.ClientChainData;
 import io.github.shiruka.protocol.packet.Login;
+import io.github.shiruka.protocol.packet.PlayStatus;
 import io.github.shiruka.protocol.packet.Unknown;
 import io.github.shiruka.protocol.server.MinecraftServer;
 import io.github.shiruka.protocol.server.ServerListener;
@@ -50,11 +52,22 @@ public final class ProtocolTest {
     @Override
     public void handle(@NotNull final Login packet) {
       final var now = System.currentTimeMillis();
+      final var version = packet.protocolVersion();
+      final var codec = Codecs.findByProtocolVersion(version);
+      if (codec == null) {
+        final var status = new PlayStatus();
+        if (version < Codecs.latestProtocolVersion()) {
+          status.status(PlayStatus.Status.LOGIN_FAILED_CLIENT_OLD);
+        } else {
+          status.status(PlayStatus.Status.LOGIN_FAILED_SERVER_OLD);
+        }
+        this.session.writeAndFlush(status);
+        return;
+      }
       final var chainData = ClientChainData.from(
         packet.chainData().toString(),
         packet.skinData().toString());
       System.out.println(System.currentTimeMillis() - now);
-      this.session.close();
     }
 
     @Override
