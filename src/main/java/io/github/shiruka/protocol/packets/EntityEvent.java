@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
-public final class EntityEvent extends MinecraftPacket {
+public final class EntityEvent extends MinecraftPacket.Base {
 
   //@formatter:off
   private int data;

@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
-public final class AddPlayer extends MinecraftPacket {
+public final class AddPlayer extends MinecraftPacket.Base {
 
   //@formatter:off
   private final AdventureSettings adventureSettings = new AdventureSettings();

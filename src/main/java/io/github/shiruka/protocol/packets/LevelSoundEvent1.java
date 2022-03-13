@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
-public final class LevelSoundEvent1 extends MinecraftPacket {
+public final class LevelSoundEvent1 extends MinecraftPacket.Base {
 
   //@formatter:off
   private boolean babySound;

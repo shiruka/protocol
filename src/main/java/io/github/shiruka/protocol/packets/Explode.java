@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
-public final class Explode extends MinecraftPacket {
+public final class Explode extends MinecraftPacket.Base {
 
   //@formatter:off
   private Vector3f position;

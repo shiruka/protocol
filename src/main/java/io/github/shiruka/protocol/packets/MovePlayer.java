@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
-public final class MovePlayer extends MinecraftPacket {
+public final class MovePlayer extends MinecraftPacket.Base {
 
   //@formatter:off
   private int entityType;

@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
-public final class AddEntity extends MinecraftPacket {
+public final class AddEntity extends MinecraftPacket.Base {
 
   //@formatter:off
   private final EntityDataMap metadata = new EntityDataMap();

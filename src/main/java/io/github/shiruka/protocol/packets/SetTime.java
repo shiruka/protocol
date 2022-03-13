@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
-public final class SetTime extends MinecraftPacket {
+public final class SetTime extends MinecraftPacket.Base {
 
   //@formatter:off
   private int time;

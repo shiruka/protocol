@@ -39,6 +39,7 @@ import io.github.shiruka.protocol.data.entity.EntityLinkDataType;
 import io.github.shiruka.protocol.data.inventory.ItemData;
 import io.github.shiruka.protocol.packets.AdventureSettings;
 import io.github.shiruka.protocol.packets.BookEdit;
+import io.github.shiruka.protocol.packets.BossEvent;
 import io.github.shiruka.protocol.packets.ResourcePackInfo;
 import io.github.shiruka.protocol.packets.ResourcePackStack;
 import io.github.shiruka.protocol.packets.StartGame;
@@ -878,6 +879,33 @@ public class CodecHelperV291 implements CodecHelper {
     return new AttributeData(name, min, max, val);
   }
 
+  @Override
+  public void readBossEventAction(@NotNull final BossEvent packet, @NotNull final PacketBuffer buffer) {
+    switch (packet.action()) {
+      case REGISTER_PLAYER, UNREGISTER_PLAYER -> {
+        packet.playerUniqueEntityId(buffer.readVarLong());
+      }
+      case CREATE -> {
+        packet.title(buffer.readString());
+        packet.healthPercentage(buffer.readFloatLE());
+      }
+      case UPDATE_PROPERTIES -> {
+        packet.darkenSky(buffer.readUnsignedShortLE());
+      }
+      case UPDATE_STYLE -> {
+        packet.color(buffer.readUnsignedVarInt());
+        packet.overlay(buffer.readUnsignedVarInt());
+      }
+      case UPDATE_PERCENTAGE -> {
+        packet.healthPercentage(buffer.readFloatLE());
+      }
+      case UPDATE_NAME -> {
+        packet.title(buffer.readString());
+      }
+      default -> throw new IllegalStateException("Unexpected value: " + packet.action());
+    }
+  }
+
   @NotNull
   @Override
   public CommandEnumData readCommandEnum(@NotNull final PacketBuffer buffer, final boolean soft) {
@@ -1082,6 +1110,35 @@ public class CodecHelperV291 implements CodecHelper {
     buffer.writeFloatLE(data.minimum());
     buffer.writeFloatLE(data.maximum());
     buffer.writeFloatLE(data.value());
+  }
+
+  @Override
+  public void writeBossEventAction(@NotNull final BossEvent packet, @NotNull final PacketBuffer buffer) {
+    switch (packet.action()) {
+      case REGISTER_PLAYER, UNREGISTER_PLAYER -> {
+        buffer.writeVarLong(packet.playerUniqueEntityId());
+      }
+      case CREATE -> {
+        buffer.writeString(packet.title());
+        buffer.writeFloatLE(packet.healthPercentage());
+      }
+      case UPDATE_PROPERTIES -> {
+        buffer.writeShortLE(packet.darkenSky());
+      }
+      case UPDATE_STYLE -> {
+        buffer.writeUnsignedVarInt(packet.color());
+        buffer.writeUnsignedVarInt(packet.overlay());
+      }
+      case UPDATE_PERCENTAGE -> {
+        buffer.writeFloatLE(packet.healthPercentage());
+      }
+      case UPDATE_NAME -> {
+        buffer.writeString(packet.title());
+      }
+      case REMOVE -> {
+      }
+      default -> throw new IllegalStateException("Unexpected value: " + packet.action());
+    }
   }
 
   @Override

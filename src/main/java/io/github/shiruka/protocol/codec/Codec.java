@@ -10,6 +10,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Supplier;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +20,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Range;
 import org.reflections.Reflections;
-import tr.com.infumia.infumialib.reflection.RefConstructed;
-import tr.com.infumia.infumialib.reflection.clazz.ClassOf;
 
 /**
  * an interface to determine codecs.
@@ -303,12 +303,42 @@ public interface Codec {
      * @return {@code this} for the builder chain.
      */
     @NotNull
-    public <T extends MinecraftPacket> Builder registerPacket(final int id, @NotNull final Supplier<T> factory,
+    public <T extends MinecraftPacket> Builder registerPacket(@Range(from = 0, to = Integer.MAX_VALUE) final int id,
+                                                              @NotNull final Supplier<T> factory,
                                                               @NotNull final PacketEncoder<T> encoder) {
-      Preconditions.checkArgument(id >= 0,
-        "Id cannot be negative!");
-      final var packetClass = (Class<T>) factory.get().getClass();
-      this.packets.put(packetClass, new PacketDefinition<>(id, factory, encoder));
+      return this.registerPacket(new PacketDefinition<>(id, factory, encoder));
+    }
+
+    /**
+     * registers the packet.
+     *
+     * @param definition the definition o register.
+     * @param <T> type of the packet.
+     *
+     * @return {@code this} for the builder chain.
+     */
+    @NotNull
+    public <T extends MinecraftPacket> Builder registerPacket(@NotNull final PacketDefinition<T> definition) {
+      this.packets.put(definition.factory().get().getClass(), definition);
+      return this;
+    }
+
+    /**
+     * registers the packets by packet encoders.
+     *
+     * @param classes the classes to scan.
+     *
+     * @return {@code this} for the builder chain.
+     */
+    @NotNull
+    public Builder registerPackets(@NotNull final Collection<Class<? extends PacketEncoder.Base>> classes) {
+      for (final var cls : classes) {
+        try {
+          this.registerPacket(cls.getConstructor().newInstance());
+        } catch (final Exception e) {
+          throw new RuntimeException(e);
+        }
+      }
       return this;
     }
 
@@ -345,15 +375,7 @@ public interface Codec {
      */
     @NotNull
     public Builder scanPackageAndRegister(@NotNull final String packageName) {
-      final var classes = new Reflections(packageName)
-        .getSubTypesOf(PacketEncoder.Base.class);
-      for (final var cls : classes) {
-        new ClassOf<>(cls).getConstructor()
-          .flatMap(RefConstructed::create)
-          .map(PacketEncoder.Base.class::cast)
-          .ifPresent(this::registerPacket);
-      }
-      return this;
+      return this.registerPackets(new Reflections(packageName).getSubTypesOf(PacketEncoder.Base.class));
     }
   }
 

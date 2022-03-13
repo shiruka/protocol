@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 @Setter
 @ToString
 @Accessors(fluent = true)
-public class AutomationClientConnect extends MinecraftPacket {
+public class AutomationClientConnect extends MinecraftPacket.Base {
 
   //@formatter:off
   private String address;

@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
-public final class RemoveEntity extends MinecraftPacket {
+public final class RemoveEntity extends MinecraftPacket.Base {
 
   //@formatter:off
   private long uniqueEntityId;

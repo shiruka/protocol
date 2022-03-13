@@ -31,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
-public final class StartGame extends MinecraftPacket {
+public final class StartGame extends MinecraftPacket.Base {
 
   //@formatter:off
   private final List<BlockPropertyData> blockProperties = new ObjectArrayList<>();

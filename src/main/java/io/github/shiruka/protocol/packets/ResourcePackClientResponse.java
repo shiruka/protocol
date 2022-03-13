@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
-public final class ResourcePackClientResponse extends MinecraftPacket {
+public final class ResourcePackClientResponse extends MinecraftPacket.Base {
 
   //@formatter:off
   private final List<String> packIds = new ObjectArrayList<>();

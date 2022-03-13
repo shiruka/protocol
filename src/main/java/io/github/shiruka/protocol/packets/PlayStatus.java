@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
-public final class PlayStatus extends MinecraftPacket {
+public final class PlayStatus extends MinecraftPacket.Base {
 
   //@formatter:off
   private Status status;

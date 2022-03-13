@@ -13,15 +13,27 @@ import io.github.shiruka.protocol.packets.BlockEntityData;
 import io.github.shiruka.protocol.packets.BlockEvent;
 import io.github.shiruka.protocol.packets.BlockPickRequest;
 import io.github.shiruka.protocol.packets.BookEdit;
+import io.github.shiruka.protocol.packets.BossEvent;
+import io.github.shiruka.protocol.packets.Camera;
+import io.github.shiruka.protocol.packets.ChangeDimension;
+import io.github.shiruka.protocol.packets.ChunkRadiusUpdated;
 import io.github.shiruka.protocol.packets.ClientToServerHandshake;
 import io.github.shiruka.protocol.packets.Disconnect;
 import io.github.shiruka.protocol.packets.EntityEvent;
 import io.github.shiruka.protocol.packets.Explode;
+import io.github.shiruka.protocol.packets.GameRulesChanged;
+import io.github.shiruka.protocol.packets.GuiDataPickItem;
+import io.github.shiruka.protocol.packets.HurtArmor;
+import io.github.shiruka.protocol.packets.ItemFrameDropItem;
+import io.github.shiruka.protocol.packets.LabTable;
+import io.github.shiruka.protocol.packets.LevelChunk;
 import io.github.shiruka.protocol.packets.LevelEvent;
 import io.github.shiruka.protocol.packets.LevelSoundEvent1;
 import io.github.shiruka.protocol.packets.Login;
 import io.github.shiruka.protocol.packets.MoveEntityAbsolute;
 import io.github.shiruka.protocol.packets.MovePlayer;
+import io.github.shiruka.protocol.packets.NetworkStackLatency;
+import io.github.shiruka.protocol.packets.NpcRequest;
 import io.github.shiruka.protocol.packets.PlayStatus;
 import io.github.shiruka.protocol.packets.PlayerAuthInput;
 import io.github.shiruka.protocol.packets.RemoveEntity;
@@ -35,6 +47,7 @@ import io.github.shiruka.protocol.packets.StartGame;
 import io.github.shiruka.protocol.packets.TakeItemEntity;
 import io.github.shiruka.protocol.packets.Text;
 import io.github.shiruka.protocol.packets.TickSync;
+import io.github.shiruka.protocol.packets.Transfer;
 import io.github.shiruka.protocol.packets.Unknown;
 import io.github.shiruka.protocol.packets.UpdateBlock;
 import org.jetbrains.annotations.NotNull;
@@ -338,5 +351,109 @@ public interface PacketHandler {
    * @param packet the packet to handle.
    */
   default void handle(@NotNull final EntityEvent packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final BossEvent packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final Camera packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final ChangeDimension packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final ChunkRadiusUpdated packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final HurtArmor packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final ItemFrameDropItem packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final Transfer packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final LabTable packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final LevelChunk packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final GameRulesChanged packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final GuiDataPickItem packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final NetworkStackLatency packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final NpcRequest packet) {
   }
 }

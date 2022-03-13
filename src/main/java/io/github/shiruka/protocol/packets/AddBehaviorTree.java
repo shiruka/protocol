@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @ToString
 @Accessors(fluent = true)
-public final class AddBehaviorTree extends MinecraftPacket {
+public final class AddBehaviorTree extends MinecraftPacket.Base {
 
   //@formatter:off
   private String behaviorTreeJson;
