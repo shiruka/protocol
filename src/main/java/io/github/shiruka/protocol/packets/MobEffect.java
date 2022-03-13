@@ -53,7 +53,7 @@ public final class MobEffect extends MinecraftPacket.Base {
      */
     MODIFY,
     /**
-     * the remove;
+     * the remove.
      */
     REMOVE;
 
