@@ -17,22 +17,20 @@ public final class AddPaintingEncoderV291 extends PacketEncoder.Base<AddPainting
   @Override
   public void decode(@NotNull final AddPainting packet, @NotNull final CodecHelper helper,
                      @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
-    final var entity = packet.entity();
-    entity.uniqueEntityId(buffer.readVarLong());
-    entity.runtimeEntityId(buffer.readUnsignedVarLong());
-    entity.position(buffer.readVector3i().toFloat());
-    entity.direction(buffer.readInt());
+    packet.uniqueEntityId(buffer.readVarLong());
+    packet.runtimeEntityId(buffer.readUnsignedVarLong());
+    packet.position(buffer.readVector3i().toFloat());
+    packet.direction(buffer.readInt());
     packet.motive(buffer.readString());
   }
 
   @Override
   public void encode(@NotNull final AddPainting packet, @NotNull final CodecHelper helper,
                      @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
-    final var entity = packet.entity();
-    buffer.writeVarLong(entity.uniqueEntityId());
-    buffer.writeUnsignedVarLong(entity.runtimeEntityId());
-    buffer.writeVector3i(entity.position().toInt());
-    buffer.writeVarInt(entity.direction());
+    buffer.writeVarLong(packet.uniqueEntityId());
+    buffer.writeUnsignedVarLong(packet.runtimeEntityId());
+    buffer.writeVector3i(packet.position().toInt());
+    buffer.writeVarInt(packet.direction());
     buffer.writeString(packet.motive());
   }
 }

@@ -1,5 +1,6 @@
 package io.github.shiruka.protocol.packets;
 
+import io.github.shiruka.api.common.vectors.Vector3f;
 import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.PacketHandler;
 import lombok.AccessLevel;
@@ -24,7 +25,10 @@ public final class AddPainting extends MinecraftPacket.Base {
 
   //@formatter:off
   String motive;
-  AddHangingEntity entity;
+  int direction;
+  Vector3f position;
+  long runtimeEntityId;
+  long uniqueEntityId;
   //@formatter:on
 
   @Override
