@@ -1,7 +1,7 @@
 package io.github.shiruka.protocol.codec.v313;
 
-import io.github.shiruka.protocol.codec.Codec;
 import io.github.shiruka.protocol.codec.v291.CodecV291;
+import io.github.shiruka.protocol.common.Codec;
 
 /**
  * an interface that contains codec for v291.

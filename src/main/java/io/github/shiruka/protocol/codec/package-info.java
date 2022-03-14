@@ -1,4 +1,4 @@
 /**
- * the package that contains codec classes version by version.
+ * the package that contains codec packages by version.
  */
 package io.github.shiruka.protocol.codec;

@@ -6,10 +6,9 @@ import io.github.shiruka.api.common.vectors.Vector3i;
 import io.github.shiruka.api.nbt.CompoundTag;
 import io.github.shiruka.api.nbt.Tag;
 import io.github.shiruka.network.PacketBuffer;
-import io.github.shiruka.protocol.codec.CodecHelper;
-import io.github.shiruka.protocol.codec.IdentifierDefinitionRegistry;
-import io.github.shiruka.protocol.codec.IntTypeMap;
-import io.github.shiruka.protocol.common.MinecraftSession;
+import io.github.shiruka.protocol.common.CodecHelper;
+import io.github.shiruka.protocol.common.IdentifierDefinitionRegistry;
+import io.github.shiruka.protocol.common.IntTypeMap;
 import io.github.shiruka.protocol.data.AdventureSetting;
 import io.github.shiruka.protocol.data.AttributeData;
 import io.github.shiruka.protocol.data.CommonLevelEvent;
@@ -36,13 +35,31 @@ import io.github.shiruka.protocol.data.entity.EntityFlag;
 import io.github.shiruka.protocol.data.entity.EntityFlags;
 import io.github.shiruka.protocol.data.entity.EntityLinkData;
 import io.github.shiruka.protocol.data.entity.EntityLinkDataType;
+import io.github.shiruka.protocol.data.event.AchievementAwardedEventData;
+import io.github.shiruka.protocol.data.event.AgentCommandEventData;
+import io.github.shiruka.protocol.data.event.AgentCreatedEventData;
+import io.github.shiruka.protocol.data.event.AgentResult;
+import io.github.shiruka.protocol.data.event.BossKilledEventData;
+import io.github.shiruka.protocol.data.event.CauldronUsedEventData;
+import io.github.shiruka.protocol.data.event.EntityInteractEventData;
+import io.github.shiruka.protocol.data.event.FishBucketedEventData;
+import io.github.shiruka.protocol.data.event.MobKilledEventData;
+import io.github.shiruka.protocol.data.event.PatternRemovedEventData;
+import io.github.shiruka.protocol.data.event.PlayerDiedEventData;
+import io.github.shiruka.protocol.data.event.PortalBuiltEventData;
+import io.github.shiruka.protocol.data.event.PortalUsedEventData;
+import io.github.shiruka.protocol.data.event.SlashCommandExecutedEventData;
+import io.github.shiruka.protocol.data.inventory.InventoryActionData;
+import io.github.shiruka.protocol.data.inventory.InventorySource;
 import io.github.shiruka.protocol.data.inventory.ItemData;
-import io.github.shiruka.protocol.packets.AdventureSettings;
-import io.github.shiruka.protocol.packets.BookEdit;
-import io.github.shiruka.protocol.packets.BossEvent;
-import io.github.shiruka.protocol.packets.ResourcePackInfo;
-import io.github.shiruka.protocol.packets.ResourcePackStack;
-import io.github.shiruka.protocol.packets.StartGame;
+import io.github.shiruka.protocol.packet.AdventureSettings;
+import io.github.shiruka.protocol.packet.BookEdit;
+import io.github.shiruka.protocol.packet.BossEvent;
+import io.github.shiruka.protocol.packet.Event;
+import io.github.shiruka.protocol.packet.InventoryTransaction;
+import io.github.shiruka.protocol.packet.ResourcePackInfo;
+import io.github.shiruka.protocol.packet.ResourcePackStack;
+import io.github.shiruka.protocol.packet.StartGame;
 import io.netty.buffer.ByteBufInputStream;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
@@ -52,6 +69,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.ObjIntConsumer;
 import java.util.function.ToIntFunction;
@@ -62,6 +81,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
+import tr.com.infumia.infumialib.misc.MutableMap;
 
 /**
  * a class that represents codec helpers for v291.
@@ -290,7 +310,7 @@ public class CodecHelperV291 implements CodecHelper {
     .insert(64, EntityData.SHULKER_ATTACH_FACE)
     .insert(66, EntityData.SHULKER_ATTACH_POS)
     .insert(67, EntityData.TRADE_TARGET_EID)
-    .insert(69, EntityData.COMMAND_BLOCK_ENABLED) // Unsure
+    .insert(69, EntityData.COMMAND_BLOCK_ENABLED)
     .insert(70, EntityData.COMMAND_BLOCK_COMMAND)
     .insert(71, EntityData.COMMAND_BLOCK_LAST_OUTPUT)
     .insert(72, EntityData.COMMAND_BLOCK_TRACK_OUTPUT)
@@ -454,6 +474,47 @@ public class CodecHelperV291 implements CodecHelper {
     .insert(59, EntityFlag.LAYING_EGG)
     .insert(60, EntityFlag.RIDER_CAN_PICK)
     .build();
+
+  /**
+   * the event type readers.
+   */
+  @Getter
+  protected final MutableMap<Event.Type, Function<PacketBuffer, Event.Data>> eventTypeReaders = MutableMap
+    .<Event.Type, Function<PacketBuffer, Event.Data>>of()
+    .with(Event.Type.ACHIEVEMENT_AWARDED, this::readAchievementAwarded)
+    .with(Event.Type.ENTITY_INTERACT, this::readEntityInteract)
+    .with(Event.Type.PORTAL_BUILT, this::readPortalBuilt)
+    .with(Event.Type.PORTAL_USED, this::readPortalUsed)
+    .with(Event.Type.MOB_KILLED, this::readMobKilled)
+    .with(Event.Type.CAULDRON_USED, this::readCauldronUsed)
+    .with(Event.Type.PLAYER_DIED, this::readPlayerDied)
+    .with(Event.Type.BOSS_KILLED, this::readBossKilled)
+    .with(Event.Type.AGENT_COMMAND, this::readAgentCommand)
+    .with(Event.Type.AGENT_CREATED, b -> AgentCreatedEventData.INSTANCE)
+    .with(Event.Type.PATTERN_REMOVED, this::readPatternRemoved)
+    .with(Event.Type.SLASH_COMMAND_EXECUTED, this::readSlashCommandExecuted)
+    .with(Event.Type.FISH_BUCKETED, this::readFishBucketed);
+
+  /**
+   * the event type writers.
+   */
+  @Getter
+  protected final MutableMap<Event.Type, BiConsumer<PacketBuffer, Event.Data>> eventTypeWriters = MutableMap
+    .<Event.Type, BiConsumer<PacketBuffer, Event.Data>>of()
+    .with(Event.Type.ACHIEVEMENT_AWARDED, this::writeAchievementAwarded)
+    .with(Event.Type.ENTITY_INTERACT, this::writeEntityInteract)
+    .with(Event.Type.PORTAL_BUILT, this::writePortalBuilt)
+    .with(Event.Type.PORTAL_USED, this::writePortalUsed)
+    .with(Event.Type.MOB_KILLED, this::writeMobKilled)
+    .with(Event.Type.CAULDRON_USED, this::writeCauldronUsed)
+    .with(Event.Type.PLAYER_DIED, this::writePlayerDied)
+    .with(Event.Type.BOSS_KILLED, this::writeBossKilled)
+    .with(Event.Type.AGENT_COMMAND, this::writeAgentCommand)
+    .with(Event.Type.AGENT_CREATED, (buffer, data) -> {
+    })
+    .with(Event.Type.PATTERN_REMOVED, this::writePatternRemoved)
+    .with(Event.Type.SLASH_COMMAND_EXECUTED, this::writeSlashCommandExecuted)
+    .with(Event.Type.FISH_BUCKETED, this::writeFishBucketed);
 
   /**
    * the game rule types.
@@ -871,12 +932,23 @@ public class CodecHelperV291 implements CodecHelper {
 
   @NotNull
   @Override
-  public AttributeData readAttribute(@NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public AttributeData readAttribute(@NotNull final PacketBuffer buffer) {
     final var name = buffer.readString();
     final var min = buffer.readFloatLE();
     final var max = buffer.readFloatLE();
     final var val = buffer.readFloatLE();
     return new AttributeData(name, min, max, val);
+  }
+
+  @NotNull
+  @Override
+  public AttributeData readAttributeFull(@NotNull final PacketBuffer buffer) {
+    final var min = buffer.readFloatLE();
+    final var max = buffer.readFloatLE();
+    final var val = buffer.readFloatLE();
+    final var def = buffer.readFloatLE();
+    final var name = buffer.readString();
+    return new AttributeData(name, min, max, val, def);
   }
 
   @Override
@@ -928,8 +1000,7 @@ public class CodecHelperV291 implements CodecHelper {
   }
 
   @Override
-  public void readEntityData(@NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session,
-                             @NotNull final EntityDataMap map) {
+  public void readEntityData(@NotNull final PacketBuffer buffer, @NotNull final EntityDataMap map) {
     final var length = buffer.readUnsignedVarInt();
     for (var index = 0; index < length; index++) {
       final var metadataInt = buffer.readUnsignedVarInt();
@@ -948,7 +1019,7 @@ public class CodecHelperV291 implements CodecHelper {
         case INT -> object = buffer.readVarInt();
         case FLOAT -> object = buffer.readFloatLE();
         case STRING -> object = buffer.readString();
-        case NBT -> object = this.readItem(buffer, session);
+        case NBT -> object = this.readItem(buffer);
         case VECTOR3I -> object = buffer.readVector3i();
         case FLAGS -> {
           map.getOrCreateFlags().set(
@@ -972,7 +1043,7 @@ public class CodecHelperV291 implements CodecHelper {
 
   @NotNull
   @Override
-  public EntityLinkData readEntityLink(@NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public EntityLinkData readEntityLink(@NotNull final PacketBuffer buffer) {
     final var from = buffer.readVarLong();
     final var to = buffer.readVarLong();
     final var type = buffer.readUnsignedByte();
@@ -980,6 +1051,15 @@ public class CodecHelperV291 implements CodecHelper {
     return new EntityLinkData(from, to, EntityLinkDataType.byOrdinal(type), immediate);
   }
 
+  @NotNull
+  @Override
+  public Event.Data readEventData(@NotNull final PacketBuffer buffer, @NotNull final Event.Type type) {
+    final var function = Preconditions.checkNotNull(this.eventTypeReaders.get(type),
+      "Unknown event type %s", type);
+    return function.apply(buffer);
+  }
+
+  @NotNull
   @Override
   public GameRuleValue readGameRule(@NotNull final PacketBuffer buffer) {
     final var name = buffer.readString();
@@ -994,7 +1074,31 @@ public class CodecHelperV291 implements CodecHelper {
 
   @NotNull
   @Override
-  public ItemData readItem(@NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public List<InventoryActionData> readInventoryActions(@NotNull final PacketBuffer buffer) {
+    return buffer.readArrayUnsignedInt(() -> {
+      final var source = this.readInventorySource(buffer);
+      final var slot = buffer.readUnsignedVarInt();
+      final var fromItem = this.readItem(buffer);
+      final var toItem = this.readItem(buffer);
+      return new InventoryActionData(source, slot, fromItem, toItem);
+    });
+  }
+
+  @Override
+  public void readInventoryTransactionType(@NotNull final PacketBuffer buffer,
+                                           @NotNull final InventoryTransaction packet) {
+    switch (packet.transactionType()) {
+      case ITEM_USE -> this.readItemUse(buffer, packet);
+      case ITEM_USE_ON_ENTITY -> this.readItemUseOnEntity(buffer, packet);
+      case ITEM_RELEASE -> this.readItemRelease(buffer, packet);
+      default -> {
+      }
+    }
+  }
+
+  @NotNull
+  @Override
+  public ItemData readItem(@NotNull final PacketBuffer buffer) {
     final var runtimeId = buffer.readVarInt();
     if (runtimeId == 0) {
       return ItemData.AIR;
@@ -1113,6 +1217,15 @@ public class CodecHelperV291 implements CodecHelper {
   }
 
   @Override
+  public void writeAttributeFull(@NotNull final PacketBuffer buffer, @NotNull final AttributeData data) {
+    buffer.writeFloatLE(data.minimum());
+    buffer.writeFloatLE(data.maximum());
+    buffer.writeFloatLE(data.value());
+    buffer.writeFloatLE(data.defaultValue());
+    buffer.writeString(data.name());
+  }
+
+  @Override
   public void writeBossEventAction(@NotNull final BossEvent packet, @NotNull final PacketBuffer buffer) {
     switch (packet.action()) {
       case REGISTER_PLAYER, UNREGISTER_PLAYER -> {
@@ -1195,7 +1308,7 @@ public class CodecHelperV291 implements CodecHelper {
   }
 
   @Override
-  public void writeEntityData(@NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session,
+  public void writeEntityData(@NotNull final PacketBuffer buffer,
                               @NotNull final EntityDataMap map) {
     buffer.writeUnsignedVarInt(map.size());
     for (final var entry : map.entrySet()) {
@@ -1238,7 +1351,7 @@ public class CodecHelperV291 implements CodecHelper {
           } else {
             item = (ItemData) object;
           }
-          this.writeItem(buffer, session, item);
+          this.writeItem(buffer, item);
           break;
         case VECTOR3I:
           buffer.writeVector3i((Vector3i) object);
@@ -1260,12 +1373,19 @@ public class CodecHelperV291 implements CodecHelper {
   }
 
   @Override
-  public void writeEntityLink(@NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session,
+  public void writeEntityLink(@NotNull final PacketBuffer buffer,
                               @NotNull final EntityLinkData link) {
     buffer.writeVarLong(link.from());
     buffer.writeVarLong(link.to());
     buffer.writeByte(link.type().ordinal());
     buffer.writeBoolean(link.immediate());
+  }
+
+  @Override
+  public void writeEventData(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+    final var function = Preconditions.checkNotNull(this.eventTypeWriters.get(data.type()),
+      "Unknown event type %s", data.type());
+    function.accept(buffer, data);
   }
 
   @Override
@@ -1283,8 +1403,30 @@ public class CodecHelperV291 implements CodecHelper {
   }
 
   @Override
-  public void writeItem(@NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session,
-                        @NotNull final ItemData item) {
+  public void writeInventoryActions(@NotNull final PacketBuffer buffer,
+                                    @NotNull final List<InventoryActionData> actions, final boolean hasNetworkIds) {
+    buffer.writeArrayUnsignedInt(actions, action -> {
+      this.writeInventorySource(buffer, action.source());
+      buffer.writeUnsignedVarInt(action.slot());
+      this.writeItem(buffer, action.fromItem());
+      this.writeItem(buffer, action.toItem());
+    });
+  }
+
+  @Override
+  public void writeInventoryTransactionType(@NotNull final PacketBuffer buffer,
+                                            @NotNull final InventoryTransaction packet) {
+    switch (packet.transactionType()) {
+      case ITEM_USE -> this.writeItemUse(buffer, packet);
+      case ITEM_USE_ON_ENTITY -> this.writeItemUseOnEntity(buffer, packet);
+      case ITEM_RELEASE -> this.writeItemRelease(buffer, packet);
+      default -> {
+      }
+    }
+  }
+
+  @Override
+  public void writeItem(@NotNull final PacketBuffer buffer, @NotNull final ItemData item) {
     final var definition = item.definition();
     if (this.isAir(definition)) {
       buffer.writeByte(0);
@@ -1365,6 +1507,62 @@ public class CodecHelperV291 implements CodecHelper {
   }
 
   /**
+   * reads the item release.
+   *
+   * @param buffer the buffer to read.
+   * @param packet the packet to read.
+   */
+  public void readItemRelease(@NotNull final PacketBuffer buffer, @NotNull final InventoryTransaction packet) {
+    packet.actionType(buffer.readUnsignedVarInt());
+    packet.hotBarSlot(buffer.readVarInt());
+    packet.itemInHand(this.readItem(buffer));
+    packet.headPosition(buffer.readVector3f());
+  }
+
+  /**
+   * reads the item use on entity.
+   *
+   * @param buffer the buffer to read.
+   * @param packet the packet to read.
+   */
+  public void readItemUseOnEntity(@NotNull final PacketBuffer buffer, @NotNull final InventoryTransaction packet) {
+    packet.runtimeEntityId(buffer.readUnsignedVarLong());
+    packet.actionType(buffer.readUnsignedVarInt());
+    packet.hotBarSlot(buffer.readVarInt());
+    packet.itemInHand(this.readItem(buffer));
+    packet.playerPosition(buffer.readVector3f());
+    packet.clickPosition(buffer.readVector3f());
+  }
+
+  /**
+   * writes the item release.
+   *
+   * @param buffer the buffer to write.
+   * @param packet the packet to write.
+   */
+  public void writeItemRelease(@NotNull final PacketBuffer buffer, @NotNull final InventoryTransaction packet) {
+    buffer.writeUnsignedVarLong(packet.actionType());
+    buffer.writeVarInt(packet.hotBarSlot());
+    this.writeItem(buffer, packet.itemInHand());
+    buffer.writeVector3f(packet.headPosition());
+  }
+
+  /**
+   * writes the item use on entity.
+   *
+   * @param buffer the buffer to read.
+   * @param packet the packet to read.
+   */
+  public void writeItemUseOnEntity(@NotNull final PacketBuffer buffer, @NotNull final InventoryTransaction packet) {
+    buffer.writeUnsignedVarLong(packet.runtimeEntityId());
+    buffer.writeUnsignedVarLong(packet.actionType());
+    buffer.writeVarInt(packet.hotBarSlot());
+    this.writeItem(buffer, packet.itemInHand());
+    buffer.writeVector3f(packet.playerPosition());
+    buffer.writeVector3f(packet.clickPosition());
+  }
+
+  /**
    * checks if the definition is air.
    *
    * @param definition the definition to check.
@@ -1373,6 +1571,415 @@ public class CodecHelperV291 implements CodecHelper {
    */
   protected final boolean isAir(@NotNull final ItemDefinition definition) {
     return definition.id() == 0;
+  }
+
+  /**
+   * reads the achievement awarded.
+   *
+   * @param buffer the buffer to read.
+   *
+   * @return achievement awarded.
+   */
+  @NotNull
+  protected AchievementAwardedEventData readAchievementAwarded(@NotNull final PacketBuffer buffer) {
+    return new AchievementAwardedEventData(buffer.readVarInt());
+  }
+
+  /**
+   * reads the agent command.
+   *
+   * @param buffer the buffer to read.
+   *
+   * @return agent command.
+   */
+  @NotNull
+  protected AgentCommandEventData readAgentCommand(@NotNull final PacketBuffer buffer) {
+    final var result = AgentResult.VALUES[buffer.readVarInt()];
+    final var dataValue = buffer.readVarInt();
+    final var command = buffer.readString();
+    final var dataKey = buffer.readString();
+    final var output = buffer.readString();
+    return new AgentCommandEventData(command, dataKey, dataValue, output, result);
+  }
+
+  /**
+   * reads the boss killed.
+   *
+   * @param buffer the buffer to read.
+   *
+   * @return boss killed.
+   */
+  @NotNull
+  protected BossKilledEventData readBossKilled(@NotNull final PacketBuffer buffer) {
+    final var bossUniqueEntityId = buffer.readVarLong();
+    final var playerPartySize = buffer.readVarInt();
+    final var interactionEntityType = buffer.readVarInt();
+    return new BossKilledEventData(interactionEntityType, bossUniqueEntityId, playerPartySize);
+  }
+
+  /**
+   * reads the cauldron used.
+   *
+   * @param buffer the buffer to read.
+   *
+   * @return cauldron used.
+   */
+  @NotNull
+  protected CauldronUsedEventData readCauldronUsed(@NotNull final PacketBuffer buffer) {
+    final var potionId = buffer.readVarInt();
+    final var color = buffer.readVarInt();
+    final var fillLevel = buffer.readVarInt();
+    return new CauldronUsedEventData(potionId, color, fillLevel);
+  }
+
+  /**
+   * reads the entity interact.
+   *
+   * @param buffer the buffer to read.
+   *
+   * @return entity interact.
+   */
+  @NotNull
+  protected EntityInteractEventData readEntityInteract(@NotNull final PacketBuffer buffer) {
+    final var interactionType = buffer.readVarInt();
+    final var interactionEntityType = buffer.readVarInt();
+    final var entityVariant = buffer.readVarInt();
+    final var entityColor = buffer.readUnsignedByte();
+    return new EntityInteractEventData(interactionType, interactionEntityType, entityVariant, entityColor);
+  }
+
+  /**
+   * reads the fish bucketed.
+   *
+   * @param buffer the buffer to read.
+   *
+   * @return fish bucketed
+   */
+  @NotNull
+  protected FishBucketedEventData readFishBucketed(@NotNull final PacketBuffer buffer) {
+    final var pattern = buffer.readVarInt();
+    final var preset = buffer.readVarInt();
+    final var bucketedEntityType = buffer.readVarInt();
+    final var isRelease = buffer.readBoolean();
+    return new FishBucketedEventData(pattern, preset, bucketedEntityType, isRelease);
+  }
+
+  /**
+   * reads the inventory source.
+   *
+   * @param buffer the buffer to read.
+   *
+   * @return inventory source.
+   */
+  @NotNull
+  protected InventorySource readInventorySource(@NotNull final PacketBuffer buffer) {
+    final var type = InventorySource.Type.byId(buffer.readUnsignedVarInt());
+    return switch (type) {
+      case CONTAINER -> InventorySource.containerId(buffer.readVarInt());
+      case GLOBAL -> InventorySource.global();
+      case WORLD_INTERACTION -> InventorySource.worldInteraction(InventorySource.Flag.VALUES[buffer.readUnsignedVarInt()]);
+      case CREATIVE -> InventorySource.creative();
+      case NON_IMPLEMENTED -> InventorySource.nonImplemented(buffer.readVarInt());
+      default -> InventorySource.invalid();
+    };
+  }
+
+  /**
+   * reads the item use.
+   *
+   * @param buffer the buffer to read.
+   * @param packet the packet to read.
+   */
+  protected void readItemUse(@NotNull final PacketBuffer buffer, @NotNull final InventoryTransaction packet) {
+    packet.actionType(buffer.readUnsignedVarInt());
+    packet.blockPosition(buffer.readVector3i());
+    packet.blockFace(buffer.readVarInt());
+    packet.hotBarSlot(buffer.readVarInt());
+    packet.itemInHand(this.readItem(buffer));
+    packet.playerPosition(buffer.readVector3f());
+    packet.clickPosition(buffer.readVector3f());
+  }
+
+  /**
+   * reads the mob killed.
+   *
+   * @param buffer the buffer to read.
+   *
+   * @return mob killed.
+   */
+  @NotNull
+  protected MobKilledEventData readMobKilled(@NotNull final PacketBuffer buffer) {
+    final var killerUniqueEntityId = buffer.readVarLong();
+    final var victimUniqueEntityId = buffer.readVarLong();
+    final var entityDamageCause = buffer.readVarInt();
+    final var villagerTradeTier = buffer.readVarInt();
+    final var villagerDisplayName = buffer.readString();
+    return new MobKilledEventData(entityDamageCause, -1, killerUniqueEntityId, victimUniqueEntityId,
+      villagerDisplayName, villagerTradeTier);
+  }
+
+  /**
+   * reads the pattern removed.
+   *
+   * @param buffer the buffer to read.
+   *
+   * @return patter removed.
+   */
+  @NotNull
+  protected PatternRemovedEventData readPatternRemoved(@NotNull final PacketBuffer buffer) {
+    final var itemId = buffer.readVarInt();
+    final var auxValue = buffer.readVarInt();
+    final var patternsSize = buffer.readVarInt();
+    final var patternIndex = buffer.readVarInt();
+    final var patternColor = buffer.readVarInt();
+    return new PatternRemovedEventData(auxValue, itemId, patternColor, patternIndex, patternsSize);
+  }
+
+  /**
+   * read the player died.
+   *
+   * @param buffer the buffer to read.
+   *
+   * @return player died.
+   */
+  @NotNull
+  protected PlayerDiedEventData readPlayerDied(@NotNull final PacketBuffer buffer) {
+    final var attackerEntityId = buffer.readVarInt();
+    final var entityDamageCause = buffer.readVarInt();
+    return new PlayerDiedEventData(attackerEntityId, -1, entityDamageCause, false);
+  }
+
+  /**
+   * reads the portal built.
+   *
+   * @param buffer the buffer to read.
+   *
+   * @return portal built.
+   */
+  @NotNull
+  protected PortalBuiltEventData readPortalBuilt(@NotNull final PacketBuffer buffer) {
+    return new PortalBuiltEventData(buffer.readVarInt());
+  }
+
+  /**
+   * reads the portal used.
+   *
+   * @param buffer the buffer to read.
+   *
+   * @return portal used.
+   */
+  @NotNull
+  protected PortalUsedEventData readPortalUsed(@NotNull final PacketBuffer buffer) {
+    final var fromDimensionId = buffer.readVarInt();
+    final var toDimensionId = buffer.readVarInt();
+    return new PortalUsedEventData(fromDimensionId, toDimensionId);
+  }
+
+  /**
+   * reads the slash command executed.
+   *
+   * @param buffer the buffer to read.
+   *
+   * @return slash command executed.
+   */
+  @NotNull
+  protected SlashCommandExecutedEventData readSlashCommandExecuted(@NotNull final PacketBuffer buffer) {
+    final var successCount = buffer.readVarInt();
+    buffer.readVarInt();
+    final var commandName = buffer.readString();
+    final var outputMessages = Arrays.asList(buffer.readString().split(";"));
+    return new SlashCommandExecutedEventData(commandName, outputMessages, successCount);
+  }
+
+  /**
+   * writes the achievement awarded.
+   *
+   * @param buffer the bufeer to write.
+   * @param data the data to write.
+   */
+  protected void writeAchievementAwarded(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+    buffer.writeVarInt(((AchievementAwardedEventData) data).achievementId());
+  }
+
+  /**
+   * writes the agent command.
+   *
+   * @param buffer the buffer to write.
+   * @param data the data to write.
+   */
+  protected void writeAgentCommand(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+    final var event = (AgentCommandEventData) data;
+    buffer.writeVarInt(event.result().ordinal());
+    buffer.writeVarInt(event.dataValue());
+    buffer.writeString(event.command());
+    buffer.writeString(event.dataKey());
+    buffer.writeString(event.output());
+  }
+
+  /**
+   * writes the boss killed.
+   *
+   * @param buffer the buffer to write.
+   * @param data the data to write.
+   */
+  protected void writeBossKilled(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+    final var event = (BossKilledEventData) data;
+    buffer.writeVarLong(event.bossUniqueEntityId());
+    buffer.writeVarInt(event.playerPartySize());
+    buffer.writeVarInt(event.bossEntityType());
+  }
+
+  /**
+   * writes the cauldron used.
+   *
+   * @param buffer the buffer to write.
+   * @param data the data to write.
+   */
+  protected void writeCauldronUsed(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+    final var event = (CauldronUsedEventData) data;
+    buffer.writeUnsignedVarInt(event.potionId());
+    buffer.writeVarInt(event.color());
+    buffer.writeVarInt(event.fillLevel());
+  }
+
+  /**
+   * writes the entity interact.
+   *
+   * @param buffer the buffer to write.
+   * @param data the data to write.
+   */
+  protected void writeEntityInteract(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+    final var event = (EntityInteractEventData) data;
+    buffer.writeVarInt(event.interactionType());
+    buffer.writeVarInt(event.legacyEntityTypeId());
+    buffer.writeVarInt(event.variant());
+    buffer.writeByte(event.paletteColor());
+  }
+
+  /**
+   * writes the fish bucketed.
+   *
+   * @param buffer the buffer to write.
+   * @param data the data to write.
+   */
+  protected void writeFishBucketed(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+    final var event = (FishBucketedEventData) data;
+    buffer.writeVarInt(event.pattern());
+    buffer.writeVarInt(event.preset());
+    buffer.writeVarInt(event.bucketedEntityType());
+    buffer.writeBoolean(event.releaseEvent());
+  }
+
+  /**
+   * writes the inventory source.
+   *
+   * @param buffer the buffer to write.
+   * @param inventorySource the inventory source to write.
+   */
+  protected void writeInventorySource(@NotNull final PacketBuffer buffer,
+                                      @NotNull final InventorySource inventorySource) {
+    buffer.writeUnsignedVarInt(inventorySource.type().id());
+    switch (inventorySource.type()) {
+      case CONTAINER, UNTRACKED_INTERACTION_UI, NON_IMPLEMENTED -> buffer.writeVarInt(inventorySource.containerId());
+      case WORLD_INTERACTION -> buffer.writeUnsignedVarInt(inventorySource.flag().ordinal());
+      default -> {
+      }
+    }
+  }
+
+  /**
+   * writes the item use.
+   *
+   * @param buffer the buffer to write.
+   * @param packet the packet to write.
+   */
+  protected void writeItemUse(@NotNull final PacketBuffer buffer, @NotNull final InventoryTransaction packet) {
+    buffer.writeUnsignedVarInt(packet.actionType());
+    buffer.writeVector3i(packet.blockPosition());
+    buffer.writeVarInt(packet.blockFace());
+    buffer.writeVarInt(packet.hotBarSlot());
+    this.writeItem(buffer, packet.itemInHand());
+    buffer.writeVector3f(packet.playerPosition());
+    buffer.writeVector3f(packet.clickPosition());
+  }
+
+  /**
+   * writes the mob killed.
+   *
+   * @param buffer the buffer to write.
+   * @param data the data to write.
+   */
+  protected void writeMobKilled(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+    final var event = (MobKilledEventData) data;
+    buffer.writeVarLong(event.killerUniqueEntityId());
+    buffer.writeVarLong(event.victimUniqueEntityId());
+    buffer.writeVarInt(event.entityDamageCause());
+    buffer.writeVarInt(event.villagerTradeTier());
+    buffer.writeString(event.villagerDisplayName());
+  }
+
+  /**
+   * writes the pattern removed.
+   *
+   * @param buffer the buffer to write.
+   * @param data the data to write.
+   */
+  protected void writePatternRemoved(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+    final var event = (PatternRemovedEventData) data;
+    buffer.writeVarInt(event.itemId());
+    buffer.writeVarInt(event.auxValue());
+    buffer.writeVarInt(event.patternsSize());
+    buffer.writeVarInt(event.patternIndex());
+    buffer.writeVarInt(event.patternColor());
+  }
+
+  /**
+   * writes the player died.
+   *
+   * @param buffer the buffer to write.
+   * @param data the data to write.
+   */
+  protected void writePlayerDied(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+    final var event = (PlayerDiedEventData) data;
+    buffer.writeVarInt(event.attackerEntityId());
+    buffer.writeVarInt(event.entityDamageCause());
+  }
+
+  /**
+   * writes the portal built.
+   *
+   * @param buffer the buffer to write.
+   * @param data the data to write.
+   */
+  protected void writePortalBuilt(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+    buffer.writeVarInt(((PortalBuiltEventData) data).dimensionId());
+  }
+
+  /**
+   * writes the portal used.
+   *
+   * @param buffer the buffer to write.
+   * @param data the data to write.
+   */
+  protected void writePortalUsed(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+    final var event = (PortalUsedEventData) data;
+    buffer.writeVarInt(event.fromDimensionId());
+    buffer.writeVarInt(event.toDimensionId());
+  }
+
+  /**
+   * writes the slash command executed.
+   *
+   * @param buffer the buffer to write.
+   * @param data the data to write.
+   */
+  protected void writeSlashCommandExecuted(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+    final var event = (SlashCommandExecutedEventData) data;
+    buffer.writeVarInt(event.successCount());
+    final var outputMessages = event.outputMessages();
+    buffer.writeVarInt(outputMessages.size());
+    buffer.writeString(event.commandName());
+    buffer.writeString(String.join(";", outputMessages));
   }
 
   /**

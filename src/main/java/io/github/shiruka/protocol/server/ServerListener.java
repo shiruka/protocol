@@ -32,6 +32,12 @@ public interface ServerListener {
   }
 
   /**
+   * runs when the server is ready to accept connections.
+   */
+  default void onStart() {
+  }
+
+  /**
    * runs after a Minecraft packets comes.
    *
    * @param packet the packet to run.

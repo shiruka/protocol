@@ -1,14 +1,17 @@
 package io.github.shiruka.protocol;
 
+import io.github.shiruka.protocol.codec.Codecs;
 import io.github.shiruka.protocol.codec.v291.CodecV291;
 import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.PacketHandler;
 import io.github.shiruka.protocol.data.ClientChainData;
-import io.github.shiruka.protocol.packets.Login;
-import io.github.shiruka.protocol.packets.Unknown;
+import io.github.shiruka.protocol.packet.Login;
+import io.github.shiruka.protocol.packet.PlayStatus;
+import io.github.shiruka.protocol.packet.Unknown;
 import io.github.shiruka.protocol.server.MinecraftServer;
 import io.github.shiruka.protocol.server.ServerListener;
 import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
+import java.util.List;
 import java.util.Locale;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 public final class ProtocolTest {
 
   public static void main(final String[] args) {
+    System.out.println("Server is starting...");
     new MinecraftServer(CodecV291.INSTANCE)
       .maxConnections(1024)
       .defaultPacketHandler(Handler::new)
@@ -49,11 +53,23 @@ public final class ProtocolTest {
     @Override
     public void handle(@NotNull final Login packet) {
       final var now = System.currentTimeMillis();
+      final var version = packet.protocolVersion();
+      final var codec = Codecs.findByProtocolVersion(version);
+      if (codec == null) {
+        final var status = new PlayStatus();
+        if (version < Codecs.latestProtocolVersion()) {
+          status.status(PlayStatus.Status.LOGIN_FAILED_CLIENT_OLD);
+        } else {
+          status.status(PlayStatus.Status.LOGIN_FAILED_SERVER_OLD);
+        }
+        // @todo #1:15m Packets cannot send.
+        this.session.writeAndFlush(List.of(status));
+        return;
+      }
       final var chainData = ClientChainData.from(
         packet.chainData().toString(),
         packet.skinData().toString());
       System.out.println(System.currentTimeMillis() - now);
-      this.session.close();
     }
 
     @Override
@@ -65,22 +81,27 @@ public final class ProtocolTest {
 
     @Override
     public void onConnect(@NotNull final MinecraftChildChannel session) {
-      System.out.println("onConnect()");
+      System.out.printf("onConnect(%s)%n", session);
     }
 
     @Override
     public void onDisconnect(@NotNull final MinecraftChildChannel session) {
-      System.out.println("onDisconnect()");
+      System.out.printf("onDisconnect(%s)%n", session);
+    }
+
+    @Override
+    public void onStart() {
+      System.out.println("onStart()");
     }
 
     @Override
     public void postPacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftChildChannel session) {
-      System.out.println("postPacket()");
+      System.out.printf("postPacket(%s,%s)%n", packet.getClass().getSimpleName(), session);
     }
 
     @Override
     public void prePacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftChildChannel session) {
-      System.out.println("prePacket()");
+      System.out.printf("prePacket(%s,%s)%n", packet.getClass().getSimpleName(), session);
     }
   }
 }

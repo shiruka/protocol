@@ -3,13 +3,14 @@ package io.github.shiruka.protocol.server;
 import io.github.shiruka.network.Constants;
 import io.github.shiruka.network.Identifier;
 import io.github.shiruka.network.options.RakNetChannelOptions;
-import io.github.shiruka.protocol.codec.Codec;
+import io.github.shiruka.protocol.common.Codec;
 import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.PacketHandler;
 import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
 import io.github.shiruka.protocol.server.channels.MinecraftServerChannel;
 import io.github.shiruka.protocol.server.pipelines.MinecraftServerInitializer;
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.nio.NioEventLoopGroup;
 import java.net.InetSocketAddress;
 import java.util.HashMap;
@@ -110,7 +111,12 @@ public final class MinecraftServer implements ServerListener, Identifier {
    */
   public void bind() {
     this.bootstrap.bind(this.address)
-      .syncUninterruptibly();
+      .syncUninterruptibly()
+      .addListener((ChannelFutureListener) future -> {
+        if (future.isSuccess()) {
+          MinecraftServer.this.serverListener.onStart();
+        }
+      });
   }
 
   @NotNull
