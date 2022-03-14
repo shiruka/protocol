@@ -65,6 +65,7 @@ public final class CompressorCodec extends MessageToMessageCodec<ByteBuf, ByteBu
       while (!deflater.finished()) {
         final var index = compressed.writerIndex();
         compressed.ensureWritable(CompressorCodec.CHUNK);
+        deflater.finish();
         final var written = deflater.deflate(compressed.internalNioBuffer(index, CompressorCodec.CHUNK));
         compressed.writerIndex(index + written);
       }

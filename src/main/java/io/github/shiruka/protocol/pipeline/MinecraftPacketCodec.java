@@ -34,8 +34,7 @@ public final class MinecraftPacketCodec extends MessageToMessageCodec<ByteBuf, L
   private final MinecraftServer server;
 
   @Override
-  protected void encode(final ChannelHandlerContext ctx, final List<MinecraftPacket> msg,
-                        final List<Object> out) {
+  protected void encode(final ChannelHandlerContext ctx, final List<MinecraftPacket> msg, final List<Object> out) {
     final var session = MinecraftChildChannel.cast(ctx);
     final var uncompressed = new PacketBuffer(ctx.alloc().ioBuffer());
     final var uncompressedBuffer = uncompressed.buffer();

@@ -11,6 +11,7 @@ import io.github.shiruka.protocol.packet.Unknown;
 import io.github.shiruka.protocol.server.MinecraftServer;
 import io.github.shiruka.protocol.server.ServerListener;
 import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
+import java.util.List;
 import java.util.Locale;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -61,7 +62,8 @@ public final class ProtocolTest {
         } else {
           status.status(PlayStatus.Status.LOGIN_FAILED_SERVER_OLD);
         }
-        this.session.writeAndFlush(status);
+        // @todo #1:15m Packets cannot send.
+        this.session.writeAndFlush(List.of(status));
         return;
       }
       final var chainData = ClientChainData.from(
