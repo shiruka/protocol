@@ -16,7 +16,7 @@ jobs:
           graalvm: 21.3.0
           java: java17
 
-      - uses: crazy-max/ghaction-import-gpg@v4.3.0
+      - uses: crazy-max/ghaction-import-gpg@v4.4.0
         with:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.GPG_PASSPHRASE }}
