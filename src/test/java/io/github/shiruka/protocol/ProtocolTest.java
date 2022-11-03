@@ -20,7 +20,7 @@ public final class ProtocolTest {
   public static void main(final String[] args) {
     System.out.println("Server is starting...");
     new MinecraftServer()
-      .codec(CodecV291.INSTANCE)
+      .codec(CodecV291.INSTANCE.toBuilder().rakNetProtocolVersion(11).build())
       .maxConnections(1024)
       .defaultPacketHandler(Handler::new)
       .motd("Motd")

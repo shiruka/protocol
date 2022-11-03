@@ -295,7 +295,7 @@ public interface Codec {
      * the rak net protocol version.
      */
     @Setter
-    private int rakNetProtocolVersion = 10;
+    private int rakNetProtocolVersion = -1;
 
     /**
      * ctor.

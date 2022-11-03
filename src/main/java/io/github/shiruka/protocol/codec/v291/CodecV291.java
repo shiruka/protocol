@@ -11,6 +11,7 @@ public interface CodecV291 {
    */
   Codec INSTANCE = Codec
     .newBuilder()
+    .rakNetProtocolVersion(10)
     .protocolVersion(291)
     .minecraftVersion("1.7.0")
     .helper(new CodecHelperV291())

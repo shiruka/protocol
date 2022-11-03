@@ -39,14 +39,6 @@ public final class MinecraftServer implements ServerListener, Identifier {
   private final InetSocketAddress address;
 
   /**
-   * the codec.
-   */
-  @NotNull
-  @Getter
-  @Setter
-  private Codec codec = CodecV291.INSTANCE;
-
-  /**
    * the server id.
    */
   @Getter
@@ -66,6 +58,13 @@ public final class MinecraftServer implements ServerListener, Identifier {
    * the sessions.
    */
   private final Map<InetSocketAddress, MinecraftChildChannel> sessions = new HashMap<>();
+
+  /**
+   * the codec.
+   */
+  @NotNull
+  @Getter
+  private Codec codec = CodecV291.INSTANCE;
 
   /**
    * the default Minecraft server session packet handler.
@@ -132,6 +131,23 @@ public final class MinecraftServer implements ServerListener, Identifier {
       .add(String.valueOf(this.maxConnections))
       .add(String.valueOf(this.serverId))
       .toString();
+  }
+
+  /**
+   * sets the codec.
+   *
+   * @param codec the codec to set.
+   *
+   * @return {@code this} for the chain.
+   */
+  @NotNull
+  public MinecraftServer codec(@NotNull final Codec codec) {
+    this.codec = codec;
+    this.bootstrap.option(
+        RakNetChannelOptions.PROTOCOL_VERSION,
+        codec.rakNetProtocolVersion()
+      );
+    return this;
   }
 
   /**
