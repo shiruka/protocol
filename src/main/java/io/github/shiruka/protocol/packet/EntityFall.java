@@ -26,11 +26,11 @@ import org.jetbrains.annotations.NotNull;
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class EntityFall extends MinecraftPacket.Base {
 
-  //@formatter:off
   float fallDistance;
+
   boolean inVoid;
+
   long runtimeEntityId;
-  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

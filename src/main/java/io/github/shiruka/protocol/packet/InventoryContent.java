@@ -29,10 +29,10 @@ import org.jetbrains.annotations.NotNull;
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class InventoryContent extends MinecraftPacket.Base {
 
-  //@formatter:off
   int containerId;
-  @Builder.Default List<ItemData> contents = new ObjectArrayList<>();
-  //@formatter:on
+
+  @Builder.Default
+  List<ItemData> contents = new ObjectArrayList<>();
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

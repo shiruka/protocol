@@ -79,5 +79,5 @@ public enum AdventureSetting {
   /**
    * the default level permissions.
    */
-  DEFAULT_LEVEL_PERMISSIONS
+  DEFAULT_LEVEL_PERMISSIONS,
 }

@@ -15,8 +15,12 @@ import org.jetbrains.annotations.NotNull;
 public final class BookEditEncoderV291 extends PacketEncoder.Base<BookEdit> {
 
   @Override
-  public void decode(@NotNull final BookEdit packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final BookEdit packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.action(helper.bookEditTypes().type(buffer.readUnsignedByte()));
     packet.inventorySlot(buffer.readUnsignedByte());
     switch (packet.action()) {
@@ -35,14 +39,17 @@ public final class BookEditEncoderV291 extends PacketEncoder.Base<BookEdit> {
         packet.author(buffer.readString());
         packet.xuid(buffer.readString());
       }
-      default -> {
-      }
+      default -> {}
     }
   }
 
   @Override
-  public void encode(@NotNull final BookEdit packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final BookEdit packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeByte(packet.action().ordinal());
     buffer.writeByte(packet.inventorySlot());
     switch (packet.action()) {
@@ -61,8 +68,7 @@ public final class BookEditEncoderV291 extends PacketEncoder.Base<BookEdit> {
         buffer.writeString(packet.author());
         buffer.writeString(packet.xuid());
       }
-      default -> {
-      }
+      default -> {}
     }
   }
 }

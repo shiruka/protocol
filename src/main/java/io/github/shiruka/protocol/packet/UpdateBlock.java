@@ -1,6 +1,6 @@
 package io.github.shiruka.protocol.packet;
 
-import io.github.shiruka.api.common.vectors.Vector3i;
+import io.github.shiruka.api.base.Vector3i;
 import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.PacketHandler;
 import java.util.EnumSet;
@@ -29,12 +29,14 @@ import org.jetbrains.annotations.NotNull;
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class UpdateBlock extends MinecraftPacket.Base {
 
-  //@formatter:off
   Vector3i blockPosition;
+
   int dataLayer;
-  @Builder.Default Set<Flag> flags = EnumSet.noneOf(Flag.class);
+
+  @Builder.Default
+  Set<Flag> flags = EnumSet.noneOf(Flag.class);
+
   int runtimeId;
-  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

@@ -12,11 +12,16 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents level chunk packet encoders.
  */
 @PacketId(58)
-public final class LevelChunkEncoderV291 extends PacketEncoder.Base<LevelChunk> {
+public final class LevelChunkEncoderV291
+  extends PacketEncoder.Base<LevelChunk> {
 
   @Override
-  public void decode(@NotNull final LevelChunk packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final LevelChunk packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.chunkX(buffer.readVarInt());
     packet.chunkZ(buffer.readVarInt());
     final var length = buffer.readUnsignedVarInt();
@@ -24,8 +29,12 @@ public final class LevelChunkEncoderV291 extends PacketEncoder.Base<LevelChunk> 
   }
 
   @Override
-  public void encode(@NotNull final LevelChunk packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final LevelChunk packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeVarInt(packet.chunkX());
     buffer.writeVarInt(packet.chunkZ());
     final var data = new PacketBuffer(packet.data());

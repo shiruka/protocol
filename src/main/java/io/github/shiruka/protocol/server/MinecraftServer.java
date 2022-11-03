@@ -71,8 +71,8 @@ public final class MinecraftServer implements ServerListener, Identifier {
   @NotNull
   @Getter
   @Setter
-  private Function<MinecraftChildChannel, PacketHandler> defaultPacketHandler = session -> new PacketHandler() {
-  };
+  private Function<MinecraftChildChannel, PacketHandler> defaultPacketHandler = session ->
+    new PacketHandler() {};
 
   /**
    * the max connections.
@@ -112,11 +112,13 @@ public final class MinecraftServer implements ServerListener, Identifier {
   public void bind() {
     this.bootstrap.bind(this.address)
       .syncUninterruptibly()
-      .addListener((ChannelFutureListener) future -> {
-        if (future.isSuccess()) {
-          MinecraftServer.this.serverListener.onStart();
+      .addListener(
+        (ChannelFutureListener) future -> {
+          if (future.isSuccess()) {
+            MinecraftServer.this.serverListener.onStart();
+          }
         }
-      });
+      );
   }
 
   @NotNull
@@ -146,12 +148,18 @@ public final class MinecraftServer implements ServerListener, Identifier {
   }
 
   @Override
-  public void postPacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftChildChannel session) {
+  public void postPacket(
+    @NotNull final MinecraftPacket packet,
+    @NotNull final MinecraftChildChannel session
+  ) {
     this.serverListener.postPacket(packet, session);
   }
 
   @Override
-  public void prePacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftChildChannel session) {
+  public void prePacket(
+    @NotNull final MinecraftPacket packet,
+    @NotNull final MinecraftChildChannel session
+  ) {
     this.serverListener.prePacket(packet, session);
   }
 }

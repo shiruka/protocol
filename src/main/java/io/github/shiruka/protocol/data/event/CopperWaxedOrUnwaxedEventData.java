@@ -9,10 +9,8 @@ import org.jetbrains.annotations.NotNull;
  *
  * @param definition the definition.
  */
-public record CopperWaxedOrUnwaxedEventData(
-  BlockDefinition definition
-) implements Event.Data {
-
+public record CopperWaxedOrUnwaxedEventData(BlockDefinition definition)
+  implements Event.Data {
   @NotNull
   @Override
   public Event.Type type() {

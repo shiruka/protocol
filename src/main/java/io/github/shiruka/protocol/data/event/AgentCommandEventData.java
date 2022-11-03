@@ -18,8 +18,8 @@ public record AgentCommandEventData(
   int dataValue,
   String output,
   AgentResult result
-) implements Event.Data {
-
+)
+  implements Event.Data {
   @NotNull
   @Override
   public Event.Type type() {

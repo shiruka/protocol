@@ -7,10 +7,8 @@ import org.jetbrains.annotations.NotNull;
  *
  * @param patternId the pattern id.
  */
-public record SRADCraftLoom(
-  @NotNull String patternId
-) implements StackRequestActionData {
-
+public record SRADCraftLoom(@NotNull String patternId)
+  implements StackRequestActionData {
   @NotNull
   @Override
   public StackRequestActionType type() {

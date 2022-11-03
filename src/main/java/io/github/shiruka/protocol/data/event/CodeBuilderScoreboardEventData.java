@@ -9,11 +9,8 @@ import org.jetbrains.annotations.NotNull;
  * @param objectiveName the objective name.
  * @param score the score.
  */
-public record CodeBuilderScoreboardEventData(
-  String objectiveName,
-  int score
-) implements Event.Data {
-
+public record CodeBuilderScoreboardEventData(String objectiveName, int score)
+  implements Event.Data {
   @NotNull
   @Override
   public Event.Type type() {

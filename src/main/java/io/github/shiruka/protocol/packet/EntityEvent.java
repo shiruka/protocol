@@ -27,11 +27,11 @@ import org.jetbrains.annotations.NotNull;
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class EntityEvent extends MinecraftPacket.Base {
 
-  //@formatter:off
   int data;
+
   long runtimeEntityId;
+
   EntityEventType type;
-  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

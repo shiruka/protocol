@@ -12,17 +12,26 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents item frame drop itme packet encoders.
  */
 @PacketId(71)
-public final class ItemFrameDropItemEncoderV291 extends PacketEncoder.Base<ItemFrameDropItem> {
+public final class ItemFrameDropItemEncoderV291
+  extends PacketEncoder.Base<ItemFrameDropItem> {
 
   @Override
-  public void decode(@NotNull final ItemFrameDropItem packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final ItemFrameDropItem packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.blockPosition(buffer.readVector3i());
   }
 
   @Override
-  public void encode(@NotNull final ItemFrameDropItem packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final ItemFrameDropItem packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeVector3i(packet.blockPosition());
   }
 }

@@ -16,8 +16,8 @@ public record PlayerDiedEventData(
   int attackerVariant,
   int entityDamageCause,
   boolean inRaid
-) implements Event.Data {
-
+)
+  implements Event.Data {
   @NotNull
   @Override
   public Event.Type type() {

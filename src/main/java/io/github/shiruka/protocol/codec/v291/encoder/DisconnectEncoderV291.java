@@ -12,11 +12,16 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents disconnect packet encoders.
  */
 @PacketId(5)
-public final class DisconnectEncoderV291 extends PacketEncoder.Base<Disconnect> {
+public final class DisconnectEncoderV291
+  extends PacketEncoder.Base<Disconnect> {
 
   @Override
-  public void decode(@NotNull final Disconnect packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final Disconnect packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.messageSkipped(buffer.readBoolean());
     if (!packet.messageSkipped()) {
       packet.kickMessage(buffer.readString());
@@ -24,8 +29,12 @@ public final class DisconnectEncoderV291 extends PacketEncoder.Base<Disconnect> 
   }
 
   @Override
-  public void encode(@NotNull final Disconnect packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final Disconnect packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeBoolean(packet.messageSkipped());
     if (!packet.messageSkipped()) {
       buffer.writeString(packet.kickMessage());

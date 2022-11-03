@@ -235,5 +235,5 @@ public enum EntityEventType {
   /**
    * the entity grow up.
    */
-  ENTITY_GROW_UP
+  ENTITY_GROW_UP,
 }

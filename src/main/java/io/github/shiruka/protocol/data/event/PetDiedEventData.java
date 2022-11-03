@@ -18,8 +18,8 @@ public record PetDiedEventData(
   boolean ownerKilled,
   int petEntityType,
   long petUniqueEntityId
-) implements Event.Data {
-
+)
+  implements Event.Data {
   @NotNull
   @Override
   public Event.Type type() {

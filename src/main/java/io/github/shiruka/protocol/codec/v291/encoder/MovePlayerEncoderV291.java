@@ -12,11 +12,16 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents move player packet encoders.
  */
 @PacketId(19)
-public final class MovePlayerEncoderV291 extends PacketEncoder.Base<MovePlayer> {
+public final class MovePlayerEncoderV291
+  extends PacketEncoder.Base<MovePlayer> {
 
   @Override
-  public void decode(@NotNull final MovePlayer packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final MovePlayer packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.runtimeEntityId(buffer.readUnsignedVarLong());
     packet.position(buffer.readVector3f());
     packet.rotation(buffer.readVector3f());
@@ -24,14 +29,20 @@ public final class MovePlayerEncoderV291 extends PacketEncoder.Base<MovePlayer> 
     packet.onGround(buffer.readBoolean());
     packet.ridingRuntimeEntityId(buffer.readUnsignedVarLong());
     if (packet.mode() == MovePlayer.Mode.TELEPORT) {
-      packet.teleportationCause(MovePlayer.TeleportationCause.byOrdinal(buffer.readIntLE()));
+      packet.teleportationCause(
+        MovePlayer.TeleportationCause.byOrdinal(buffer.readIntLE())
+      );
       packet.entityType(buffer.readIntLE());
     }
   }
 
   @Override
-  public void encode(@NotNull final MovePlayer packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final MovePlayer packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeUnsignedVarLong(packet.runtimeEntityId());
     buffer.writeVector3f(packet.position());
     buffer.writeVector3f(packet.rotation());

@@ -18,7 +18,6 @@ public record EntityLinkData(
   boolean immediate,
   boolean riderInitiated
 ) {
-
   /**
    * ctor.
    *
@@ -27,8 +26,12 @@ public record EntityLinkData(
    * @param type the type.
    * @param immediate the immediate.
    */
-  public EntityLinkData(final long from, final long to, @NotNull final EntityLinkDataType type,
-                        final boolean immediate) {
+  public EntityLinkData(
+    final long from,
+    final long to,
+    @NotNull final EntityLinkDataType type,
+    final boolean immediate
+  ) {
     this(from, to, type, immediate, false);
   }
 }

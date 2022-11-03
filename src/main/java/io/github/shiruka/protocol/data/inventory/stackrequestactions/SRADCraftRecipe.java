@@ -7,10 +7,8 @@ import org.jetbrains.annotations.NotNull;
  *
  * @param recipeNetworkId the recipe network id.
  */
-public record SRADCraftRecipe(
-  int recipeNetworkId
-) implements StackRequestActionData {
-
+public record SRADCraftRecipe(int recipeNetworkId)
+  implements StackRequestActionData {
   @NotNull
   @Override
   public StackRequestActionType type() {

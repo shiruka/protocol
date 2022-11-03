@@ -14,8 +14,8 @@ public record SRADTake(
   byte count,
   @NotNull StackRequestSlotInfoData source,
   @NotNull StackRequestSlotInfoData destination
-) implements StackRequestActionData {
-
+)
+  implements StackRequestActionData {
   @NotNull
   @Override
   public StackRequestActionType type() {

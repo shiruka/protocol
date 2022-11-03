@@ -1,7 +1,7 @@
 package io.github.shiruka.protocol.data.inventory;
 
-import io.github.shiruka.api.common.vectors.Vector3f;
-import io.github.shiruka.api.common.vectors.Vector3i;
+import io.github.shiruka.api.base.Vector3f;
+import io.github.shiruka.api.base.Vector3i;
 import java.util.List;
 
 /**
@@ -33,6 +33,4 @@ public record ItemUseTransaction(
   Vector3f playerPosition,
   Vector3f clickPosition,
   int blockRuntimeId
-) {
-
-}
+) {}

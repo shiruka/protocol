@@ -8,10 +8,8 @@ import org.jetbrains.annotations.NotNull;
  *
  * @param eventName the event name.
  */
-public record EntityDefinitionTriggerEventData(
-  String eventName
-) implements Event.Data {
-
+public record EntityDefinitionTriggerEventData(String eventName)
+  implements Event.Data {
   @NotNull
   @Override
   public Event.Type type() {

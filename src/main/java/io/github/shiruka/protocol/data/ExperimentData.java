@@ -8,11 +8,7 @@ import org.jetbrains.annotations.NotNull;
  * @param name the name.
  * @param enabled the enabled.
  */
-public record ExperimentData(
-  @NotNull String name,
-  boolean enabled
-) {
-
+public record ExperimentData(@NotNull String name, boolean enabled) {
   /**
    * ctor.
    *

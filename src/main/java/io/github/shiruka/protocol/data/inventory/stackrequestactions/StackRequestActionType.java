@@ -106,11 +106,14 @@ public enum StackRequestActionType {
    */
   @NotNull
   public static StackRequestActionType byId(final int id) {
-    return Arrays.stream(StackRequestActionType.VALUES)
+    return Arrays
+      .stream(StackRequestActionType.VALUES)
       .filter(stackRequestActionType -> stackRequestActionType.id == id)
       .findFirst()
       .orElseThrow(() ->
-        new IllegalStateException("Stack request action type %s not found!"
-          .formatted(id)));
+        new IllegalStateException(
+          "Stack request action type %s not found!".formatted(id)
+        )
+      );
   }
 }

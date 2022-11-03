@@ -12,18 +12,27 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents block entity data packet encoders.
  */
 @PacketId(56)
-public final class BlockEntityDataEncoderV291 extends PacketEncoder.Base<BlockEntityData> {
+public final class BlockEntityDataEncoderV291
+  extends PacketEncoder.Base<BlockEntityData> {
 
   @Override
-  public void decode(@NotNull final BlockEntityData packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final BlockEntityData packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.blockPosition(buffer.readVector3i());
     packet.data(buffer.readCompoundTag());
   }
 
   @Override
-  public void encode(@NotNull final BlockEntityData packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final BlockEntityData packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeVector3i(packet.blockPosition());
     buffer.writeCompoundTag(packet.data());
   }

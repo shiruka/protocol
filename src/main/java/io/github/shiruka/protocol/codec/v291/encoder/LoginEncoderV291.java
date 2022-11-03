@@ -15,8 +15,12 @@ import org.jetbrains.annotations.NotNull;
 public final class LoginEncoderV291 extends PacketEncoder.Base<Login> {
 
   @Override
-  public void decode(@NotNull final Login packet, @NotNull final CodecHelper helper, @NotNull final PacketBuffer buffer,
-                     @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final Login packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.protocolVersion(buffer.readInt());
     final var jwt = new PacketBuffer(buffer.readSlice());
     packet.chainData(jwt.readLEAsciiString());
@@ -24,8 +28,12 @@ public final class LoginEncoderV291 extends PacketEncoder.Base<Login> {
   }
 
   @Override
-  public void encode(@NotNull final Login packet, @NotNull final CodecHelper helper, @NotNull final PacketBuffer buffer,
-                     @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final Login packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeInt(packet.protocolVersion());
     final var chainData = packet.chainData();
     final var skinData = packet.skinData();

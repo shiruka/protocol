@@ -11,8 +11,8 @@ import org.jetbrains.annotations.NotNull;
 public record SRADCraftRecipeOptional(
   int recipeNetworkId,
   int filteredStringIndex
-) implements StackRequestActionData {
-
+)
+  implements StackRequestActionData {
   @NotNull
   @Override
   public StackRequestActionType type() {

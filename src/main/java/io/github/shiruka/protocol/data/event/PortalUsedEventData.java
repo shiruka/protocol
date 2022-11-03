@@ -9,11 +9,8 @@ import org.jetbrains.annotations.NotNull;
  * @param fromDimensionId the from dimension id.
  * @param toDimensionId the to dimension id.
  */
-public record PortalUsedEventData(
-  int fromDimensionId,
-  int toDimensionId
-) implements Event.Data {
-
+public record PortalUsedEventData(int fromDimensionId, int toDimensionId)
+  implements Event.Data {
   @NotNull
   @Override
   public Event.Type type() {

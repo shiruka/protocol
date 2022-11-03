@@ -1,9 +1,9 @@
 package io.github.shiruka.protocol.data.entity;
 
-import io.github.shiruka.api.common.vectors.Vector3f;
-import io.github.shiruka.api.common.vectors.Vector3i;
-import io.github.shiruka.api.nbt.CompoundTag;
-import io.github.shiruka.api.nbt.Tag;
+import io.github.shiruka.api.base.Vector3f;
+import io.github.shiruka.api.base.Vector3i;
+import io.github.shiruka.nbt.CompoundTag;
+import io.github.shiruka.nbt.Tag;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -34,7 +34,9 @@ public final class EntityDataMap implements Map<EntityData, Object> {
    * @return converted text.
    */
   @NotNull
-  private static String mapToString(@NotNull final Map<EntityData, Object> map) {
+  private static String mapToString(
+    @NotNull final Map<EntityData, Object> map
+  ) {
     final var iterator = map.entrySet().iterator();
     if (!iterator.hasNext()) {
       return "{}";
@@ -108,7 +110,10 @@ public final class EntityDataMap implements Map<EntityData, Object> {
    *
    * @return float value.
    */
-  public float getFloat(@NotNull final EntityData key, final float defaultValue) {
+  public float getFloat(
+    @NotNull final EntityData key,
+    final float defaultValue
+  ) {
     return this.getOrDefault(key, defaultValue);
   }
 
@@ -193,7 +198,10 @@ public final class EntityDataMap implements Map<EntityData, Object> {
    * @return position.
    */
   @NotNull
-  public Vector3i getPos(@NotNull final EntityData key, final Vector3i defaultValue) {
+  public Vector3i getPos(
+    @NotNull final EntityData key,
+    final Vector3i defaultValue
+  ) {
     return this.getOrDefault(key, defaultValue);
   }
 
@@ -216,7 +224,10 @@ public final class EntityDataMap implements Map<EntityData, Object> {
    *
    * @return short.
    */
-  public short getShort(@NotNull final EntityData key, final short defaultValue) {
+  public short getShort(
+    @NotNull final EntityData key,
+    final short defaultValue
+  ) {
     return this.getOrDefault(key, defaultValue);
   }
 
@@ -241,7 +252,10 @@ public final class EntityDataMap implements Map<EntityData, Object> {
    * @return string.
    */
   @NotNull
-  public String getString(@NotNull final EntityData key, final String defaultValue) {
+  public String getString(
+    @NotNull final EntityData key,
+    final String defaultValue
+  ) {
     return this.getOrDefault(key, defaultValue);
   }
 
@@ -266,7 +280,10 @@ public final class EntityDataMap implements Map<EntityData, Object> {
    * @return tag.
    */
   @NotNull
-  public CompoundTag getTag(@NotNull final EntityData key, @NotNull final CompoundTag defaultValue) {
+  public CompoundTag getTag(
+    @NotNull final EntityData key,
+    @NotNull final CompoundTag defaultValue
+  ) {
     return this.getOrDefault(key, defaultValue);
   }
 
@@ -307,7 +324,10 @@ public final class EntityDataMap implements Map<EntityData, Object> {
    * @return vector 3f.
    */
   @NotNull
-  public Vector3f getVector3f(@NotNull final EntityData key, @NotNull final Vector3f defaultValue) {
+  public Vector3f getVector3f(
+    @NotNull final EntityData key,
+    @NotNull final Vector3f defaultValue
+  ) {
     return this.getOrDefault(key, defaultValue);
   }
 
@@ -348,7 +368,10 @@ public final class EntityDataMap implements Map<EntityData, Object> {
    * @return {@code this} for the builder chain.
    */
   @NotNull
-  public EntityDataMap putFloat(@NotNull final EntityData key, final float value) {
+  public EntityDataMap putFloat(
+    @NotNull final EntityData key,
+    final float value
+  ) {
     this.put(key, value);
     return this;
   }
@@ -376,7 +399,10 @@ public final class EntityDataMap implements Map<EntityData, Object> {
    * @return {@code this} for the builder chain.
    */
   @NotNull
-  public EntityDataMap putLong(@NotNull final EntityData key, final long value) {
+  public EntityDataMap putLong(
+    @NotNull final EntityData key,
+    final long value
+  ) {
     this.put(key, value);
     return this;
   }
@@ -390,7 +416,10 @@ public final class EntityDataMap implements Map<EntityData, Object> {
    * @return {@code this} for the builder chain.
    */
   @NotNull
-  public EntityDataMap putPos(@NotNull final EntityData key, @NotNull final Vector3i value) {
+  public EntityDataMap putPos(
+    @NotNull final EntityData key,
+    @NotNull final Vector3i value
+  ) {
     this.put(key, value);
     return this;
   }
@@ -404,7 +433,10 @@ public final class EntityDataMap implements Map<EntityData, Object> {
    * @return {@code this} for the builder chain.
    */
   @NotNull
-  public EntityDataMap putShort(@NotNull final EntityData key, final int value) {
+  public EntityDataMap putShort(
+    @NotNull final EntityData key,
+    final int value
+  ) {
     this.put(key, (short) value);
     return this;
   }
@@ -418,7 +450,10 @@ public final class EntityDataMap implements Map<EntityData, Object> {
    * @return {@code this} for the builder chain.
    */
   @NotNull
-  public EntityDataMap putString(@NotNull final EntityData key, @NotNull final String value) {
+  public EntityDataMap putString(
+    @NotNull final EntityData key,
+    @NotNull final String value
+  ) {
     this.put(key, value);
     return this;
   }
@@ -432,7 +467,10 @@ public final class EntityDataMap implements Map<EntityData, Object> {
    * @return {@code this} for the builder chain.
    */
   @NotNull
-  public EntityDataMap putTag(@NotNull final EntityData key, @NotNull final CompoundTag value) {
+  public EntityDataMap putTag(
+    @NotNull final EntityData key,
+    @NotNull final CompoundTag value
+  ) {
     this.put(key, value);
     return this;
   }
@@ -446,7 +484,10 @@ public final class EntityDataMap implements Map<EntityData, Object> {
    * @return {@code this} for the builder chain.
    */
   @NotNull
-  public EntityDataMap putVector3f(@NotNull final EntityData key, @NotNull final Vector3f value) {
+  public EntityDataMap putVector3f(
+    @NotNull final EntityData key,
+    @NotNull final Vector3f value
+  ) {
     this.put(key, value);
     return this;
   }
@@ -478,7 +519,10 @@ public final class EntityDataMap implements Map<EntityData, Object> {
   }
 
   @Override
-  public Object put(@NotNull final EntityData key, @NotNull final Object value) {
+  public Object put(
+    @NotNull final EntityData key,
+    @NotNull final Object value
+  ) {
     EntityDataType.byObject(value);
     if (key == EntityData.FLAGS || key == EntityData.FLAGS_2) {
       return this.putFlags((EntityFlags) value);
@@ -528,7 +572,10 @@ public final class EntityDataMap implements Map<EntityData, Object> {
    *
    * @return value.
    */
-  private <T> T getOrDefault(@NotNull final EntityData key, @NotNull final T defaultValue) {
+  private <T> T getOrDefault(
+    @NotNull final EntityData key,
+    @NotNull final T defaultValue
+  ) {
     final var object = this.map.getOrDefault(key, defaultValue);
     try {
       return (T) object;

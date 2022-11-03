@@ -1,7 +1,7 @@
 package io.github.shiruka.protocol.packet;
 
-import io.github.shiruka.api.common.vectors.Vector2f;
-import io.github.shiruka.api.common.vectors.Vector3f;
+import io.github.shiruka.api.base.Vector2f;
+import io.github.shiruka.api.base.Vector3f;
 import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.PacketHandler;
 import io.github.shiruka.protocol.data.ClientPlayMode;
@@ -40,20 +40,33 @@ import org.jetbrains.annotations.NotNull;
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class PlayerAuthInput extends MinecraftPacket.Base {
 
-  //@formatter:off
   Vector3f delta;
-  @Builder.Default Set<PlayerAuthInputData> inputData = EnumSet.noneOf(PlayerAuthInputData.class);
+
+  @Builder.Default
+  Set<PlayerAuthInputData> inputData = EnumSet.noneOf(
+    PlayerAuthInputData.class
+  );
+
   InputMode inputMode;
+
   ItemStackRequest itemStackRequest;
+
   ItemUseTransaction itemUseTransaction;
+
   Vector2f motion;
+
   ClientPlayMode playMode;
-  @Builder.Default List<PlayerBlockActionData> playerActions = new ObjectArrayList<>();
+
+  @Builder.Default
+  List<PlayerBlockActionData> playerActions = new ObjectArrayList<>();
+
   Vector3f position;
+
   Vector3f rotation;
+
   long tick;
+
   Vector3f vrGazeDirection;
-  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

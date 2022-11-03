@@ -12,17 +12,26 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents available commands' packet encoders.
  */
 @PacketId(76)
-public final class AvailableCommandsEncoderV291 extends PacketEncoder.Base<AvailableCommands> {
+public final class AvailableCommandsEncoderV291
+  extends PacketEncoder.Base<AvailableCommands> {
 
   @Override
-  public void decode(@NotNull final AvailableCommands packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final AvailableCommands packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.commands(helper.readCommands(buffer));
   }
 
   @Override
-  public void encode(@NotNull final AvailableCommands packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final AvailableCommands packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     helper.writeCommands(buffer, packet.commands());
   }
 }

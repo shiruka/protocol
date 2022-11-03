@@ -10,12 +10,8 @@ import org.jetbrains.annotations.NotNull;
  * @param entityType the entity type.
  * @param variant the variant.
  */
-public record MobBornEventData(
-  int color,
-  int entityType,
-  int variant
-) implements Event.Data {
-
+public record MobBornEventData(int color, int entityType, int variant)
+  implements Event.Data {
   @NotNull
   @Override
   public Event.Type type() {

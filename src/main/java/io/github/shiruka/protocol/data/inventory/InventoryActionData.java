@@ -18,7 +18,6 @@ public record InventoryActionData(
   @NotNull ItemData toItem,
   int stackNetworkId
 ) {
-
   /**
    * ctor.
    *
@@ -27,8 +26,12 @@ public record InventoryActionData(
    * @param fromItem the from item.
    * @param toItem the to item.
    */
-  public InventoryActionData(@NotNull final InventorySource source, final int slot, @NotNull final ItemData fromItem,
-                             @NotNull final ItemData toItem) {
+  public InventoryActionData(
+    @NotNull final InventorySource source,
+    final int slot,
+    @NotNull final ItemData fromItem,
+    @NotNull final ItemData toItem
+  ) {
     this(source, slot, fromItem, toItem, 0);
   }
 
@@ -39,6 +42,12 @@ public record InventoryActionData(
    */
   @NotNull
   public InventoryActionData reverse() {
-    return new InventoryActionData(this.source, this.slot, this.toItem, this.fromItem, this.stackNetworkId);
+    return new InventoryActionData(
+      this.source,
+      this.slot,
+      this.toItem,
+      this.fromItem,
+      this.stackNetworkId
+    );
   }
 }

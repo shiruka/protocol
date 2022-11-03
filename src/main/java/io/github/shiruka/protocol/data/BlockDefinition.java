@@ -1,6 +1,6 @@
 package io.github.shiruka.protocol.data;
 
-import io.github.shiruka.api.nbt.CompoundTag;
+import io.github.shiruka.nbt.CompoundTag;
 import io.github.shiruka.protocol.common.IdentifierDefinition;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,6 +15,5 @@ public record BlockDefinition(
   @NotNull String identifier,
   int id,
   @NotNull CompoundTag state
-) implements IdentifierDefinition {
-
-}
+)
+  implements IdentifierDefinition {}

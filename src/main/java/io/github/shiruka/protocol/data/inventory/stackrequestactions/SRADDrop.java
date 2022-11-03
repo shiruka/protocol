@@ -14,8 +14,8 @@ public record SRADDrop(
   byte count,
   @NotNull StackRequestSlotInfoData source,
   boolean randomly
-) implements StackRequestActionData {
-
+)
+  implements StackRequestActionData {
   @NotNull
   @Override
   public StackRequestActionType type() {

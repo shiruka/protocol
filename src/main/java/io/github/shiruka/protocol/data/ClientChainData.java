@@ -34,7 +34,6 @@ public record ClientChainData(
   @NotNull ChainData chainData,
   @NotNull SkinData skinData
 ) {
-
   /**
    * the mapper.
    */
@@ -43,8 +42,7 @@ public record ClientChainData(
   /**
    * the map type.
    */
-  private static final TypeReference<Map<String, List<String>>> MAP_TYPE = new TypeReference<>() {
-  };
+  private static final TypeReference<Map<String, List<String>>> MAP_TYPE = new TypeReference<>() {};
 
   /**
    * the Mojang's public key.
@@ -59,9 +57,13 @@ public record ClientChainData(
 
   static {
     try {
-      MOJANG_PUBLIC_KEY = ClientChainData.generateKey(ClientChainData.MOJANG_PUBLIC_KEY_BASE64);
+      MOJANG_PUBLIC_KEY =
+        ClientChainData.generateKey(ClientChainData.MOJANG_PUBLIC_KEY_BASE64);
     } catch (final NoSuchAlgorithmException | InvalidKeySpecException e) {
-      throw new IllegalStateException("An error occurs when generating Mojang's public key", e);
+      throw new IllegalStateException(
+        "An error occurs when generating Mojang's public key",
+        e
+      );
     }
   }
 
@@ -74,10 +76,14 @@ public record ClientChainData(
    * @return chain data.
    */
   @NotNull
-  public static ClientChainData from(@NotNull final String chainData, @NotNull final String skinData) {
+  public static ClientChainData from(
+    @NotNull final String chainData,
+    @NotNull final String skinData
+  ) {
     return new ClientChainData(
       ChainData.decode(chainData),
-      SkinData.decode(skinData));
+      SkinData.decode(skinData)
+    );
   }
 
   /**
@@ -91,7 +97,10 @@ public record ClientChainData(
   private static JsonNode decodeToken(@NotNull final String token) {
     final var base = token.split("\\.");
     Preconditions.checkArgument(base.length >= 2, "Invalid token length!");
-    final var json = new String(Base64.getDecoder().decode(base[1]), StandardCharsets.UTF_8);
+    final var json = new String(
+      Base64.getDecoder().decode(base[1]),
+      StandardCharsets.UTF_8
+    );
     try {
       return ClientChainData.MAPPER.readTree(json);
     } catch (final IOException e) {
@@ -112,10 +121,13 @@ public record ClientChainData(
    *   public key.
    */
   @NotNull
-  private static ECPublicKey generateKey(@NotNull final String base64) throws NoSuchAlgorithmException,
-    InvalidKeySpecException {
-    return (ECPublicKey) KeyFactory.getInstance("EC")
-      .generatePublic(new X509EncodedKeySpec(Base64.getDecoder().decode(base64)));
+  private static ECPublicKey generateKey(@NotNull final String base64)
+    throws NoSuchAlgorithmException, InvalidKeySpecException {
+    return (ECPublicKey) KeyFactory
+      .getInstance("EC")
+      .generatePublic(
+        new X509EncodedKeySpec(Base64.getDecoder().decode(base64))
+      );
   }
 
   /**
@@ -128,7 +140,10 @@ public record ClientChainData(
    *
    * @throws JOSEException if the JWS object couldn't be verified, or if the elliptic curve of key is not supported.
    */
-  private static boolean verify(@NotNull final ECPublicKey key, @NotNull final JWSObject object) throws JOSEException {
+  private static boolean verify(
+    @NotNull final ECPublicKey key,
+    @NotNull final JWSObject object
+  ) throws JOSEException {
     return object.verify(new ECDSAVerifier(key));
   }
 
@@ -146,8 +161,8 @@ public record ClientChainData(
    *   public key.
    * @throws JOSEException if the JWS object couldn't be verified, or if the elliptic curve of key is not supported.
    */
-  private static boolean verifyChain(@NotNull final List<String> chains) throws ParseException, NoSuchAlgorithmException,
-    InvalidKeySpecException, JOSEException {
+  private static boolean verifyChain(@NotNull final List<String> chains)
+    throws ParseException, NoSuchAlgorithmException, InvalidKeySpecException, JOSEException {
     ECPublicKey lastKey = null;
     var mojangKeyVerified = false;
     final var iterator = chains.iterator();
@@ -198,7 +213,6 @@ public record ClientChainData(
     @Nullable String xuid,
     @Nullable String identityPublicKey
   ) {
-
     /**
      * decodes the chain data.
      *
@@ -210,18 +224,22 @@ public record ClientChainData(
     private static ChainData decode(@NotNull final String chainData) {
       final Map<String, List<String>> map;
       try {
-        map = ClientChainData.MAPPER.readValue(chainData, ClientChainData.MAP_TYPE);
+        map =
+          ClientChainData.MAPPER.readValue(chainData, ClientChainData.MAP_TYPE);
       } catch (final IOException e) {
         throw new IllegalArgumentException("Invalid JSON!", e);
       }
-      Preconditions.checkArgument(!map.isEmpty() && map.containsKey("chain") && !map.get("chain").isEmpty(),
-        "Something goes wrong when reading the chain data!");
+      Preconditions.checkArgument(
+        !map.isEmpty() &&
+        map.containsKey("chain") &&
+        !map.get("chain").isEmpty(),
+        "Something goes wrong when reading the chain data!"
+      );
       final var chains = map.get("chain");
       var xboxAuthed = false;
       try {
         xboxAuthed = ClientChainData.verifyChain(chains);
-      } catch (final Exception ignored) {
-      }
+      } catch (final Exception ignored) {}
       String username = null;
       UUID clientUUID = null;
       String xuid = null;
@@ -247,7 +265,13 @@ public record ClientChainData(
       if (!xboxAuthed) {
         xuid = null;
       }
-      return new ChainData(xboxAuthed, username, clientUUID, xuid, identityPublicKey);
+      return new ChainData(
+        xboxAuthed,
+        username,
+        clientUUID,
+        xuid,
+        identityPublicKey
+      );
     }
   }
 
@@ -281,7 +305,6 @@ public record ClientChainData(
     int uiProfile,
     @NotNull Skin skin
   ) {
-
     /**
      * decodes the skin data.
      *
@@ -336,8 +359,20 @@ public record ClientChainData(
       if (skinToken.has("UIProfile")) {
         uiProfile = skinToken.get("UIProfile").intValue();
       }
-      return new SkinData(clientId, serverAddress, deviceModel, deviceOS, deviceId, gameVersion, guiScale, languageCode,
-        currentInputMode, defaultInputMode, uiProfile, Skin.from(skinToken));
+      return new SkinData(
+        clientId,
+        serverAddress,
+        deviceModel,
+        deviceOS,
+        deviceId,
+        gameVersion,
+        guiScale,
+        languageCode,
+        currentInputMode,
+        defaultInputMode,
+        uiProfile,
+        Skin.from(skinToken)
+      );
     }
   }
 }

@@ -21,7 +21,6 @@ public record IntTypeMap<T>(
   @NotNull Int2ObjectBiMap<T> map,
   @NotNull String type
 ) {
-
   /**
    * creates an empty int type map.
    *
@@ -206,12 +205,14 @@ public record IntTypeMap<T>(
     @NotNull
     public IntTypeMap<T> build() {
       final var map = new Int2ObjectBiMap<T>();
-      IntStream.range(0, this.map.length).forEach(index -> {
-        final var type = this.map[index];
-        if (type != null) {
-          map.put(index, (T) type);
-        }
-      });
+      IntStream
+        .range(0, this.map.length)
+        .forEach(index -> {
+          final var type = this.map[index];
+          if (type != null) {
+            map.put(index, (T) type);
+          }
+        });
       return new IntTypeMap<>(map, this.type);
     }
 
@@ -226,8 +227,10 @@ public record IntTypeMap<T>(
     @NotNull
     public Builder<T> insert(final int index, @NotNull final T value) {
       this.ensureIndex(index);
-      Preconditions.checkArgument(this.map[index] == null,
-        "Cannot insert into non-null value");
+      Preconditions.checkArgument(
+        this.map[index] == null,
+        "Cannot insert into non-null value"
+      );
       this.map[index] = value;
       return this;
     }
@@ -242,11 +245,19 @@ public record IntTypeMap<T>(
      * @return {@code this} for the builder chain.
      */
     @NotNull
-    public Builder<T> move(final int oldIndex, final int newIndex, @NotNull final T value) {
-      Preconditions.checkArgument(oldIndex < this.map.length,
-        "Cannot move out of bounds value!");
-      Preconditions.checkArgument(this.map[oldIndex] == value,
-        "oldIndex value does not equal expected!");
+    public Builder<T> move(
+      final int oldIndex,
+      final int newIndex,
+      @NotNull final T value
+    ) {
+      Preconditions.checkArgument(
+        oldIndex < this.map.length,
+        "Cannot move out of bounds value!"
+      );
+      Preconditions.checkArgument(
+        this.map[oldIndex] == value,
+        "oldIndex value does not equal expected!"
+      );
       this.ensureIndex(newIndex);
       this.map[oldIndex] = null;
       this.map[newIndex] = value;
@@ -276,10 +287,14 @@ public record IntTypeMap<T>(
      */
     @NotNull
     public Builder<T> replace(final int index, @NotNull final T value) {
-      Preconditions.checkArgument(index < this.map.length,
-        "Cannot replace out of bounds value!");
-      Preconditions.checkArgument(this.map[index] != null,
-        "Cannot replace null value!");
+      Preconditions.checkArgument(
+        index < this.map.length,
+        "Cannot replace out of bounds value!"
+      );
+      Preconditions.checkArgument(
+        this.map[index] != null,
+        "Cannot replace null value!"
+      );
       this.map[index] = value;
       return this;
     }
@@ -294,15 +309,30 @@ public record IntTypeMap<T>(
      * @return {@code this} for the builder chain.
      */
     @NotNull
-    public Builder<T> shift(final int startIndex, final int amount, final int length) {
-      Preconditions.checkArgument(startIndex < this.map.length,
-        "Start index is out of bounds!");
+    public Builder<T> shift(
+      final int startIndex,
+      final int amount,
+      final int length
+    ) {
+      Preconditions.checkArgument(
+        startIndex < this.map.length,
+        "Start index is out of bounds!"
+      );
       final var endIndex = startIndex + length;
-      Preconditions.checkArgument(endIndex <= this.map.length, "" +
-        "Length exceeds array bounds!");
+      Preconditions.checkArgument(
+        endIndex <= this.map.length,
+        "" + "Length exceeds array bounds!"
+      );
       this.ensureCapacity(this.map.length + amount);
-      System.arraycopy(this.map, startIndex, this.map, startIndex + amount, length);
-      IntStream.range(0, amount)
+      System.arraycopy(
+        this.map,
+        startIndex,
+        this.map,
+        startIndex + amount,
+        length
+      );
+      IntStream
+        .range(0, amount)
         .map(operand -> operand + startIndex)
         .forEach(value -> this.map[value] = null);
       return this;

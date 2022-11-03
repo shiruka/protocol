@@ -21,6 +21,4 @@ public record CommandParamData(
   @Nullable CommandParam type,
   @Nullable String postfix,
   @NotNull List<CommandParamOption> options
-) {
-
-}
+) {}

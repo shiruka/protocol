@@ -12,18 +12,27 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents script custom event packet encoders.
  */
 @PacketId(117)
-public final class ScriptCustomEventEncoderV291 extends PacketEncoder.Base<ScriptCustomEvent> {
+public final class ScriptCustomEventEncoderV291
+  extends PacketEncoder.Base<ScriptCustomEvent> {
 
   @Override
-  public void decode(@NotNull final ScriptCustomEvent packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final ScriptCustomEvent packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.eventName(buffer.readString());
     packet.data(buffer.readString());
   }
 
   @Override
-  public void encode(@NotNull final ScriptCustomEvent packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final ScriptCustomEvent packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeString(packet.eventName());
     buffer.writeString(packet.data());
   }

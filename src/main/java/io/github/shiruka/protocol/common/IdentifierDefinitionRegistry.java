@@ -20,7 +20,6 @@ public record IdentifierDefinitionRegistry<T extends IdentifierDefinition>(
   @NotNull Int2ObjectMap<T> idRegistry,
   @NotNull Object2ObjectMap<String, T> identifierRegistry
 ) {
-
   /**
    * creates a new builder.
    *
@@ -99,10 +98,14 @@ public record IdentifierDefinitionRegistry<T extends IdentifierDefinition>(
     public Builder<T> add(@NotNull final T definition) {
       final var id = definition.id();
       final var identifier = definition.identifier();
-      Preconditions.checkArgument(!this.identifierRegistry.containsKey(identifier),
-        "Identifier is already registered!");
-      Preconditions.checkArgument(!this.idRegistry.containsKey(id),
-        "ID is already registered!");
+      Preconditions.checkArgument(
+        !this.identifierRegistry.containsKey(identifier),
+        "Identifier is already registered!"
+      );
+      Preconditions.checkArgument(
+        !this.idRegistry.containsKey(id),
+        "ID is already registered!"
+      );
       this.idRegistry.put(id, definition);
       this.identifierRegistry.put(identifier, definition);
       return this;
@@ -128,7 +131,10 @@ public record IdentifierDefinitionRegistry<T extends IdentifierDefinition>(
      */
     @NotNull
     public IdentifierDefinitionRegistry<T> build() {
-      return new IdentifierDefinitionRegistry<>(this.idRegistry, this.identifierRegistry);
+      return new IdentifierDefinitionRegistry<>(
+        this.idRegistry,
+        this.identifierRegistry
+      );
     }
 
     /**
@@ -142,10 +148,14 @@ public record IdentifierDefinitionRegistry<T extends IdentifierDefinition>(
     public Builder<T> remove(@NotNull final T definition) {
       final var id = definition.id();
       final var identifier = definition.identifier();
-      Preconditions.checkArgument(this.identifierRegistry.containsKey(identifier),
-        "Identifier is mot registered!");
-      Preconditions.checkArgument(this.idRegistry.containsKey(id),
-        "ID is not registered!");
+      Preconditions.checkArgument(
+        this.identifierRegistry.containsKey(identifier),
+        "Identifier is mot registered!"
+      );
+      Preconditions.checkArgument(
+        this.idRegistry.containsKey(id),
+        "ID is not registered!"
+      );
       this.idRegistry.remove(id);
       this.identifierRegistry.remove(identifier);
       return this;

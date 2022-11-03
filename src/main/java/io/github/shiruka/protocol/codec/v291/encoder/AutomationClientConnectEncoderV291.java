@@ -12,17 +12,26 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents automation client connect packet encoders.
  */
 @PacketId(95)
-public final class AutomationClientConnectEncoderV291 extends PacketEncoder.Base<AutomationClientConnect> {
+public final class AutomationClientConnectEncoderV291
+  extends PacketEncoder.Base<AutomationClientConnect> {
 
   @Override
-  public void decode(@NotNull final AutomationClientConnect packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final AutomationClientConnect packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.address(buffer.readString());
   }
 
   @Override
-  public void encode(@NotNull final AutomationClientConnect packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final AutomationClientConnect packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeString(packet.address());
   }
 }

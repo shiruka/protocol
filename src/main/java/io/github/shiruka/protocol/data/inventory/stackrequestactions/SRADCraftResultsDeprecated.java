@@ -12,8 +12,8 @@ import org.jetbrains.annotations.NotNull;
 public record SRADCraftResultsDeprecated(
   ItemData[] resultItems,
   byte timesCrafted
-) implements StackRequestActionData {
-
+)
+  implements StackRequestActionData {
   @NotNull
   @Override
   public StackRequestActionType type() {

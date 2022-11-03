@@ -26,10 +26,9 @@ import org.jetbrains.annotations.NotNull;
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class Transfer extends MinecraftPacket.Base {
 
-  //@formatter:off
   String address;
+
   int port;
-  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

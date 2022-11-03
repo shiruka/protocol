@@ -12,17 +12,26 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents remove entity packet encoders.
  */
 @PacketId(14)
-public final class RemoveEntityEncoderV291 extends PacketEncoder.Base<RemoveEntity> {
+public final class RemoveEntityEncoderV291
+  extends PacketEncoder.Base<RemoveEntity> {
 
   @Override
-  public void decode(@NotNull final RemoveEntity packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final RemoveEntity packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.uniqueEntityId(buffer.readVarLong());
   }
 
   @Override
-  public void encode(@NotNull final RemoveEntity packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final RemoveEntity packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeVarLong(packet.uniqueEntityId());
   }
 }

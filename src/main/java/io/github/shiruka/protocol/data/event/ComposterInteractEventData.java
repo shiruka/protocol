@@ -13,8 +13,8 @@ import org.jetbrains.annotations.NotNull;
 public record ComposterInteractEventData(
   BlockInteractionType blockInteractionType,
   int itemId
-) implements Event.Data {
-
+)
+  implements Event.Data {
   @NotNull
   @Override
   public Event.Type type() {

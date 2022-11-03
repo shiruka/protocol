@@ -14,18 +14,16 @@ import org.jetbrains.annotations.Nullable;
  * an interface that contains utility methods for codecs.
  */
 public interface Codecs {
-
   /**
    * the ALL.
    */
-  Collection<Codec> ALL = Set.of(
-    CodecV291.INSTANCE, CodecV313.INSTANCE
-  );
+  Collection<Codec> ALL = Set.of(CodecV291.INSTANCE, CodecV313.INSTANCE);
 
   /**
    * the by protocol version.
    */
-  Map<Integer, Codec> ALL_BY_PROTOCOL_VERSION = Codecs.ALL.stream()
+  Map<Integer, Codec> ALL_BY_PROTOCOL_VERSION = Codecs.ALL
+    .stream()
     .collect(Collectors.toMap(Codec::protocolVersion, Function.identity()));
 
   /**
@@ -46,7 +44,8 @@ public interface Codecs {
    * @return latest protocol version.
    */
   static int latestProtocolVersion() {
-    return Codecs.ALL.stream()
+    return Codecs.ALL
+      .stream()
       .mapToInt(Codec::protocolVersion)
       .sorted()
       .boxed()

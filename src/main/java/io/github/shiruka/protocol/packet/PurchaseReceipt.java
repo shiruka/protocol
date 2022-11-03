@@ -28,9 +28,8 @@ import org.jetbrains.annotations.NotNull;
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class PurchaseReceipt extends MinecraftPacket.Base {
 
-  //@formatter:off
-  @Builder.Default List<String> receipts = new ObjectArrayList<>();
-  //@formatter:on
+  @Builder.Default
+  List<String> receipts = new ObjectArrayList<>();
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

@@ -29,10 +29,9 @@ import org.jetbrains.annotations.NotNull;
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class AvailableCommands extends MinecraftPacket.Base {
 
-  //@formatter:off
   List<CommandData> commands;
+
   List<CommandEnumConstraintData> constraints;
-  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

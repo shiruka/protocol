@@ -7,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
  * an interface to determine Minecraft server sessions.
  */
 public interface MinecraftServerSession extends MinecraftSession {
-
   /**
    * obtains the server.
    *

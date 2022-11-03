@@ -26,11 +26,11 @@ import org.jetbrains.annotations.NotNull;
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class Event extends MinecraftPacket.Base {
 
-  //@formatter:off
   Data data;
+
   long uniqueEntityId;
+
   byte usePlayerId;
-  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {
@@ -172,7 +172,6 @@ public final class Event extends MinecraftPacket.Base {
    * an interface to determine event data.
    */
   public interface Data {
-
     /**
      * obtains the type.
      *

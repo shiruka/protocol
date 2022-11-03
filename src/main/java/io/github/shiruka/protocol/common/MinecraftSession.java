@@ -8,7 +8,6 @@ import org.jetbrains.annotations.NotNull;
  * an interface to determine Minecraft sessions.
  */
 public interface MinecraftSession {
-
   /**
    * obtains the address.
    *

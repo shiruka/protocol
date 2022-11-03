@@ -12,20 +12,30 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents inventory transaction packet encoders.
  */
 @PacketId(30)
-public final class InventoryTransactionEncoderV291 extends PacketEncoder.Base<InventoryTransaction> {
+public final class InventoryTransactionEncoderV291
+  extends PacketEncoder.Base<InventoryTransaction> {
 
   @Override
-  public void decode(@NotNull final InventoryTransaction packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
-    final var transactionType = InventoryTransaction.Type.VALUES[buffer.readUnsignedVarInt()];
+  public void decode(
+    @NotNull final InventoryTransaction packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
+    final var transactionType =
+      InventoryTransaction.Type.VALUES[buffer.readUnsignedVarInt()];
     packet.transactionType(transactionType);
     packet.actions(helper.readInventoryActions(buffer));
     helper.readInventoryTransactionType(buffer, packet);
   }
 
   @Override
-  public void encode(@NotNull final InventoryTransaction packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final InventoryTransaction packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeUnsignedVarInt(packet.transactionType().ordinal());
     helper.writeInventoryActions(buffer, packet.actions(), false);
     helper.writeInventoryTransactionType(buffer, packet);

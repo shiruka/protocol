@@ -14,16 +14,23 @@ public record ItemDefinition(
   @NotNull String identifier,
   int id,
   boolean componentBased
-) implements IdentifierDefinition {
-
+)
+  implements IdentifierDefinition {
   /**
    * the air.
    */
-  public static final ItemDefinition AIR = new ItemDefinition("minecraft:air", 0, false);
+  public static final ItemDefinition AIR = new ItemDefinition(
+    "minecraft:air",
+    0,
+    false
+  );
 
   /**
    * the legacy firework.
    */
-  public static final ItemDefinition LEGACY_FIREWORK = new ItemDefinition("minecraft:fireworks_rocket", 401,
-    false);
+  public static final ItemDefinition LEGACY_FIREWORK = new ItemDefinition(
+    "minecraft:fireworks_rocket",
+    401,
+    false
+  );
 }

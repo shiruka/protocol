@@ -12,17 +12,26 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents set local player as initialized packet encoders.
  */
 @PacketId(113)
-public final class SetLocalPlayerAsInitializedEncoderV291 extends PacketEncoder.Base<SetLocalPlayerAsInitialized> {
+public final class SetLocalPlayerAsInitializedEncoderV291
+  extends PacketEncoder.Base<SetLocalPlayerAsInitialized> {
 
   @Override
-  public void decode(@NotNull final SetLocalPlayerAsInitialized packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final SetLocalPlayerAsInitialized packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.runtimeEntityId(buffer.readUnsignedVarLong());
   }
 
   @Override
-  public void encode(@NotNull final SetLocalPlayerAsInitialized packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final SetLocalPlayerAsInitialized packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeUnsignedVarLong(packet.runtimeEntityId());
   }
 }

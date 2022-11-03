@@ -15,16 +15,24 @@ import org.jetbrains.annotations.NotNull;
 public final class BossEventEncoderV291 extends PacketEncoder.Base<BossEvent> {
 
   @Override
-  public void decode(@NotNull final BossEvent packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final BossEvent packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.bossUniqueEntityId(buffer.readVarInt());
     packet.action(BossEvent.Action.VALUES[buffer.readUnsignedVarInt()]);
     helper.readBossEventAction(packet, buffer);
   }
 
   @Override
-  public void encode(@NotNull final BossEvent packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final BossEvent packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeVarLong(packet.bossUniqueEntityId());
     buffer.writeUnsignedVarInt(packet.action().ordinal());
     helper.writeBossEventAction(packet, buffer);

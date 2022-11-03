@@ -26,9 +26,7 @@ import org.jetbrains.annotations.NotNull;
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class SetLocalPlayerAsInitialized extends MinecraftPacket.Base {
 
-  //@formatter:off
   long runtimeEntityId;
-  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

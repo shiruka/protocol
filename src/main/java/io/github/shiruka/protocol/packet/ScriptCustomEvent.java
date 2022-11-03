@@ -26,10 +26,9 @@ import org.jetbrains.annotations.NotNull;
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class ScriptCustomEvent extends MinecraftPacket.Base {
 
-  //@formatter:off
   String data;
+
   String eventName;
-  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

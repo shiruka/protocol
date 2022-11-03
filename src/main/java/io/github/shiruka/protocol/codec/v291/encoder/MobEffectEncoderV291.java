@@ -15,8 +15,12 @@ import org.jetbrains.annotations.NotNull;
 public final class MobEffectEncoderV291 extends PacketEncoder.Base<MobEffect> {
 
   @Override
-  public void decode(@NotNull final MobEffect packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final MobEffect packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.runtimeEntityId(buffer.readUnsignedVarLong());
     packet.event(MobEffect.Event.VALUES[buffer.readUnsignedByte()]);
     packet.effectId(buffer.readVarInt());
@@ -26,8 +30,12 @@ public final class MobEffectEncoderV291 extends PacketEncoder.Base<MobEffect> {
   }
 
   @Override
-  public void encode(@NotNull final MobEffect packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final MobEffect packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeUnsignedVarLong(packet.runtimeEntityId());
     buffer.writeByte(packet.event().ordinal());
     buffer.writeVarInt(packet.effectId());

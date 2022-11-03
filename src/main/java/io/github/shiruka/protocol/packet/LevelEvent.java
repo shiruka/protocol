@@ -1,6 +1,6 @@
 package io.github.shiruka.protocol.packet;
 
-import io.github.shiruka.api.common.vectors.Vector3f;
+import io.github.shiruka.api.base.Vector3f;
 import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.PacketHandler;
 import io.github.shiruka.protocol.data.CommonLevelEvent;
@@ -28,11 +28,11 @@ import org.jetbrains.annotations.NotNull;
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class LevelEvent extends MinecraftPacket.Base {
 
-  //@formatter:off
   int data;
+
   Vector3f position;
+
   CommonLevelEvent type;
-  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

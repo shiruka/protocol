@@ -1,7 +1,7 @@
 package io.github.shiruka.protocol.packet;
 
-import io.github.shiruka.api.common.vectors.Vector3f;
-import io.github.shiruka.api.common.vectors.Vector3i;
+import io.github.shiruka.api.base.Vector3f;
+import io.github.shiruka.api.base.Vector3i;
 import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.PacketHandler;
 import io.github.shiruka.protocol.data.inventory.InventoryActionData;
@@ -33,23 +33,37 @@ import org.jetbrains.annotations.NotNull;
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class InventoryTransaction extends MinecraftPacket.Base {
 
-  //@formatter:off
   int actionType;
-  @Builder.Default List<InventoryActionData> actions = new ObjectArrayList<>();
+
+  @Builder.Default
+  List<InventoryActionData> actions = new ObjectArrayList<>();
+
   int blockFace;
+
   Vector3i blockPosition;
+
   int blockRuntimeId;
+
   Vector3f clickPosition;
+
   Vector3f headPosition;
+
   int hotBarSlot;
+
   ItemData itemInHand;
+
   int legacyRequestId;
-  @Builder.Default List<LegacySetItemSlotData> legacySlots = new ObjectArrayList<>();
+
+  @Builder.Default
+  List<LegacySetItemSlotData> legacySlots = new ObjectArrayList<>();
+
   Vector3f playerPosition;
+
   long runtimeEntityId;
+
   Type transactionType;
+
   boolean usingNetIds;
-  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

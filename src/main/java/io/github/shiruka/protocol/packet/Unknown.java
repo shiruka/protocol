@@ -28,21 +28,29 @@ import org.jetbrains.annotations.NotNull;
 @Accessors(fluent = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
-public final class Unknown extends MinecraftPacket.Base implements PacketEncoder<Unknown>, ReferenceCounted {
+public final class Unknown
+  extends MinecraftPacket.Base
+  implements PacketEncoder<Unknown>, ReferenceCounted {
 
-  //@formatter:off
   PacketBuffer payload;
-  //@formatter:on
 
   @Override
-  public void decode(@NotNull final Unknown packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final Unknown packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     this.payload = buffer.readRetainedSlice(buffer.remaining());
   }
 
   @Override
-  public void encode(@NotNull final Unknown packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final Unknown packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     final var payload = this.payload();
     buffer.writeBytes(payload, payload.readerIndex(), payload.remaining());
   }

@@ -12,17 +12,26 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents server to client handshake packet encoders.
  */
 @PacketId(3)
-public final class ServerToClientHandshakeEncoderV291 extends PacketEncoder.Base<ServerToClientHandshake> {
+public final class ServerToClientHandshakeEncoderV291
+  extends PacketEncoder.Base<ServerToClientHandshake> {
 
   @Override
-  public void decode(@NotNull final ServerToClientHandshake packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final ServerToClientHandshake packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.jwt(buffer.readString());
   }
 
   @Override
-  public void encode(@NotNull final ServerToClientHandshake packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final ServerToClientHandshake packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeString(packet.jwt());
   }
 }

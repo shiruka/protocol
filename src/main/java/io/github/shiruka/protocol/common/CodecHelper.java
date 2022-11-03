@@ -34,7 +34,6 @@ import org.jetbrains.annotations.NotNull;
  * an interface to determine codec helpers.
  */
 public interface CodecHelper {
-
   /**
    * the log.
    */
@@ -146,7 +145,10 @@ public interface CodecHelper {
    * @param packet the packet to read.
    * @param buffer the buffer to read.
    */
-  void readAdventureSettings(@NotNull AdventureSettings packet, @NotNull PacketBuffer buffer);
+  void readAdventureSettings(
+    @NotNull AdventureSettings packet,
+    @NotNull PacketBuffer buffer
+  );
 
   /**
    * reads the attribute.
@@ -174,7 +176,10 @@ public interface CodecHelper {
    * @param packet the packet to read.
    * @param buffer the buffer to read.
    */
-  void readBossEventAction(@NotNull BossEvent packet, @NotNull PacketBuffer buffer);
+  void readBossEventAction(
+    @NotNull BossEvent packet,
+    @NotNull PacketBuffer buffer
+  );
 
   /**
    * reads the command enum.
@@ -224,7 +229,10 @@ public interface CodecHelper {
    * @return event data.
    */
   @NotNull
-  Event.Data readEventData(@NotNull PacketBuffer buffer, @NotNull Event.Type type);
+  Event.Data readEventData(
+    @NotNull PacketBuffer buffer,
+    @NotNull Event.Type type
+  );
 
   /**
    * reads the game rule value.
@@ -252,7 +260,10 @@ public interface CodecHelper {
    * @param buffer the buffer to read.
    * @param packet the packet to read.
    */
-  void readInventoryTransactionType(@NotNull PacketBuffer buffer, @NotNull InventoryTransaction packet);
+  void readInventoryTransactionType(
+    @NotNull PacketBuffer buffer,
+    @NotNull InventoryTransaction packet
+  );
 
   /**
    * reads the item.
@@ -270,7 +281,10 @@ public interface CodecHelper {
    * @param packet the packet to read.
    * @param buffer the buffer to read.
    */
-  void readLevelSettings(@NotNull StartGame packet, @NotNull PacketBuffer buffer);
+  void readLevelSettings(
+    @NotNull StartGame packet,
+    @NotNull PacketBuffer buffer
+  );
 
   /**
    * reads the resource pack info entry.
@@ -280,7 +294,9 @@ public interface CodecHelper {
    * @return resource pack info entry.
    */
   @NotNull
-  ResourcePackInfo.Entry readResourcePackInfoEntry(@NotNull PacketBuffer buffer);
+  ResourcePackInfo.Entry readResourcePackInfoEntry(
+    @NotNull PacketBuffer buffer
+  );
 
   /**
    * reads the resource pack stack entry.
@@ -290,7 +306,9 @@ public interface CodecHelper {
    * @return resource pack stack entry.
    */
   @NotNull
-  ResourcePackStack.Entry readResourcePackStackEntry(@NotNull PacketBuffer buffer);
+  ResourcePackStack.Entry readResourcePackStackEntry(
+    @NotNull PacketBuffer buffer
+  );
 
   /**
    * obtains the sound events.
@@ -306,7 +324,10 @@ public interface CodecHelper {
    * @param packet the packet to write.
    * @param buffer the buffer to write.
    */
-  void writeAdventureSettings(@NotNull AdventureSettings packet, @NotNull PacketBuffer buffer);
+  void writeAdventureSettings(
+    @NotNull AdventureSettings packet,
+    @NotNull PacketBuffer buffer
+  );
 
   /**
    * writes the attribute data.
@@ -314,7 +335,10 @@ public interface CodecHelper {
    * @param buffer the buffer to write.
    * @param data the data to write.
    */
-  void writeAttribute(@NotNull PacketBuffer buffer, @NotNull AttributeData data);
+  void writeAttribute(
+    @NotNull PacketBuffer buffer,
+    @NotNull AttributeData data
+  );
 
   /**
    * writes the attribute data.
@@ -322,7 +346,10 @@ public interface CodecHelper {
    * @param buffer the buffer to write.
    * @param data the data to write.
    */
-  void writeAttributeFull(@NotNull PacketBuffer buffer, @NotNull AttributeData data);
+  void writeAttributeFull(
+    @NotNull PacketBuffer buffer,
+    @NotNull AttributeData data
+  );
 
   /**
    * writes the boss event.
@@ -330,7 +357,10 @@ public interface CodecHelper {
    * @param packet the packet to write.
    * @param buffer the buffer to write.
    */
-  void writeBossEventAction(@NotNull BossEvent packet, @NotNull PacketBuffer buffer);
+  void writeBossEventAction(
+    @NotNull BossEvent packet,
+    @NotNull PacketBuffer buffer
+  );
 
   /**
    * writes the command enum.
@@ -338,7 +368,10 @@ public interface CodecHelper {
    * @param buffer the buffer to write.
    * @param data the data to write.
    */
-  void writeCommandEnum(@NotNull PacketBuffer buffer, @NotNull CommandEnumData data);
+  void writeCommandEnum(
+    @NotNull PacketBuffer buffer,
+    @NotNull CommandEnumData data
+  );
 
   /**
    * writes the commands.
@@ -346,7 +379,10 @@ public interface CodecHelper {
    * @param buffer the buffer to write.
    * @param commands the commands to write.
    */
-  void writeCommands(@NotNull PacketBuffer buffer, @NotNull List<CommandData> commands);
+  void writeCommands(
+    @NotNull PacketBuffer buffer,
+    @NotNull List<CommandData> commands
+  );
 
   /**
    * writes the entity data.
@@ -354,7 +390,10 @@ public interface CodecHelper {
    * @param buffer the buffer to write.
    * @param map the map to write.
    */
-  void writeEntityData(@NotNull PacketBuffer buffer, @NotNull EntityDataMap map);
+  void writeEntityData(
+    @NotNull PacketBuffer buffer,
+    @NotNull EntityDataMap map
+  );
 
   /**
    * writes the entity link.
@@ -362,7 +401,10 @@ public interface CodecHelper {
    * @param buffer the buffer to write.
    * @param link the link to write.
    */
-  void writeEntityLink(@NotNull PacketBuffer buffer, @NotNull EntityLinkData link);
+  void writeEntityLink(
+    @NotNull PacketBuffer buffer,
+    @NotNull EntityLinkData link
+  );
 
   /**
    * writes the event data.
@@ -378,7 +420,10 @@ public interface CodecHelper {
    * @param buffer the buffer to write.
    * @param gameRule the game rule to write.
    */
-  void writeGameRule(@NotNull PacketBuffer buffer, @NotNull GameRuleValue gameRule);
+  void writeGameRule(
+    @NotNull PacketBuffer buffer,
+    @NotNull GameRuleValue gameRule
+  );
 
   /**
    * writes the inventory actions.
@@ -387,8 +432,11 @@ public interface CodecHelper {
    * @param actions the actions to write.
    * @param hasNetworkIds the has network ids to write.
    */
-  void writeInventoryActions(@NotNull PacketBuffer buffer, @NotNull List<InventoryActionData> actions,
-                             boolean hasNetworkIds);
+  void writeInventoryActions(
+    @NotNull PacketBuffer buffer,
+    @NotNull List<InventoryActionData> actions,
+    boolean hasNetworkIds
+  );
 
   /**
    * writes the inventory transaction type.
@@ -396,7 +444,10 @@ public interface CodecHelper {
    * @param buffer the buffer to write.
    * @param packet the packet to write.
    */
-  void writeInventoryTransactionType(@NotNull PacketBuffer buffer, @NotNull InventoryTransaction packet);
+  void writeInventoryTransactionType(
+    @NotNull PacketBuffer buffer,
+    @NotNull InventoryTransaction packet
+  );
 
   /**
    * writes the item.
@@ -412,7 +463,10 @@ public interface CodecHelper {
    * @param packet the packet to write.
    * @param buffer the buffer to write.
    */
-  void writeLevelSettings(@NotNull StartGame packet, @NotNull PacketBuffer buffer);
+  void writeLevelSettings(
+    @NotNull StartGame packet,
+    @NotNull PacketBuffer buffer
+  );
 
   /**
    * writes the resource pack entry.
@@ -420,7 +474,10 @@ public interface CodecHelper {
    * @param buffer the buffer to write.
    * @param entry the entry to write.
    */
-  void writeResourcePackEntry(@NotNull PacketBuffer buffer, @NotNull ResourcePackInfo.Entry entry);
+  void writeResourcePackEntry(
+    @NotNull PacketBuffer buffer,
+    @NotNull ResourcePackInfo.Entry entry
+  );
 
   /**
    * writes the entry to buffer.
@@ -428,5 +485,8 @@ public interface CodecHelper {
    * @param buffer the buffer to write.
    * @param entry the entry to write.
    */
-  void writeResourcePackStackEntry(@NotNull PacketBuffer buffer, @NotNull ResourcePackStack.Entry entry);
+  void writeResourcePackStackEntry(
+    @NotNull PacketBuffer buffer,
+    @NotNull ResourcePackStack.Entry entry
+  );
 }

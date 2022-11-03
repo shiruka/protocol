@@ -12,18 +12,27 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents entity pick request packet encoders.
  */
 @PacketId(35)
-public final class EntityPickRequestEncoderV291 extends PacketEncoder.Base<EntityPickRequest> {
+public final class EntityPickRequestEncoderV291
+  extends PacketEncoder.Base<EntityPickRequest> {
 
   @Override
-  public void decode(@NotNull final EntityPickRequest packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final EntityPickRequest packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.runtimeEntityId(buffer.readLongLE());
     packet.hotBarSlot(buffer.readUnsignedByte());
   }
 
   @Override
-  public void encode(@NotNull final EntityPickRequest packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final EntityPickRequest packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeLongLE(packet.runtimeEntityId());
     buffer.writeByte(packet.hotBarSlot());
   }

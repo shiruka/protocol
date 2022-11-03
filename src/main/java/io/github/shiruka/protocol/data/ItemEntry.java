@@ -14,7 +14,6 @@ public record ItemEntry(
   short id,
   boolean componentBased
 ) {
-
   /**
    * ctor.
    *

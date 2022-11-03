@@ -34,8 +34,11 @@ public enum EntityLinkDataType {
    */
   @NotNull
   public static EntityLinkDataType byOrdinal(final int ordinal) {
-    Preconditions.checkState(ordinal >= 0 && ordinal < EntityLinkDataType.VALUES.length,
-      "Unknown EntityLinkDataType ID: %s", ordinal);
+    Preconditions.checkState(
+      ordinal >= 0 && ordinal < EntityLinkDataType.VALUES.length,
+      "Unknown EntityLinkDataType ID: %s",
+      ordinal
+    );
     return EntityLinkDataType.VALUES[ordinal];
   }
 }

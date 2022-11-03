@@ -12,11 +12,16 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents add painting packet encoders.
  */
 @PacketId(22)
-public final class AddPaintingEncoderV291 extends PacketEncoder.Base<AddPainting> {
+public final class AddPaintingEncoderV291
+  extends PacketEncoder.Base<AddPainting> {
 
   @Override
-  public void decode(@NotNull final AddPainting packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final AddPainting packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.uniqueEntityId(buffer.readVarLong());
     packet.runtimeEntityId(buffer.readUnsignedVarLong());
     packet.position(buffer.readVector3i().toFloat());
@@ -25,8 +30,12 @@ public final class AddPaintingEncoderV291 extends PacketEncoder.Base<AddPainting
   }
 
   @Override
-  public void encode(@NotNull final AddPainting packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final AddPainting packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeVarLong(packet.uniqueEntityId());
     buffer.writeUnsignedVarLong(packet.runtimeEntityId());
     buffer.writeVector3i(packet.position().toInt());

@@ -10,12 +10,8 @@ import org.jetbrains.annotations.NotNull;
  * @param fillLevel the fill level.
  * @param potionId the potion id.
  */
-public record CauldronUsedEventData(
-  int color,
-  int fillLevel,
-  int potionId
-) implements Event.Data {
-
+public record CauldronUsedEventData(int color, int fillLevel, int potionId)
+  implements Event.Data {
   @NotNull
   @Override
   public Event.Type type() {

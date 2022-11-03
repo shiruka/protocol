@@ -15,15 +15,23 @@ import org.jetbrains.annotations.NotNull;
 public final class CameraEncoderV291 extends PacketEncoder.Base<Camera> {
 
   @Override
-  public void decode(@NotNull final Camera packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final Camera packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.cameraUniqueEntityId(buffer.readVarLong());
     packet.playerUniqueEntityId(buffer.readVarLong());
   }
 
   @Override
-  public void encode(@NotNull final Camera packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final Camera packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeVarLong(packet.cameraUniqueEntityId());
     buffer.writeVarLong(packet.playerUniqueEntityId());
   }

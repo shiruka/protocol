@@ -26,9 +26,7 @@ import org.jetbrains.annotations.NotNull;
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class PlayStatus extends MinecraftPacket.Base {
 
-  //@formatter:off
   Status status;
-  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {
@@ -39,7 +37,6 @@ public final class PlayStatus extends MinecraftPacket.Base {
    * an enum class that contains play status.
    */
   public enum Status {
-
     /**
      * sent to confirm login success and move onto resource pack sequence.
      */

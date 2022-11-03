@@ -28,13 +28,17 @@ import org.jetbrains.annotations.NotNull;
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class ResourcePackInfo extends MinecraftPacket.Base {
 
-  //@formatter:off
-  @Builder.Default List<Entry> behaviorPackInfos = new ObjectArrayList<>();
+  @Builder.Default
+  List<Entry> behaviorPackInfos = new ObjectArrayList<>();
+
   boolean forcedToAccept;
+
   boolean forcingServerPacksEnabled;
-  @Builder.Default List<Entry> resourcePackInfos = new ObjectArrayList<>();
+
+  @Builder.Default
+  List<Entry> resourcePackInfos = new ObjectArrayList<>();
+
   boolean scriptingEnabled;
-  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {
@@ -63,7 +67,6 @@ public final class ResourcePackInfo extends MinecraftPacket.Base {
     boolean scripting,
     boolean raytracingCapable
   ) {
-
     /**
      * sets the raytracing capable.
      *
@@ -73,8 +76,16 @@ public final class ResourcePackInfo extends MinecraftPacket.Base {
      */
     @NotNull
     public Entry raytracingCapable(final boolean raytracingCapable) {
-      return new Entry(this.packId, this.packVersion, this.packSize, this.contentKey, this.subPackName,
-        this.contentId, this.scripting, raytracingCapable);
+      return new Entry(
+        this.packId,
+        this.packVersion,
+        this.packSize,
+        this.contentKey,
+        this.subPackName,
+        this.contentId,
+        this.scripting,
+        raytracingCapable
+      );
     }
   }
 }

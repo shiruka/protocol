@@ -14,23 +14,36 @@ import org.jetbrains.annotations.NotNull;
  */
 @Log4j2
 @PacketId(27)
-public final class EntityEventEncoderV291 extends PacketEncoder.Base<EntityEvent> {
+public final class EntityEventEncoderV291
+  extends PacketEncoder.Base<EntityEvent> {
 
   @Override
-  public void decode(@NotNull final EntityEvent packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final EntityEvent packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.runtimeEntityId(buffer.readUnsignedVarLong());
     final var event = buffer.readUnsignedByte();
     packet.type(helper.entityEventTypes().type(event));
     packet.data(buffer.readVarInt());
     if (packet.type() == null) {
-      EntityEventEncoderV291.log.debug("Unknown EntityEvent {} in packet {}", event, packet);
+      EntityEventEncoderV291.log.debug(
+        "Unknown EntityEvent {} in packet {}",
+        event,
+        packet
+      );
     }
   }
 
   @Override
-  public void encode(@NotNull final EntityEvent packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final EntityEvent packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeUnsignedVarLong(packet.runtimeEntityId());
     buffer.writeByte(helper.entityEventTypes().id(packet.type()));
     buffer.writeVarInt(packet.data());

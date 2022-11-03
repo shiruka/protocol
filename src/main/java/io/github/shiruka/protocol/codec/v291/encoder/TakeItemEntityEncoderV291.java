@@ -12,18 +12,27 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents take item entity packet encoders.
  */
 @PacketId(17)
-public final class TakeItemEntityEncoderV291 extends PacketEncoder.Base<TakeItemEntity> {
+public final class TakeItemEntityEncoderV291
+  extends PacketEncoder.Base<TakeItemEntity> {
 
   @Override
-  public void decode(@NotNull final TakeItemEntity packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final TakeItemEntity packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.itemRuntimeEntityId(buffer.readUnsignedVarLong());
     packet.runtimeEntityId(buffer.readUnsignedVarLong());
   }
 
   @Override
-  public void encode(@NotNull final TakeItemEntity packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final TakeItemEntity packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeUnsignedVarLong(packet.itemRuntimeEntityId());
     buffer.writeUnsignedVarLong(packet.runtimeEntityId());
   }

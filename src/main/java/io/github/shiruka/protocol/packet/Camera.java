@@ -26,10 +26,9 @@ import org.jetbrains.annotations.NotNull;
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class Camera extends MinecraftPacket.Base {
 
-  //@formatter:off
   long cameraUniqueEntityId;
+
   long playerUniqueEntityId;
-  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

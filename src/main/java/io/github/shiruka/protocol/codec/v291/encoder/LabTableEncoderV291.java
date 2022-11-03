@@ -15,16 +15,26 @@ import org.jetbrains.annotations.NotNull;
 public final class LabTableEncoderV291 extends PacketEncoder.Base<LabTable> {
 
   @Override
-  public void decode(@NotNull final LabTable packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final LabTable packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.type(LabTable.Type.VALUES[buffer.readUnsignedByte()]);
     packet.position(buffer.readVector3i());
-    packet.reactionType(LabTable.ReactionType.VALUES[buffer.readUnsignedByte()]);
+    packet.reactionType(
+      LabTable.ReactionType.VALUES[buffer.readUnsignedByte()]
+    );
   }
 
   @Override
-  public void encode(@NotNull final LabTable packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final LabTable packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeByte(packet.type().ordinal());
     buffer.writeVector3i(packet.position());
     buffer.writeByte(packet.reactionType().ordinal());

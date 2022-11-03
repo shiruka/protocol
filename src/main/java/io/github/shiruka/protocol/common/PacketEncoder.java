@@ -1,14 +1,15 @@
 package io.github.shiruka.protocol.common;
 
+import com.google.common.base.Preconditions;
 import io.github.shiruka.network.PacketBuffer;
+import java.lang.reflect.InvocationTargetException;
 import java.util.function.Supplier;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
-import tr.com.infumia.infumialib.misc.TypeParameterMatcher;
-import tr.com.infumia.infumialib.reflection.clazz.ClassOf;
 
 /**
  * an interface to determine packet serializers.
@@ -16,7 +17,6 @@ import tr.com.infumia.infumialib.reflection.clazz.ClassOf;
  * @param <T> type of the packet.
  */
 public interface PacketEncoder<T extends MinecraftPacket> {
-
   /**
    * decodes the packet.
    * <p>
@@ -29,8 +29,12 @@ public interface PacketEncoder<T extends MinecraftPacket> {
    *
    * @throws Exception if something goes wrong when decoding.
    */
-  void decode(@NotNull T packet, @NotNull CodecHelper helper, @NotNull PacketBuffer buffer,
-              @NotNull MinecraftSession session) throws Exception;
+  void decode(
+    @NotNull T packet,
+    @NotNull CodecHelper helper,
+    @NotNull PacketBuffer buffer,
+    @NotNull MinecraftSession session
+  ) throws Exception;
 
   /**
    * encodes the packet.
@@ -44,8 +48,12 @@ public interface PacketEncoder<T extends MinecraftPacket> {
    *
    * @throws Exception if something goes wrong when encoding.
    */
-  void encode(@NotNull T packet, @NotNull CodecHelper helper, @NotNull PacketBuffer buffer,
-              @NotNull MinecraftSession session) throws Exception;
+  void encode(
+    @NotNull T packet,
+    @NotNull CodecHelper helper,
+    @NotNull PacketBuffer buffer,
+    @NotNull MinecraftSession session
+  ) throws Exception;
 
   /**
    * an abstract class that represents base packet encoders.
@@ -63,7 +71,8 @@ public interface PacketEncoder<T extends MinecraftPacket> {
     /**
      * the annotate warning.
      */
-    private static final String ANNOTATE = "Annotate %s class with PacketId annotation!";
+    private static final String ANNOTATE =
+      "Annotate %s class with PacketId annotation!";
 
     /**
      * the factory.
@@ -79,18 +88,30 @@ public interface PacketEncoder<T extends MinecraftPacket> {
     /**
      * ctor.
      */
+    @SneakyThrows
     protected Base() {
-      this.id = new ClassOf<>(this)
-        .getAnnotation(PacketId.class)
-        .orElseThrow(() ->
-          new IllegalStateException(Base.ANNOTATE.formatted(this.getClass().getSimpleName())))
-        .value();
-      final var constructor = new ClassOf<>(TypeParameterMatcher.find(this, Base.class, "T"))
-        .getConstructor()
-        .orElseThrow();
-      this.factory = () -> constructor.create()
-        .map(instance -> (T) instance)
-        .orElseThrow();
+      this.id =
+        Preconditions
+          .checkNotNull(
+            this.getClass().getDeclaredAnnotation(PacketId.class),
+            Base.ANNOTATE,
+            this.getClass().getSimpleName()
+          )
+          .value();
+      final var packetClass = TypeParameterMatcher.find(this, Base.class, "T");
+      final var classConstructor = packetClass.getDeclaredConstructor();
+      this.factory =
+        () -> {
+          try {
+            return (T) classConstructor.newInstance();
+          } catch (
+            final InstantiationException
+            | IllegalAccessException
+            | InvocationTargetException e
+          ) {
+            throw new RuntimeException(e);
+          }
+        };
     }
   }
 }

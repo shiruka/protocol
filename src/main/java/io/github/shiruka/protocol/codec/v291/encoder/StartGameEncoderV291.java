@@ -1,6 +1,6 @@
 package io.github.shiruka.protocol.codec.v291.encoder;
 
-import io.github.shiruka.api.nbt.Tag;
+import io.github.shiruka.nbt.Tag;
 import io.github.shiruka.network.PacketBuffer;
 import io.github.shiruka.protocol.common.CodecHelper;
 import io.github.shiruka.protocol.common.MinecraftSession;
@@ -17,8 +17,12 @@ import org.jetbrains.annotations.NotNull;
 public final class StartGameEncoderV291 extends PacketEncoder.Base<StartGame> {
 
   @Override
-  public void decode(@NotNull final StartGame packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final StartGame packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.uniqueEntityId(buffer.readVarLong());
     packet.runtimeEntityId(buffer.readUnsignedVarLong());
     packet.playerGameType(GameType.byOrdinal(buffer.readVarInt()));
@@ -34,18 +38,27 @@ public final class StartGameEncoderV291 extends PacketEncoder.Base<StartGame> {
     final var paletteLength = buffer.readUnsignedVarInt();
     final var palette = Tag.createList();
     for (var index = 0; index < paletteLength; index++) {
-      palette.add(Tag.createCompound()
-        .set("block", Tag.createCompound()
-          .setString("name", buffer.readString()))
-        .setShort("meta", buffer.readShortLE()));
+      palette.add(
+        Tag
+          .createCompound()
+          .set(
+            "block",
+            Tag.createCompound().setString("name", buffer.readString())
+          )
+          .setShort("meta", buffer.readShortLE())
+      );
     }
     packet.blockPalette(palette);
     packet.multiplayerCorrelationId(buffer.readString());
   }
 
   @Override
-  public void encode(@NotNull final StartGame packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final StartGame packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeVarLong(packet.uniqueEntityId());
     buffer.writeUnsignedVarLong(packet.runtimeEntityId());
     buffer.writeVarInt(packet.playerGameType().ordinal());
@@ -62,8 +75,7 @@ public final class StartGameEncoderV291 extends PacketEncoder.Base<StartGame> {
     buffer.writeUnsignedVarInt(palette.size());
     for (final var entry : palette) {
       final var tag = entry.asCompound();
-      final var blockTag = tag.getCompoundTag("block")
-        .orElseThrow();
+      final var blockTag = tag.getCompoundTag("block").orElseThrow();
       buffer.writeString(blockTag.getString("name").orElseThrow());
       buffer.writeShortLE(tag.getShort("meta").orElseThrow());
     }

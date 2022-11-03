@@ -12,7 +12,8 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents move entity absolute packet encoders.
  */
 @PacketId(18)
-public final class MoveEntityAbsoluteEncoderV291 extends PacketEncoder.Base<MoveEntityAbsolute> {
+public final class MoveEntityAbsoluteEncoderV291
+  extends PacketEncoder.Base<MoveEntityAbsolute> {
 
   /**
    * the flag on ground.
@@ -25,19 +26,31 @@ public final class MoveEntityAbsoluteEncoderV291 extends PacketEncoder.Base<Move
   private static final int FLAG_TELEPORTED = 0x2;
 
   @Override
-  public void decode(@NotNull final MoveEntityAbsolute packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final MoveEntityAbsolute packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.runtimeEntityId(buffer.readUnsignedVarLong());
     final var flags = buffer.readUnsignedByte();
-    packet.onGround((flags & MoveEntityAbsoluteEncoderV291.FLAG_ON_GROUND) != 0);
-    packet.teleported((flags & MoveEntityAbsoluteEncoderV291.FLAG_TELEPORTED) != 0);
+    packet.onGround(
+      (flags & MoveEntityAbsoluteEncoderV291.FLAG_ON_GROUND) != 0
+    );
+    packet.teleported(
+      (flags & MoveEntityAbsoluteEncoderV291.FLAG_TELEPORTED) != 0
+    );
     packet.position(buffer.readVector3f());
     packet.rotation(buffer.readByteRotation());
   }
 
   @Override
-  public void encode(@NotNull final MoveEntityAbsolute packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final MoveEntityAbsolute packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeUnsignedVarLong(packet.runtimeEntityId());
     var flags = 0;
     if (packet.onGround()) {

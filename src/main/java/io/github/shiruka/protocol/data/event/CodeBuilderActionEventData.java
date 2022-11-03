@@ -8,10 +8,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @param action the action.
  */
-public record CodeBuilderActionEventData(
-  String action
-) implements Event.Data {
-
+public record CodeBuilderActionEventData(String action) implements Event.Data {
   @NotNull
   @Override
   public Event.Type type() {

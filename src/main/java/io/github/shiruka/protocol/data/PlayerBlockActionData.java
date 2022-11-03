@@ -1,6 +1,6 @@
 package io.github.shiruka.protocol.data;
 
-import io.github.shiruka.api.common.vectors.Vector3i;
+import io.github.shiruka.api.base.Vector3i;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -14,6 +14,4 @@ public record PlayerBlockActionData(
   @NotNull PlayerActionType action,
   Vector3i blockPosition,
   int face
-) {
-
-}
+) {}

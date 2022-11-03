@@ -339,5 +339,5 @@ public enum ParticleType implements CommonLevelEvent {
   /**
    * the sculk soul.
    */
-  SCULK_SOUL
+  SCULK_SOUL,
 }

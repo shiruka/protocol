@@ -26,11 +26,11 @@ import org.jetbrains.annotations.NotNull;
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class EntityPickRequest extends MinecraftPacket.Base {
 
-  //@formatter:off
   int hotBarSlot;
+
   long runtimeEntityId;
+
   boolean withData;
-  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

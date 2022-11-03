@@ -38,8 +38,11 @@ public enum CommandEnumConstraintType {
    */
   @NotNull
   public static CommandEnumConstraintType byOrdinal(final int ordinal) {
-    Preconditions.checkArgument(ordinal >= 0 && ordinal < CommandEnumConstraintType.VALUES.length,
-      "Unknown CommandEnumConstraintType ID: %s", ordinal);
+    Preconditions.checkArgument(
+      ordinal >= 0 && ordinal < CommandEnumConstraintType.VALUES.length,
+      "Unknown CommandEnumConstraintType ID: %s",
+      ordinal
+    );
     return CommandEnumConstraintType.VALUES[ordinal];
   }
 }

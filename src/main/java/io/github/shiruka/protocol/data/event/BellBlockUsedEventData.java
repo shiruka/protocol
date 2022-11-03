@@ -8,10 +8,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @param itemId the item id.
  */
-public record BellBlockUsedEventData(
-  int itemId
-) implements Event.Data {
-
+public record BellBlockUsedEventData(int itemId) implements Event.Data {
   @NotNull
   @Override
   public Event.Type type() {

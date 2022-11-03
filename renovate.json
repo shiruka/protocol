@@ -2,22 +2,8 @@
   "extends": [
     "config:base"
   ],
-  "labels": [
-    "dependencies"
-  ],
+  "labels": ["dependencies"],
   "schedule": [
-    "on monday after 9am"
-  ],
-  "packageRules": [
-    {
-      "matchUpdateTypes": [
-        "major",
-        "minor",
-        "patch",
-        "pin",
-        "digest"
-      ],
-      "automerge": true
-    }
+    "after 9am"
   ]
 }
