@@ -1,9 +1,17 @@
 [libraries]
 lombok = { module = "org.projectlombok:lombok", version = "1.18.24" }
 annotations = { module = "org.jetbrains:annotations", version = "23.0.0" }
-network = { module = "io.github.shiruka:network", version = "3.0.6" }
+#network = { module = "io.github.shiruka:network", version = "3.0.6" }
+network = { module = "io.github.shiruka:network", version = "1.0.0-SNAPSHOT" }
 reflections = { module = "org.reflections:reflections", version = "0.10.2" }
 jwt = { module = "com.nimbusds:nimbus-jose-jwt", version = "9.25.6" }
+fastutil = { module = "it.unimi.dsi:fastutil", version = "8.5.9" }
+guava = { module = "com.google.guava:guava", version = "31.1-jre" }
+log4j = { module = "org.apache.logging.log4j:log4j-core", version = "2.19.0" }
+nbt = { module = "io.github.shiruka:nbt", version = "2.0.1-SNAPSHOT" }
+api = { module = "io.github.shiruka:api", version = "3.0.17-SNAPSHOT" }
+commonsmath = { module = "org.apache.commons:commons-math3", version = "3.6.1" }
+netty = { module = "io.netty:netty-all", version = "4.1.84.Final" }
 junit = { module = "org.junit.jupiter:junit-jupiter", version = "5.9.1" }
 
 [plugins]

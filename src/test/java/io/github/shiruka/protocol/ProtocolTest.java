@@ -19,7 +19,8 @@ public final class ProtocolTest {
 
   public static void main(final String[] args) {
     System.out.println("Server is starting...");
-    new MinecraftServer(CodecV291.INSTANCE)
+    new MinecraftServer()
+      .codec(CodecV291.INSTANCE)
       .maxConnections(1024)
       .defaultPacketHandler(Handler::new)
       .motd("Motd")

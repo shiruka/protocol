@@ -32,6 +32,13 @@ dependencies {
   compileOnlyApi(libs.reflections)
   compileOnlyApi(libs.jwt)
 
+  testImplementation(libs.netty)
+  testImplementation(libs.fastutil)
+  testImplementation(libs.guava)
+  testImplementation(libs.log4j)
+  testImplementation(libs.nbt)
+  testImplementation(libs.api)
+  testImplementation(libs.commonsmath)
   testImplementation(libs.junit)
 
   annotationProcessor(libs.lombok)

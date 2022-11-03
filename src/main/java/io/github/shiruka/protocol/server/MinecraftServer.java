@@ -3,6 +3,7 @@ package io.github.shiruka.protocol.server;
 import io.github.shiruka.network.Constants;
 import io.github.shiruka.network.Identifier;
 import io.github.shiruka.network.options.RakNetChannelOptions;
+import io.github.shiruka.protocol.codec.v291.CodecV291;
 import io.github.shiruka.protocol.common.Codec;
 import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.PacketHandler;
@@ -26,8 +27,8 @@ import org.jetbrains.annotations.NotNull;
 /**
  * a class that represents minecraft server sessions.
  */
-@Accessors(fluent = true)
 @RequiredArgsConstructor
+@Accessors(fluent = true)
 public final class MinecraftServer implements ServerListener, Identifier {
 
   /**
@@ -42,7 +43,8 @@ public final class MinecraftServer implements ServerListener, Identifier {
    */
   @NotNull
   @Getter
-  private final Codec codec;
+  @Setter
+  private Codec codec = CodecV291.INSTANCE;
 
   /**
    * the server id.
@@ -78,7 +80,6 @@ public final class MinecraftServer implements ServerListener, Identifier {
    * the max connections.
    */
   @Getter
-  @Setter
   private int maxConnections = 1024;
 
   /**
@@ -99,11 +100,9 @@ public final class MinecraftServer implements ServerListener, Identifier {
 
   /**
    * ctor.
-   *
-   * @param codec the codec.
    */
-  public MinecraftServer(@NotNull final Codec codec) {
-    this(new InetSocketAddress("127.0.0.1", 19132), codec);
+  public MinecraftServer() {
+    this(new InetSocketAddress("127.0.0.1", 19132));
   }
 
   /**
@@ -133,6 +132,20 @@ public final class MinecraftServer implements ServerListener, Identifier {
       .add(String.valueOf(this.maxConnections))
       .add(String.valueOf(this.serverId))
       .toString();
+  }
+
+  /**
+   * sets the max connections.
+   *
+   * @param maxConnections the max connections to set.
+   *
+   * @return {@code this} for the chain.
+   */
+  @NotNull
+  public MinecraftServer maxConnections(final int maxConnections) {
+    this.maxConnections = maxConnections;
+    this.bootstrap.option(RakNetChannelOptions.MAX_CONNECTIONS, maxConnections);
+    return this;
   }
 
   @Override

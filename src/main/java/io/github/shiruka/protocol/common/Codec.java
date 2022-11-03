@@ -37,6 +37,7 @@ public interface Codec {
    *
    * @param minecraftVersion the minecraft version to create.
    * @param protocolVersion the protocol version to create.
+   * @param rakNetProtocolVersion the rak net protocol version to create.
    * @param helper the helper to create.
    * @param packets the packets to create.
    * @param packetsById the packets by id to create.
@@ -47,6 +48,7 @@ public interface Codec {
   static Codec create(
     @NotNull final String minecraftVersion,
     final int protocolVersion,
+    final int rakNetProtocolVersion,
     @NotNull final CodecHelper helper,
     @NotNull final Object2ObjectMap<Class<? extends MinecraftPacket>, PacketDefinition<?>> packets,
     @NotNull final Int2ObjectMap<PacketDefinition<?>> packetsById
@@ -54,6 +56,7 @@ public interface Codec {
     return new Impl(
       minecraftVersion,
       protocolVersion,
+      rakNetProtocolVersion,
       String.valueOf(protocolVersion),
       helper,
       packets,
@@ -233,6 +236,13 @@ public interface Codec {
   String protocolVersionAsString();
 
   /**
+   * obtains the rak net protocol version.
+   *
+   * @return rak net protocol version.
+   */
+  int rakNetProtocolVersion();
+
+  /**
    * converts {@code this} to {@link Builder}.
    *
    * @return converted builder.
@@ -282,6 +292,12 @@ public interface Codec {
     private int protocolVersion = -1;
 
     /**
+     * the rak net protocol version.
+     */
+    @Setter
+    private int rakNetProtocolVersion = 10;
+
+    /**
      * ctor.
      *
      * @param copy the copy version.
@@ -289,6 +305,7 @@ public interface Codec {
     private Builder(@NotNull final Codec copy) {
       this.minecraftVersion = copy.minecraftVersion();
       this.protocolVersion = copy.protocolVersion();
+      this.rakNetProtocolVersion = copy.rakNetProtocolVersion();
       this.helper = copy.helper();
       this.packets = new Object2ObjectOpenHashMap<>(copy.packets());
     }
@@ -314,6 +331,7 @@ public interface Codec {
       return Codec.create(
         this.minecraftVersion,
         this.protocolVersion,
+        this.rakNetProtocolVersion,
         this.helper,
         this.packets,
         packetsById
@@ -444,6 +462,7 @@ public interface Codec {
    *
    * @param minecraftVersion the minecraft version.
    * @param protocolVersion the protocol version.
+   * @param rakNetProtocolVersion the rak net protocol version.
    * @param protocolVersionAsString the protocol version as string.
    * @param helper the helper.
    * @param packets the packets.
@@ -452,6 +471,7 @@ public interface Codec {
   record Impl(
     @NotNull String minecraftVersion,
     int protocolVersion,
+    int rakNetProtocolVersion,
     @NotNull String protocolVersionAsString,
     @NotNull CodecHelper helper,
     @NotNull

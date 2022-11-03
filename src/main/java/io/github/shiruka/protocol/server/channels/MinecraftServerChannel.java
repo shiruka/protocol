@@ -4,13 +4,11 @@ import io.github.shiruka.network.server.channels.RakNetServerChannel;
 import io.github.shiruka.protocol.server.MinecraftServer;
 import java.net.InetSocketAddress;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * a class that represents Minecraft server channels.
  */
-@Accessors(fluent = true)
 @RequiredArgsConstructor
 public final class MinecraftServerChannel extends RakNetServerChannel {
 
