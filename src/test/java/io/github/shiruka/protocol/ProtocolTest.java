@@ -13,8 +13,6 @@ import io.github.shiruka.protocol.server.ServerListener;
 import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
 import java.util.List;
 import java.util.Locale;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 public final class ProtocolTest {
@@ -51,24 +49,22 @@ public final class ProtocolTest {
     return builder.toString();
   }
 
-  @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-  private static final class Handler implements PacketHandler {
-
-    @NotNull
-    private final MinecraftChildChannel session;
-
+  private record Handler(@NotNull MinecraftChildChannel session)
+    implements PacketHandler {
     @Override
     public void handle(@NotNull final Login packet) {
       final var now = System.currentTimeMillis();
       final var version = packet.protocolVersion();
       final var codec = Codecs.findByProtocolVersion(version);
       if (codec == null) {
-        final var status = new PlayStatus();
-        if (version < Codecs.latestProtocolVersion()) {
-          status.status(PlayStatus.Status.LOGIN_FAILED_CLIENT_OLD);
-        } else {
-          status.status(PlayStatus.Status.LOGIN_FAILED_SERVER_OLD);
-        }
+        final var status = PlayStatus
+          .newBuilder()
+          .status(
+            version < Codecs.latestProtocolVersion()
+              ? PlayStatus.Status.LOGIN_FAILED_CLIENT_OLD
+              : PlayStatus.Status.LOGIN_FAILED_SERVER_OLD
+          )
+          .build();
         // @todo #1:15m Packets cannot send.
         this.session.writeAndFlush(List.of(status));
         return;
