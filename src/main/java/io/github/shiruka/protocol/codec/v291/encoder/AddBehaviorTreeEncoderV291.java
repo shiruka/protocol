@@ -12,17 +12,26 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents add behavior tree packet encoders.
  */
 @PacketId(89)
-public final class AddBehaviorTreeEncoderV291 extends PacketEncoder.Base<AddBehaviorTree> {
+public final class AddBehaviorTreeEncoderV291
+  extends PacketEncoder.Base<AddBehaviorTree> {
 
   @Override
-  public void decode(@NotNull final AddBehaviorTree packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final AddBehaviorTree packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.behaviorTreeJson(buffer.readString());
   }
 
   @Override
-  public void encode(@NotNull final AddBehaviorTree packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final AddBehaviorTree packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeString(packet.behaviorTreeJson());
   }
 }

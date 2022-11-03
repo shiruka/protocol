@@ -28,16 +28,21 @@ import org.jetbrains.annotations.NotNull;
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class LevelChunk extends MinecraftPacket.ReferencedCount {
 
-  //@formatter:off
   LongList blobIds;
+
   boolean cachingEnabled;
+
   int chunkX;
+
   int chunkZ;
+
   ByteBuf data;
+
   boolean requestSubChunks;
+
   int subChunkLimit;
+
   int subChunksLength;
-  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

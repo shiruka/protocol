@@ -28,15 +28,21 @@ import org.jetbrains.annotations.NotNull;
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class Text extends MinecraftPacket.Base {
 
-  //@formatter:off
   String message;
+
   boolean needsTranslation;
-  @Builder.Default List<String> parameters = new ObjectArrayList<>();
-  @Builder.Default String platformChatId = "";
+
+  @Builder.Default
+  List<String> parameters = new ObjectArrayList<>();
+
+  @Builder.Default
+  String platformChatId = "";
+
   String sourceName;
+
   Type type;
+
   String xboxUniqueId;
-  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

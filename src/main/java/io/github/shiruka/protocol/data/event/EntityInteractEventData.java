@@ -16,8 +16,8 @@ public record EntityInteractEventData(
   int legacyEntityTypeId,
   int paletteColor,
   int variant
-) implements Event.Data {
-
+)
+  implements Event.Data {
   @NotNull
   @Override
   public Event.Type type() {

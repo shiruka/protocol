@@ -1,6 +1,6 @@
 package io.github.shiruka.protocol.packet;
 
-import io.github.shiruka.api.common.vectors.Vector3f;
+import io.github.shiruka.api.base.Vector3f;
 import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.PacketHandler;
 import java.util.Optional;
@@ -30,17 +30,23 @@ import org.jetbrains.annotations.NotNull;
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class MovePlayer extends MinecraftPacket.Base {
 
-  //@formatter:off
   int entityType;
+
   Mode mode;
+
   boolean onGround;
+
   Vector3f position;
+
   long ridingRuntimeEntityId;
+
   Vector3f rotation;
+
   long runtimeEntityId;
+
   TeleportationCause teleportationCause;
+
   long tick;
-  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {
@@ -113,7 +119,8 @@ public final class MovePlayer extends MinecraftPacket.Base {
      */
     @NotNull
     public static TeleportationCause byOrdinal(final int ordinal) {
-      return Optional.of(ordinal)
+      return Optional
+        .of(ordinal)
         .filter(id -> id >= 0 && id < TeleportationCause.VALUES.length)
         .map(id -> TeleportationCause.VALUES[id])
         .orElse(TeleportationCause.UNKNOWN);

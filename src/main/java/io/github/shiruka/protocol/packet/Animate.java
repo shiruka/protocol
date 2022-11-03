@@ -28,11 +28,11 @@ import org.jetbrains.annotations.NotNull;
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class Animate extends MinecraftPacket.Base {
 
-  //@formatter:off
   Action action;
+
   float rowingTime;
+
   long runtimeEntityId;
-  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {
@@ -94,7 +94,8 @@ public final class Animate extends MinecraftPacket.Base {
      */
     @NotNull
     public static Action byId(final int id) {
-      return Arrays.stream(Action.VALUES)
+      return Arrays
+        .stream(Action.VALUES)
         .filter(action1 -> action1.id == id)
         .findFirst()
         .orElseThrow();

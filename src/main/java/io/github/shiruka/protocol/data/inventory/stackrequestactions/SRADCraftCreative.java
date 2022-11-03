@@ -7,10 +7,8 @@ import org.jetbrains.annotations.NotNull;
  *
  * @param creativeItemNetworkId the creative item network id.
  */
-public record SRADCraftCreative(
-  int creativeItemNetworkId
-) implements StackRequestActionData {
-
+public record SRADCraftCreative(int creativeItemNetworkId)
+  implements StackRequestActionData {
   @NotNull
   @Override
   public StackRequestActionType type() {

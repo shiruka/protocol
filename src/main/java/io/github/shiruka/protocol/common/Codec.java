@@ -25,9 +25,8 @@ import org.reflections.Reflections;
 /**
  * an interface to determine codecs.
  */
-@SuppressWarnings({"unchecked", "rawtypes"})
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public interface Codec {
-
   /**
    * the log.
    */
@@ -45,11 +44,21 @@ public interface Codec {
    * @return codec.
    */
   @NotNull
-  static Codec create(@NotNull final String minecraftVersion, final int protocolVersion,
-                      @NotNull final CodecHelper helper,
-                      @NotNull final Object2ObjectMap<Class<? extends MinecraftPacket>, PacketDefinition<?>> packets,
-                      @NotNull final Int2ObjectMap<PacketDefinition<?>> packetsById) {
-    return new Impl(minecraftVersion, protocolVersion, String.valueOf(protocolVersion), helper, packets, packetsById);
+  static Codec create(
+    @NotNull final String minecraftVersion,
+    final int protocolVersion,
+    @NotNull final CodecHelper helper,
+    @NotNull final Object2ObjectMap<Class<? extends MinecraftPacket>, PacketDefinition<?>> packets,
+    @NotNull final Int2ObjectMap<PacketDefinition<?>> packetsById
+  ) {
+    return new Impl(
+      minecraftVersion,
+      protocolVersion,
+      String.valueOf(protocolVersion),
+      helper,
+      packets,
+      packetsById
+    );
   }
 
   /**
@@ -72,8 +81,11 @@ public interface Codec {
    * @return decoded packet.
    */
   @NotNull
-  default MinecraftPacket decode(@NotNull final PacketBuffer buffer, final int packetId,
-                                 @NotNull final MinecraftChildChannel session) {
+  default MinecraftPacket decode(
+    @NotNull final PacketBuffer buffer,
+    final int packetId,
+    @NotNull final MinecraftChildChannel session
+  ) {
     final var definitionOptional = this.packet(packetId);
     final MinecraftPacket packet;
     final PacketEncoder<MinecraftPacket> encoder;
@@ -88,11 +100,17 @@ public interface Codec {
     try {
       encoder.decode(packet, this.helper(), buffer, session);
     } catch (final Exception e) {
-      throw new PacketEncodeException("Error whilst decoding %s".formatted(packet), e);
+      throw new PacketEncodeException(
+        "Error whilst decoding %s".formatted(packet),
+        e
+      );
     }
     if (Codec.LOG.isDebugEnabled() && buffer.isReadable()) {
-      Codec.LOG.debug("{} still has {} bytes to read!",
-        packet.getClass().getSimpleName(), buffer.remaining());
+      Codec.LOG.debug(
+        "{} still has {} bytes to read!",
+        packet.getClass().getSimpleName(),
+        buffer.remaining()
+      );
     }
     return packet;
   }
@@ -104,24 +122,35 @@ public interface Codec {
    * @param packet the packet to encode.
    * @param session the session to encode.
    */
-  default void encode(@NotNull final PacketBuffer buffer, @NotNull final MinecraftPacket packet,
-                      @NotNull final MinecraftSession session) {
-    @NotNull final PacketEncoder<MinecraftPacket> encoder;
+  default void encode(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftPacket packet,
+    @NotNull final MinecraftSession session
+  ) {
+    @NotNull
+    final PacketEncoder<MinecraftPacket> encoder;
     if (packet instanceof Unknown) {
       encoder = (PacketEncoder) packet;
     } else {
-      encoder = (PacketEncoder) this.packet(packet.getClass())
-        .map(PacketDefinition::encoder)
-        .orElseThrow();
+      encoder =
+        (PacketEncoder) this.packet(packet.getClass())
+          .map(PacketDefinition::encoder)
+          .orElseThrow();
     }
     try {
       encoder.encode(packet, this.helper(), buffer, session);
     } catch (final Exception e) {
-      throw new PacketEncodeException("Error whilst encoding %s".formatted(packet), e);
+      throw new PacketEncodeException(
+        "Error whilst encoding %s".formatted(packet),
+        e
+      );
     }
     if (Codec.LOG.isDebugEnabled() && buffer.isReadable()) {
-      Codec.LOG.debug("{} still has {} bytes to read!",
-        packet.getClass().getSimpleName(), buffer.remaining());
+      Codec.LOG.debug(
+        "{} still has {} bytes to read!",
+        packet.getClass().getSimpleName(),
+        buffer.remaining()
+      );
     }
   }
 
@@ -150,8 +179,11 @@ public interface Codec {
    * @return packet definition.
    */
   @NotNull
-  default <T extends MinecraftPacket> Optional<PacketDefinition<T>> packet(@NotNull final Class<T> cls) {
-    return Optional.ofNullable(this.packets().get(cls))
+  default <T extends MinecraftPacket> Optional<PacketDefinition<T>> packet(
+    @NotNull final Class<T> cls
+  ) {
+    return Optional
+      .ofNullable(this.packets().get(cls))
       .map(definition -> (PacketDefinition<T>) definition);
   }
 
@@ -163,7 +195,9 @@ public interface Codec {
    * @return packet definition.
    */
   @NotNull
-  default Optional<PacketDefinition<? extends MinecraftPacket>> packet(final int id) {
+  default Optional<PacketDefinition<? extends MinecraftPacket>> packet(
+    final int id
+  ) {
     return Optional.ofNullable(this.packetsById().get(id));
   }
 
@@ -218,7 +252,8 @@ public interface Codec {
     /**
      * the encoders package.
      */
-    private static final String ENCODERS_PACKAGE = "io.github.shiruka.protocol.codec.v%s.encoder";
+    private static final String ENCODERS_PACKAGE =
+      "io.github.shiruka.protocol.codec.v%s.encoder";
 
     /**
      * the packets.
@@ -274,8 +309,15 @@ public interface Codec {
     public Codec build() {
       Preconditions.checkNotNull(this.helper, "Helper not set!");
       final var packetsById = new Int2ObjectOpenHashMap<PacketDefinition<?>>();
-      this.packets.values().forEach(definition -> packetsById.put(definition.id(), definition));
-      return Codec.create(this.minecraftVersion, this.protocolVersion, this.helper, this.packets, packetsById);
+      this.packets.values()
+        .forEach(definition -> packetsById.put(definition.id(), definition));
+      return Codec.create(
+        this.minecraftVersion,
+        this.protocolVersion,
+        this.helper,
+        this.packets,
+        packetsById
+      );
     }
 
     /**
@@ -287,7 +329,9 @@ public interface Codec {
      * @return {@code this} for the builder chain.
      */
     @NotNull
-    public <T extends MinecraftPacket> Builder registerPacket(@NotNull final PacketEncoder.Base<T> encoder) {
+    public <T extends MinecraftPacket> Builder registerPacket(
+      @NotNull final PacketEncoder.Base<T> encoder
+    ) {
       return this.registerPacket(encoder.id(), encoder.factory(), encoder);
     }
 
@@ -302,9 +346,11 @@ public interface Codec {
      * @return {@code this} for the builder chain.
      */
     @NotNull
-    public <T extends MinecraftPacket> Builder registerPacket(@Range(from = 0, to = Integer.MAX_VALUE) final int id,
-                                                              @NotNull final Supplier<T> factory,
-                                                              @NotNull final PacketEncoder<T> encoder) {
+    public <T extends MinecraftPacket> Builder registerPacket(
+      @Range(from = 0, to = Integer.MAX_VALUE) final int id,
+      @NotNull final Supplier<T> factory,
+      @NotNull final PacketEncoder<T> encoder
+    ) {
       return this.registerPacket(new PacketDefinition<>(id, factory, encoder));
     }
 
@@ -317,7 +363,9 @@ public interface Codec {
      * @return {@code this} for the builder chain.
      */
     @NotNull
-    public <T extends MinecraftPacket> Builder registerPacket(@NotNull final PacketDefinition<T> definition) {
+    public <T extends MinecraftPacket> Builder registerPacket(
+      @NotNull final PacketDefinition<T> definition
+    ) {
       this.packets.put(definition.factory().get().getClass(), definition);
       return this;
     }
@@ -330,7 +378,9 @@ public interface Codec {
      * @return {@code this} for the builder chain.
      */
     @NotNull
-    public Builder registerPackets(@NotNull final Collection<Class<? extends PacketEncoder.Base>> classes) {
+    public Builder registerPackets(
+      @NotNull final Collection<Class<? extends PacketEncoder.Base>> classes
+    ) {
       for (final var cls : classes) {
         try {
           final var constructor = cls.getConstructor();
@@ -351,7 +401,9 @@ public interface Codec {
      * @return {@code this} for the builder chain.
      */
     @NotNull
-    public Builder removePacket(@NotNull final Class<? extends MinecraftPacket> packetClass) {
+    public Builder removePacket(
+      @NotNull final Class<? extends MinecraftPacket> packetClass
+    ) {
       this.packets.remove(packetClass);
       return this;
     }
@@ -363,8 +415,13 @@ public interface Codec {
      */
     @NotNull
     public Builder scanPackageAndRegister() {
-      Preconditions.checkState(this.protocolVersion != -1, "Protocol version not set!");
-      return this.scanPackageAndRegister(Builder.ENCODERS_PACKAGE.formatted(this.protocolVersion));
+      Preconditions.checkState(
+        this.protocolVersion != -1,
+        "Protocol version not set!"
+      );
+      return this.scanPackageAndRegister(
+          Builder.ENCODERS_PACKAGE.formatted(this.protocolVersion)
+        );
     }
 
     /**
@@ -376,7 +433,9 @@ public interface Codec {
      */
     @NotNull
     public Builder scanPackageAndRegister(@NotNull final String packageName) {
-      return this.registerPackets(new Reflections(packageName).getSubTypesOf(PacketEncoder.Base.class));
+      return this.registerPackets(
+          new Reflections(packageName).getSubTypesOf(PacketEncoder.Base.class)
+        );
     }
   }
 
@@ -395,9 +454,9 @@ public interface Codec {
     int protocolVersion,
     @NotNull String protocolVersionAsString,
     @NotNull CodecHelper helper,
-    @NotNull Object2ObjectMap<Class<? extends MinecraftPacket>, PacketDefinition<?>> packets,
+    @NotNull
+    Object2ObjectMap<Class<? extends MinecraftPacket>, PacketDefinition<?>> packets,
     @NotNull Int2ObjectMap<PacketDefinition<?>> packetsById
-  ) implements Codec {
-
-  }
+  )
+    implements Codec {}
 }

@@ -12,11 +12,16 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents add hanging entity packet encoders.
  */
 @PacketId(16)
-public final class AddHangingEntityEncoderV291 extends PacketEncoder.Base<AddHangingEntity> {
+public final class AddHangingEntityEncoderV291
+  extends PacketEncoder.Base<AddHangingEntity> {
 
   @Override
-  public void decode(@NotNull final AddHangingEntity packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final AddHangingEntity packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.uniqueEntityId(buffer.readVarLong());
     packet.runtimeEntityId(buffer.readUnsignedVarLong());
     packet.position(buffer.readVector3i().toFloat());
@@ -24,8 +29,12 @@ public final class AddHangingEntityEncoderV291 extends PacketEncoder.Base<AddHan
   }
 
   @Override
-  public void encode(@NotNull final AddHangingEntity packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final AddHangingEntity packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeVarLong(packet.uniqueEntityId());
     buffer.writeUnsignedVarLong(packet.runtimeEntityId());
     buffer.writeVector3i(packet.position().toInt());

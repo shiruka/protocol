@@ -14,8 +14,8 @@ public record BossKilledEventData(
   int bossEntityType,
   long bossUniqueEntityId,
   int playerPartySize
-) implements Event.Data {
-
+)
+  implements Event.Data {
   @NotNull
   @Override
   public Event.Type type() {

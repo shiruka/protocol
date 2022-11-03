@@ -12,9 +12,11 @@ public record EduSharedUriResource(
   @NotNull String buttonName,
   @NotNull String linkUri
 ) {
-
   /**
    * the empty.
    */
-  public static final EduSharedUriResource EMPTY = new EduSharedUriResource("", "");
+  public static final EduSharedUriResource EMPTY = new EduSharedUriResource(
+    "",
+    ""
+  );
 }

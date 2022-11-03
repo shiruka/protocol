@@ -30,8 +30,11 @@ public enum SpawnBiomeType {
    */
   @NotNull
   public static SpawnBiomeType byId(final int id) {
-    Preconditions.checkState(id >= 0 && id < SpawnBiomeType.VALUES.length,
-      "Unknown SpawnBiomeType ID: %s", id);
+    Preconditions.checkState(
+      id >= 0 && id < SpawnBiomeType.VALUES.length,
+      "Unknown SpawnBiomeType ID: %s",
+      id
+    );
     return SpawnBiomeType.VALUES[id];
   }
 }

@@ -16,18 +16,30 @@ import org.jetbrains.annotations.NotNull;
 public final class EventEncoderV291 extends PacketEncoder.Base<Event> {
 
   @Override
-  public void decode(@NotNull final Event packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final Event packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.uniqueEntityId(buffer.readVarLong());
     final var eventId = buffer.readVarInt();
-    Preconditions.checkElementIndex(eventId, Event.Type.VALUES.length, "Event type");
+    Preconditions.checkElementIndex(
+      eventId,
+      Event.Type.VALUES.length,
+      "Event type"
+    );
     packet.usePlayerId(buffer.readByte());
     packet.data(helper.readEventData(buffer, Event.Type.VALUES[eventId]));
   }
 
   @Override
-  public void encode(@NotNull final Event packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final Event packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeVarLong(packet.uniqueEntityId());
     final var data = packet.data();
     buffer.writeVarInt(data.type().ordinal());

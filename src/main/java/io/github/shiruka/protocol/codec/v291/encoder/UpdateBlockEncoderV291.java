@@ -12,11 +12,16 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents update block packet encoders.
  */
 @PacketId(21)
-public final class UpdateBlockEncoderV291 extends PacketEncoder.Base<UpdateBlock> {
+public final class UpdateBlockEncoderV291
+  extends PacketEncoder.Base<UpdateBlock> {
 
   @Override
-  public void decode(@NotNull final UpdateBlock packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final UpdateBlock packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.blockPosition(buffer.readVector3i());
     packet.runtimeId(buffer.readUnsignedVarInt());
     final var flagValue = buffer.readUnsignedVarInt();
@@ -30,8 +35,12 @@ public final class UpdateBlockEncoderV291 extends PacketEncoder.Base<UpdateBlock
   }
 
   @Override
-  public void encode(@NotNull final UpdateBlock packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final UpdateBlock packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeVector3i(packet.blockPosition());
     buffer.writeUnsignedVarInt(packet.runtimeId());
     var flagValue = 0;

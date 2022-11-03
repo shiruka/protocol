@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
  * an interface to determine minecraft packets.
  */
 public interface MinecraftPacket {
-
   /**
    * obtains the client id.
    *
@@ -99,7 +98,9 @@ public interface MinecraftPacket {
   @Getter
   @Setter
   @Accessors(fluent = true)
-  abstract class ReferencedCount extends AbstractReferenceCounted implements MinecraftPacket {
+  abstract class ReferencedCount
+    extends AbstractReferenceCounted
+    implements MinecraftPacket {
 
     /**
      * the client id.

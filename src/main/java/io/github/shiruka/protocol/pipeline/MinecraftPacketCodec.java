@@ -20,7 +20,8 @@ import org.jetbrains.annotations.NotNull;
  */
 @Log4j2
 @RequiredArgsConstructor
-public final class MinecraftPacketCodec extends MessageToMessageCodec<ByteBuf, List<MinecraftPacket>> {
+public final class MinecraftPacketCodec
+  extends MessageToMessageCodec<ByteBuf, List<MinecraftPacket>> {
 
   /**
    * the name.
@@ -34,7 +35,11 @@ public final class MinecraftPacketCodec extends MessageToMessageCodec<ByteBuf, L
   private final MinecraftServer server;
 
   @Override
-  protected void encode(final ChannelHandlerContext ctx, final List<MinecraftPacket> msg, final List<Object> out) {
+  protected void encode(
+    final ChannelHandlerContext ctx,
+    final List<MinecraftPacket> msg,
+    final List<Object> out
+  ) {
     final var session = MinecraftChildChannel.cast(ctx);
     final var uncompressed = new PacketBuffer(ctx.alloc().ioBuffer());
     final var uncompressedBuffer = uncompressed.buffer();
@@ -53,9 +58,15 @@ public final class MinecraftPacketCodec extends MessageToMessageCodec<ByteBuf, L
           uncompressed.writeUnsignedVarInt(packetBuffer.remaining());
           uncompressedBuffer.writeBytes(packetBufferBuffer);
         } catch (final Exception e) {
-          MinecraftPacketCodec.log.error("Error occurred whilst decoding packet!", e);
+          MinecraftPacketCodec.log.error(
+            "Error occurred whilst decoding packet!",
+            e
+          );
           if (MinecraftPacketCodec.log.isTraceEnabled()) {
-            MinecraftPacketCodec.log.trace("Packet contents\n{}", ByteBufUtil.prettyHexDump(packetBufferBuffer.readerIndex(0)));
+            MinecraftPacketCodec.log.trace(
+              "Packet contents\n{}",
+              ByteBufUtil.prettyHexDump(packetBufferBuffer.readerIndex(0))
+            );
           }
         } finally {
           packetBuffer.release();
@@ -67,7 +78,11 @@ public final class MinecraftPacketCodec extends MessageToMessageCodec<ByteBuf, L
   }
 
   @Override
-  protected void decode(final ChannelHandlerContext ctx, final ByteBuf msg, final List<Object> out) {
+  protected void decode(
+    final ChannelHandlerContext ctx,
+    final ByteBuf msg,
+    final List<Object> out
+  ) {
     final var session = MinecraftChildChannel.cast(ctx);
     final var packets = new ArrayList<MinecraftPacket>();
     try {
@@ -80,15 +95,22 @@ public final class MinecraftPacketCodec extends MessageToMessageCodec<ByteBuf, L
         try {
           final var header = packetBuffer.readUnsignedVarInt();
           final var packetId = header & 0x3ff;
-          final var packet = this.server.codec().decode(packetBuffer, packetId, session);
+          final var packet =
+            this.server.codec().decode(packetBuffer, packetId, session);
           packet.packetId(packetId);
           packet.senderId(header >>> 10 & 3);
           packet.clientId(header >>> 12 & 3);
           packets.add(packet);
         } catch (final Exception e) {
-          MinecraftPacketCodec.log.error("Error occurred whilst decoding packet!", e);
+          MinecraftPacketCodec.log.error(
+            "Error occurred whilst decoding packet!",
+            e
+          );
           if (MinecraftPacketCodec.log.isTraceEnabled()) {
-            MinecraftPacketCodec.log.trace("Packet contents\n{}", ByteBufUtil.prettyHexDump(packetBuffer.buffer().readerIndex(0)));
+            MinecraftPacketCodec.log.trace(
+              "Packet contents\n{}",
+              ByteBufUtil.prettyHexDump(packetBuffer.buffer().readerIndex(0))
+            );
           }
         }
       }

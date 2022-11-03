@@ -14,7 +14,8 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents minecraft server initializers.
  */
 @RequiredArgsConstructor
-public final class MinecraftServerInitializer extends ChannelInitializer<Channel> {
+public final class MinecraftServerInitializer
+  extends ChannelInitializer<Channel> {
 
   /**
    * the server.
@@ -24,11 +25,18 @@ public final class MinecraftServerInitializer extends ChannelInitializer<Channel
 
   @Override
   protected void initChannel(@NotNull final Channel ch) {
-    ch.pipeline()
-      .addLast(MinecraftServerConnection.NAME, new MinecraftServerConnection(this.server))
+    ch
+      .pipeline()
+      .addLast(
+        MinecraftServerConnection.NAME,
+        new MinecraftServerConnection(this.server)
+      )
       .addLast(UserDataCodec.NAME, new UserDataCodec(0xFE))
       .addLast(CompressorCodec.NAME, CompressorCodec.INSTANCE)
       .addLast(MinecraftPacketCodec.NAME, new MinecraftPacketCodec(this.server))
-      .addLast(MinecraftPacketHandler.NAME, new MinecraftPacketHandler(this.server));
+      .addLast(
+        MinecraftPacketHandler.NAME,
+        new MinecraftPacketHandler(this.server)
+      );
   }
 }

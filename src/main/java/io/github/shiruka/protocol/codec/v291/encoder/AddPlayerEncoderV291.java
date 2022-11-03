@@ -15,8 +15,12 @@ import org.jetbrains.annotations.NotNull;
 public final class AddPlayerEncoderV291 extends PacketEncoder.Base<AddPlayer> {
 
   @Override
-  public void decode(@NotNull final AddPlayer packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final AddPlayer packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.uuid(buffer.readUUID());
     packet.username(buffer.readString());
     packet.uniqueEntityId(buffer.readVarLong());
@@ -28,13 +32,19 @@ public final class AddPlayerEncoderV291 extends PacketEncoder.Base<AddPlayer> {
     packet.hand(helper.readItem(buffer));
     helper.readEntityData(buffer, packet.metadata());
     helper.readAdventureSettings(packet.adventureSettings(), buffer);
-    packet.entityLinks(buffer.readArrayUnsignedInt(() -> helper.readEntityLink(buffer)));
+    packet.entityLinks(
+      buffer.readArrayUnsignedInt(() -> helper.readEntityLink(buffer))
+    );
     packet.deviceId(buffer.readString());
   }
 
   @Override
-  public void encode(@NotNull final AddPlayer packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final AddPlayer packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeUUID(packet.uuid());
     buffer.writeString(packet.username());
     buffer.writeVarLong(packet.uniqueEntityId());
@@ -46,7 +56,10 @@ public final class AddPlayerEncoderV291 extends PacketEncoder.Base<AddPlayer> {
     helper.writeItem(buffer, packet.hand());
     helper.writeEntityData(buffer, packet.metadata());
     helper.writeAdventureSettings(packet.adventureSettings(), buffer);
-    buffer.writeArrayUnsignedInt(packet.entityLinks(), link -> helper.writeEntityLink(buffer, link));
+    buffer.writeArrayUnsignedInt(
+      packet.entityLinks(),
+      link -> helper.writeEntityLink(buffer, link)
+    );
     buffer.writeString(packet.deviceId());
   }
 }

@@ -15,8 +15,12 @@ import org.jetbrains.annotations.NotNull;
 public final class InteractEncoderV291 extends PacketEncoder.Base<Interact> {
 
   @Override
-  public void decode(@NotNull final Interact packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final Interact packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.action(Interact.Action.VALUES[buffer.readUnsignedByte()]);
     packet.runtimeEntityId(buffer.readUnsignedVarLong());
     if (packet.action() == Interact.Action.MOUSEOVER) {
@@ -25,8 +29,12 @@ public final class InteractEncoderV291 extends PacketEncoder.Base<Interact> {
   }
 
   @Override
-  public void encode(@NotNull final Interact packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final Interact packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeByte(packet.action().ordinal());
     buffer.writeUnsignedVarLong(packet.runtimeEntityId());
     if (packet.action() == Interact.Action.MOUSEOVER) {

@@ -8,10 +8,8 @@ import org.jetbrains.annotations.NotNull;
  *
  * @param achievementId the achievement id.
  */
-public record AchievementAwardedEventData(
-  int achievementId
-) implements Event.Data {
-
+public record AchievementAwardedEventData(int achievementId)
+  implements Event.Data {
   @NotNull
   @Override
   public Event.Type type() {

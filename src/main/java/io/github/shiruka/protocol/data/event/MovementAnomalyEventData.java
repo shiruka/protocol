@@ -20,8 +20,8 @@ public record MovementAnomalyEventData(
   float maxPositionDelta,
   float minPositionDelta,
   float totalPositionDelta
-) implements Event.Data {
-
+)
+  implements Event.Data {
   @NotNull
   @Override
   public Event.Type type() {

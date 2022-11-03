@@ -26,9 +26,7 @@ import org.jetbrains.annotations.NotNull;
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class SetTime extends MinecraftPacket.Base {
 
-  //@formatter:off
   int time;
-  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

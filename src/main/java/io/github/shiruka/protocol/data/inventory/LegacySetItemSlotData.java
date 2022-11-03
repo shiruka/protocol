@@ -6,9 +6,4 @@ package io.github.shiruka.protocol.data.inventory;
  * @param containerId the container id.
  * @param slots the slots.
  */
-public record LegacySetItemSlotData(
-  int containerId,
-  byte[] slots
-) {
-
-}
+public record LegacySetItemSlotData(int containerId, byte[] slots) {}

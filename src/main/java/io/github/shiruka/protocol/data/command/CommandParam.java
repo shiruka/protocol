@@ -14,22 +14,30 @@ public final class CommandParam {
   /**
    * the block position.
    */
-  public static final CommandParam BLOCK_POSITION = new CommandParam(CommandParamType.BLOCK_POSITION);
+  public static final CommandParam BLOCK_POSITION = new CommandParam(
+    CommandParamType.BLOCK_POSITION
+  );
 
   /**
    * the command.
    */
-  public static final CommandParam COMMAND = new CommandParam(CommandParamType.COMMAND);
+  public static final CommandParam COMMAND = new CommandParam(
+    CommandParamType.COMMAND
+  );
 
   /**
    * the filepath.
    */
-  public static final CommandParam FILE_PATH = new CommandParam(CommandParamType.FILE_PATH);
+  public static final CommandParam FILE_PATH = new CommandParam(
+    CommandParamType.FILE_PATH
+  );
 
   /**
    * the float.
    */
-  public static final CommandParam FLOAT = new CommandParam(CommandParamType.FLOAT);
+  public static final CommandParam FLOAT = new CommandParam(
+    CommandParamType.FLOAT
+  );
 
   /**
    * the int.
@@ -39,57 +47,79 @@ public final class CommandParam {
   /**
    * the int range.
    */
-  public static final CommandParam INT_RANGE = new CommandParam(CommandParamType.INT_RANGE);
+  public static final CommandParam INT_RANGE = new CommandParam(
+    CommandParamType.INT_RANGE
+  );
 
   /**
    * the json.
    */
-  public static final CommandParam JSON = new CommandParam(CommandParamType.JSON);
+  public static final CommandParam JSON = new CommandParam(
+    CommandParamType.JSON
+  );
 
   /**
    * the message.
    */
-  public static final CommandParam MESSAGE = new CommandParam(CommandParamType.MESSAGE);
+  public static final CommandParam MESSAGE = new CommandParam(
+    CommandParamType.MESSAGE
+  );
 
   /**
    * the operator.
    */
-  public static final CommandParam OPERATOR = new CommandParam(CommandParamType.OPERATOR);
+  public static final CommandParam OPERATOR = new CommandParam(
+    CommandParamType.OPERATOR
+  );
 
   /**
    * the position.
    */
-  public static final CommandParam POSITION = new CommandParam(CommandParamType.POSITION);
+  public static final CommandParam POSITION = new CommandParam(
+    CommandParamType.POSITION
+  );
 
   /**
    * the string.
    */
-  public static final CommandParam STRING = new CommandParam(CommandParamType.STRING);
+  public static final CommandParam STRING = new CommandParam(
+    CommandParamType.STRING
+  );
 
   /**
    * the target.
    */
-  public static final CommandParam TARGET = new CommandParam(CommandParamType.TARGET);
+  public static final CommandParam TARGET = new CommandParam(
+    CommandParamType.TARGET
+  );
 
   /**
    * the text.
    */
-  public static final CommandParam TEXT = new CommandParam(CommandParamType.TEXT);
+  public static final CommandParam TEXT = new CommandParam(
+    CommandParamType.TEXT
+  );
 
   /**
    * the value.
    */
-  public static final CommandParam VALUE = new CommandParam(CommandParamType.VALUE);
+  public static final CommandParam VALUE = new CommandParam(
+    CommandParamType.VALUE
+  );
 
   /**
    * the wildcard int.
    */
-  public static final CommandParam WILDCARD_INT = new CommandParam(CommandParamType.WILDCARD_INT);
+  public static final CommandParam WILDCARD_INT = new CommandParam(
+    CommandParamType.WILDCARD_INT
+  );
 
   /**
    * the wildcard target.
    */
-  public static final CommandParam WILDCARD_TARGET = new CommandParam(CommandParamType.WILDCARD_TARGET);
+  public static final CommandParam WILDCARD_TARGET = new CommandParam(
+    CommandParamType.WILDCARD_TARGET
+  );
 
   /**
    * the default value.
@@ -122,8 +152,12 @@ public final class CommandParam {
 
   @Override
   public String toString() {
-    final var param = this.paramType == null ? "UNKNOWN" : this.paramType.name();
-    return "CommandParam(type=" + param + ", defaultValue=" + this.defaultValue + ")";
+    final var param = this.paramType == null
+      ? "UNKNOWN"
+      : this.paramType.name();
+    return (
+      "CommandParam(type=" + param + ", defaultValue=" + this.defaultValue + ")"
+    );
   }
 
   /**

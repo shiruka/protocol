@@ -15,14 +15,22 @@ import org.jetbrains.annotations.NotNull;
 public final class SetTimeEncoderV291 extends PacketEncoder.Base<SetTime> {
 
   @Override
-  public void decode(@NotNull final SetTime packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final SetTime packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.time(buffer.readVarInt());
   }
 
   @Override
-  public void encode(@NotNull final SetTime packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final SetTime packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeVarInt(packet.time());
   }
 }

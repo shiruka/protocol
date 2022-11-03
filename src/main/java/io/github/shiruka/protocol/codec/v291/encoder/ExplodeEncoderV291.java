@@ -15,16 +15,24 @@ import org.jetbrains.annotations.NotNull;
 public final class ExplodeEncoderV291 extends PacketEncoder.Base<Explode> {
 
   @Override
-  public void decode(@NotNull final Explode packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final Explode packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.position(buffer.readVector3f());
     packet.radius(buffer.readVarInt() / 32f);
     packet.records(buffer.readArrayUnsignedInt(buffer::readVector3i));
   }
 
   @Override
-  public void encode(@NotNull final Explode packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final Explode packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeVector3f(packet.position());
     buffer.writeVarInt((int) (packet.radius() * 32));
     buffer.writeArrayUnsignedInt(packet.records(), buffer::writeVector3i);

@@ -26,16 +26,21 @@ import org.jetbrains.annotations.NotNull;
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class BossEvent extends MinecraftPacket.Base {
 
-  //@formatter:off
   Action action;
+
   long bossUniqueEntityId;
+
   int color;
+
   int darkenSky;
+
   float healthPercentage;
+
   int overlay;
+
   long playerUniqueEntityId;
+
   String title;
-  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

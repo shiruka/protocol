@@ -26,18 +26,23 @@ import org.jetbrains.annotations.NotNull;
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class BookEdit extends MinecraftPacket.Base {
 
-  //@formatter:off
   Action action;
-  String author;
-  int inventorySlot;
-  int pageNumber;
-  String photoName;
-  int secondaryPageNumber;
-  String text;
-  String title;
-  String xuid;
 
-  //@formatter:on
+  String author;
+
+  int inventorySlot;
+
+  int pageNumber;
+
+  String photoName;
+
+  int secondaryPageNumber;
+
+  String text;
+
+  String title;
+
+  String xuid;
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {
@@ -67,6 +72,6 @@ public final class BookEdit extends MinecraftPacket.Base {
     /**
      * the sign book.
      */
-    SIGN_BOOK
+    SIGN_BOOK,
   }
 }

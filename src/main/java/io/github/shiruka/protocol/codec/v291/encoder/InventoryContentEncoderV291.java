@@ -12,21 +12,31 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents inventory content packet encoders.
  */
 @PacketId(49)
-public final class InventoryContentEncoderV291 extends PacketEncoder.Base<InventoryContent> {
+public final class InventoryContentEncoderV291
+  extends PacketEncoder.Base<InventoryContent> {
 
   @Override
-  public void decode(@NotNull final InventoryContent packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final InventoryContent packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.containerId(buffer.readUnsignedVarInt());
-    packet.contents(buffer.readArrayUnsignedInt(() ->
-      helper.readItem(buffer)));
+    packet.contents(buffer.readArrayUnsignedInt(() -> helper.readItem(buffer)));
   }
 
   @Override
-  public void encode(@NotNull final InventoryContent packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final InventoryContent packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeUnsignedVarInt(packet.containerId());
-    buffer.writeArrayUnsignedInt(packet.contents(), item ->
-      helper.writeItem(buffer, item));
+    buffer.writeArrayUnsignedInt(
+      packet.contents(),
+      item -> helper.writeItem(buffer, item)
+    );
   }
 }

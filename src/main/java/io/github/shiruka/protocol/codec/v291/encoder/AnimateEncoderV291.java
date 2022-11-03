@@ -15,23 +15,35 @@ import org.jetbrains.annotations.NotNull;
 public final class AnimateEncoderV291 extends PacketEncoder.Base<Animate> {
 
   @Override
-  public void decode(@NotNull final Animate packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final Animate packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     final var action = Animate.Action.byId(buffer.readVarInt());
     packet.action(action);
     packet.runtimeEntityId(buffer.readUnsignedVarLong());
-    if (action == Animate.Action.ROW_LEFT || action == Animate.Action.ROW_RIGHT) {
+    if (
+      action == Animate.Action.ROW_LEFT || action == Animate.Action.ROW_RIGHT
+    ) {
       packet.rowingTime(buffer.readFloatLE());
     }
   }
 
   @Override
-  public void encode(@NotNull final Animate packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final Animate packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     final var action = packet.action();
     buffer.writeVarInt(action.id());
     buffer.writeUnsignedVarLong(packet.runtimeEntityId());
-    if (action == Animate.Action.ROW_LEFT || action == Animate.Action.ROW_RIGHT) {
+    if (
+      action == Animate.Action.ROW_LEFT || action == Animate.Action.ROW_RIGHT
+    ) {
       buffer.writeFloatLE(packet.rowingTime());
     }
   }

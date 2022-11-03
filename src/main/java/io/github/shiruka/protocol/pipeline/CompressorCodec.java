@@ -15,7 +15,8 @@ import org.jetbrains.annotations.Nullable;
  * a class that represents compressor pipelines.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class CompressorCodec extends MessageToMessageCodec<ByteBuf, ByteBuf> {
+public final class CompressorCodec
+  extends MessageToMessageCodec<ByteBuf, ByteBuf> {
 
   /**
    * the instance.
@@ -40,17 +41,26 @@ public final class CompressorCodec extends MessageToMessageCodec<ByteBuf, ByteBu
   /**
    * the deflater.
    */
-  private final ThreadLocal<Deflater> deflater = ThreadLocal.withInitial(() -> new Deflater(7, true));
+  private final ThreadLocal<Deflater> deflater = ThreadLocal.withInitial(() ->
+    new Deflater(7, true)
+  );
 
   /**
    * the inflater.
    */
-  private final ThreadLocal<Inflater> inflater = ThreadLocal.withInitial(() -> new Inflater(true));
+  private final ThreadLocal<Inflater> inflater = ThreadLocal.withInitial(() ->
+    new Inflater(true)
+  );
 
   @Override
-  protected void encode(final ChannelHandlerContext ctx, final ByteBuf msg, final List<Object> out) {
+  protected void encode(
+    final ChannelHandlerContext ctx,
+    final ByteBuf msg,
+    final List<Object> out
+  ) {
     final var compressed = ctx.alloc().ioBuffer();
-    @Nullable ByteBuf source = null;
+    @Nullable
+    ByteBuf source = null;
     try {
       if (msg.isDirect()) {
         source = msg;
@@ -61,12 +71,16 @@ public final class CompressorCodec extends MessageToMessageCodec<ByteBuf, ByteBu
       final var deflater = this.deflater.get();
       deflater.reset();
       deflater.setLevel(Deflater.DEFAULT_COMPRESSION);
-      deflater.setInput(source.internalNioBuffer(source.readerIndex(), source.readableBytes()));
+      deflater.setInput(
+        source.internalNioBuffer(source.readerIndex(), source.readableBytes())
+      );
       while (!deflater.finished()) {
         final var index = compressed.writerIndex();
         compressed.ensureWritable(CompressorCodec.CHUNK);
         deflater.finish();
-        final var written = deflater.deflate(compressed.internalNioBuffer(index, CompressorCodec.CHUNK));
+        final var written = deflater.deflate(
+          compressed.internalNioBuffer(index, CompressorCodec.CHUNK)
+        );
         compressed.writerIndex(index + written);
       }
       out.add(compressed);
@@ -78,9 +92,14 @@ public final class CompressorCodec extends MessageToMessageCodec<ByteBuf, ByteBu
   }
 
   @Override
-  protected void decode(final ChannelHandlerContext ctx, final ByteBuf msg, final List<Object> out) throws Exception {
+  protected void decode(
+    final ChannelHandlerContext ctx,
+    final ByteBuf msg,
+    final List<Object> out
+  ) throws Exception {
     final var decompressed = ctx.alloc().ioBuffer();
-    @Nullable ByteBuf source = null;
+    @Nullable
+    ByteBuf source = null;
     try {
       if (msg.isDirect()) {
         source = msg;
@@ -91,17 +110,24 @@ public final class CompressorCodec extends MessageToMessageCodec<ByteBuf, ByteBu
       }
       final var inflater = this.inflater.get();
       inflater.reset();
-      inflater.setInput(source.internalNioBuffer(source.readerIndex(), source.readableBytes()));
+      inflater.setInput(
+        source.internalNioBuffer(source.readerIndex(), source.readableBytes())
+      );
       inflater.finished();
       while (!inflater.finished()) {
         decompressed.ensureWritable(CompressorCodec.CHUNK);
         final var index = decompressed.writerIndex();
-        final var written = inflater.inflate(decompressed.internalNioBuffer(index, CompressorCodec.CHUNK));
+        final var written = inflater.inflate(
+          decompressed.internalNioBuffer(index, CompressorCodec.CHUNK)
+        );
         if (written < 1) {
           break;
         }
         decompressed.writerIndex(index + written);
-        if (CompressorCodec.MAX_SIZE > 0 && decompressed.writerIndex() >= CompressorCodec.MAX_SIZE) {
+        if (
+          CompressorCodec.MAX_SIZE > 0 &&
+          decompressed.writerIndex() >= CompressorCodec.MAX_SIZE
+        ) {
           throw new DataFormatException("Inflated data exceeds maximum size!");
         }
       }

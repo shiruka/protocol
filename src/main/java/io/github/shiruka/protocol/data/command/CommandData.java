@@ -24,7 +24,6 @@ public record CommandData(
   @Nullable CommandEnumData aliases,
   @NotNull CommandParamData[][] overloads
 ) {
-
   @Override
   public String toString() {
     final var overloads = new StringBuilder("[\r\n");
@@ -37,11 +36,19 @@ public record CommandData(
     }
     overloads.append("]\r\n");
     final var builder = new StringBuilder("CommandData(\r\n");
-    final var objects = Arrays.asList("name=" + this.name, "description=" + this.description,
-      "flags=" + Arrays.toString(this.flags.toArray()), "permission=" + this.permission, "aliases=" + this.aliases,
-      "overloads=" + overloads);
+    final var objects = Arrays.asList(
+      "name=" + this.name,
+      "description=" + this.description,
+      "flags=" + Arrays.toString(this.flags.toArray()),
+      "permission=" + this.permission,
+      "aliases=" + this.aliases,
+      "overloads=" + overloads
+    );
     for (final var object : objects) {
-      builder.append("    ").append(Objects.toString(object).replaceAll("\r\n", "\r\n    ")).append("\r\n");
+      builder
+        .append("    ")
+        .append(Objects.toString(object).replaceAll("\r\n", "\r\n    "))
+        .append("\r\n");
     }
     return builder.append(")").toString();
   }

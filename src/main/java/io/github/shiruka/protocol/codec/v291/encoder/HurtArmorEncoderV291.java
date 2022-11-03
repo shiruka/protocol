@@ -15,14 +15,22 @@ import org.jetbrains.annotations.NotNull;
 public final class HurtArmorEncoderV291 extends PacketEncoder.Base<HurtArmor> {
 
   @Override
-  public void decode(@NotNull final HurtArmor packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final HurtArmor packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.damage(buffer.readVarInt());
   }
 
   @Override
-  public void encode(@NotNull final HurtArmor packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final HurtArmor packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeVarInt(packet.damage());
   }
 }

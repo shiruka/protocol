@@ -18,7 +18,6 @@ public record AttributeData(
   float defaultValue,
   float value
 ) {
-
   /**
    * ctor.
    *
@@ -27,7 +26,12 @@ public record AttributeData(
    * @param maximum the maximum.
    * @param value the value.
    */
-  public AttributeData(@NotNull final String name, final float minimum, final float maximum, final float value) {
+  public AttributeData(
+    @NotNull final String name,
+    final float minimum,
+    final float maximum,
+    final float value
+  ) {
     this(name, minimum, maximum, maximum, value);
   }
 }

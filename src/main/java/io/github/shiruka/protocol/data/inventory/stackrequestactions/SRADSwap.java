@@ -12,8 +12,8 @@ import org.jetbrains.annotations.NotNull;
 public record SRADSwap(
   @NotNull StackRequestSlotInfoData source,
   @NotNull StackRequestSlotInfoData destination
-) implements StackRequestActionData {
-
+)
+  implements StackRequestActionData {
   @NotNull
   @Override
   public StackRequestActionType type() {

@@ -12,17 +12,26 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents purchase receipt packet encoders.
  */
 @PacketId(92)
-public final class PurchaseReceiptEncoderV291 extends PacketEncoder.Base<PurchaseReceipt> {
+public final class PurchaseReceiptEncoderV291
+  extends PacketEncoder.Base<PurchaseReceipt> {
 
   @Override
-  public void decode(@NotNull final PurchaseReceipt packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final PurchaseReceipt packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.receipts(buffer.readArrayUnsignedInt(buffer::readString));
   }
 
   @Override
-  public void encode(@NotNull final PurchaseReceipt packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final PurchaseReceipt packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeArrayUnsignedInt(packet.receipts(), buffer::writeString);
   }
 }

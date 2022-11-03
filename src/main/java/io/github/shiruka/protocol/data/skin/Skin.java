@@ -134,7 +134,14 @@ public final class Skin {
       newSkin.playFabId(token.get("PlayFabId").textValue());
     }
     if (token.has("SkinResourcePatch")) {
-      newSkin.skinResourcePatch(new String(Base64.getDecoder().decode(token.get("SkinResourcePatch").textValue()), StandardCharsets.UTF_8));
+      newSkin.skinResourcePatch(
+        new String(
+          Base64
+            .getDecoder()
+            .decode(token.get("SkinResourcePatch").textValue()),
+          StandardCharsets.UTF_8
+        )
+      );
     }
     newSkin.skinData(ImageData.from(token, "Skin"));
     if (token.has("AnimatedImageData")) {
@@ -165,19 +172,30 @@ public final class Skin {
           for (final var color : node.get("Colors")) {
             colors.add(color.textValue());
           }
-          newSkin.addTintColors(new PersonaPiece.Tint(
-            node.get("PieceType").textValue(),
-            colors
-          ));
+          newSkin.addTintColors(
+            new PersonaPiece.Tint(node.get("PieceType").textValue(), colors)
+          );
         }
       }
     }
     newSkin.capeData(ImageData.from(token, "Cape"));
     if (token.has("SkinGeometryData")) {
-      newSkin.geometryData(new String(Base64.getDecoder().decode(token.get("SkinGeometryData").textValue()), StandardCharsets.UTF_8));
+      newSkin.geometryData(
+        new String(
+          Base64.getDecoder().decode(token.get("SkinGeometryData").textValue()),
+          StandardCharsets.UTF_8
+        )
+      );
     }
     if (token.has("SkinAnimationData")) {
-      newSkin.animationData(new String(Base64.getDecoder().decode(token.get("SkinAnimationData").textValue()), StandardCharsets.UTF_8));
+      newSkin.animationData(
+        new String(
+          Base64
+            .getDecoder()
+            .decode(token.get("SkinAnimationData").textValue()),
+          StandardCharsets.UTF_8
+        )
+      );
     }
     if (token.has("PremiumSkin")) {
       newSkin.premium(token.get("PremiumSkin").booleanValue());
@@ -229,7 +247,6 @@ public final class Skin {
     float frames,
     int expression
   ) {
-
     /**
      * creates an skin animation from animation token.
      *
@@ -241,14 +258,21 @@ public final class Skin {
     public static Animation from(@NotNull final JsonNode token) {
       final var frames = token.get("Frames").floatValue();
       final var type = token.get("Type").intValue();
-      final var data = Base64.getDecoder().decode(token.get("Image").textValue());
+      final var data = Base64
+        .getDecoder()
+        .decode(token.get("Image").textValue());
       final var width = token.get("ImageWidth").intValue();
       final var height = token.get("ImageHeight").intValue();
       var expression = 0;
       if (token.hasNonNull("ExpressionType")) {
         expression = token.get("ExpressionType").intValue();
       }
-      return new Animation(new ImageData(width, height, data), type, frames, expression);
+      return new Animation(
+        new ImageData(width, height, data),
+        type,
+        frames,
+        expression
+      );
     }
   }
 }

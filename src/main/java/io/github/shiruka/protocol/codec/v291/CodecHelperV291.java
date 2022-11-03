@@ -1,14 +1,15 @@
 package io.github.shiruka.protocol.codec.v291;
 
 import com.google.common.base.Preconditions;
-import io.github.shiruka.api.common.vectors.Vector3f;
-import io.github.shiruka.api.common.vectors.Vector3i;
-import io.github.shiruka.api.nbt.CompoundTag;
-import io.github.shiruka.api.nbt.Tag;
+import io.github.shiruka.api.base.Vector3f;
+import io.github.shiruka.api.base.Vector3i;
+import io.github.shiruka.nbt.CompoundTag;
+import io.github.shiruka.nbt.Tag;
 import io.github.shiruka.network.PacketBuffer;
 import io.github.shiruka.protocol.common.CodecHelper;
 import io.github.shiruka.protocol.common.IdentifierDefinitionRegistry;
 import io.github.shiruka.protocol.common.IntTypeMap;
+import io.github.shiruka.protocol.common.MutableMap;
 import io.github.shiruka.protocol.data.AdventureSetting;
 import io.github.shiruka.protocol.data.AttributeData;
 import io.github.shiruka.protocol.data.CommonLevelEvent;
@@ -81,7 +82,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
-import tr.com.infumia.infumialib.misc.MutableMap;
 
 /**
  * a class that represents codec helpers for v291.
@@ -118,17 +118,20 @@ public class CodecHelperV291 implements CodecHelper {
   /**
    * the read byte.
    */
-  private static final ToIntFunction<PacketBuffer> READ_BYTE = PacketBuffer::readUnsignedByte;
+  private static final ToIntFunction<PacketBuffer> READ_BYTE =
+    PacketBuffer::readUnsignedByte;
 
   /**
    * the read int.
    */
-  private static final ToIntFunction<PacketBuffer> READ_INT = PacketBuffer::readIntLE;
+  private static final ToIntFunction<PacketBuffer> READ_INT =
+    PacketBuffer::readIntLE;
 
   /**
    * the read short.
    */
-  private static final ToIntFunction<PacketBuffer> READ_SHORT = PacketBuffer::readUnsignedShortLE;
+  private static final ToIntFunction<PacketBuffer> READ_SHORT =
+    PacketBuffer::readUnsignedShortLE;
 
   /**
    * the reader supplier.
@@ -146,17 +149,20 @@ public class CodecHelperV291 implements CodecHelper {
   /**
    * the write byte.
    */
-  private static final ObjIntConsumer<PacketBuffer> WRITE_BYTE = PacketBuffer::writeByte;
+  private static final ObjIntConsumer<PacketBuffer> WRITE_BYTE =
+    PacketBuffer::writeByte;
 
   /**
    * the write int.
    */
-  private static final ObjIntConsumer<PacketBuffer> WRITE_INT = PacketBuffer::writeIntLE;
+  private static final ObjIntConsumer<PacketBuffer> WRITE_INT =
+    PacketBuffer::writeIntLE;
 
   /**
    * the write short.
    */
-  private static final ObjIntConsumer<PacketBuffer> WRITE_SHORT = PacketBuffer::writeShortLE;
+  private static final ObjIntConsumer<PacketBuffer> WRITE_SHORT =
+    PacketBuffer::writeShortLE;
 
   /**
    * the writer supplier.
@@ -175,7 +181,8 @@ public class CodecHelperV291 implements CodecHelper {
    * the adventure setting flags 1.
    */
   @Getter
-  protected final IntTypeMap<AdventureSetting> adventureSettingFlags1 = IntTypeMap.newBuilder(AdventureSetting.class)
+  protected final IntTypeMap<AdventureSetting> adventureSettingFlags1 = IntTypeMap
+    .newBuilder(AdventureSetting.class)
     .insert(1, AdventureSetting.WORLD_IMMUTABLE)
     .insert(1 << 1, AdventureSetting.NO_PVM)
     .insert(1 << 2, AdventureSetting.NO_MVP)
@@ -192,7 +199,8 @@ public class CodecHelperV291 implements CodecHelper {
    * the adventure setting flags 2.
    */
   @Getter
-  protected final IntTypeMap<AdventureSetting> adventureSettingFlags2 = IntTypeMap.newBuilder(AdventureSetting.class)
+  protected final IntTypeMap<AdventureSetting> adventureSettingFlags2 = IntTypeMap
+    .newBuilder(AdventureSetting.class)
     .insert(1, AdventureSetting.MINE)
     .insert(1 << 1, AdventureSetting.DOORS_AND_SWITCHES)
     .insert(1 << 2, AdventureSetting.OPEN_CONTAINERS)
@@ -208,7 +216,8 @@ public class CodecHelperV291 implements CodecHelper {
    * the book edit type.
    */
   @Getter
-  protected final IntTypeMap<BookEdit.Action> bookEditTypes = IntTypeMap.newBuilder(BookEdit.Action.class)
+  protected final IntTypeMap<BookEdit.Action> bookEditTypes = IntTypeMap
+    .newBuilder(BookEdit.Action.class)
     .insert(0, BookEdit.Action.REPLACE_PAGE)
     .insert(1, BookEdit.Action.ADD_PAGE)
     .insert(2, BookEdit.Action.DELETE_PAGE)
@@ -220,7 +229,8 @@ public class CodecHelperV291 implements CodecHelper {
    * the command parameters.
    */
   @Getter
-  protected final IntTypeMap<CommandParam> commandParameters = IntTypeMap.newBuilder(CommandParam.class)
+  protected final IntTypeMap<CommandParam> commandParameters = IntTypeMap
+    .newBuilder(CommandParam.class)
     .insert(1, CommandParam.INT)
     .insert(2, CommandParam.FLOAT)
     .insert(3, CommandParam.VALUE)
@@ -242,7 +252,8 @@ public class CodecHelperV291 implements CodecHelper {
    * the entity data.
    */
   @Getter
-  protected final IntTypeMap<EntityData> entityData = IntTypeMap.newBuilder(EntityData.class)
+  protected final IntTypeMap<EntityData> entityData = IntTypeMap
+    .newBuilder(EntityData.class)
     .insert(0, EntityData.FLAGS)
     .insert(1, EntityData.HEALTH)
     .insert(2, EntityData.VARIANT)
@@ -334,7 +345,8 @@ public class CodecHelperV291 implements CodecHelper {
    * the entity data type.
    */
   @Getter
-  protected final IntTypeMap<EntityDataType> entityDataTypes = IntTypeMap.newBuilder(EntityDataType.class)
+  protected final IntTypeMap<EntityDataType> entityDataTypes = IntTypeMap
+    .newBuilder(EntityDataType.class)
     .insert(0, EntityDataType.BYTE)
     .insert(1, EntityDataType.SHORT)
     .insert(2, EntityDataType.INT)
@@ -350,7 +362,8 @@ public class CodecHelperV291 implements CodecHelper {
    * the book edit type.
    */
   @Getter
-  protected final IntTypeMap<EntityEventType> entityEventTypes = IntTypeMap.newBuilder(EntityEventType.class)
+  protected final IntTypeMap<EntityEventType> entityEventTypes = IntTypeMap
+    .newBuilder(EntityEventType.class)
     .insert(0, EntityEventType.NONE)
     .insert(1, EntityEventType.JUMP)
     .insert(2, EntityEventType.HURT)
@@ -411,7 +424,8 @@ public class CodecHelperV291 implements CodecHelper {
    * the entity flags.
    */
   @Getter
-  protected final IntTypeMap<EntityFlag> entityFlags = IntTypeMap.newBuilder(EntityFlag.class)
+  protected final IntTypeMap<EntityFlag> entityFlags = IntTypeMap
+    .newBuilder(EntityFlag.class)
     .insert(0, EntityFlag.ON_FIRE)
     .insert(1, EntityFlag.SNEAKING)
     .insert(2, EntityFlag.RIDING)
@@ -510,8 +524,7 @@ public class CodecHelperV291 implements CodecHelper {
     .with(Event.Type.PLAYER_DIED, this::writePlayerDied)
     .with(Event.Type.BOSS_KILLED, this::writeBossKilled)
     .with(Event.Type.AGENT_COMMAND, this::writeAgentCommand)
-    .with(Event.Type.AGENT_CREATED, (buffer, data) -> {
-    })
+    .with(Event.Type.AGENT_CREATED, (buffer, data) -> {})
     .with(Event.Type.PATTERN_REMOVED, this::writePatternRemoved)
     .with(Event.Type.SLASH_COMMAND_EXECUTED, this::writeSlashCommandExecuted)
     .with(Event.Type.FISH_BUCKETED, this::writeFishBucketed);
@@ -520,7 +533,8 @@ public class CodecHelperV291 implements CodecHelper {
    * the game rule types.
    */
   @Getter
-  protected final IntTypeMap<Class<?>> gameRuleTypes = IntTypeMap.<Class<?>>newBuilder("GameRuleTypes")
+  protected final IntTypeMap<Class<?>> gameRuleTypes = IntTypeMap
+    .<Class<?>>newBuilder("GameRuleTypes")
     .insert(1, Boolean.class)
     .insert(2, Integer.class)
     .insert(3, Float.class)
@@ -530,129 +544,403 @@ public class CodecHelperV291 implements CodecHelper {
    * the item definitions.
    */
   @Getter
-  protected final IdentifierDefinitionRegistry<ItemDefinition> itemDefinitions =
-    IdentifierDefinitionRegistry.<ItemDefinition>newBuilder()
-      .build();
+  protected final IdentifierDefinitionRegistry<ItemDefinition> itemDefinitions = IdentifierDefinitionRegistry
+    .<ItemDefinition>newBuilder()
+    .build();
 
   /**
    * the level events.
    */
   @Getter
-  protected final IntTypeMap<CommonLevelEvent> levelEvents = IntTypeMap.newBuilder(CommonLevelEvent.class)
+  protected final IntTypeMap<CommonLevelEvent> levelEvents = IntTypeMap
+    .newBuilder(CommonLevelEvent.class)
     .insert(0, LevelEventType.UNDEFINED)
     .insert(CodecHelperV291.LEVEL_EVENT_SOUND, LevelEventType.SOUND_CLICK)
-    .insert(CodecHelperV291.LEVEL_EVENT_SOUND + 1, LevelEventType.SOUND_CLICK_FAIL)
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_SOUND + 1,
+      LevelEventType.SOUND_CLICK_FAIL
+    )
     .insert(CodecHelperV291.LEVEL_EVENT_SOUND + 2, LevelEventType.SOUND_LAUNCH)
-    .insert(CodecHelperV291.LEVEL_EVENT_SOUND + 3, LevelEventType.SOUND_DOOR_OPEN)
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_SOUND + 3,
+      LevelEventType.SOUND_DOOR_OPEN
+    )
     .insert(CodecHelperV291.LEVEL_EVENT_SOUND + 4, LevelEventType.SOUND_FIZZ)
     .insert(CodecHelperV291.LEVEL_EVENT_SOUND + 5, LevelEventType.SOUND_FUSE)
-    .insert(CodecHelperV291.LEVEL_EVENT_SOUND + 6, LevelEventType.SOUND_PLAY_RECORDING)
-    .insert(CodecHelperV291.LEVEL_EVENT_SOUND + 7, LevelEventType.SOUND_GHAST_WARNING)
-    .insert(CodecHelperV291.LEVEL_EVENT_SOUND + 8, LevelEventType.SOUND_GHAST_FIREBALL)
-    .insert(CodecHelperV291.LEVEL_EVENT_SOUND + 9, LevelEventType.SOUND_BLAZE_FIREBALL)
-    .insert(CodecHelperV291.LEVEL_EVENT_SOUND + 10, LevelEventType.SOUND_ZOMBIE_DOOR_BUMP)
-    .insert(CodecHelperV291.LEVEL_EVENT_SOUND + 12, LevelEventType.SOUND_ZOMBIE_DOOR_CRASH)
-    .insert(CodecHelperV291.LEVEL_EVENT_SOUND + 16, LevelEventType.SOUND_ZOMBIE_INFECTED)
-    .insert(CodecHelperV291.LEVEL_EVENT_SOUND + 17, LevelEventType.SOUND_ZOMBIE_CONVERTED)
-    .insert(CodecHelperV291.LEVEL_EVENT_SOUND + 18, LevelEventType.SOUND_ENDERMAN_TELEPORT)
-    .insert(CodecHelperV291.LEVEL_EVENT_SOUND + 20, LevelEventType.SOUND_ANVIL_BROKEN)
-    .insert(CodecHelperV291.LEVEL_EVENT_SOUND + 21, LevelEventType.SOUND_ANVIL_USED)
-    .insert(CodecHelperV291.LEVEL_EVENT_SOUND + 22, LevelEventType.SOUND_ANVIL_LAND)
-    .insert(CodecHelperV291.LEVEL_EVENT_SOUND + 30, LevelEventType.SOUND_INFINITY_ARROW_PICKUP)
-    .insert(CodecHelperV291.LEVEL_EVENT_SOUND + 32, LevelEventType.SOUND_TELEPORT_ENDERPEARL)
-    .insert(CodecHelperV291.LEVEL_EVENT_SOUND + 40, LevelEventType.SOUND_ITEMFRAME_ITEM_ADD)
-    .insert(CodecHelperV291.LEVEL_EVENT_SOUND + 41, LevelEventType.SOUND_ITEMFRAME_BREAK)
-    .insert(CodecHelperV291.LEVEL_EVENT_SOUND + 42, LevelEventType.SOUND_ITEMFRAME_PLACE)
-    .insert(CodecHelperV291.LEVEL_EVENT_SOUND + 43, LevelEventType.SOUND_ITEMFRAME_ITEM_REMOVE)
-    .insert(CodecHelperV291.LEVEL_EVENT_SOUND + 44, LevelEventType.SOUND_ITEMFRAME_ITEM_ROTATE)
-    .insert(CodecHelperV291.LEVEL_EVENT_SOUND + 51, LevelEventType.SOUND_EXPERIENCE_ORB_PICKUP)
-    .insert(CodecHelperV291.LEVEL_EVENT_SOUND + 52, LevelEventType.SOUND_TOTEM_USED)
-    .insert(CodecHelperV291.LEVEL_EVENT_SOUND + 60, LevelEventType.SOUND_ARMOR_STAND_BREAK)
-    .insert(CodecHelperV291.LEVEL_EVENT_SOUND + 61, LevelEventType.SOUND_ARMOR_STAND_HIT)
-    .insert(CodecHelperV291.LEVEL_EVENT_SOUND + 62, LevelEventType.SOUND_ARMOR_STAND_LAND)
-    .insert(CodecHelperV291.LEVEL_EVENT_SOUND + 63, LevelEventType.SOUND_ARMOR_STAND_PLACE)
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_SOUND + 6,
+      LevelEventType.SOUND_PLAY_RECORDING
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_SOUND + 7,
+      LevelEventType.SOUND_GHAST_WARNING
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_SOUND + 8,
+      LevelEventType.SOUND_GHAST_FIREBALL
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_SOUND + 9,
+      LevelEventType.SOUND_BLAZE_FIREBALL
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_SOUND + 10,
+      LevelEventType.SOUND_ZOMBIE_DOOR_BUMP
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_SOUND + 12,
+      LevelEventType.SOUND_ZOMBIE_DOOR_CRASH
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_SOUND + 16,
+      LevelEventType.SOUND_ZOMBIE_INFECTED
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_SOUND + 17,
+      LevelEventType.SOUND_ZOMBIE_CONVERTED
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_SOUND + 18,
+      LevelEventType.SOUND_ENDERMAN_TELEPORT
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_SOUND + 20,
+      LevelEventType.SOUND_ANVIL_BROKEN
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_SOUND + 21,
+      LevelEventType.SOUND_ANVIL_USED
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_SOUND + 22,
+      LevelEventType.SOUND_ANVIL_LAND
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_SOUND + 30,
+      LevelEventType.SOUND_INFINITY_ARROW_PICKUP
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_SOUND + 32,
+      LevelEventType.SOUND_TELEPORT_ENDERPEARL
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_SOUND + 40,
+      LevelEventType.SOUND_ITEMFRAME_ITEM_ADD
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_SOUND + 41,
+      LevelEventType.SOUND_ITEMFRAME_BREAK
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_SOUND + 42,
+      LevelEventType.SOUND_ITEMFRAME_PLACE
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_SOUND + 43,
+      LevelEventType.SOUND_ITEMFRAME_ITEM_REMOVE
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_SOUND + 44,
+      LevelEventType.SOUND_ITEMFRAME_ITEM_ROTATE
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_SOUND + 51,
+      LevelEventType.SOUND_EXPERIENCE_ORB_PICKUP
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_SOUND + 52,
+      LevelEventType.SOUND_TOTEM_USED
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_SOUND + 60,
+      LevelEventType.SOUND_ARMOR_STAND_BREAK
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_SOUND + 61,
+      LevelEventType.SOUND_ARMOR_STAND_HIT
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_SOUND + 62,
+      LevelEventType.SOUND_ARMOR_STAND_LAND
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_SOUND + 63,
+      LevelEventType.SOUND_ARMOR_STAND_PLACE
+    )
     .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE, LevelEventType.PARTICLE_SHOOT)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE + 1, LevelEventType.PARTICLE_DESTROY_BLOCK)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE + 2, LevelEventType.PARTICLE_POTION_SPLASH)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE + 3, LevelEventType.PARTICLE_EYE_OF_ENDER_DEATH)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE + 4, LevelEventType.PARTICLE_MOB_BLOCK_SPAWN)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE + 5, LevelEventType.PARTICLE_CROP_GROWTH)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE + 6, LevelEventType.PARTICLE_SOUND_GUARDIAN_GHOST)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE + 7, LevelEventType.PARTICLE_DEATH_SMOKE)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE + 8, LevelEventType.PARTICLE_DENY_BLOCK)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE + 9, LevelEventType.PARTICLE_GENERIC_SPAWN)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE + 10, LevelEventType.PARTICLE_DRAGON_EGG)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE + 11, LevelEventType.PARTICLE_CROP_EATEN)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE + 12, LevelEventType.PARTICLE_CRIT)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE + 13, LevelEventType.PARTICLE_TELEPORT)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE + 14, LevelEventType.PARTICLE_CRACK_BLOCK)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE + 15, LevelEventType.PARTICLE_BUBBLES)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE + 16, LevelEventType.PARTICLE_EVAPORATE)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE + 17, LevelEventType.PARTICLE_DESTROY_ARMOR_STAND)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE + 18, LevelEventType.PARTICLE_BREAKING_EGG)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE + 19, LevelEventType.PARTICLE_DESTROY_EGG)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE + 20, LevelEventType.PARTICLE_EVAPORATE_WATER)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE + 21, LevelEventType.PARTICLE_DESTROY_BLOCK_NO_SOUND)
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE + 1,
+      LevelEventType.PARTICLE_DESTROY_BLOCK
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE + 2,
+      LevelEventType.PARTICLE_POTION_SPLASH
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE + 3,
+      LevelEventType.PARTICLE_EYE_OF_ENDER_DEATH
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE + 4,
+      LevelEventType.PARTICLE_MOB_BLOCK_SPAWN
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE + 5,
+      LevelEventType.PARTICLE_CROP_GROWTH
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE + 6,
+      LevelEventType.PARTICLE_SOUND_GUARDIAN_GHOST
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE + 7,
+      LevelEventType.PARTICLE_DEATH_SMOKE
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE + 8,
+      LevelEventType.PARTICLE_DENY_BLOCK
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE + 9,
+      LevelEventType.PARTICLE_GENERIC_SPAWN
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE + 10,
+      LevelEventType.PARTICLE_DRAGON_EGG
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE + 11,
+      LevelEventType.PARTICLE_CROP_EATEN
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE + 12,
+      LevelEventType.PARTICLE_CRIT
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE + 13,
+      LevelEventType.PARTICLE_TELEPORT
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE + 14,
+      LevelEventType.PARTICLE_CRACK_BLOCK
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE + 15,
+      LevelEventType.PARTICLE_BUBBLES
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE + 16,
+      LevelEventType.PARTICLE_EVAPORATE
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE + 17,
+      LevelEventType.PARTICLE_DESTROY_ARMOR_STAND
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE + 18,
+      LevelEventType.PARTICLE_BREAKING_EGG
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE + 19,
+      LevelEventType.PARTICLE_DESTROY_EGG
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE + 20,
+      LevelEventType.PARTICLE_EVAPORATE_WATER
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE + 21,
+      LevelEventType.PARTICLE_DESTROY_BLOCK_NO_SOUND
+    )
     .insert(CodecHelperV291.LEVEL_EVENT_WORLD + 1, LevelEventType.START_RAINING)
-    .insert(CodecHelperV291.LEVEL_EVENT_WORLD + 2, LevelEventType.START_THUNDERSTORM)
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_WORLD + 2,
+      LevelEventType.START_THUNDERSTORM
+    )
     .insert(CodecHelperV291.LEVEL_EVENT_WORLD + 3, LevelEventType.STOP_RAINING)
-    .insert(CodecHelperV291.LEVEL_EVENT_WORLD + 4, LevelEventType.STOP_THUNDERSTORM)
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_WORLD + 4,
+      LevelEventType.STOP_THUNDERSTORM
+    )
     .insert(CodecHelperV291.LEVEL_EVENT_WORLD + 5, LevelEventType.GLOBAL_PAUSE)
     .insert(CodecHelperV291.LEVEL_EVENT_WORLD + 6, LevelEventType.SIM_TIME_STEP)
-    .insert(CodecHelperV291.LEVEL_EVENT_WORLD + 7, LevelEventType.SIM_TIME_SCALE)
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_WORLD + 7,
+      LevelEventType.SIM_TIME_SCALE
+    )
     .insert(CodecHelperV291.LEVEL_EVENT_BLOCK, LevelEventType.ACTIVATE_BLOCK)
-    .insert(CodecHelperV291.LEVEL_EVENT_BLOCK + 1, LevelEventType.CAULDRON_EXPLODE)
-    .insert(CodecHelperV291.LEVEL_EVENT_BLOCK + 2, LevelEventType.CAULDRON_DYE_ARMOR)
-    .insert(CodecHelperV291.LEVEL_EVENT_BLOCK + 3, LevelEventType.CAULDRON_CLEAN_ARMOR)
-    .insert(CodecHelperV291.LEVEL_EVENT_BLOCK + 4, LevelEventType.CAULDRON_FILL_POTION)
-    .insert(CodecHelperV291.LEVEL_EVENT_BLOCK + 5, LevelEventType.CAULDRON_TAKE_POTION)
-    .insert(CodecHelperV291.LEVEL_EVENT_BLOCK + 6, LevelEventType.CAULDRON_FILL_WATER)
-    .insert(CodecHelperV291.LEVEL_EVENT_BLOCK + 7, LevelEventType.CAULDRON_TAKE_WATER)
-    .insert(CodecHelperV291.LEVEL_EVENT_BLOCK + 8, LevelEventType.CAULDRON_ADD_DYE)
-    .insert(CodecHelperV291.LEVEL_EVENT_BLOCK + 9, LevelEventType.CAULDRON_CLEAN_BANNER)
-    .insert(CodecHelperV291.LEVEL_EVENT_BLOCK + 10, LevelEventType.CAULDRON_FLUSH)
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_BLOCK + 1,
+      LevelEventType.CAULDRON_EXPLODE
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_BLOCK + 2,
+      LevelEventType.CAULDRON_DYE_ARMOR
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_BLOCK + 3,
+      LevelEventType.CAULDRON_CLEAN_ARMOR
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_BLOCK + 4,
+      LevelEventType.CAULDRON_FILL_POTION
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_BLOCK + 5,
+      LevelEventType.CAULDRON_TAKE_POTION
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_BLOCK + 6,
+      LevelEventType.CAULDRON_FILL_WATER
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_BLOCK + 7,
+      LevelEventType.CAULDRON_TAKE_WATER
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_BLOCK + 8,
+      LevelEventType.CAULDRON_ADD_DYE
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_BLOCK + 9,
+      LevelEventType.CAULDRON_CLEAN_BANNER
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_BLOCK + 10,
+      LevelEventType.CAULDRON_FLUSH
+    )
     .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE, ParticleType.UNDEFINED)
     .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 1, ParticleType.BUBBLE)
     .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 2, ParticleType.CRIT)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 3, ParticleType.BLOCK_FORCE_FIELD)
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 3,
+      ParticleType.BLOCK_FORCE_FIELD
+    )
     .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 4, ParticleType.SMOKE)
     .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 5, ParticleType.EXPLODE)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 6, ParticleType.EVAPORATION)
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 6,
+      ParticleType.EVAPORATION
+    )
     .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 7, ParticleType.FLAME)
     .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 8, ParticleType.LAVA)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 9, ParticleType.LARGE_SMOKE)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 10, ParticleType.RED_DUST)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 11, ParticleType.RISING_BORDER_DUST)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 12, ParticleType.ICON_CRACK)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 13, ParticleType.SNOWBALL_POOF)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 14, ParticleType.LARGE_EXPLODE)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 15, ParticleType.HUGE_EXPLOSION)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 16, ParticleType.MOB_FLAME)
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 9,
+      ParticleType.LARGE_SMOKE
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 10,
+      ParticleType.RED_DUST
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 11,
+      ParticleType.RISING_BORDER_DUST
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 12,
+      ParticleType.ICON_CRACK
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 13,
+      ParticleType.SNOWBALL_POOF
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 14,
+      ParticleType.LARGE_EXPLODE
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 15,
+      ParticleType.HUGE_EXPLOSION
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 16,
+      ParticleType.MOB_FLAME
+    )
     .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 17, ParticleType.HEART)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 18, ParticleType.TERRAIN)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 19, ParticleType.TOWN_AURA)
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 18,
+      ParticleType.TERRAIN
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 19,
+      ParticleType.TOWN_AURA
+    )
     .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 20, ParticleType.PORTAL)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 21, ParticleType.WATER_SPLASH)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 22, ParticleType.WATER_WAKE)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 23, ParticleType.DRIP_WATER)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 24, ParticleType.DRIP_LAVA)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 25, ParticleType.FALLING_DUST)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 26, ParticleType.MOB_SPELL)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 27, ParticleType.MOB_SPELL_AMBIENT)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 28, ParticleType.MOB_SPELL_INSTANTANEOUS)
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 21,
+      ParticleType.WATER_SPLASH
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 22,
+      ParticleType.WATER_WAKE
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 23,
+      ParticleType.DRIP_WATER
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 24,
+      ParticleType.DRIP_LAVA
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 25,
+      ParticleType.FALLING_DUST
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 26,
+      ParticleType.MOB_SPELL
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 27,
+      ParticleType.MOB_SPELL_AMBIENT
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 28,
+      ParticleType.MOB_SPELL_INSTANTANEOUS
+    )
     .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 29, ParticleType.INK)
     .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 30, ParticleType.SLIME)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 31, ParticleType.RAIN_SPLASH)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 32, ParticleType.VILLAGER_ANGRY)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 33, ParticleType.VILLAGER_HAPPY)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 34, ParticleType.ENCHANTING_TABLE)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 35, ParticleType.TRACKER_EMITTER)
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 31,
+      ParticleType.RAIN_SPLASH
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 32,
+      ParticleType.VILLAGER_ANGRY
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 33,
+      ParticleType.VILLAGER_HAPPY
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 34,
+      ParticleType.ENCHANTING_TABLE
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 35,
+      ParticleType.TRACKER_EMITTER
+    )
     .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 36, ParticleType.NOTE)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 37, ParticleType.WITCH_SPELL)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 38, ParticleType.CARROT_BOOST)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 39, ParticleType.MOB_APPEARANCE)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 40, ParticleType.END_ROD)
-    .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 41, ParticleType.DRAGON_BREATH)
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 37,
+      ParticleType.WITCH_SPELL
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 38,
+      ParticleType.CARROT_BOOST
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 39,
+      ParticleType.MOB_APPEARANCE
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 40,
+      ParticleType.END_ROD
+    )
+    .insert(
+      CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 41,
+      ParticleType.DRAGON_BREATH
+    )
     .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 42, ParticleType.SPIT)
     .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 43, ParticleType.TOTEM)
     .insert(CodecHelperV291.LEVEL_EVENT_PARTICLE_TYPE + 44, ParticleType.FOOD)
@@ -662,7 +950,8 @@ public class CodecHelperV291 implements CodecHelper {
    * the sound events.
    */
   @Getter
-  protected final IntTypeMap<SoundEvent> soundEvents = IntTypeMap.newBuilder(SoundEvent.class)
+  protected final IntTypeMap<SoundEvent> soundEvents = IntTypeMap
+    .newBuilder(SoundEvent.class)
     .insert(0, SoundEvent.ITEM_USE_ON)
     .insert(1, SoundEvent.HIT)
     .insert(2, SoundEvent.STEP)
@@ -906,8 +1195,11 @@ public class CodecHelperV291 implements CodecHelper {
    * @param mappings the mappings to read.
    * @param settings the settings to read.
    */
-  private static void readFlags(final int flags, @NotNull final Collection<AdventureSetting> mappings,
-                                @NotNull final Set<AdventureSetting> settings) {
+  private static void readFlags(
+    final int flags,
+    @NotNull final Collection<AdventureSetting> mappings,
+    @NotNull final Set<AdventureSetting> settings
+  ) {
     final var array = mappings.toArray(new AdventureSetting[0]);
     for (var index = 0; index < array.length; index++) {
       final var setting = array[index];
@@ -918,16 +1210,31 @@ public class CodecHelperV291 implements CodecHelper {
   }
 
   @Override
-  public void readAdventureSettings(@NotNull final AdventureSettings packet, @NotNull final PacketBuffer buffer) {
+  public void readAdventureSettings(
+    @NotNull final AdventureSettings packet,
+    @NotNull final PacketBuffer buffer
+  ) {
     final var flags1 = buffer.readUnsignedVarInt();
-    packet.commandPermission(CommandPermission.byOrdinal(buffer.readUnsignedVarInt()));
+    packet.commandPermission(
+      CommandPermission.byOrdinal(buffer.readUnsignedVarInt())
+    );
     final var flags2 = buffer.readUnsignedVarInt();
-    packet.playerPermission(PlayerPermission.byOrdinal(buffer.readUnsignedVarInt()));
+    packet.playerPermission(
+      PlayerPermission.byOrdinal(buffer.readUnsignedVarInt())
+    );
     buffer.readUnsignedVarInt();
     packet.uniqueEntityId(buffer.readLongLE());
     final var settings = packet.settings();
-    CodecHelperV291.readFlags(flags1, this.adventureSettingFlags1.values(), settings);
-    CodecHelperV291.readFlags(flags2, this.adventureSettingFlags2.values(), settings);
+    CodecHelperV291.readFlags(
+      flags1,
+      this.adventureSettingFlags1.values(),
+      settings
+    );
+    CodecHelperV291.readFlags(
+      flags2,
+      this.adventureSettingFlags2.values(),
+      settings
+    );
   }
 
   @NotNull
@@ -952,7 +1259,10 @@ public class CodecHelperV291 implements CodecHelper {
   }
 
   @Override
-  public void readBossEventAction(@NotNull final BossEvent packet, @NotNull final PacketBuffer buffer) {
+  public void readBossEventAction(
+    @NotNull final BossEvent packet,
+    @NotNull final PacketBuffer buffer
+  ) {
     switch (packet.action()) {
       case REGISTER_PLAYER, UNREGISTER_PLAYER -> {
         packet.playerUniqueEntityId(buffer.readVarLong());
@@ -974,13 +1284,18 @@ public class CodecHelperV291 implements CodecHelper {
       case UPDATE_NAME -> {
         packet.title(buffer.readString());
       }
-      default -> throw new IllegalStateException("Unexpected value: " + packet.action());
+      default -> throw new IllegalStateException(
+        "Unexpected value: " + packet.action()
+      );
     }
   }
 
   @NotNull
   @Override
-  public CommandEnumData readCommandEnum(@NotNull final PacketBuffer buffer, final boolean soft) {
+  public CommandEnumData readCommandEnum(
+    @NotNull final PacketBuffer buffer,
+    final boolean soft
+  ) {
     final var name = buffer.readString();
     final var values = new String[buffer.readUnsignedVarInt()];
     for (var index = 0; index < values.length; index++) {
@@ -995,12 +1310,19 @@ public class CodecHelperV291 implements CodecHelper {
     final var enumValues = buffer.readArrayUnsignedInt(buffer::readString);
     final var postFixes = buffer.readArrayUnsignedInt(buffer::readString);
     final var enums = this.readCommandEnums(buffer, enumValues);
-    final var softEnums = buffer.readArrayUnsignedInt(() -> this.readCommandEnum(buffer, true));
-    return buffer.readArrayUnsignedInt(() -> this.readCommand(buffer, enums, softEnums, postFixes));
+    final var softEnums = buffer.readArrayUnsignedInt(() ->
+      this.readCommandEnum(buffer, true)
+    );
+    return buffer.readArrayUnsignedInt(() ->
+      this.readCommand(buffer, enums, softEnums, postFixes)
+    );
   }
 
   @Override
-  public void readEntityData(@NotNull final PacketBuffer buffer, @NotNull final EntityDataMap map) {
+  public void readEntityData(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final EntityDataMap map
+  ) {
     final var length = buffer.readUnsignedVarInt();
     for (var index = 0; index < length; index++) {
       final var metadataInt = buffer.readUnsignedVarInt();
@@ -1008,7 +1330,9 @@ public class CodecHelperV291 implements CodecHelper {
       var type = this.entityDataTypes.type(buffer.readUnsignedVarInt());
       if (data != null && data.isFlags()) {
         if (type != EntityDataType.LONG) {
-          throw new IllegalArgumentException("Expected long value for flags, got " + type.name());
+          throw new IllegalArgumentException(
+            "Expected long value for flags, got " + type.name()
+          );
         }
         type = EntityDataType.FLAGS;
       }
@@ -1022,21 +1346,30 @@ public class CodecHelperV291 implements CodecHelper {
         case NBT -> object = this.readItem(buffer);
         case VECTOR3I -> object = buffer.readVector3i();
         case FLAGS -> {
-          map.getOrCreateFlags().set(
-            buffer.readVarLong(),
-            data == EntityData.FLAGS_2 ? 1 : 0,
-            this.entityFlags
-          );
+          map
+            .getOrCreateFlags()
+            .set(
+              buffer.readVarLong(),
+              data == EntityData.FLAGS_2 ? 1 : 0,
+              this.entityFlags
+            );
           continue;
         }
         case LONG -> object = buffer.readVarLong();
         case VECTOR3F -> object = buffer.readVector3f();
-        default -> throw new IllegalArgumentException("Unknown entity data type received!");
+        default -> throw new IllegalArgumentException(
+          "Unknown entity data type received!"
+        );
       }
       if (data != null) {
         map.put(data, object);
       } else {
-        CodecHelper.LOG.debug("Unknown entity data: {} type {} value {}", metadataInt, type, object);
+        CodecHelper.LOG.debug(
+          "Unknown entity data: {} type {} value {}",
+          metadataInt,
+          type,
+          object
+        );
       }
     }
   }
@@ -1048,14 +1381,25 @@ public class CodecHelperV291 implements CodecHelper {
     final var to = buffer.readVarLong();
     final var type = buffer.readUnsignedByte();
     final var immediate = buffer.readBoolean();
-    return new EntityLinkData(from, to, EntityLinkDataType.byOrdinal(type), immediate);
+    return new EntityLinkData(
+      from,
+      to,
+      EntityLinkDataType.byOrdinal(type),
+      immediate
+    );
   }
 
   @NotNull
   @Override
-  public Event.Data readEventData(@NotNull final PacketBuffer buffer, @NotNull final Event.Type type) {
-    final var function = Preconditions.checkNotNull(this.eventTypeReaders.get(type),
-      "Unknown event type %s", type);
+  public Event.Data readEventData(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final Event.Type type
+  ) {
+    final var function = Preconditions.checkNotNull(
+      this.eventTypeReaders.get(type),
+      "Unknown event type %s",
+      type
+    );
     return function.apply(buffer);
   }
 
@@ -1068,13 +1412,17 @@ public class CodecHelperV291 implements CodecHelper {
       case 1 -> new GameRuleValue(name, buffer.readBoolean());
       case 2 -> new GameRuleValue(name, buffer.readUnsignedVarInt());
       case 3 -> new GameRuleValue(name, buffer.readFloatLE());
-      default -> throw new IllegalStateException("Invalid game rule type received!");
+      default -> throw new IllegalStateException(
+        "Invalid game rule type received!"
+      );
     };
   }
 
   @NotNull
   @Override
-  public List<InventoryActionData> readInventoryActions(@NotNull final PacketBuffer buffer) {
+  public List<InventoryActionData> readInventoryActions(
+    @NotNull final PacketBuffer buffer
+  ) {
     return buffer.readArrayUnsignedInt(() -> {
       final var source = this.readInventorySource(buffer);
       final var slot = buffer.readUnsignedVarInt();
@@ -1085,14 +1433,15 @@ public class CodecHelperV291 implements CodecHelper {
   }
 
   @Override
-  public void readInventoryTransactionType(@NotNull final PacketBuffer buffer,
-                                           @NotNull final InventoryTransaction packet) {
+  public void readInventoryTransactionType(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final InventoryTransaction packet
+  ) {
     switch (packet.transactionType()) {
       case ITEM_USE -> this.readItemUse(buffer, packet);
       case ITEM_USE_ON_ENTITY -> this.readItemUseOnEntity(buffer, packet);
       case ITEM_RELEASE -> this.readItemRelease(buffer, packet);
-      default -> {
-      }
+      default -> {}
     }
   }
 
@@ -1113,7 +1462,11 @@ public class CodecHelperV291 implements CodecHelper {
     final var nbtSize = buffer.readShortLE();
     CompoundTag compoundTag = null;
     if (nbtSize > 0) {
-      try (final var reader = Tag.createNetworkReader(new ByteBufInputStream(buffer.buffer().readSlice(nbtSize)))) {
+      try (
+        final var reader = Tag.createNetworkReader(
+          new ByteBufInputStream(buffer.buffer().readSlice(nbtSize))
+        )
+      ) {
         compoundTag = reader.readCompoundTag();
       } catch (final IOException e) {
         throw new IllegalStateException("Unable to load NBT data!", e);
@@ -1121,7 +1474,8 @@ public class CodecHelperV291 implements CodecHelper {
     }
     final var canPlace = buffer.readArrayUnsignedInt(buffer::readString);
     final var canBreak = buffer.readArrayUnsignedInt(buffer::readString);
-    return ItemData.newBuilder()
+    return ItemData
+      .newBuilder()
       .definition(definition)
       .damage(damage)
       .count(count)
@@ -1132,7 +1486,10 @@ public class CodecHelperV291 implements CodecHelper {
   }
 
   @Override
-  public void readLevelSettings(@NotNull final StartGame packet, @NotNull final PacketBuffer buffer) {
+  public void readLevelSettings(
+    @NotNull final StartGame packet,
+    @NotNull final PacketBuffer buffer
+  ) {
     packet.seed(buffer.readVarInt());
     packet.dimensionId(buffer.readVarInt());
     packet.generatorId(buffer.readVarInt());
@@ -1150,15 +1507,21 @@ public class CodecHelperV291 implements CodecHelper {
     buffer.readBoolean();
     packet.commandsEnabled(buffer.readBoolean());
     packet.texturePacksRequired(buffer.readBoolean());
-    packet.gameRules(buffer.readArrayUnsignedInt(() -> this.readGameRule(buffer)));
+    packet.gameRules(
+      buffer.readArrayUnsignedInt(() -> this.readGameRule(buffer))
+    );
     packet.bonusChestEnabled(buffer.readBoolean());
     packet.startingWithMap(buffer.readBoolean());
     packet.trustingPlayers(buffer.readBoolean());
-    packet.defaultPlayerPermission(PlayerPermission.byOrdinal(buffer.readVarInt()));
+    packet.defaultPlayerPermission(
+      PlayerPermission.byOrdinal(buffer.readVarInt())
+    );
     packet.xblBroadcastMode(GamePublishSetting.byOrdinal(buffer.readVarInt()));
     packet.serverChunkTickRange(buffer.readIntLE());
     buffer.readBoolean();
-    packet.platformBroadcastMode(GamePublishSetting.byOrdinal(buffer.readVarInt()));
+    packet.platformBroadcastMode(
+      GamePublishSetting.byOrdinal(buffer.readVarInt())
+    );
     buffer.readBoolean();
     packet.behaviorPackLocked(buffer.readBoolean());
     packet.resourcePackLocked(buffer.readBoolean());
@@ -1168,20 +1531,32 @@ public class CodecHelperV291 implements CodecHelper {
 
   @NotNull
   @Override
-  public ResourcePackInfo.Entry readResourcePackInfoEntry(@NotNull final PacketBuffer buffer) {
+  public ResourcePackInfo.Entry readResourcePackInfoEntry(
+    @NotNull final PacketBuffer buffer
+  ) {
     final var packId = buffer.readString();
     final var packVersion = buffer.readString();
     final var packSize = buffer.readLongLE();
     final var contentKey = buffer.readString();
     final var subPackName = buffer.readString();
     final var contentId = buffer.readString();
-    return new ResourcePackInfo.Entry(packId, packVersion, packSize, contentKey, subPackName, contentId,
-      false, false);
+    return new ResourcePackInfo.Entry(
+      packId,
+      packVersion,
+      packSize,
+      contentKey,
+      subPackName,
+      contentId,
+      false,
+      false
+    );
   }
 
   @NotNull
   @Override
-  public ResourcePackStack.Entry readResourcePackStackEntry(@NotNull final PacketBuffer buffer) {
+  public ResourcePackStack.Entry readResourcePackStackEntry(
+    @NotNull final PacketBuffer buffer
+  ) {
     final var packId = buffer.readString();
     final var packVersion = buffer.readString();
     final var subPackName = buffer.readString();
@@ -1189,7 +1564,10 @@ public class CodecHelperV291 implements CodecHelper {
   }
 
   @Override
-  public void writeAdventureSettings(@NotNull final AdventureSettings packet, @NotNull final PacketBuffer buffer) {
+  public void writeAdventureSettings(
+    @NotNull final AdventureSettings packet,
+    @NotNull final PacketBuffer buffer
+  ) {
     var flags1 = 0;
     var flags2 = 0;
     for (final var setting : packet.settings()) {
@@ -1208,8 +1586,10 @@ public class CodecHelperV291 implements CodecHelper {
   }
 
   @Override
-  public void writeAttribute(@NotNull final PacketBuffer buffer,
-                             @NotNull final AttributeData data) {
+  public void writeAttribute(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final AttributeData data
+  ) {
     buffer.writeString(data.name());
     buffer.writeFloatLE(data.minimum());
     buffer.writeFloatLE(data.maximum());
@@ -1217,7 +1597,10 @@ public class CodecHelperV291 implements CodecHelper {
   }
 
   @Override
-  public void writeAttributeFull(@NotNull final PacketBuffer buffer, @NotNull final AttributeData data) {
+  public void writeAttributeFull(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final AttributeData data
+  ) {
     buffer.writeFloatLE(data.minimum());
     buffer.writeFloatLE(data.maximum());
     buffer.writeFloatLE(data.value());
@@ -1226,7 +1609,10 @@ public class CodecHelperV291 implements CodecHelper {
   }
 
   @Override
-  public void writeBossEventAction(@NotNull final BossEvent packet, @NotNull final PacketBuffer buffer) {
+  public void writeBossEventAction(
+    @NotNull final BossEvent packet,
+    @NotNull final PacketBuffer buffer
+  ) {
     switch (packet.action()) {
       case REGISTER_PLAYER, UNREGISTER_PLAYER -> {
         buffer.writeVarLong(packet.playerUniqueEntityId());
@@ -1248,15 +1634,18 @@ public class CodecHelperV291 implements CodecHelper {
       case UPDATE_NAME -> {
         buffer.writeString(packet.title());
       }
-      case REMOVE -> {
-      }
-      default -> throw new IllegalStateException("Unexpected value: " + packet.action());
+      case REMOVE -> {}
+      default -> throw new IllegalStateException(
+        "Unexpected value: " + packet.action()
+      );
     }
   }
 
   @Override
-  public void writeCommandEnum(@NotNull final PacketBuffer buffer,
-                               @NotNull final CommandEnumData data) {
+  public void writeCommandEnum(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final CommandEnumData data
+  ) {
     buffer.writeString(data.name());
     final var values = data.values();
     buffer.writeUnsignedVarInt(values.length);
@@ -1266,7 +1655,10 @@ public class CodecHelperV291 implements CodecHelper {
   }
 
   @Override
-  public void writeCommands(@NotNull final PacketBuffer buffer, @NotNull final List<CommandData> commands) {
+  public void writeCommands(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final List<CommandData> commands
+  ) {
     final var enumValuesSet = new ObjectOpenHashSet<String>();
     final var postFixesSet = new ObjectOpenHashSet<String>();
     final var enumsSet = new ObjectOpenHashSet<CommandEnumData>();
@@ -1302,14 +1694,21 @@ public class CodecHelperV291 implements CodecHelper {
     buffer.writeArrayUnsignedInt(enumValues, buffer::writeString);
     buffer.writeArrayUnsignedInt(postFixes, buffer::writeString);
     this.writeCommandEnums(buffer, enumValues, enums);
-    buffer.writeArrayUnsignedInt(commands, command ->
-      this.writeCommand(buffer, command, enums, softEnums, postFixes));
-    buffer.writeArrayUnsignedInt(softEnums, data -> this.writeCommandEnum(buffer, data));
+    buffer.writeArrayUnsignedInt(
+      commands,
+      command -> this.writeCommand(buffer, command, enums, softEnums, postFixes)
+    );
+    buffer.writeArrayUnsignedInt(
+      softEnums,
+      data -> this.writeCommandEnum(buffer, data)
+    );
   }
 
   @Override
-  public void writeEntityData(@NotNull final PacketBuffer buffer,
-                              @NotNull final EntityDataMap map) {
+  public void writeEntityData(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final EntityDataMap map
+  ) {
     buffer.writeUnsignedVarInt(map.size());
     for (final var entry : map.entrySet()) {
       final var size = buffer.size();
@@ -1342,12 +1741,14 @@ public class CodecHelperV291 implements CodecHelper {
         case NBT:
           final ItemData item;
           if (object instanceof CompoundTag compoundTag) {
-            item = ItemData.newBuilder()
-              .definition(ItemDefinition.LEGACY_FIREWORK)
-              .damage(0)
-              .count(1)
-              .tag(compoundTag)
-              .build();
+            item =
+              ItemData
+                .newBuilder()
+                .definition(ItemDefinition.LEGACY_FIREWORK)
+                .damage(0)
+                .count(1)
+                .tag(compoundTag)
+                .build();
           } else {
             item = (ItemData) object;
           }
@@ -1373,8 +1774,10 @@ public class CodecHelperV291 implements CodecHelper {
   }
 
   @Override
-  public void writeEntityLink(@NotNull final PacketBuffer buffer,
-                              @NotNull final EntityLinkData link) {
+  public void writeEntityLink(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final EntityLinkData link
+  ) {
     buffer.writeVarLong(link.from());
     buffer.writeVarLong(link.to());
     buffer.writeByte(link.type().ordinal());
@@ -1382,14 +1785,23 @@ public class CodecHelperV291 implements CodecHelper {
   }
 
   @Override
-  public void writeEventData(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
-    final var function = Preconditions.checkNotNull(this.eventTypeWriters.get(data.type()),
-      "Unknown event type %s", data.type());
+  public void writeEventData(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final Event.Data data
+  ) {
+    final var function = Preconditions.checkNotNull(
+      this.eventTypeWriters.get(data.type()),
+      "Unknown event type %s",
+      data.type()
+    );
     function.accept(buffer, data);
   }
 
   @Override
-  public void writeGameRule(@NotNull final PacketBuffer buffer, @NotNull final GameRuleValue gameRule) {
+  public void writeGameRule(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final GameRuleValue gameRule
+  ) {
     final var value = gameRule.value();
     final var type = this.gameRuleTypes.id(value.getClass());
     buffer.writeString(gameRule.name());
@@ -1398,35 +1810,47 @@ public class CodecHelperV291 implements CodecHelper {
       case 1 -> buffer.writeBoolean((boolean) value);
       case 2 -> buffer.writeUnsignedVarInt((int) value);
       case 3 -> buffer.writeFloatLE((float) value);
-      default -> throw new IllegalStateException("Invalid game rule type received!");
+      default -> throw new IllegalStateException(
+        "Invalid game rule type received!"
+      );
     }
   }
 
   @Override
-  public void writeInventoryActions(@NotNull final PacketBuffer buffer,
-                                    @NotNull final List<InventoryActionData> actions, final boolean hasNetworkIds) {
-    buffer.writeArrayUnsignedInt(actions, action -> {
-      this.writeInventorySource(buffer, action.source());
-      buffer.writeUnsignedVarInt(action.slot());
-      this.writeItem(buffer, action.fromItem());
-      this.writeItem(buffer, action.toItem());
-    });
+  public void writeInventoryActions(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final List<InventoryActionData> actions,
+    final boolean hasNetworkIds
+  ) {
+    buffer.writeArrayUnsignedInt(
+      actions,
+      action -> {
+        this.writeInventorySource(buffer, action.source());
+        buffer.writeUnsignedVarInt(action.slot());
+        this.writeItem(buffer, action.fromItem());
+        this.writeItem(buffer, action.toItem());
+      }
+    );
   }
 
   @Override
-  public void writeInventoryTransactionType(@NotNull final PacketBuffer buffer,
-                                            @NotNull final InventoryTransaction packet) {
+  public void writeInventoryTransactionType(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final InventoryTransaction packet
+  ) {
     switch (packet.transactionType()) {
       case ITEM_USE -> this.writeItemUse(buffer, packet);
       case ITEM_USE_ON_ENTITY -> this.writeItemUseOnEntity(buffer, packet);
       case ITEM_RELEASE -> this.writeItemRelease(buffer, packet);
-      default -> {
-      }
+      default -> {}
     }
   }
 
   @Override
-  public void writeItem(@NotNull final PacketBuffer buffer, @NotNull final ItemData item) {
+  public void writeItem(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final ItemData item
+  ) {
     final var definition = item.definition();
     if (this.isAir(definition)) {
       buffer.writeByte(0);
@@ -1455,7 +1879,10 @@ public class CodecHelperV291 implements CodecHelper {
   }
 
   @Override
-  public void writeLevelSettings(@NotNull final StartGame packet, @NotNull final PacketBuffer buffer) {
+  public void writeLevelSettings(
+    @NotNull final StartGame packet,
+    @NotNull final PacketBuffer buffer
+  ) {
     buffer.writeVarInt(packet.seed());
     buffer.writeVarInt(packet.dimensionId());
     buffer.writeVarInt(packet.generatorId());
@@ -1470,19 +1897,28 @@ public class CodecHelperV291 implements CodecHelper {
     buffer.writeFloatLE(packet.lightningLevel());
     buffer.writeBoolean(packet.multiplayerGame());
     buffer.writeBoolean(packet.broadcastingToLan());
-    buffer.writeBoolean(packet.xblBroadcastMode() != GamePublishSetting.NO_MULTI_PLAY);
+    buffer.writeBoolean(
+      packet.xblBroadcastMode() != GamePublishSetting.NO_MULTI_PLAY
+    );
     buffer.writeBoolean(packet.commandsEnabled());
     buffer.writeBoolean(packet.texturePacksRequired());
-    buffer.writeArrayUnsignedInt(packet.gameRules(), rule -> this.writeGameRule(buffer, rule));
+    buffer.writeArrayUnsignedInt(
+      packet.gameRules(),
+      rule -> this.writeGameRule(buffer, rule)
+    );
     buffer.writeBoolean(packet.bonusChestEnabled());
     buffer.writeBoolean(packet.startingWithMap());
     buffer.writeBoolean(packet.trustingPlayers());
     buffer.writeVarInt(packet.defaultPlayerPermission().ordinal());
     buffer.writeVarInt(packet.xblBroadcastMode().ordinal());
     buffer.writeIntLE(packet.serverChunkTickRange());
-    buffer.writeBoolean(packet.platformBroadcastMode() != GamePublishSetting.NO_MULTI_PLAY);
+    buffer.writeBoolean(
+      packet.platformBroadcastMode() != GamePublishSetting.NO_MULTI_PLAY
+    );
     buffer.writeVarInt(packet.platformBroadcastMode().ordinal());
-    buffer.writeBoolean(packet.xblBroadcastMode() != GamePublishSetting.NO_MULTI_PLAY);
+    buffer.writeBoolean(
+      packet.xblBroadcastMode() != GamePublishSetting.NO_MULTI_PLAY
+    );
     buffer.writeBoolean(packet.behaviorPackLocked());
     buffer.writeBoolean(packet.resourcePackLocked());
     buffer.writeBoolean(packet.fromLockedWorldTemplate());
@@ -1490,7 +1926,10 @@ public class CodecHelperV291 implements CodecHelper {
   }
 
   @Override
-  public void writeResourcePackEntry(@NotNull final PacketBuffer buffer, @NotNull final ResourcePackInfo.Entry entry) {
+  public void writeResourcePackEntry(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final ResourcePackInfo.Entry entry
+  ) {
     buffer.writeString(entry.packId());
     buffer.writeString(entry.packVersion());
     buffer.writeLongLE(entry.packSize());
@@ -1500,7 +1939,10 @@ public class CodecHelperV291 implements CodecHelper {
   }
 
   @Override
-  public void writeResourcePackStackEntry(@NotNull final PacketBuffer buffer, @NotNull final ResourcePackStack.Entry entry) {
+  public void writeResourcePackStackEntry(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final ResourcePackStack.Entry entry
+  ) {
     buffer.writeString(entry.packId());
     buffer.writeString(entry.packVersion());
     buffer.writeString(entry.subPackName());
@@ -1512,7 +1954,10 @@ public class CodecHelperV291 implements CodecHelper {
    * @param buffer the buffer to read.
    * @param packet the packet to read.
    */
-  public void readItemRelease(@NotNull final PacketBuffer buffer, @NotNull final InventoryTransaction packet) {
+  public void readItemRelease(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final InventoryTransaction packet
+  ) {
     packet.actionType(buffer.readUnsignedVarInt());
     packet.hotBarSlot(buffer.readVarInt());
     packet.itemInHand(this.readItem(buffer));
@@ -1525,7 +1970,10 @@ public class CodecHelperV291 implements CodecHelper {
    * @param buffer the buffer to read.
    * @param packet the packet to read.
    */
-  public void readItemUseOnEntity(@NotNull final PacketBuffer buffer, @NotNull final InventoryTransaction packet) {
+  public void readItemUseOnEntity(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final InventoryTransaction packet
+  ) {
     packet.runtimeEntityId(buffer.readUnsignedVarLong());
     packet.actionType(buffer.readUnsignedVarInt());
     packet.hotBarSlot(buffer.readVarInt());
@@ -1540,7 +1988,10 @@ public class CodecHelperV291 implements CodecHelper {
    * @param buffer the buffer to write.
    * @param packet the packet to write.
    */
-  public void writeItemRelease(@NotNull final PacketBuffer buffer, @NotNull final InventoryTransaction packet) {
+  public void writeItemRelease(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final InventoryTransaction packet
+  ) {
     buffer.writeUnsignedVarLong(packet.actionType());
     buffer.writeVarInt(packet.hotBarSlot());
     this.writeItem(buffer, packet.itemInHand());
@@ -1553,7 +2004,10 @@ public class CodecHelperV291 implements CodecHelper {
    * @param buffer the buffer to read.
    * @param packet the packet to read.
    */
-  public void writeItemUseOnEntity(@NotNull final PacketBuffer buffer, @NotNull final InventoryTransaction packet) {
+  public void writeItemUseOnEntity(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final InventoryTransaction packet
+  ) {
     buffer.writeUnsignedVarLong(packet.runtimeEntityId());
     buffer.writeUnsignedVarLong(packet.actionType());
     buffer.writeVarInt(packet.hotBarSlot());
@@ -1581,7 +2035,9 @@ public class CodecHelperV291 implements CodecHelper {
    * @return achievement awarded.
    */
   @NotNull
-  protected AchievementAwardedEventData readAchievementAwarded(@NotNull final PacketBuffer buffer) {
+  protected AchievementAwardedEventData readAchievementAwarded(
+    @NotNull final PacketBuffer buffer
+  ) {
     return new AchievementAwardedEventData(buffer.readVarInt());
   }
 
@@ -1593,13 +2049,21 @@ public class CodecHelperV291 implements CodecHelper {
    * @return agent command.
    */
   @NotNull
-  protected AgentCommandEventData readAgentCommand(@NotNull final PacketBuffer buffer) {
+  protected AgentCommandEventData readAgentCommand(
+    @NotNull final PacketBuffer buffer
+  ) {
     final var result = AgentResult.VALUES[buffer.readVarInt()];
     final var dataValue = buffer.readVarInt();
     final var command = buffer.readString();
     final var dataKey = buffer.readString();
     final var output = buffer.readString();
-    return new AgentCommandEventData(command, dataKey, dataValue, output, result);
+    return new AgentCommandEventData(
+      command,
+      dataKey,
+      dataValue,
+      output,
+      result
+    );
   }
 
   /**
@@ -1610,11 +2074,17 @@ public class CodecHelperV291 implements CodecHelper {
    * @return boss killed.
    */
   @NotNull
-  protected BossKilledEventData readBossKilled(@NotNull final PacketBuffer buffer) {
+  protected BossKilledEventData readBossKilled(
+    @NotNull final PacketBuffer buffer
+  ) {
     final var bossUniqueEntityId = buffer.readVarLong();
     final var playerPartySize = buffer.readVarInt();
     final var interactionEntityType = buffer.readVarInt();
-    return new BossKilledEventData(interactionEntityType, bossUniqueEntityId, playerPartySize);
+    return new BossKilledEventData(
+      interactionEntityType,
+      bossUniqueEntityId,
+      playerPartySize
+    );
   }
 
   /**
@@ -1625,7 +2095,9 @@ public class CodecHelperV291 implements CodecHelper {
    * @return cauldron used.
    */
   @NotNull
-  protected CauldronUsedEventData readCauldronUsed(@NotNull final PacketBuffer buffer) {
+  protected CauldronUsedEventData readCauldronUsed(
+    @NotNull final PacketBuffer buffer
+  ) {
     final var potionId = buffer.readVarInt();
     final var color = buffer.readVarInt();
     final var fillLevel = buffer.readVarInt();
@@ -1640,12 +2112,19 @@ public class CodecHelperV291 implements CodecHelper {
    * @return entity interact.
    */
   @NotNull
-  protected EntityInteractEventData readEntityInteract(@NotNull final PacketBuffer buffer) {
+  protected EntityInteractEventData readEntityInteract(
+    @NotNull final PacketBuffer buffer
+  ) {
     final var interactionType = buffer.readVarInt();
     final var interactionEntityType = buffer.readVarInt();
     final var entityVariant = buffer.readVarInt();
     final var entityColor = buffer.readUnsignedByte();
-    return new EntityInteractEventData(interactionType, interactionEntityType, entityVariant, entityColor);
+    return new EntityInteractEventData(
+      interactionType,
+      interactionEntityType,
+      entityVariant,
+      entityColor
+    );
   }
 
   /**
@@ -1656,12 +2135,19 @@ public class CodecHelperV291 implements CodecHelper {
    * @return fish bucketed
    */
   @NotNull
-  protected FishBucketedEventData readFishBucketed(@NotNull final PacketBuffer buffer) {
+  protected FishBucketedEventData readFishBucketed(
+    @NotNull final PacketBuffer buffer
+  ) {
     final var pattern = buffer.readVarInt();
     final var preset = buffer.readVarInt();
     final var bucketedEntityType = buffer.readVarInt();
     final var isRelease = buffer.readBoolean();
-    return new FishBucketedEventData(pattern, preset, bucketedEntityType, isRelease);
+    return new FishBucketedEventData(
+      pattern,
+      preset,
+      bucketedEntityType,
+      isRelease
+    );
   }
 
   /**
@@ -1672,14 +2158,20 @@ public class CodecHelperV291 implements CodecHelper {
    * @return inventory source.
    */
   @NotNull
-  protected InventorySource readInventorySource(@NotNull final PacketBuffer buffer) {
+  protected InventorySource readInventorySource(
+    @NotNull final PacketBuffer buffer
+  ) {
     final var type = InventorySource.Type.byId(buffer.readUnsignedVarInt());
     return switch (type) {
       case CONTAINER -> InventorySource.containerId(buffer.readVarInt());
       case GLOBAL -> InventorySource.global();
-      case WORLD_INTERACTION -> InventorySource.worldInteraction(InventorySource.Flag.VALUES[buffer.readUnsignedVarInt()]);
+      case WORLD_INTERACTION -> InventorySource.worldInteraction(
+        InventorySource.Flag.VALUES[buffer.readUnsignedVarInt()]
+      );
       case CREATIVE -> InventorySource.creative();
-      case NON_IMPLEMENTED -> InventorySource.nonImplemented(buffer.readVarInt());
+      case NON_IMPLEMENTED -> InventorySource.nonImplemented(
+        buffer.readVarInt()
+      );
       default -> InventorySource.invalid();
     };
   }
@@ -1690,7 +2182,10 @@ public class CodecHelperV291 implements CodecHelper {
    * @param buffer the buffer to read.
    * @param packet the packet to read.
    */
-  protected void readItemUse(@NotNull final PacketBuffer buffer, @NotNull final InventoryTransaction packet) {
+  protected void readItemUse(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final InventoryTransaction packet
+  ) {
     packet.actionType(buffer.readUnsignedVarInt());
     packet.blockPosition(buffer.readVector3i());
     packet.blockFace(buffer.readVarInt());
@@ -1708,14 +2203,22 @@ public class CodecHelperV291 implements CodecHelper {
    * @return mob killed.
    */
   @NotNull
-  protected MobKilledEventData readMobKilled(@NotNull final PacketBuffer buffer) {
+  protected MobKilledEventData readMobKilled(
+    @NotNull final PacketBuffer buffer
+  ) {
     final var killerUniqueEntityId = buffer.readVarLong();
     final var victimUniqueEntityId = buffer.readVarLong();
     final var entityDamageCause = buffer.readVarInt();
     final var villagerTradeTier = buffer.readVarInt();
     final var villagerDisplayName = buffer.readString();
-    return new MobKilledEventData(entityDamageCause, -1, killerUniqueEntityId, victimUniqueEntityId,
-      villagerDisplayName, villagerTradeTier);
+    return new MobKilledEventData(
+      entityDamageCause,
+      -1,
+      killerUniqueEntityId,
+      victimUniqueEntityId,
+      villagerDisplayName,
+      villagerTradeTier
+    );
   }
 
   /**
@@ -1726,13 +2229,21 @@ public class CodecHelperV291 implements CodecHelper {
    * @return patter removed.
    */
   @NotNull
-  protected PatternRemovedEventData readPatternRemoved(@NotNull final PacketBuffer buffer) {
+  protected PatternRemovedEventData readPatternRemoved(
+    @NotNull final PacketBuffer buffer
+  ) {
     final var itemId = buffer.readVarInt();
     final var auxValue = buffer.readVarInt();
     final var patternsSize = buffer.readVarInt();
     final var patternIndex = buffer.readVarInt();
     final var patternColor = buffer.readVarInt();
-    return new PatternRemovedEventData(auxValue, itemId, patternColor, patternIndex, patternsSize);
+    return new PatternRemovedEventData(
+      auxValue,
+      itemId,
+      patternColor,
+      patternIndex,
+      patternsSize
+    );
   }
 
   /**
@@ -1743,10 +2254,17 @@ public class CodecHelperV291 implements CodecHelper {
    * @return player died.
    */
   @NotNull
-  protected PlayerDiedEventData readPlayerDied(@NotNull final PacketBuffer buffer) {
+  protected PlayerDiedEventData readPlayerDied(
+    @NotNull final PacketBuffer buffer
+  ) {
     final var attackerEntityId = buffer.readVarInt();
     final var entityDamageCause = buffer.readVarInt();
-    return new PlayerDiedEventData(attackerEntityId, -1, entityDamageCause, false);
+    return new PlayerDiedEventData(
+      attackerEntityId,
+      -1,
+      entityDamageCause,
+      false
+    );
   }
 
   /**
@@ -1757,7 +2275,9 @@ public class CodecHelperV291 implements CodecHelper {
    * @return portal built.
    */
   @NotNull
-  protected PortalBuiltEventData readPortalBuilt(@NotNull final PacketBuffer buffer) {
+  protected PortalBuiltEventData readPortalBuilt(
+    @NotNull final PacketBuffer buffer
+  ) {
     return new PortalBuiltEventData(buffer.readVarInt());
   }
 
@@ -1769,7 +2289,9 @@ public class CodecHelperV291 implements CodecHelper {
    * @return portal used.
    */
   @NotNull
-  protected PortalUsedEventData readPortalUsed(@NotNull final PacketBuffer buffer) {
+  protected PortalUsedEventData readPortalUsed(
+    @NotNull final PacketBuffer buffer
+  ) {
     final var fromDimensionId = buffer.readVarInt();
     final var toDimensionId = buffer.readVarInt();
     return new PortalUsedEventData(fromDimensionId, toDimensionId);
@@ -1783,12 +2305,18 @@ public class CodecHelperV291 implements CodecHelper {
    * @return slash command executed.
    */
   @NotNull
-  protected SlashCommandExecutedEventData readSlashCommandExecuted(@NotNull final PacketBuffer buffer) {
+  protected SlashCommandExecutedEventData readSlashCommandExecuted(
+    @NotNull final PacketBuffer buffer
+  ) {
     final var successCount = buffer.readVarInt();
     buffer.readVarInt();
     final var commandName = buffer.readString();
     final var outputMessages = Arrays.asList(buffer.readString().split(";"));
-    return new SlashCommandExecutedEventData(commandName, outputMessages, successCount);
+    return new SlashCommandExecutedEventData(
+      commandName,
+      outputMessages,
+      successCount
+    );
   }
 
   /**
@@ -1797,7 +2325,10 @@ public class CodecHelperV291 implements CodecHelper {
    * @param buffer the bufeer to write.
    * @param data the data to write.
    */
-  protected void writeAchievementAwarded(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+  protected void writeAchievementAwarded(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final Event.Data data
+  ) {
     buffer.writeVarInt(((AchievementAwardedEventData) data).achievementId());
   }
 
@@ -1807,7 +2338,10 @@ public class CodecHelperV291 implements CodecHelper {
    * @param buffer the buffer to write.
    * @param data the data to write.
    */
-  protected void writeAgentCommand(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+  protected void writeAgentCommand(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final Event.Data data
+  ) {
     final var event = (AgentCommandEventData) data;
     buffer.writeVarInt(event.result().ordinal());
     buffer.writeVarInt(event.dataValue());
@@ -1822,7 +2356,10 @@ public class CodecHelperV291 implements CodecHelper {
    * @param buffer the buffer to write.
    * @param data the data to write.
    */
-  protected void writeBossKilled(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+  protected void writeBossKilled(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final Event.Data data
+  ) {
     final var event = (BossKilledEventData) data;
     buffer.writeVarLong(event.bossUniqueEntityId());
     buffer.writeVarInt(event.playerPartySize());
@@ -1835,7 +2372,10 @@ public class CodecHelperV291 implements CodecHelper {
    * @param buffer the buffer to write.
    * @param data the data to write.
    */
-  protected void writeCauldronUsed(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+  protected void writeCauldronUsed(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final Event.Data data
+  ) {
     final var event = (CauldronUsedEventData) data;
     buffer.writeUnsignedVarInt(event.potionId());
     buffer.writeVarInt(event.color());
@@ -1848,7 +2388,10 @@ public class CodecHelperV291 implements CodecHelper {
    * @param buffer the buffer to write.
    * @param data the data to write.
    */
-  protected void writeEntityInteract(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+  protected void writeEntityInteract(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final Event.Data data
+  ) {
     final var event = (EntityInteractEventData) data;
     buffer.writeVarInt(event.interactionType());
     buffer.writeVarInt(event.legacyEntityTypeId());
@@ -1862,7 +2405,10 @@ public class CodecHelperV291 implements CodecHelper {
    * @param buffer the buffer to write.
    * @param data the data to write.
    */
-  protected void writeFishBucketed(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+  protected void writeFishBucketed(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final Event.Data data
+  ) {
     final var event = (FishBucketedEventData) data;
     buffer.writeVarInt(event.pattern());
     buffer.writeVarInt(event.preset());
@@ -1876,14 +2422,19 @@ public class CodecHelperV291 implements CodecHelper {
    * @param buffer the buffer to write.
    * @param inventorySource the inventory source to write.
    */
-  protected void writeInventorySource(@NotNull final PacketBuffer buffer,
-                                      @NotNull final InventorySource inventorySource) {
+  protected void writeInventorySource(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final InventorySource inventorySource
+  ) {
     buffer.writeUnsignedVarInt(inventorySource.type().id());
     switch (inventorySource.type()) {
-      case CONTAINER, UNTRACKED_INTERACTION_UI, NON_IMPLEMENTED -> buffer.writeVarInt(inventorySource.containerId());
-      case WORLD_INTERACTION -> buffer.writeUnsignedVarInt(inventorySource.flag().ordinal());
-      default -> {
-      }
+      case CONTAINER,
+        UNTRACKED_INTERACTION_UI,
+        NON_IMPLEMENTED -> buffer.writeVarInt(inventorySource.containerId());
+      case WORLD_INTERACTION -> buffer.writeUnsignedVarInt(
+        inventorySource.flag().ordinal()
+      );
+      default -> {}
     }
   }
 
@@ -1893,7 +2444,10 @@ public class CodecHelperV291 implements CodecHelper {
    * @param buffer the buffer to write.
    * @param packet the packet to write.
    */
-  protected void writeItemUse(@NotNull final PacketBuffer buffer, @NotNull final InventoryTransaction packet) {
+  protected void writeItemUse(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final InventoryTransaction packet
+  ) {
     buffer.writeUnsignedVarInt(packet.actionType());
     buffer.writeVector3i(packet.blockPosition());
     buffer.writeVarInt(packet.blockFace());
@@ -1909,7 +2463,10 @@ public class CodecHelperV291 implements CodecHelper {
    * @param buffer the buffer to write.
    * @param data the data to write.
    */
-  protected void writeMobKilled(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+  protected void writeMobKilled(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final Event.Data data
+  ) {
     final var event = (MobKilledEventData) data;
     buffer.writeVarLong(event.killerUniqueEntityId());
     buffer.writeVarLong(event.victimUniqueEntityId());
@@ -1924,7 +2481,10 @@ public class CodecHelperV291 implements CodecHelper {
    * @param buffer the buffer to write.
    * @param data the data to write.
    */
-  protected void writePatternRemoved(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+  protected void writePatternRemoved(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final Event.Data data
+  ) {
     final var event = (PatternRemovedEventData) data;
     buffer.writeVarInt(event.itemId());
     buffer.writeVarInt(event.auxValue());
@@ -1939,7 +2499,10 @@ public class CodecHelperV291 implements CodecHelper {
    * @param buffer the buffer to write.
    * @param data the data to write.
    */
-  protected void writePlayerDied(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+  protected void writePlayerDied(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final Event.Data data
+  ) {
     final var event = (PlayerDiedEventData) data;
     buffer.writeVarInt(event.attackerEntityId());
     buffer.writeVarInt(event.entityDamageCause());
@@ -1951,7 +2514,10 @@ public class CodecHelperV291 implements CodecHelper {
    * @param buffer the buffer to write.
    * @param data the data to write.
    */
-  protected void writePortalBuilt(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+  protected void writePortalBuilt(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final Event.Data data
+  ) {
     buffer.writeVarInt(((PortalBuiltEventData) data).dimensionId());
   }
 
@@ -1961,7 +2527,10 @@ public class CodecHelperV291 implements CodecHelper {
    * @param buffer the buffer to write.
    * @param data the data to write.
    */
-  protected void writePortalUsed(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+  protected void writePortalUsed(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final Event.Data data
+  ) {
     final var event = (PortalUsedEventData) data;
     buffer.writeVarInt(event.fromDimensionId());
     buffer.writeVarInt(event.toDimensionId());
@@ -1973,7 +2542,10 @@ public class CodecHelperV291 implements CodecHelper {
    * @param buffer the buffer to write.
    * @param data the data to write.
    */
-  protected void writeSlashCommandExecuted(@NotNull final PacketBuffer buffer, @NotNull final Event.Data data) {
+  protected void writeSlashCommandExecuted(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final Event.Data data
+  ) {
     final var event = (SlashCommandExecutedEventData) data;
     buffer.writeVarInt(event.successCount());
     final var outputMessages = event.outputMessages();
@@ -1993,9 +2565,12 @@ public class CodecHelperV291 implements CodecHelper {
    * @return command.
    */
   @NotNull
-  private CommandData readCommand(@NotNull final PacketBuffer buffer, @NotNull final List<CommandEnumData> enums,
-                                  @NotNull final List<CommandEnumData> softEnums,
-                                  @NotNull final List<String> postFixes) {
+  private CommandData readCommand(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final List<CommandEnumData> enums,
+    @NotNull final List<CommandEnumData> softEnums,
+    @NotNull final List<String> postFixes
+  ) {
     final var name = buffer.readString();
     final var description = buffer.readString();
     final var flags = buffer.readByte();
@@ -2004,15 +2579,25 @@ public class CodecHelperV291 implements CodecHelper {
     final var overloads = new CommandParamData[buffer.readUnsignedVarInt()][];
     for (var index = 0; index < overloads.length; index++) {
       overloads[index] = new CommandParamData[buffer.readUnsignedVarInt()];
-      Arrays.setAll(overloads[index], index2 ->
-        this.readParameter(buffer, enums, softEnums, postFixes));
+      Arrays.setAll(
+        overloads[index],
+        index2 -> this.readParameter(buffer, enums, softEnums, postFixes)
+      );
     }
-    final var flagList = IntStream.range(0, 6)
+    final var flagList = IntStream
+      .range(0, 6)
       .filter(index -> (flags & 1 << index) != 0)
       .mapToObj(index -> CommandData.Flag.VALUES[index])
       .collect(Collectors.toCollection(ObjectArrayList::new));
     final var aliases = aliasesIndex == -1 ? null : enums.get(aliasesIndex);
-    return new CommandData(name, description, flagList, permissions, aliases, overloads);
+    return new CommandData(
+      name,
+      description,
+      flagList,
+      permissions,
+      aliases,
+      overloads
+    );
   }
 
   /**
@@ -2024,9 +2609,13 @@ public class CodecHelperV291 implements CodecHelper {
    * @return command enum data.
    */
   @NotNull
-  private List<CommandEnumData> readCommandEnums(@NotNull final PacketBuffer buffer,
-                                                 @NotNull final List<String> values) {
-    final var indexReader = CodecHelperV291.READER_FUNCTION.apply(values.size());
+  private List<CommandEnumData> readCommandEnums(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final List<String> values
+  ) {
+    final var indexReader = CodecHelperV291.READER_FUNCTION.apply(
+      values.size()
+    );
     return buffer.readArrayUnsignedInt(() -> {
       final var name = buffer.readString();
       final var length = buffer.readUnsignedVarInt();
@@ -2049,9 +2638,12 @@ public class CodecHelperV291 implements CodecHelper {
    * @return command parameter data.
    */
   @NotNull
-  private CommandParamData readParameter(@NotNull final PacketBuffer buffer, @NotNull final List<CommandEnumData> enums,
-                                         @NotNull final List<CommandEnumData> softEnums,
-                                         @NotNull final List<String> postFixes) {
+  private CommandParamData readParameter(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final List<CommandEnumData> enums,
+    @NotNull final List<CommandEnumData> softEnums,
+    @NotNull final List<String> postFixes
+  ) {
     final var name = buffer.readString();
     final var type = CommandSymbolData.deserialize(buffer.readIntLE());
     final var optional = buffer.readBoolean();
@@ -2068,11 +2660,19 @@ public class CodecHelperV291 implements CodecHelper {
     } else {
       commandParam = this.commandParam(type.value());
     }
-    final var options = IntStream.range(0, 8)
+    final var options = IntStream
+      .range(0, 8)
       .filter(index -> (optionsByte & 1 << index) != 0)
       .mapToObj(index -> CommandParamOption.VALUES[index])
       .collect(Collectors.toCollection(ObjectArrayList::new));
-    return new CommandParamData(name, optional, enumData, commandParam, postfix, options);
+    return new CommandParamData(
+      name,
+      optional,
+      enumData,
+      commandParam,
+      postfix,
+      options
+    );
   }
 
   /**
@@ -2084,12 +2684,18 @@ public class CodecHelperV291 implements CodecHelper {
    * @param softEnums the soft enums to read.
    * @param postFixes the post fixes to read.
    */
-  private void writeCommand(@NotNull final PacketBuffer buffer, @NotNull final CommandData commandData,
-                            @NotNull final List<CommandEnumData> enums, @NotNull final List<CommandEnumData> softEnums,
-                            @NotNull final List<String> postFixes) {
+  private void writeCommand(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final CommandData commandData,
+    @NotNull final List<CommandEnumData> enums,
+    @NotNull final List<CommandEnumData> softEnums,
+    @NotNull final List<String> postFixes
+  ) {
     buffer.writeString(commandData.name());
     buffer.writeString(commandData.description());
-    final var flags = commandData.flags().stream()
+    final var flags = commandData
+      .flags()
+      .stream()
       .mapToInt(flag -> 1 << flag.ordinal())
       .reduce(0, (a, b) -> a | b);
     buffer.writeByte(flags);
@@ -2113,18 +2719,30 @@ public class CodecHelperV291 implements CodecHelper {
    * @param values the values to write.
    * @param enums the enums to write.
    */
-  private void writeCommandEnums(@NotNull final PacketBuffer buffer, @NotNull final List<String> values,
-                                 @NotNull final Collection<CommandEnumData> enums) {
-    final var indexWriter = CodecHelperV291.WRITER_FUNCTION.apply(values.size());
-    buffer.writeArrayUnsignedInt(enums, commandEnum -> {
-      buffer.writeString(commandEnum.name());
-      buffer.writeUnsignedVarInt(commandEnum.values().length);
-      for (final var value : commandEnum.values()) {
-        final var index = values.indexOf(value);
-        Preconditions.checkArgument(index > -1, "Invalid enum value detected: %s", value);
-        indexWriter.accept(buffer, index);
+  private void writeCommandEnums(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final List<String> values,
+    @NotNull final Collection<CommandEnumData> enums
+  ) {
+    final var indexWriter = CodecHelperV291.WRITER_FUNCTION.apply(
+      values.size()
+    );
+    buffer.writeArrayUnsignedInt(
+      enums,
+      commandEnum -> {
+        buffer.writeString(commandEnum.name());
+        buffer.writeUnsignedVarInt(commandEnum.values().length);
+        for (final var value : commandEnum.values()) {
+          final var index = values.indexOf(value);
+          Preconditions.checkArgument(
+            index > -1,
+            "Invalid enum value detected: %s",
+            value
+          );
+          indexWriter.accept(buffer, index);
+        }
       }
-    });
+    );
   }
 
   /**
@@ -2136,9 +2754,13 @@ public class CodecHelperV291 implements CodecHelper {
    * @param softEnums the soft enums to write.
    * @param postFixes the post fixes to write.
    */
-  private void writeParameter(@NotNull final PacketBuffer buffer, @NotNull final CommandParamData param,
-                              @NotNull final List<CommandEnumData> enums,
-                              @NotNull final List<CommandEnumData> softEnums, @NotNull final List<String> postFixes) {
+  private void writeParameter(
+    @NotNull final PacketBuffer buffer,
+    @NotNull final CommandParamData param,
+    @NotNull final List<CommandEnumData> enums,
+    @NotNull final List<CommandEnumData> softEnums,
+    @NotNull final List<String> postFixes
+  ) {
     buffer.writeString(param.name());
     final int index;
     var postfix = false;
@@ -2160,7 +2782,11 @@ public class CodecHelperV291 implements CodecHelper {
         }
       } else {
         final var type = param.type();
-        Preconditions.checkState(type != null, "No param type specified: %s", param);
+        Preconditions.checkState(
+          type != null,
+          "No param type specified: %s",
+          param
+        );
         index = type.value(this);
       }
     }

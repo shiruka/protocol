@@ -16,8 +16,8 @@ public record FishBucketedEventData(
   int pattern,
   int preset,
   boolean releaseEvent
-) implements Event.Data {
-
+)
+  implements Event.Data {
   @NotNull
   @Override
   public Event.Type type() {

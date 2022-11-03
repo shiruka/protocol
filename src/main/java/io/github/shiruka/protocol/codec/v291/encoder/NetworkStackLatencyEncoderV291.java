@@ -12,17 +12,26 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents network stack latency packet encoders.
  */
 @PacketId(115)
-public final class NetworkStackLatencyEncoderV291 extends PacketEncoder.Base<NetworkStackLatency> {
+public final class NetworkStackLatencyEncoderV291
+  extends PacketEncoder.Base<NetworkStackLatency> {
 
   @Override
-  public void decode(@NotNull final NetworkStackLatency packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final NetworkStackLatency packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.timestamp(buffer.readLongLE());
   }
 
   @Override
-  public void encode(@NotNull final NetworkStackLatency packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final NetworkStackLatency packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeLongLE(packet.timestamp());
   }
 }

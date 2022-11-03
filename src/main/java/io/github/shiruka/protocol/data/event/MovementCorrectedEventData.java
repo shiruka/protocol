@@ -18,8 +18,8 @@ public record MovementCorrectedEventData(
   int durationThreshold,
   float positionDelta,
   float scoreThreshold
-) implements Event.Data {
-
+)
+  implements Event.Data {
   @NotNull
   @Override
   public Event.Type type() {

@@ -1,7 +1,7 @@
 package io.github.shiruka.protocol.packet;
 
-import io.github.shiruka.api.common.vectors.Vector3f;
-import io.github.shiruka.api.common.vectors.Vector3i;
+import io.github.shiruka.api.base.Vector3f;
+import io.github.shiruka.api.base.Vector3i;
 import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.PacketHandler;
 import java.util.List;
@@ -29,11 +29,11 @@ import org.jetbrains.annotations.NotNull;
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class Explode extends MinecraftPacket.Base {
 
-  //@formatter:off
   Vector3f position;
+
   float radius;
+
   List<Vector3i> records;
-  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

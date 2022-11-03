@@ -20,8 +20,8 @@ public record MobKilledEventData(
   long victimUniqueEntityId,
   String villagerDisplayName,
   int villagerTradeTier
-) implements Event.Data {
-
+)
+  implements Event.Data {
   /**
    * ctor.
    *
@@ -30,10 +30,20 @@ public record MobKilledEventData(
    * @param killerUniqueEntityId the killer unique entity id.
    * @param victimUniqueEntityId the victim unique entity id.
    */
-  public MobKilledEventData(final int entityDamageCause, final int killerEntityType, final long killerUniqueEntityId,
-                            final long victimUniqueEntityId) {
-    this(entityDamageCause, killerEntityType, killerUniqueEntityId, victimUniqueEntityId, "",
-      -1);
+  public MobKilledEventData(
+    final int entityDamageCause,
+    final int killerEntityType,
+    final long killerUniqueEntityId,
+    final long victimUniqueEntityId
+  ) {
+    this(
+      entityDamageCause,
+      killerEntityType,
+      killerUniqueEntityId,
+      victimUniqueEntityId,
+      "",
+      -1
+    );
   }
 
   @NotNull

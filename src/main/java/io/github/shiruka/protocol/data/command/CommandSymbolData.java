@@ -17,7 +17,6 @@ public record CommandSymbolData(
   boolean softEnum,
   boolean postfix
 ) {
-
   /**
    * the arg flag enum.
    */
@@ -51,8 +50,11 @@ public record CommandSymbolData(
     final var commandEnum = (type & CommandSymbolData.ARG_FLAG_ENUM) != 0;
     final var softEnum = (type & CommandSymbolData.ARG_FLAG_SOFT_ENUM) != 0;
     final var postfix = (type & CommandSymbolData.ARG_FLAG_POSTFIX) != 0;
-    Preconditions.checkState(postfix || (type & CommandSymbolData.ARG_FLAG_VALID) != 0,
-      "Invalid command param type: %s", type);
+    Preconditions.checkState(
+      postfix || (type & CommandSymbolData.ARG_FLAG_VALID) != 0,
+      "Invalid command param type: %s",
+      type
+    );
     return new CommandSymbolData(value, commandEnum, softEnum, postfix);
   }
 

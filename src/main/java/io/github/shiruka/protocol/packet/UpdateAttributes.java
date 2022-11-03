@@ -29,11 +29,12 @@ import org.jetbrains.annotations.NotNull;
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class UpdateAttributes extends MinecraftPacket.Base {
 
-  //@formatter:off
-  @Builder.Default List<AttributeData> attributes = new ObjectArrayList<>();
+  @Builder.Default
+  List<AttributeData> attributes = new ObjectArrayList<>();
+
   long runtimeEntityId;
+
   long tick;
-  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

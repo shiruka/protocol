@@ -22,7 +22,9 @@ public final class MinecraftServerChannel extends RakNetServerChannel {
 
   @NotNull
   @Override
-  public MinecraftChildChannel newChild(@NotNull final InetSocketAddress address) {
+  public MinecraftChildChannel newChild(
+    @NotNull final InetSocketAddress address
+  ) {
     return new MinecraftChildChannel(this, address, this.server);
   }
 }

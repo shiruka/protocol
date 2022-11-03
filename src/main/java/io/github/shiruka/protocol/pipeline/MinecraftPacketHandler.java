@@ -13,7 +13,8 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents minecraft packet handler pipelines.
  */
 @RequiredArgsConstructor
-public final class MinecraftPacketHandler extends SimpleChannelInboundHandler<List<MinecraftPacket>> {
+public final class MinecraftPacketHandler
+  extends SimpleChannelInboundHandler<List<MinecraftPacket>> {
 
   /**
    * the name.
@@ -27,7 +28,10 @@ public final class MinecraftPacketHandler extends SimpleChannelInboundHandler<Li
   private final MinecraftServer server;
 
   @Override
-  protected void channelRead0(final ChannelHandlerContext ctx, final List<MinecraftPacket> msg) {
+  protected void channelRead0(
+    final ChannelHandlerContext ctx,
+    final List<MinecraftPacket> msg
+  ) {
     final var session = MinecraftChildChannel.cast(ctx);
     for (final var packet : msg) {
       this.server.prePacket(packet, session);

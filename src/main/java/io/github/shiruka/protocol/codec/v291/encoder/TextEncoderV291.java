@@ -15,8 +15,12 @@ import org.jetbrains.annotations.NotNull;
 public final class TextEncoderV291 extends PacketEncoder.Base<Text> {
 
   @Override
-  public void decode(@NotNull final Text packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final Text packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     final var type = Text.Type.VALUES[buffer.readUnsignedByte()];
     packet.type(type);
     packet.needsTranslation(buffer.readBoolean());
@@ -44,8 +48,12 @@ public final class TextEncoderV291 extends PacketEncoder.Base<Text> {
   }
 
   @Override
-  public void encode(@NotNull final Text packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final Text packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     final var type = packet.type();
     buffer.writeByte(type.ordinal());
     buffer.writeBoolean(packet.needsTranslation());

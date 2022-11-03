@@ -31,12 +31,16 @@ import org.jetbrains.annotations.NotNull;
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class AdventureSettings extends MinecraftPacket.Base {
 
-  //@formatter:off
-  @Builder.Default CommandPermission commandPermission = CommandPermission.NORMAL;
-  @Builder.Default PlayerPermission playerPermission = PlayerPermission.VISITOR;
-  @Builder.Default Set<AdventureSetting> settings = EnumSet.noneOf(AdventureSetting.class);
+  @Builder.Default
+  CommandPermission commandPermission = CommandPermission.NORMAL;
+
+  @Builder.Default
+  PlayerPermission playerPermission = PlayerPermission.VISITOR;
+
+  @Builder.Default
+  Set<AdventureSetting> settings = EnumSet.noneOf(AdventureSetting.class);
+
   long uniqueEntityId;
-  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

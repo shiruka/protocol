@@ -14,8 +14,8 @@ public record RaidUpdateEventData(
   int currentWave,
   int totalWaves,
   boolean winner
-) implements Event.Data {
-
+)
+  implements Event.Data {
   @NotNull
   @Override
   public Event.Type type() {

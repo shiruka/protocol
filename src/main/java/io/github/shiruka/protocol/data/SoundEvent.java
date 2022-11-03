@@ -1479,5 +1479,5 @@ public enum SoundEvent {
   /**
    * the undefined.
    */
-  UNDEFINED
+  UNDEFINED,
 }

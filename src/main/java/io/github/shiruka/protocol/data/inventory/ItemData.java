@@ -1,7 +1,7 @@
 package io.github.shiruka.protocol.data.inventory;
 
 import com.google.common.base.Preconditions;
-import io.github.shiruka.api.nbt.CompoundTag;
+import io.github.shiruka.nbt.CompoundTag;
 import io.github.shiruka.protocol.data.ItemDefinition;
 import java.util.Arrays;
 import java.util.Objects;
@@ -15,7 +15,11 @@ import org.jetbrains.annotations.Nullable;
  * a class that represents item data.
  */
 @Accessors(fluent = true)
-@Builder(toBuilder = true, builderClassName = "Builder", builderMethodName = "newBuilder")
+@Builder(
+  toBuilder = true,
+  builderClassName = "Builder",
+  builderMethodName = "newBuilder"
+)
 public final class ItemData {
 
   /**
@@ -26,8 +30,18 @@ public final class ItemData {
   /**
    * the air.
    */
-  public static final ItemData AIR = new ItemData(0, 0, ItemData.EMPTY,
-    ItemData.EMPTY, 0, 0, ItemDefinition.AIR, 0, null, false);
+  public static final ItemData AIR = new ItemData(
+    0,
+    0,
+    ItemData.EMPTY,
+    ItemData.EMPTY,
+    0,
+    0,
+    ItemDefinition.AIR,
+    0,
+    null,
+    false
+  );
 
   /**
    * the block runtime id.
@@ -107,10 +121,18 @@ public final class ItemData {
    * @param usingNetId the using net id.
    * @param netId the net id.
    */
-  private ItemData(final int blockRuntimeId, final long blockingTicks, @Nullable final String[] canBreak,
-                   @Nullable final String[] canPlace, final int count, final int damage,
-                   @NotNull final ItemDefinition definition, final int netId, @Nullable final CompoundTag tag,
-                   final boolean usingNetId) {
+  private ItemData(
+    final int blockRuntimeId,
+    final long blockingTicks,
+    @Nullable final String[] canBreak,
+    @Nullable final String[] canPlace,
+    final int count,
+    final int damage,
+    @NotNull final ItemDefinition definition,
+    final int netId,
+    @Nullable final CompoundTag tag,
+    final boolean usingNetId
+  ) {
     Preconditions.checkArgument(count < 256, "Count exceeds maximum of 255!");
     this.definition = definition;
     this.damage = damage;
@@ -134,21 +156,41 @@ public final class ItemData {
    *
    * @return {@code true} if the item equals the other.
    */
-  public boolean equals(@NotNull final ItemData other, final boolean amount, final boolean metadata,
-                        final boolean userdata) {
-    return this.definition == other.definition &&
+  public boolean equals(
+    @NotNull final ItemData other,
+    final boolean amount,
+    final boolean metadata,
+    final boolean userdata
+  ) {
+    return (
+      this.definition == other.definition &&
       (!amount || this.count == other.count) &&
-      (!metadata || this.damage == other.damage &&
-        this.blockRuntimeId == other.blockRuntimeId) &&
-      (!userdata || Objects.equals(this.tag, other.tag) &&
+      (
+        !metadata ||
+        this.damage == other.damage &&
+        this.blockRuntimeId == other.blockRuntimeId
+      ) &&
+      (
+        !userdata ||
+        Objects.equals(this.tag, other.tag) &&
         Arrays.equals(this.canPlace, other.canPlace) &&
-        Arrays.equals(this.canBreak, other.canBreak));
+        Arrays.equals(this.canBreak, other.canBreak)
+      )
+    );
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(this.definition, this.damage, this.count, this.tag, Arrays.hashCode(this.canPlace),
-      Arrays.hashCode(this.canBreak), this.blockingTicks, this.blockRuntimeId);
+    return Objects.hash(
+      this.definition,
+      this.damage,
+      this.count,
+      this.tag,
+      Arrays.hashCode(this.canPlace),
+      Arrays.hashCode(this.canBreak),
+      this.blockingTicks,
+      this.blockRuntimeId
+    );
   }
 
   @Override

@@ -14,6 +14,4 @@ public record ItemStackRequest(
   int requestId,
   @NotNull StackRequestActionData[] actions,
   @NotNull String[] filterStrings
-) {
-
-}
+) {}

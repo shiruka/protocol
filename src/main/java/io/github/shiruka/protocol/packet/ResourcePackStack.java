@@ -29,14 +29,20 @@ import org.jetbrains.annotations.NotNull;
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class ResourcePackStack extends MinecraftPacket.Base {
 
-  //@formatter:off
-  @Builder.Default List<Entry> behaviorPacks = new ObjectArrayList<>();
-  @Builder.Default List<ExperimentData> experiments = new ObjectArrayList<>();
+  @Builder.Default
+  List<Entry> behaviorPacks = new ObjectArrayList<>();
+
+  @Builder.Default
+  List<ExperimentData> experiments = new ObjectArrayList<>();
+
   boolean experimentsPreviouslyToggled;
+
   boolean forcedToAccept;
+
   String gameVersion;
-  @Builder.Default List<Entry> resourcePacks = new ObjectArrayList<>();
-  //@formatter:on
+
+  @Builder.Default
+  List<Entry> resourcePacks = new ObjectArrayList<>();
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {
@@ -54,7 +60,5 @@ public final class ResourcePackStack extends MinecraftPacket.Base {
     @NotNull String packId,
     @NotNull String packVersion,
     @NotNull String subPackName
-  ) {
-
-  }
+  ) {}
 }

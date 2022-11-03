@@ -36,10 +36,17 @@ public final class ProtocolTest {
       final var name = value.name();
       final var comment = name.toLowerCase(Locale.ROOT).replace("_", " ");
       builder
-        .append("/**").append("\n")
-        .append(" * the ").append(comment).append(".").append("\n")
-        .append(" */").append("\n")
-        .append(name).append(",").append("\n");
+        .append("/**")
+        .append("\n")
+        .append(" * the ")
+        .append(comment)
+        .append(".")
+        .append("\n")
+        .append(" */")
+        .append("\n")
+        .append(name)
+        .append(",")
+        .append("\n");
     }
     return builder.toString();
   }
@@ -68,13 +75,13 @@ public final class ProtocolTest {
       }
       final var chainData = ClientChainData.from(
         packet.chainData().toString(),
-        packet.skinData().toString());
+        packet.skinData().toString()
+      );
       System.out.println(System.currentTimeMillis() - now);
     }
 
     @Override
-    public void handle(@NotNull final Unknown packet) {
-    }
+    public void handle(@NotNull final Unknown packet) {}
   }
 
   private static final class Listener implements ServerListener {
@@ -95,13 +102,27 @@ public final class ProtocolTest {
     }
 
     @Override
-    public void postPacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftChildChannel session) {
-      System.out.printf("postPacket(%s,%s)%n", packet.getClass().getSimpleName(), session);
+    public void postPacket(
+      @NotNull final MinecraftPacket packet,
+      @NotNull final MinecraftChildChannel session
+    ) {
+      System.out.printf(
+        "postPacket(%s,%s)%n",
+        packet.getClass().getSimpleName(),
+        session
+      );
     }
 
     @Override
-    public void prePacket(@NotNull final MinecraftPacket packet, @NotNull final MinecraftChildChannel session) {
-      System.out.printf("prePacket(%s,%s)%n", packet.getClass().getSimpleName(), session);
+    public void prePacket(
+      @NotNull final MinecraftPacket packet,
+      @NotNull final MinecraftChildChannel session
+    ) {
+      System.out.printf(
+        "prePacket(%s,%s)%n",
+        packet.getClass().getSimpleName(),
+        session
+      );
     }
   }
 }

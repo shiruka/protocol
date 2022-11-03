@@ -13,8 +13,8 @@ import org.jetbrains.annotations.NotNull;
 public record PiglinBarterEventData(
   ItemDefinition definition,
   boolean targetingPlayer
-) implements Event.Data {
-
+)
+  implements Event.Data {
   @NotNull
   @Override
   public Event.Type type() {

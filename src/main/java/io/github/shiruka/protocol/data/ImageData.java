@@ -11,12 +11,7 @@ import org.jetbrains.annotations.NotNull;
  * @param height the height.
  * @param image the image.
  */
-public record ImageData(
-  int width,
-  int height,
-  byte[] image
-) {
-
+public record ImageData(int width, int height, byte[] image) {
   /**
    * the empty image data.
    */
@@ -31,11 +26,16 @@ public record ImageData(
    * @return image data.
    */
   @NotNull
-  public static ImageData from(@NotNull final JsonNode token, @NotNull final String name) {
+  public static ImageData from(
+    @NotNull final JsonNode token,
+    @NotNull final String name
+  ) {
     if (!token.has(name + "Data")) {
       return ImageData.EMPTY;
     }
-    final var skinImage = Base64.getDecoder().decode(token.get(name + "Data").textValue());
+    final var skinImage = Base64
+      .getDecoder()
+      .decode(token.get(name + "Data").textValue());
     if (token.has(name + "ImageHeight") && token.has(name + "ImageWidth")) {
       final var width = token.get(name + "ImageWidth").intValue();
       final var height = token.get(name + "ImageHeight").intValue();

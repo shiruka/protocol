@@ -8,11 +8,8 @@ import org.jetbrains.annotations.NotNull;
  * @param recipeNetworkId the recipe network id.
  * @param repairCost the repair cost.
  */
-public record SRADCraftGrindstone(
-  int recipeNetworkId,
-  int repairCost
-) implements StackRequestActionData {
-
+public record SRADCraftGrindstone(int recipeNetworkId, int repairCost)
+  implements StackRequestActionData {
   @NotNull
   @Override
   public StackRequestActionType type() {

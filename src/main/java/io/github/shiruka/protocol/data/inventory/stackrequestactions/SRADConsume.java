@@ -9,11 +9,8 @@ import org.jetbrains.annotations.NotNull;
  * @param count the count.
  * @param source the source.
  */
-public record SRADConsume(
-  byte count,
-  @NotNull StackRequestSlotInfoData source
-) implements StackRequestActionData {
-
+public record SRADConsume(byte count, @NotNull StackRequestSlotInfoData source)
+  implements StackRequestActionData {
   @NotNull
   @Override
   public StackRequestActionType type() {

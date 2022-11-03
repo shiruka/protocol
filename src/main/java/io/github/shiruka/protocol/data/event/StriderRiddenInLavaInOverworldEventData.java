@@ -9,7 +9,8 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents strider ridden in lava in overworld event data.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class StriderRiddenInLavaInOverworldEventData implements Event.Data {
+public final class StriderRiddenInLavaInOverworldEventData
+  implements Event.Data {
 
   /**
    * the intance.

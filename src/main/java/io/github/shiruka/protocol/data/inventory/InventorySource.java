@@ -19,17 +19,29 @@ public final class InventorySource {
   /**
    * the creative source.
    */
-  private static final InventorySource CREATIVE_SOURCE = new InventorySource(ContainerId.NONE, Flag.NONE, Type.CREATIVE);
+  private static final InventorySource CREATIVE_SOURCE = new InventorySource(
+    ContainerId.NONE,
+    Flag.NONE,
+    Type.CREATIVE
+  );
 
   /**
    * the global source.
    */
-  private static final InventorySource GLOBAL_SOURCE = new InventorySource(ContainerId.NONE, Flag.NONE, Type.GLOBAL);
+  private static final InventorySource GLOBAL_SOURCE = new InventorySource(
+    ContainerId.NONE,
+    Flag.NONE,
+    Type.GLOBAL
+  );
 
   /**
    * the invalid source.
    */
-  private static final InventorySource INVALID_SOURCE = new InventorySource(ContainerId.NONE, Flag.NONE, Type.INVALID);
+  private static final InventorySource INVALID_SOURCE = new InventorySource(
+    ContainerId.NONE,
+    Flag.NONE,
+    Type.INVALID
+  );
 
   /**
    * the container id.
@@ -114,7 +126,11 @@ public final class InventorySource {
    */
   @NotNull
   public static InventorySource untrackedInteractionUI(final int containerId) {
-    return new InventorySource(containerId, Flag.NONE, Type.UNTRACKED_INTERACTION_UI);
+    return new InventorySource(
+      containerId,
+      Flag.NONE,
+      Type.UNTRACKED_INTERACTION_UI
+    );
   }
 
   /**
@@ -190,7 +206,9 @@ public final class InventorySource {
     /**
      * the cache by id.
      */
-    private static final Int2ObjectMap<Type> BY_ID = new Int2ObjectOpenHashMap<>(6);
+    private static final Int2ObjectMap<Type> BY_ID = new Int2ObjectOpenHashMap<>(
+      6
+    );
 
     /**
      * the values.

@@ -30,6 +30,9 @@ repositories {
 dependencies {
   compileOnlyApi(libs.network)
   compileOnlyApi(libs.reflections)
+  compileOnlyApi(libs.jwt)
+
+  testImplementation(libs.junit)
 
   annotationProcessor(libs.lombok)
   annotationProcessor(libs.annotations)
@@ -80,6 +83,10 @@ tasks {
 
   checkstyleTest {
     isEnabled = false
+  }
+
+  checkstyleMain {
+    exclude("io/github/shiruka/protocol/packet/*.java")
   }
 }
 

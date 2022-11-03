@@ -427,5 +427,5 @@ public enum LevelEventType implements CommonLevelEvent {
   /**
    * the jump prevented.
    */
-  JUMP_PREVENTED
+  JUMP_PREVENTED,
 }

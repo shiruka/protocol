@@ -403,5 +403,5 @@ public enum EntityFlag {
   /**
    * the over descendable block.
    */
-  OVER_DESCENDABLE_BLOCK
+  OVER_DESCENDABLE_BLOCK,
 }

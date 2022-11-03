@@ -26,10 +26,9 @@ import org.jetbrains.annotations.NotNull;
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class Disconnect extends MinecraftPacket.Base {
 
-  //@formatter:off
   String kickMessage;
+
   boolean messageSkipped;
-  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

@@ -12,19 +12,28 @@ import org.jetbrains.annotations.NotNull;
  * a class that block pick request packet encoders.
  */
 @PacketId(97)
-public final class BlockPickRequestEncoderV291 extends PacketEncoder.Base<BlockPickRequest> {
+public final class BlockPickRequestEncoderV291
+  extends PacketEncoder.Base<BlockPickRequest> {
 
   @Override
-  public void decode(@NotNull final BlockPickRequest packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final BlockPickRequest packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.blockPosition(buffer.readVector3i());
     packet.addUserData(buffer.readBoolean());
     packet.hotBarSlot(buffer.readUnsignedByte());
   }
 
   @Override
-  public void encode(@NotNull final BlockPickRequest packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final BlockPickRequest packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeVector3i(packet.blockPosition());
     buffer.writeBoolean(packet.addUserData());
     buffer.writeByte(packet.hotBarSlot());

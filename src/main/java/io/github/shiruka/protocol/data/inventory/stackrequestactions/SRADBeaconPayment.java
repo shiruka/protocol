@@ -8,11 +8,8 @@ import org.jetbrains.annotations.NotNull;
  * @param primaryEffect the primary effect.
  * @param secondaryEffect the secondary effect.
  */
-public record SRADBeaconPayment(
-  int primaryEffect,
-  int secondaryEffect
-) implements StackRequestActionData {
-
+public record SRADBeaconPayment(int primaryEffect, int secondaryEffect)
+  implements StackRequestActionData {
   @NotNull
   @Override
   public StackRequestActionType type() {

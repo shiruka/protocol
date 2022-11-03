@@ -18,8 +18,8 @@ public record PatternRemovedEventData(
   int patternColor,
   int patternIndex,
   int patternsSize
-) implements Event.Data {
-
+)
+  implements Event.Data {
   @NotNull
   @Override
   public Event.Type type() {

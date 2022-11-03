@@ -15,8 +15,8 @@ public record SlashCommandExecutedEventData(
   String commandName,
   List<String> outputMessages,
   int successCount
-) implements Event.Data {
-
+)
+  implements Event.Data {
   @NotNull
   @Override
   public Event.Type type() {

@@ -1,6 +1,6 @@
 package io.github.shiruka.protocol.packet;
 
-import io.github.shiruka.api.common.vectors.Vector3f;
+import io.github.shiruka.api.base.Vector3f;
 import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.PacketHandler;
 import io.github.shiruka.protocol.data.SoundEvent;
@@ -28,14 +28,17 @@ import org.jetbrains.annotations.NotNull;
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class LevelSoundEvent1 extends MinecraftPacket.Base {
 
-  //@formatter:off
   boolean babySound;
+
   int extraData;
+
   int pitch;
+
   Vector3f position;
+
   boolean relativeVolumeDisabled;
+
   SoundEvent sound;
-  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

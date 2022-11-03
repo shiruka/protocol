@@ -18,7 +18,9 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @Setter
 @Accessors(fluent = true)
-public final class MinecraftChildChannel extends RakNetChildChannel implements MinecraftServerSession {
+public final class MinecraftChildChannel
+  extends RakNetChildChannel
+  implements MinecraftServerSession {
 
   /**
    * the dynamic blocking id.
@@ -44,8 +46,11 @@ public final class MinecraftChildChannel extends RakNetChildChannel implements M
    * @param address the address.
    * @param server the server.
    */
-  public MinecraftChildChannel(@NotNull final MinecraftServerChannel parent, @NotNull final InetSocketAddress address,
-                               @NotNull final MinecraftServer server) {
+  public MinecraftChildChannel(
+    @NotNull final MinecraftServerChannel parent,
+    @NotNull final InetSocketAddress address,
+    @NotNull final MinecraftServer server
+  ) {
     super(parent, address);
     this.server = server;
     this.packetHandler = server.defaultPacketHandler().apply(this);
@@ -59,7 +64,9 @@ public final class MinecraftChildChannel extends RakNetChildChannel implements M
    * @return Minecraft child channel.
    */
   @NotNull
-  public static MinecraftChildChannel cast(@NotNull final ChannelHandlerContext ctx) {
+  public static MinecraftChildChannel cast(
+    @NotNull final ChannelHandlerContext ctx
+  ) {
     return (MinecraftChildChannel) ctx.channel();
   }
 

@@ -107,5 +107,5 @@ public enum BlockInteractionType {
   /**
    * the disenchant and repair.
    */
-  DISENCHANT_AND_REPAIR
+  DISENCHANT_AND_REPAIR,
 }

@@ -26,14 +26,17 @@ import org.jetbrains.annotations.NotNull;
 @Builder(builderMethodName = "newBuilder", toBuilder = true)
 public final class MobEffect extends MinecraftPacket.Base {
 
-  //@formatter:off
   int amplifier;
+
   int duration;
+
   int effectId;
+
   Event event;
+
   boolean particles;
+
   long runtimeEntityId;
-  //@formatter:on
 
   @Override
   public void handle(@NotNull final PacketHandler handler) {

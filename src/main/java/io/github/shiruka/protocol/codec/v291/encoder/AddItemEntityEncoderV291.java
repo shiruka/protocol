@@ -12,11 +12,16 @@ import org.jetbrains.annotations.NotNull;
  * a class that represents add item entity packet encoders.
  */
 @PacketId(15)
-public final class AddItemEntityEncoderV291 extends PacketEncoder.Base<AddItemEntity> {
+public final class AddItemEntityEncoderV291
+  extends PacketEncoder.Base<AddItemEntity> {
 
   @Override
-  public void decode(@NotNull final AddItemEntity packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void decode(
+    @NotNull final AddItemEntity packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     packet.uniqueEntityId(buffer.readVarLong());
     packet.runtimeEntityId(buffer.readUnsignedVarLong());
     packet.itemInHand(helper.readItem(buffer));
@@ -27,8 +32,12 @@ public final class AddItemEntityEncoderV291 extends PacketEncoder.Base<AddItemEn
   }
 
   @Override
-  public void encode(@NotNull final AddItemEntity packet, @NotNull final CodecHelper helper,
-                     @NotNull final PacketBuffer buffer, @NotNull final MinecraftSession session) {
+  public void encode(
+    @NotNull final AddItemEntity packet,
+    @NotNull final CodecHelper helper,
+    @NotNull final PacketBuffer buffer,
+    @NotNull final MinecraftSession session
+  ) {
     buffer.writeVarLong(packet.uniqueEntityId());
     buffer.writeUnsignedVarLong(packet.runtimeEntityId());
     helper.writeItem(buffer, packet.itemInHand());

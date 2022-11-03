@@ -8,11 +8,8 @@ import org.jetbrains.annotations.NotNull;
  * @param recipeNetworkId the recipe network id.
  * @param timesCrafted the time crafted.
  */
-public record SRADAutoCraftRecipe(
-  int recipeNetworkId,
-  byte timesCrafted
-) implements SRADRecipe {
-
+public record SRADAutoCraftRecipe(int recipeNetworkId, byte timesCrafted)
+  implements SRADRecipe {
   @NotNull
   @Override
   public StackRequestActionType type() {
