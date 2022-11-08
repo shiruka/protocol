@@ -20,6 +20,7 @@ public record IdentifierDefinitionRegistry<T extends IdentifierDefinition>(
   @NotNull Int2ObjectMap<T> idRegistry,
   @NotNull Object2ObjectMap<String, T> identifierRegistry
 ) {
+
   /**
    * creates a new builder.
    *

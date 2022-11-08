@@ -18,6 +18,7 @@ public record EntityLinkData(
   boolean immediate,
   boolean riderInitiated
 ) {
+
   /**
    * ctor.
    *

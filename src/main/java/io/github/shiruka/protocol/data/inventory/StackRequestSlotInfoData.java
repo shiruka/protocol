@@ -13,4 +13,6 @@ public record StackRequestSlotInfoData(
   @NotNull ContainerSlotType container,
   byte slot,
   int stackNetworkId
-) {}
+) {
+
+}

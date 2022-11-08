@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public record SRADAutoCraftRecipe(int recipeNetworkId, byte timesCrafted)
   implements SRADRecipe {
+
   @NotNull
   @Override
   public StackRequestActionType type() {

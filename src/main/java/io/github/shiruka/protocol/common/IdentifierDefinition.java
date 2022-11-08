@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
  * an interface to determine definitions.
  */
 public interface IdentifierDefinition extends Definition {
+
   /**
    * obtains the identifier.
    *

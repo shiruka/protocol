@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
  * @param <T> type of the packet.
  */
 public interface PacketEncoder<T extends MinecraftPacket> {
+
   /**
    * decodes the packet.
    * <p>
@@ -106,8 +107,8 @@ public interface PacketEncoder<T extends MinecraftPacket> {
             return (T) classConstructor.newInstance();
           } catch (
             final InstantiationException
-            | IllegalAccessException
-            | InvocationTargetException e
+                  | IllegalAccessException
+                  | InvocationTargetException e
           ) {
             throw new RuntimeException(e);
           }

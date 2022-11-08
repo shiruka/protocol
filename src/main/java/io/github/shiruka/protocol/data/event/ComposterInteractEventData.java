@@ -15,6 +15,7 @@ public record ComposterInteractEventData(
   int itemId
 )
   implements Event.Data {
+
   @NotNull
   @Override
   public Event.Type type() {

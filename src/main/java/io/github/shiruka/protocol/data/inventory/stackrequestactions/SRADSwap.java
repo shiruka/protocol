@@ -14,6 +14,7 @@ public record SRADSwap(
   @NotNull StackRequestSlotInfoData destination
 )
   implements StackRequestActionData {
+
   @NotNull
   @Override
   public StackRequestActionType type() {

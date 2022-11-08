@@ -1,7 +1,6 @@
 package io.github.shiruka.protocol.server.pipelines;
 
 import io.github.shiruka.network.pipelines.UserDataCodec;
-import io.github.shiruka.protocol.pipeline.CompressorCodec;
 import io.github.shiruka.protocol.pipeline.MinecraftPacketCodec;
 import io.github.shiruka.protocol.pipeline.MinecraftPacketHandler;
 import io.github.shiruka.protocol.server.MinecraftServer;
@@ -32,7 +31,6 @@ public final class MinecraftServerInitializer
         new MinecraftServerConnection(this.server)
       )
       .addLast(UserDataCodec.NAME, new UserDataCodec(0xFE))
-      .addLast(CompressorCodec.NAME, CompressorCodec.INSTANCE)
       .addLast(MinecraftPacketCodec.NAME, new MinecraftPacketCodec(this.server))
       .addLast(
         MinecraftPacketHandler.NAME,

@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public record MobBornEventData(int color, int entityType, int variant)
   implements Event.Data {
+
   @NotNull
   @Override
   public Event.Type type() {

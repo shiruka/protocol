@@ -16,6 +16,7 @@ public record BossKilledEventData(
   int playerPartySize
 )
   implements Event.Data {
+
   @NotNull
   @Override
   public Event.Type type() {

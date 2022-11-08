@@ -10,4 +10,6 @@ import lombok.experimental.Accessors;
  */
 @Accessors(fluent = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CodecHelperV313 extends CodecHelperV291 {}
+public class CodecHelperV313 extends CodecHelperV291 {
+
+}

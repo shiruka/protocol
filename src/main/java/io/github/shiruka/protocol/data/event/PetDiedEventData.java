@@ -20,6 +20,7 @@ public record PetDiedEventData(
   long petUniqueEntityId
 )
   implements Event.Data {
+
   @NotNull
   @Override
   public Event.Type type() {

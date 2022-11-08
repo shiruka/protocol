@@ -41,12 +41,14 @@ import io.github.shiruka.protocol.packet.Login;
 import io.github.shiruka.protocol.packet.MobEffect;
 import io.github.shiruka.protocol.packet.MoveEntityAbsolute;
 import io.github.shiruka.protocol.packet.MovePlayer;
+import io.github.shiruka.protocol.packet.NetworkSettings;
 import io.github.shiruka.protocol.packet.NetworkStackLatency;
 import io.github.shiruka.protocol.packet.NpcRequest;
 import io.github.shiruka.protocol.packet.PlayStatus;
 import io.github.shiruka.protocol.packet.PlayerAuthInput;
 import io.github.shiruka.protocol.packet.PurchaseReceipt;
 import io.github.shiruka.protocol.packet.RemoveEntity;
+import io.github.shiruka.protocol.packet.RequestNetworkSettings;
 import io.github.shiruka.protocol.packet.ResourcePackClientResponse;
 import io.github.shiruka.protocol.packet.ResourcePackInfo;
 import io.github.shiruka.protocol.packet.ResourcePackStack;
@@ -69,444 +71,524 @@ import org.jetbrains.annotations.NotNull;
  * an interface to determine packet handlers.
  */
 public interface PacketHandler {
-  /**
-   * handles the packet.
-   *
-   * @param packet the packet to handle.
-   */
-  default void handle(@NotNull final PlayerAuthInput packet) {}
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final PlayStatus packet) {}
+  default void handle(@NotNull final PlayerAuthInput packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final Login packet) {}
+  default void handle(@NotNull final PlayStatus packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final Unknown packet) {}
+  default void handle(@NotNull final Login packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final ServerToClientHandshake packet) {}
+  default void handle(@NotNull final Unknown packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final AddEntity packet) {}
+  default void handle(@NotNull final ServerToClientHandshake packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final AddItemEntity packet) {}
+  default void handle(@NotNull final AddEntity packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final AddPlayer packet) {}
+  default void handle(@NotNull final AddItemEntity packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final ClientToServerHandshake packet) {}
+  default void handle(@NotNull final AddPlayer packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final Disconnect packet) {}
+  default void handle(@NotNull final ClientToServerHandshake packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final RemoveEntity packet) {}
+  default void handle(@NotNull final Disconnect packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final ResourcePackClientResponse packet) {}
+  default void handle(@NotNull final RemoveEntity packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final ResourcePackInfo packet) {}
+  default void handle(@NotNull final ResourcePackClientResponse packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final ResourcePackStack packet) {}
+  default void handle(@NotNull final ResourcePackInfo packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final SetTime packet) {}
+  default void handle(@NotNull final ResourcePackStack packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final StartGame packet) {}
+  default void handle(@NotNull final SetTime packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final TakeItemEntity packet) {}
+  default void handle(@NotNull final StartGame packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final Text packet) {}
+  default void handle(@NotNull final TakeItemEntity packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final AdventureSettings packet) {}
+  default void handle(@NotNull final Text packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final AddBehaviorTree packet) {}
+  default void handle(@NotNull final AdventureSettings packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final MoveEntityAbsolute packet) {}
+  default void handle(@NotNull final AddBehaviorTree packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final MovePlayer packet) {}
+  default void handle(@NotNull final MoveEntityAbsolute packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final RiderJump packet) {}
+  default void handle(@NotNull final MovePlayer packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final UpdateBlock packet) {}
+  default void handle(@NotNull final RiderJump packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final AddHangingEntity packet) {}
+  default void handle(@NotNull final UpdateBlock packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final TickSync packet) {}
+  default void handle(@NotNull final AddHangingEntity packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final LevelSoundEvent1 packet) {}
+  default void handle(@NotNull final TickSync packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final LevelEvent packet) {}
+  default void handle(@NotNull final LevelSoundEvent1 packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final BlockEvent packet) {}
+  default void handle(@NotNull final LevelEvent packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final Animate packet) {}
+  default void handle(@NotNull final BlockEvent packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final AutomationClientConnect packet) {}
+  default void handle(@NotNull final Animate packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final AvailableCommands packet) {}
+  default void handle(@NotNull final AutomationClientConnect packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final BlockEntityData packet) {}
+  default void handle(@NotNull final AvailableCommands packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final BlockPickRequest packet) {}
+  default void handle(@NotNull final BlockEntityData packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final BookEdit packet) {}
+  default void handle(@NotNull final BlockPickRequest packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final Explode packet) {}
+  default void handle(@NotNull final BookEdit packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final EntityEvent packet) {}
+  default void handle(@NotNull final Explode packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final BossEvent packet) {}
+  default void handle(@NotNull final EntityEvent packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final Camera packet) {}
+  default void handle(@NotNull final BossEvent packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final ChangeDimension packet) {}
+  default void handle(@NotNull final Camera packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final ChunkRadiusUpdated packet) {}
+  default void handle(@NotNull final ChangeDimension packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final HurtArmor packet) {}
+  default void handle(@NotNull final ChunkRadiusUpdated packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final ItemFrameDropItem packet) {}
+  default void handle(@NotNull final HurtArmor packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final Transfer packet) {}
+  default void handle(@NotNull final ItemFrameDropItem packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final LabTable packet) {}
+  default void handle(@NotNull final Transfer packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final LevelChunk packet) {}
+  default void handle(@NotNull final LabTable packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final GameRulesChanged packet) {}
+  default void handle(@NotNull final LevelChunk packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final GuiDataPickItem packet) {}
+  default void handle(@NotNull final GameRulesChanged packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final NetworkStackLatency packet) {}
+  default void handle(@NotNull final GuiDataPickItem packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final NpcRequest packet) {}
+  default void handle(@NotNull final NetworkStackLatency packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final EntityFall packet) {}
+  default void handle(@NotNull final NpcRequest packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final AddPainting packet) {}
+  default void handle(@NotNull final EntityFall packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final MobEffect packet) {}
+  default void handle(@NotNull final AddPainting packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final UpdateAttributes packet) {}
+  default void handle(@NotNull final MobEffect packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final EntityPickRequest packet) {}
+  default void handle(@NotNull final UpdateAttributes packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final Event packet) {}
+  default void handle(@NotNull final EntityPickRequest packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final Interact packet) {}
+  default void handle(@NotNull final Event packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final InventoryContent packet) {}
+  default void handle(@NotNull final Interact packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final InventoryTransaction packet) {}
+  default void handle(@NotNull final InventoryContent packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final InventorySlot packet) {}
+  default void handle(@NotNull final InventoryTransaction packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final PurchaseReceipt packet) {}
+  default void handle(@NotNull final InventorySlot packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final ScriptCustomEvent packet) {}
+  default void handle(@NotNull final PurchaseReceipt packet) {
+  }
 
   /**
    * handles the packet.
    *
    * @param packet the packet to handle.
    */
-  default void handle(@NotNull final SetLocalPlayerAsInitialized packet) {}
+  default void handle(@NotNull final ScriptCustomEvent packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final SetLocalPlayerAsInitialized packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final RequestNetworkSettings packet) {
+  }
+
+  /**
+   * handles the packet.
+   *
+   * @param packet the packet to handle.
+   */
+  default void handle(@NotNull final NetworkSettings packet) {
+  }
 }

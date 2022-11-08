@@ -73,7 +73,8 @@ public final class MinecraftServer implements ServerListener, Identifier {
   @Getter
   @Setter
   private Function<MinecraftChildChannel, PacketHandler> defaultPacketHandler = session ->
-    new PacketHandler() {};
+    new PacketHandler() {
+    };
 
   /**
    * the max connections.
@@ -144,9 +145,9 @@ public final class MinecraftServer implements ServerListener, Identifier {
   public MinecraftServer codec(@NotNull final Codec codec) {
     this.codec = codec;
     this.bootstrap.option(
-        RakNetChannelOptions.PROTOCOL_VERSION,
-        codec.rakNetProtocolVersion()
-      );
+      RakNetChannelOptions.PROTOCOL_VERSION,
+      codec.rakNetProtocolVersion()
+    );
     return this;
   }
 

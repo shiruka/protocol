@@ -20,6 +20,7 @@ public record MovementCorrectedEventData(
   float scoreThreshold
 )
   implements Event.Data {
+
   @NotNull
   @Override
   public Event.Type type() {

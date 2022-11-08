@@ -22,6 +22,7 @@ public record MobKilledEventData(
   int villagerTradeTier
 )
   implements Event.Data {
+
   /**
    * ctor.
    *

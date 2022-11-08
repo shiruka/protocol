@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
  * an interface to determine minecraft packets.
  */
 public interface MinecraftPacket {
+
   /**
    * obtains the client id.
    *

@@ -4,6 +4,7 @@ package io.github.shiruka.protocol.data.inventory;
  * an interface that contains container ids.
  */
 public interface ContainerId {
+
   /**
    * the anvil material.
    */

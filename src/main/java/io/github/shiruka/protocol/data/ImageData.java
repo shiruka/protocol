@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
  * @param image the image.
  */
 public record ImageData(int width, int height, byte[] image) {
+
   /**
    * the empty image data.
    */

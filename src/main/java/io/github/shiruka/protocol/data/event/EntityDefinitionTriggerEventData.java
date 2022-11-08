@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public record EntityDefinitionTriggerEventData(String eventName)
   implements Event.Data {
+
   @NotNull
   @Override
   public Event.Type type() {

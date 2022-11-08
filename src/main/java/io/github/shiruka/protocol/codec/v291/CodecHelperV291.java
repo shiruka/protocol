@@ -524,7 +524,8 @@ public class CodecHelperV291 implements CodecHelper {
     .with(Event.Type.PLAYER_DIED, this::writePlayerDied)
     .with(Event.Type.BOSS_KILLED, this::writeBossKilled)
     .with(Event.Type.AGENT_COMMAND, this::writeAgentCommand)
-    .with(Event.Type.AGENT_CREATED, (buffer, data) -> {})
+    .with(Event.Type.AGENT_CREATED, (buffer, data) -> {
+    })
     .with(Event.Type.PATTERN_REMOVED, this::writePatternRemoved)
     .with(Event.Type.SLASH_COMMAND_EXECUTED, this::writeSlashCommandExecuted)
     .with(Event.Type.FISH_BUCKETED, this::writeFishBucketed);
@@ -1441,7 +1442,8 @@ public class CodecHelperV291 implements CodecHelper {
       case ITEM_USE -> this.readItemUse(buffer, packet);
       case ITEM_USE_ON_ENTITY -> this.readItemUseOnEntity(buffer, packet);
       case ITEM_RELEASE -> this.readItemRelease(buffer, packet);
-      default -> {}
+      default -> {
+      }
     }
   }
 
@@ -1634,7 +1636,8 @@ public class CodecHelperV291 implements CodecHelper {
       case UPDATE_NAME -> {
         buffer.writeString(packet.title());
       }
-      case REMOVE -> {}
+      case REMOVE -> {
+      }
       default -> throw new IllegalStateException(
         "Unexpected value: " + packet.action()
       );
@@ -1842,7 +1845,8 @@ public class CodecHelperV291 implements CodecHelper {
       case ITEM_USE -> this.writeItemUse(buffer, packet);
       case ITEM_USE_ON_ENTITY -> this.writeItemUseOnEntity(buffer, packet);
       case ITEM_RELEASE -> this.writeItemRelease(buffer, packet);
-      default -> {}
+      default -> {
+      }
     }
   }
 
@@ -2434,7 +2438,8 @@ public class CodecHelperV291 implements CodecHelper {
       case WORLD_INTERACTION -> buffer.writeUnsignedVarInt(
         inventorySource.flag().ordinal()
       );
-      default -> {}
+      default -> {
+      }
     }
   }
 

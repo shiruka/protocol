@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public record SRADBeaconPayment(int primaryEffect, int secondaryEffect)
   implements StackRequestActionData {
+
   @NotNull
   @Override
   public StackRequestActionType type() {

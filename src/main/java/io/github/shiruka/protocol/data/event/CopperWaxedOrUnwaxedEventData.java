@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public record CopperWaxedOrUnwaxedEventData(BlockDefinition definition)
   implements Event.Data {
+
   @NotNull
   @Override
   public Event.Type type() {

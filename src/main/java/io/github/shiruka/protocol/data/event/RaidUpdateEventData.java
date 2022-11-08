@@ -16,6 +16,7 @@ public record RaidUpdateEventData(
   boolean winner
 )
   implements Event.Data {
+
   @NotNull
   @Override
   public Event.Type type() {

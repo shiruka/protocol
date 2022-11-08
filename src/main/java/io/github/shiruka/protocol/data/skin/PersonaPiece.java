@@ -19,11 +19,14 @@ public record PersonaPiece(
   boolean isDefault,
   @NotNull String productId
 ) {
+
   /**
    * a record class that represents persona piece tints.
    *
    * @param pieceType the piece type.
    * @param colors the colors.
    */
-  public record Tint(@NotNull String pieceType, @NotNull List<String> colors) {}
+  public record Tint(@NotNull String pieceType, @NotNull List<String> colors) {
+
+  }
 }

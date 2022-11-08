@@ -1,7 +1,9 @@
 package io.github.shiruka.protocol.server.channels;
 
+import io.github.shiruka.network.pipelines.UserDataCodec;
 import io.github.shiruka.network.server.channels.RakNetChildChannel;
 import io.github.shiruka.protocol.common.PacketHandler;
+import io.github.shiruka.protocol.pipeline.CompressorCodec;
 import io.github.shiruka.protocol.server.MinecraftServer;
 import io.github.shiruka.protocol.server.MinecraftServerSession;
 import io.netty.channel.ChannelHandlerContext;
@@ -74,5 +76,12 @@ public final class MinecraftChildChannel
   @Override
   public InetSocketAddress address() {
     return this.remoteAddress0();
+  }
+
+  /**
+   * enables the compression.
+   */
+  public void enableCompression() {
+    this.pipeline().addAfter(UserDataCodec.NAME, CompressorCodec.NAME, CompressorCodec.INSTANCE);
   }
 }

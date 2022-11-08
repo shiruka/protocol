@@ -13,4 +13,6 @@ public record CommandEnumConstraintData(
   @NotNull String option,
   @NotNull CommandEnumData enumData,
   @NotNull CommandEnumConstraintType[] constraints
-) {}
+) {
+
+}

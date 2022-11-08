@@ -13,4 +13,6 @@ public record CommandEnumData(
   boolean isSoft,
   @NotNull String name,
   @NotNull String[] values
-) {}
+) {
+
+}

@@ -14,6 +14,7 @@ public record SRADCraftResultsDeprecated(
   byte timesCrafted
 )
   implements StackRequestActionData {
+
   @NotNull
   @Override
   public StackRequestActionType type() {

@@ -67,6 +67,7 @@ public final class ResourcePackInfo extends MinecraftPacket.Base {
     boolean scripting,
     boolean raytracingCapable
   ) {
+
     /**
      * sets the raytracing capable.
      *

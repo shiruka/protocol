@@ -60,5 +60,7 @@ public final class ResourcePackStack extends MinecraftPacket.Base {
     @NotNull String packId,
     @NotNull String packVersion,
     @NotNull String subPackName
-  ) {}
+  ) {
+
+  }
 }

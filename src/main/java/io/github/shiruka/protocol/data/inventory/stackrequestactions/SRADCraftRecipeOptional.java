@@ -13,6 +13,7 @@ public record SRADCraftRecipeOptional(
   int filteredStringIndex
 )
   implements StackRequestActionData {
+
   @NotNull
   @Override
   public StackRequestActionType type() {

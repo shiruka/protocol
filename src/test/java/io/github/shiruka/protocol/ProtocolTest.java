@@ -2,17 +2,24 @@ package io.github.shiruka.protocol;
 
 import io.github.shiruka.protocol.codec.Codecs;
 import io.github.shiruka.protocol.codec.v291.CodecV291;
+import io.github.shiruka.protocol.codec.v557.CodecV557;
 import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.PacketHandler;
 import io.github.shiruka.protocol.data.ClientChainData;
+import io.github.shiruka.protocol.data.PacketCompressionAlgorithm;
+import io.github.shiruka.protocol.packet.Event;
 import io.github.shiruka.protocol.packet.Login;
+import io.github.shiruka.protocol.packet.NetworkSettings;
 import io.github.shiruka.protocol.packet.PlayStatus;
+import io.github.shiruka.protocol.packet.RequestNetworkSettings;
 import io.github.shiruka.protocol.packet.Unknown;
 import io.github.shiruka.protocol.server.MinecraftServer;
 import io.github.shiruka.protocol.server.ServerListener;
 import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
+import lombok.ToString;
 import org.jetbrains.annotations.NotNull;
 
 public final class ProtocolTest {
@@ -20,7 +27,7 @@ public final class ProtocolTest {
   public static void main(final String[] args) {
     System.out.println("Server is starting...");
     new MinecraftServer()
-      .codec(CodecV291.INSTANCE.toBuilder().rakNetProtocolVersion(11).build())
+      .codec(CodecV557.INSTANCE)
       .maxConnections(1024)
       .defaultPacketHandler(Handler::new)
       .motd("Motd")
@@ -79,6 +86,29 @@ public final class ProtocolTest {
 
     @Override
     public void handle(@NotNull final Unknown packet) {}
+
+    @Override
+    public void handle(@NotNull final RequestNetworkSettings packet) {
+      final var version = packet.protocolVersion();
+      final var codec = Codecs.findByProtocolVersion(version);
+      if (codec == null) {
+        final var status = PlayStatus
+          .newBuilder()
+          .status(
+            version < Codecs.latestProtocolVersion()
+              ? PlayStatus.Status.LOGIN_FAILED_CLIENT_OLD
+              : PlayStatus.Status.LOGIN_FAILED_SERVER_OLD
+          )
+          .build();
+        // @todo #1:15m Packets cannot send.
+        this.session.writeAndFlush(List.of(status));
+        return;
+      }
+      this.session.writeAndFlush(NetworkSettings.newBuilder()
+          .compressionAlgorithm(PacketCompressionAlgorithm.ZLIB)
+          .compressionThreshold(1)
+          .build());
+    }
   }
 
   private static final class Listener implements ServerListener {

@@ -126,7 +126,7 @@ public final class CompressorCodec
         decompressed.writerIndex(index + written);
         if (
           CompressorCodec.MAX_SIZE > 0 &&
-          decompressed.writerIndex() >= CompressorCodec.MAX_SIZE
+            decompressed.writerIndex() >= CompressorCodec.MAX_SIZE
         ) {
           throw new DataFormatException("Inflated data exceeds maximum size!");
         }

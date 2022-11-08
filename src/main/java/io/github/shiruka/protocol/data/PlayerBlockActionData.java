@@ -14,4 +14,6 @@ public record PlayerBlockActionData(
   @NotNull PlayerActionType action,
   Vector3i blockPosition,
   int face
-) {}
+) {
+
+}
