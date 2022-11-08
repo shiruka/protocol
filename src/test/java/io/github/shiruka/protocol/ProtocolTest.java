@@ -1,13 +1,11 @@
 package io.github.shiruka.protocol;
 
 import io.github.shiruka.protocol.codec.Codecs;
-import io.github.shiruka.protocol.codec.v291.CodecV291;
 import io.github.shiruka.protocol.codec.v557.CodecV557;
 import io.github.shiruka.protocol.common.MinecraftPacket;
 import io.github.shiruka.protocol.common.PacketHandler;
 import io.github.shiruka.protocol.data.ClientChainData;
 import io.github.shiruka.protocol.data.PacketCompressionAlgorithm;
-import io.github.shiruka.protocol.packet.Event;
 import io.github.shiruka.protocol.packet.Login;
 import io.github.shiruka.protocol.packet.NetworkSettings;
 import io.github.shiruka.protocol.packet.PlayStatus;
@@ -18,8 +16,6 @@ import io.github.shiruka.protocol.server.ServerListener;
 import io.github.shiruka.protocol.server.channels.MinecraftChildChannel;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.ExecutionException;
-import lombok.ToString;
 import org.jetbrains.annotations.NotNull;
 
 public final class ProtocolTest {
@@ -104,10 +100,13 @@ public final class ProtocolTest {
         this.session.writeAndFlush(List.of(status));
         return;
       }
-      this.session.writeAndFlush(NetworkSettings.newBuilder()
-          .compressionAlgorithm(PacketCompressionAlgorithm.ZLIB)
-          .compressionThreshold(1)
-          .build());
+      this.session.writeAndFlush(
+          NetworkSettings
+            .newBuilder()
+            .compressionAlgorithm(PacketCompressionAlgorithm.ZLIB)
+            .compressionThreshold(1)
+            .build()
+        );
     }
   }
 

@@ -15,7 +15,6 @@ public record PiglinBarterEventData(
   boolean targetingPlayer
 )
   implements Event.Data {
-
   @NotNull
   @Override
   public Event.Type type() {

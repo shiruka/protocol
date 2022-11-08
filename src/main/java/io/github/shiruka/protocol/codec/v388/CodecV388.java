@@ -7,7 +7,6 @@ import io.github.shiruka.protocol.common.Codec;
  * an interface that contains codec for v388.
  */
 public interface CodecV388 {
-
   /**
    * the instance.
    */

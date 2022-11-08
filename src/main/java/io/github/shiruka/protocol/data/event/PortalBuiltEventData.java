@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
  * @param dimensionId the dimension id.
  */
 public record PortalBuiltEventData(int dimensionId) implements Event.Data {
-
   @NotNull
   @Override
   public Event.Type type() {

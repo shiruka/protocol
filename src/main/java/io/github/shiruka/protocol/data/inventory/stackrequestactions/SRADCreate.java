@@ -8,7 +8,6 @@ import org.jetbrains.annotations.NotNull;
  * @param slot the slot.
  */
 public record SRADCreate(byte slot) implements StackRequestActionData {
-
   @NotNull
   @Override
   public StackRequestActionType type() {

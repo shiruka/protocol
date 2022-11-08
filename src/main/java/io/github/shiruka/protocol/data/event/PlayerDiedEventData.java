@@ -18,7 +18,6 @@ public record PlayerDiedEventData(
   boolean inRaid
 )
   implements Event.Data {
-
   @NotNull
   @Override
   public Event.Type type() {

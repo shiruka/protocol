@@ -11,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public record SRADConsume(byte count, @NotNull StackRequestSlotInfoData source)
   implements StackRequestActionData {
-
   @NotNull
   @Override
   public StackRequestActionType type() {

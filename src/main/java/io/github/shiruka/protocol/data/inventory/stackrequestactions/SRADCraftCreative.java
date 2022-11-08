@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public record SRADCraftCreative(int creativeItemNetworkId)
   implements StackRequestActionData {
-
   @NotNull
   @Override
   public StackRequestActionType type() {

@@ -7,7 +7,6 @@ import io.github.shiruka.protocol.common.Codec;
  * an interface that contains codec for v291.
  */
 public interface CodecV313 {
-
   /**
    * the instance.
    */

@@ -172,7 +172,6 @@ public final class Event extends MinecraftPacket.Base {
    * an interface to determine event data.
    */
   public interface Data {
-
     /**
      * obtains the type.
      *

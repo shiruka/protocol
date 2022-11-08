@@ -20,7 +20,6 @@ public record PatternRemovedEventData(
   int patternsSize
 )
   implements Event.Data {
-
   @NotNull
   @Override
   public Event.Type type() {

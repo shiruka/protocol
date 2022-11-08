@@ -7,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
  * an interface to determine transfer stack request action data.
  */
 public interface SRADTransfer extends StackRequestActionData {
-
   /**
    * obtains the count.
    *

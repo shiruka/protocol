@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
  * @param enabled the enabled.
  */
 public record ExperimentData(@NotNull String name, boolean enabled) {
-
   /**
    * ctor.
    *

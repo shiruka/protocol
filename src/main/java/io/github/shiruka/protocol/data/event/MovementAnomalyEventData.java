@@ -22,7 +22,6 @@ public record MovementAnomalyEventData(
   float totalPositionDelta
 )
   implements Event.Data {
-
   @NotNull
   @Override
   public Event.Type type() {

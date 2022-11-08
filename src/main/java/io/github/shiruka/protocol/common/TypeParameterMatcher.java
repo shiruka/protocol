@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
  * an interface to determine type parameter matcher.
  */
 public interface TypeParameterMatcher extends Predicate<Object> {
-
   /**
    * finds the class internally.
    *
@@ -30,7 +29,7 @@ public interface TypeParameterMatcher extends Predicate<Object> {
   ) {
     final var thisClass = object.getClass();
     var currentClass = thisClass;
-    for (; ; ) {
+    for (;;) {
       if (currentClass.getSuperclass() != parametrizedSuperclass) {
         currentClass = currentClass.getSuperclass();
         Preconditions.checkNotNull(
@@ -90,9 +89,9 @@ public interface TypeParameterMatcher extends Predicate<Object> {
       }
       throw new IllegalStateException(
         "cannot determine the type of the type parameter '" +
-          typeParamName +
-          "': " +
-          thisClass
+        typeParamName +
+        "': " +
+        thisClass
       );
     }
   }

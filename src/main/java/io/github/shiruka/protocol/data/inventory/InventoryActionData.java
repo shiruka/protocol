@@ -18,7 +18,6 @@ public record InventoryActionData(
   @NotNull ItemData toItem,
   int stackNetworkId
 ) {
-
   /**
    * ctor.
    *

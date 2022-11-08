@@ -13,6 +13,4 @@ public record SyncedPlayerMovementSettings(
   boolean serverAuthoritativeBlockBreaking,
   @NotNull AuthoritativeMovementMode movementMode,
   int rewindHistorySize
-) {
-
-}
+) {}

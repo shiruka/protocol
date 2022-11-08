@@ -18,7 +18,6 @@ public record AttributeData(
   float defaultValue,
   float value
 ) {
-
   /**
    * ctor.
    *

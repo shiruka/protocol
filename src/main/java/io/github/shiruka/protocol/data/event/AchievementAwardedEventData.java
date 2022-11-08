@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public record AchievementAwardedEventData(int achievementId)
   implements Event.Data {
-
   @NotNull
   @Override
   public Event.Type type() {

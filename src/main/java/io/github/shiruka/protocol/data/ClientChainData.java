@@ -34,7 +34,6 @@ public record ClientChainData(
   @NotNull ChainData chainData,
   @NotNull SkinData skinData
 ) {
-
   /**
    * the mapper.
    */
@@ -43,8 +42,7 @@ public record ClientChainData(
   /**
    * the map type.
    */
-  private static final TypeReference<Map<String, List<String>>> MAP_TYPE = new TypeReference<>() {
-  };
+  private static final TypeReference<Map<String, List<String>>> MAP_TYPE = new TypeReference<>() {};
 
   /**
    * the Mojang's public key.
@@ -215,7 +213,6 @@ public record ClientChainData(
     @Nullable String xuid,
     @Nullable String identityPublicKey
   ) {
-
     /**
      * decodes the chain data.
      *
@@ -234,16 +231,15 @@ public record ClientChainData(
       }
       Preconditions.checkArgument(
         !map.isEmpty() &&
-          map.containsKey("chain") &&
-          !map.get("chain").isEmpty(),
+        map.containsKey("chain") &&
+        !map.get("chain").isEmpty(),
         "Something goes wrong when reading the chain data!"
       );
       final var chains = map.get("chain");
       var xboxAuthed = false;
       try {
         xboxAuthed = ClientChainData.verifyChain(chains);
-      } catch (final Exception ignored) {
-      }
+      } catch (final Exception ignored) {}
       String username = null;
       UUID clientUUID = null;
       String xuid = null;
@@ -309,7 +305,6 @@ public record ClientChainData(
     int uiProfile,
     @NotNull Skin skin
   ) {
-
     /**
      * decodes the skin data.
      *

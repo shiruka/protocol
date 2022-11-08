@@ -16,7 +16,6 @@ public record SRADDrop(
   boolean randomly
 )
   implements StackRequestActionData {
-
   @NotNull
   @Override
   public StackRequestActionType type() {

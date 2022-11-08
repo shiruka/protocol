@@ -14,7 +14,6 @@ public record GameRuleValue(
   boolean editable,
   Object value
 ) {
-
   /**
    * ctor.
    *

@@ -16,6 +16,4 @@ public record BlockDefinition(
   int id,
   @NotNull CompoundTag state
 )
-  implements IdentifierDefinition {
-
-}
+  implements IdentifierDefinition {}

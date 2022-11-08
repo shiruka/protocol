@@ -21,7 +21,6 @@ public record IntTypeMap<T>(
   @NotNull Int2ObjectBiMap<T> map,
   @NotNull String type
 ) {
-
   /**
    * creates an empty int type map.
    *

@@ -16,7 +16,6 @@ public record ItemDefinition(
   boolean componentBased
 )
   implements IdentifierDefinition {
-
   /**
    * the air.
    */

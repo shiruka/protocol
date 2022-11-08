@@ -18,7 +18,6 @@ public record EntityInteractEventData(
   int variant
 )
   implements Event.Data {
-
   @NotNull
   @Override
   public Event.Type type() {

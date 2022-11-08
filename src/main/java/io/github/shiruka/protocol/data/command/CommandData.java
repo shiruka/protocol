@@ -24,7 +24,6 @@ public record CommandData(
   @Nullable CommandEnumData aliases,
   @NotNull CommandParamData[][] overloads
 ) {
-
   @Override
   public String toString() {
     final var overloads = new StringBuilder("[\r\n");

@@ -39,8 +39,7 @@ public final class BookEditEncoderV291 extends PacketEncoder.Base<BookEdit> {
         packet.author(buffer.readString());
         packet.xuid(buffer.readString());
       }
-      default -> {
-      }
+      default -> {}
     }
   }
 
@@ -69,8 +68,7 @@ public final class BookEditEncoderV291 extends PacketEncoder.Base<BookEdit> {
         buffer.writeString(packet.author());
         buffer.writeString(packet.xuid());
       }
-      default -> {
-      }
+      default -> {}
     }
   }
 }

@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
  * @param redstoneLevel the redstone level.
  */
 public record TargetBlockHitEventData(int redstoneLevel) implements Event.Data {
-
   @NotNull
   @Override
   public Event.Type type() {

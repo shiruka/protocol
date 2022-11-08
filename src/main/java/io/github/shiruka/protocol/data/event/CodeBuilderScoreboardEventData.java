@@ -11,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public record CodeBuilderScoreboardEventData(String objectiveName, int score)
   implements Event.Data {
-
   @NotNull
   @Override
   public Event.Type type() {

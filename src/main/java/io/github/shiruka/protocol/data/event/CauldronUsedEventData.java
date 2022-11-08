@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public record CauldronUsedEventData(int color, int fillLevel, int potionId)
   implements Event.Data {
-
   @NotNull
   @Override
   public Event.Type type() {

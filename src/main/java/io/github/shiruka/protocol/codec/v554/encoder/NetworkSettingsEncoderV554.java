@@ -24,7 +24,9 @@ public final class NetworkSettingsEncoderV554
     @NotNull final MinecraftSession session
   ) {
     super.decode(packet, helper, buffer, session);
-    packet.compressionAlgorithm(PacketCompressionAlgorithm.byOrdinal(buffer.readUnsignedShortLE()));
+    packet.compressionAlgorithm(
+      PacketCompressionAlgorithm.byOrdinal(buffer.readUnsignedShortLE())
+    );
     packet.clientThrottleEnabled(buffer.readBoolean());
     packet.clientThrottleThreshold(buffer.readUnsignedByte());
     packet.clientThrottleScalar(buffer.readFloatLE());

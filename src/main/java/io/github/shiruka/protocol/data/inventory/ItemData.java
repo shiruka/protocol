@@ -162,19 +162,21 @@ public final class ItemData {
     final boolean metadata,
     final boolean userdata
   ) {
-    return this.definition == other.definition &&
+    return (
+      this.definition == other.definition &&
       (!amount || this.count == other.count) &&
       (
         !metadata ||
-          this.damage == other.damage &&
-            this.blockRuntimeId == other.blockRuntimeId
+        this.damage == other.damage &&
+        this.blockRuntimeId == other.blockRuntimeId
       ) &&
       (
         !userdata ||
-          Objects.equals(this.tag, other.tag) &&
-            Arrays.equals(this.canPlace, other.canPlace) &&
-            Arrays.equals(this.canBreak, other.canBreak)
-      );
+        Objects.equals(this.tag, other.tag) &&
+        Arrays.equals(this.canPlace, other.canPlace) &&
+        Arrays.equals(this.canBreak, other.canBreak)
+      )
+    );
   }
 
   @Override

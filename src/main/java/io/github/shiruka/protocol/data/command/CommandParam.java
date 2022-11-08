@@ -155,7 +155,9 @@ public final class CommandParam {
     final var param = this.paramType == null
       ? "UNKNOWN"
       : this.paramType.name();
-    return "CommandParam(type=" + param + ", defaultValue=" + this.defaultValue + ")";
+    return (
+      "CommandParam(type=" + param + ", defaultValue=" + this.defaultValue + ")"
+    );
   }
 
   /**

@@ -17,7 +17,6 @@ public record SlashCommandExecutedEventData(
   int successCount
 )
   implements Event.Data {
-
   @NotNull
   @Override
   public Event.Type type() {

@@ -16,7 +16,6 @@ public record SRADTake(
   @NotNull StackRequestSlotInfoData destination
 )
   implements StackRequestActionData {
-
   @NotNull
   @Override
   public StackRequestActionType type() {

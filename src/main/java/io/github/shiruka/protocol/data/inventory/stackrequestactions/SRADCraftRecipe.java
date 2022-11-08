@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public record SRADCraftRecipe(int recipeNetworkId)
   implements StackRequestActionData {
-
   @NotNull
   @Override
   public StackRequestActionType type() {

@@ -11,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public record PortalUsedEventData(int fromDimensionId, int toDimensionId)
   implements Event.Data {
-
   @NotNull
   @Override
   public Event.Type type() {

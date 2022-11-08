@@ -82,6 +82,11 @@ public final class MinecraftChildChannel
    * enables the compression.
    */
   public void enableCompression() {
-    this.pipeline().addAfter(UserDataCodec.NAME, CompressorCodec.NAME, CompressorCodec.INSTANCE);
+    this.pipeline()
+      .addAfter(
+        UserDataCodec.NAME,
+        CompressorCodec.NAME,
+        CompressorCodec.INSTANCE
+      );
   }
 }

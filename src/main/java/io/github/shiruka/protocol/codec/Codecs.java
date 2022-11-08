@@ -17,11 +17,16 @@ import org.jetbrains.annotations.Nullable;
  * an interface that contains utility methods for codecs.
  */
 public interface Codecs {
-
   /**
    * the ALL.
    */
-  Collection<Codec> ALL = Set.of(CodecV291.INSTANCE, CodecV313.INSTANCE, CodecV388.INSTANCE, CodecV554.INSTANCE, CodecV557.INSTANCE);
+  Collection<Codec> ALL = Set.of(
+    CodecV291.INSTANCE,
+    CodecV313.INSTANCE,
+    CodecV388.INSTANCE,
+    CodecV554.INSTANCE,
+    CodecV557.INSTANCE
+  );
 
   /**
    * the by protocol version.

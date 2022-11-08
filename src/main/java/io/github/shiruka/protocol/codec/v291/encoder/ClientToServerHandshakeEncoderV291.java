@@ -21,8 +21,7 @@ public final class ClientToServerHandshakeEncoderV291
     @NotNull final CodecHelper helper,
     @NotNull final PacketBuffer buffer,
     @NotNull final MinecraftSession session
-  ) {
-  }
+  ) {}
 
   @Override
   public void encode(
@@ -30,6 +29,5 @@ public final class ClientToServerHandshakeEncoderV291
     @NotNull final CodecHelper helper,
     @NotNull final PacketBuffer buffer,
     @NotNull final MinecraftSession session
-  ) {
-  }
+  ) {}
 }

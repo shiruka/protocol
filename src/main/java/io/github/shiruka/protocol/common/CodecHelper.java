@@ -34,7 +34,6 @@ import org.jetbrains.annotations.NotNull;
  * an interface to determine codec helpers.
  */
 public interface CodecHelper {
-
   /**
    * the log.
    */

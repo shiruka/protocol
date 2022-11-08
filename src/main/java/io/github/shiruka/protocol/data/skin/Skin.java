@@ -247,7 +247,6 @@ public final class Skin {
     float frames,
     int expression
   ) {
-
     /**
      * creates an skin animation from animation token.
      *

@@ -25,9 +25,8 @@ import org.reflections.Reflections;
 /**
  * an interface to determine codecs.
  */
-@SuppressWarnings({"unchecked", "rawtypes"})
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public interface Codec {
-
   /**
    * the log.
    */
@@ -131,7 +130,8 @@ public interface Codec {
     @NotNull final MinecraftPacket packet,
     @NotNull final MinecraftSession session
   ) {
-    @NotNull final PacketEncoder<MinecraftPacket> encoder;
+    @NotNull
+    final PacketEncoder<MinecraftPacket> encoder;
     if (packet instanceof Unknown) {
       encoder = (PacketEncoder) packet;
     } else {
@@ -438,8 +438,8 @@ public interface Codec {
         "Protocol version not set!"
       );
       return this.scanPackageAndRegister(
-        Builder.ENCODERS_PACKAGE.formatted(this.protocolVersion)
-      );
+          Builder.ENCODERS_PACKAGE.formatted(this.protocolVersion)
+        );
     }
 
     /**
@@ -452,8 +452,8 @@ public interface Codec {
     @NotNull
     public Builder scanPackageAndRegister(@NotNull final String packageName) {
       return this.registerPackets(
-        new Reflections(packageName).getSubTypesOf(PacketEncoder.Base.class)
-      );
+          new Reflections(packageName).getSubTypesOf(PacketEncoder.Base.class)
+        );
     }
   }
 
@@ -478,7 +478,5 @@ public interface Codec {
     Object2ObjectMap<Class<? extends MinecraftPacket>, PacketDefinition<?>> packets,
     @NotNull Int2ObjectMap<PacketDefinition<?>> packetsById
   )
-    implements Codec {
-
-  }
+    implements Codec {}
 }

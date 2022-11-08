@@ -16,6 +16,4 @@ public record PacketDefinition<T extends MinecraftPacket>(
   @NotNull Supplier<T> factory,
   @NotNull PacketEncoder<T> encoder
 )
-  implements Definition {
-
-}
+  implements Definition {}

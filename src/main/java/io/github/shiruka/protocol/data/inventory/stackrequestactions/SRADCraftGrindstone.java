@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public record SRADCraftGrindstone(int recipeNetworkId, int repairCost)
   implements StackRequestActionData {
-
   @NotNull
   @Override
   public StackRequestActionType type() {

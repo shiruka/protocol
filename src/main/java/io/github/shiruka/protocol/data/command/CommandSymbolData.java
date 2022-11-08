@@ -17,7 +17,6 @@ public record CommandSymbolData(
   boolean softEnum,
   boolean postfix
 ) {
-
   /**
    * the arg flag enum.
    */
