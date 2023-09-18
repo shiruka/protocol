@@ -3,7 +3,7 @@ lombok = { module = "org.projectlombok:lombok", version = "1.18.24" }
 annotations = { module = "org.jetbrains:annotations", version = "23.1.0" }
 network = { module = "io.github.shiruka:network", version = "3.0.6" }
 reflections = { module = "org.reflections:reflections", version = "0.10.2" }
-jwt = { module = "com.nimbusds:nimbus-jose-jwt", version = "9.26" }
+jwt = { module = "com.nimbusds:nimbus-jose-jwt", version = "9.35" }
 junit = { module = "org.junit.jupiter:junit-jupiter", version = "5.9.1" }
 
 [plugins]
