@@ -4,7 +4,7 @@ annotations = { module = "org.jetbrains:annotations", version = "23.1.0" }
 network = { module = "io.github.shiruka:network", version = "3.0.6" }
 reflections = { module = "org.reflections:reflections", version = "0.10.2" }
 jwt = { module = "com.nimbusds:nimbus-jose-jwt", version = "9.26" }
-junit = { module = "org.junit.jupiter:junit-jupiter", version = "5.9.1" }
+junit = { module = "org.junit.jupiter:junit-jupiter", version = "5.10.1" }
 
 [plugins]
 spotless = { id = "com.diffplug.spotless", version = "6.12.0" }
